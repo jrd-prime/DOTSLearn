@@ -1,11 +1,14 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace DefaultNamespace
+namespace Grid.Points
 {
     public struct PointComponent : IComponentData
     {
-        public float3 position;
-        public Entity prefab;
+        public Entity self;
+        public int id;
+        public float3 pointPosition;
+        public bool isBlocked;
+        public Entity entityOnPoint;
     }
 }

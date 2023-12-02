@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Unity.Entities;
 using Unity.Mathematics;
+using UserInput;
 
 namespace DefaultNamespace
 {

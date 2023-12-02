@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Grid.GridLayout
 {
-    public class GridLayoutAuthoring : MonoBehaviour
+    public class GridAuthoring : MonoBehaviour
     {
         public int2 gridSize;
         public GameObject pointPrefabMain;
@@ -12,12 +12,12 @@ namespace Grid.GridLayout
         public GameObject pointPrefabSmall;
     }
 
-    public class GridLayoutBaker : Baker<GridLayoutAuthoring>
+    public class GridLayoutBaker : Baker<GridAuthoring>
     {
-        public override void Bake(GridLayoutAuthoring authoring)
+        public override void Bake(GridAuthoring authoring)
         {
             var _entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(_entity, new GridLayoutComponent
+            AddComponent(_entity, new GridComponent
             {
                 gridSize = authoring.gridSize,
                 pointPrefabMain = GetEntity(authoring.pointPrefabMain, TransformUsageFlags.None),

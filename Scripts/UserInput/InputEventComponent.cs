@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace DefaultNamespace
+namespace UserInput
 {
     public struct InputEventComponent : IComponentData
     {

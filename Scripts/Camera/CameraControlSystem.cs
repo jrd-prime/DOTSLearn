@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UserInput;
 using Vector3 = UnityEngine.Vector3;
 
 namespace DefaultNamespace
