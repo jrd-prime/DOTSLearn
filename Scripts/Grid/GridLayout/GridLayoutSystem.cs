@@ -1,18 +1,17 @@
-﻿using Unity.Burst;
+﻿using DefaultNamespace;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace Grid.GridLayout
 {
     public partial struct GridLayoutSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<GridLayoutComponent>();
-            // grid holder
         }
 
         public void OnUpdate(ref SystemState state)

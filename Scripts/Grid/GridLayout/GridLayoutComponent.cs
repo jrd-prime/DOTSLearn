@@ -1,9 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Rendering;
-using UnityEngine;
 
-namespace DefaultNamespace
+namespace Grid.GridLayout
 {
     public struct GridLayoutComponent : IComponentData
     {
