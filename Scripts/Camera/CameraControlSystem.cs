@@ -41,7 +41,7 @@ namespace DefaultNamespace
             foreach (var camera in SystemAPI.Query<CameraAspect>())
             {
                 instance.transform.position += (Vector3)(camera.Direction * dt * camera.Speed);
-                camera.IsMoving = !Equals(camera.Direction, new float3(0, 0, 0));
+                camera.IsMoving = !Equals(camera.Direction, (float3)Vector3.zero);
             }
         }
     }

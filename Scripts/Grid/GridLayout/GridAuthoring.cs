@@ -16,8 +16,8 @@ namespace Grid.GridLayout
     {
         public override void Bake(GridAuthoring authoring)
         {
-            var _entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(_entity, new GridComponent
+            var entity = GetEntity(TransformUsageFlags.None);
+            AddComponent(entity, new GridComponent
             {
                 gridSize = authoring.gridSize,
                 pointPrefabMain = GetEntity(authoring.pointPrefabMain, TransformUsageFlags.None),

@@ -7,7 +7,6 @@ namespace Grid.GridLayout
 {
     public struct GridData : IComponentData
     {
-        [SerializeField]
-        public NativeList<PointComponent> PointData;
+        public NativeList<PointComponent> PointsData;
     }
 }

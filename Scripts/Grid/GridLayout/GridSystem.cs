@@ -34,7 +34,7 @@ namespace Grid.GridLayout
             ecb.Dispose();
 
             // set data
-            em.SetComponentData(gridEntity, new GridData { PointData = _tempPointsList });
+            em.SetComponentData(gridEntity, new GridData { PointsData = _tempPointsList });
             _tempPointsList.Dispose();
         }
 
@@ -85,26 +85,24 @@ namespace Grid.GridLayout
                     var position = new float3(x, 0, z);
                     var entity = em.Instantiate(prefab);
 
-                    ecb.AddComponent(entity,
-                        new ComponentTypeSet(
-                            typeof(LocalTransform),
-                            typeof(PointComponent)
-                        ));
+                    ecb.AddComponent(entity, typeof(PointComponent));
 
-                    SystemAPI.SetComponent(entity, new LocalTransform
-                    {
-                        Position = position,
-                        Rotation = Quaternion.identity,
-                        Scale = scale
-                    });
-
-                    _tempPointsList.Add(new PointComponent
+                    var point = new PointComponent
                     {
                         id = _tempPointsList.Length,
                         pointPosition = position,
                         isBlocked = false,
                         self = entity
+                    };
+                    ecb.SetComponent(entity, new LocalTransform
+                    {
+                        Position = position,
+                        Rotation = Quaternion.identity,
+                        Scale = scale
                     });
+                    ecb.SetComponent(entity,point);
+
+                    _tempPointsList.Add(point);
                 }
             }
         }
