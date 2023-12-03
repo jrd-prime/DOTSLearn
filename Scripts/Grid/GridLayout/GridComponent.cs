@@ -9,5 +9,6 @@ namespace Grid.GridLayout
         public Entity pointPrefabMain;
         public Entity pointPrefabMid;
         public Entity pointPrefabSmall;
+        public bool findPoints;
     }
 }

@@ -106,7 +106,8 @@ namespace Grid.GridLayout
                         id = _tempPointsList.Length,
                         pointPosition = position,
                         isBlocked = false,
-                        self = entity
+                        self = entity,
+                        prefab = prefab
                     };
                     ecb.SetComponent(entity, new LocalTransform
                     {

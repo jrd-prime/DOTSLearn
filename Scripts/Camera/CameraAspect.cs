@@ -12,8 +12,7 @@ namespace DefaultNamespace
         // private readonly RefRO<CameraComponent> _cameraComponent;
         private readonly RefRW<MovableComponent> _movableComponent;
         private readonly RefRO<InputEventComponent> _inputEventComponent;
-
-       
+        
         public float Speed => _movableComponent.ValueRO.speed;
         public float3 Direction => _inputEventComponent.ValueRO.direction;
 

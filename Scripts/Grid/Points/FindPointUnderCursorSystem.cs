@@ -1,11 +1,8 @@
-﻿using System;
-using Grid.GridLayout;
+﻿using Grid.GridLayout;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Profiling;
 using UserInput;
 
 namespace Grid.Points
@@ -14,6 +11,7 @@ namespace Grid.Points
     {
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<GridComponent>();
             state.RequireForUpdate<CursorComponent>();
             state.RequireForUpdate<GridData>();
         }
@@ -25,6 +23,8 @@ namespace Grid.Points
             var gridData = em.GetComponentData<GridData>(gridDataEntity);
             var cursorEntity = SystemAPI.GetSingletonEntity<CursorComponent>();
             var cursor = em.GetComponentData<CursorComponent>(cursorEntity);
+            var gridEntity = SystemAPI.GetSingletonEntity<GridComponent>();
+            var grid = em.GetComponentData<GridComponent>(gridEntity);
 
             // round cursor coords
             var coords = new float3(
@@ -33,22 +33,19 @@ namespace Grid.Points
                 Mathf.Round(cursor.cursorPosition.z));
 
             // temp checkbox
-            var buildState = true;
-            if (buildState)
+            if (!grid.findPoints) return;
+            foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
             {
-                foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
+                var p = point.Item1.ValueRO;
+                if (Equals(coords, p.pointPosition))
                 {
-                    var p = point.Item1.ValueRO;
-                    if (Equals(coords, p.pointPosition))
+                    // temp scale +
+                    em.SetComponentData(p.self, new LocalTransform
                     {
-                        // temp scale +
-                        em.SetComponentData(p.self, new LocalTransform
-                        {
-                            Position = coords,
-                            Scale = .2f,
-                            Rotation = Quaternion.identity
-                        });
-                    }
+                        Position = coords,
+                        Scale = .2f,
+                        Rotation = Quaternion.identity
+                    });
                 }
             }
         }

@@ -1,10 +1,7 @@
-﻿using System.Numerics;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
-using Unity.VisualScripting;
+using UnityEngine;
 using UserInput;
-using Vector3 = UnityEngine.Vector3;
 
 namespace DefaultNamespace
 {

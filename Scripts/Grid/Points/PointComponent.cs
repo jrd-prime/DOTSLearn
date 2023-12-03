@@ -10,5 +10,6 @@ namespace Grid.Points
         public float3 pointPosition;
         public bool isBlocked;
         public Entity entityOnPoint;
+        public Entity prefab;
     }
 }

@@ -10,6 +10,7 @@ namespace Grid.GridLayout
         public GameObject pointPrefabMain;
         public GameObject pointPrefabMid;
         public GameObject pointPrefabSmall;
+        public bool findPoints;
     }
 
     public class GridLayoutBaker : Baker<GridAuthoring>
