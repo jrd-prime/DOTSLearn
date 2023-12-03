@@ -48,12 +48,12 @@ namespace Grid.GridLayout
 
             // Main grid
             var mainStart = new float2(0f, 0f);
-            GeneratePointsLevel(mainStart, gridSize, mainPrefab, 0.1f, ecb, ref state);
+            GeneratePointsLevel("main", mainStart, gridSize, mainPrefab, 0.1f, ecb, ref state);
 
             // Middle grid
             var midStart = new float2(0.5f, 0.5f);
             var midSize = new int2(gridSize.x - 1, gridSize.y - 1);
-            GeneratePointsLevel(midStart, midSize, midPrefab, 0.05f, ecb, ref state);
+            GeneratePointsLevel("mid", midStart, midSize, midPrefab, 0.05f, ecb, ref state);
 
             // Small grid
             const float defOff = 0.375f;
@@ -66,14 +66,15 @@ namespace Grid.GridLayout
             var dot3 = new float2(defOff, defOff + smallOffset);
             var dot4 = new float2(defOff + smallOffset, defOff + smallOffset);
 
-            GeneratePointsLevel(dot1, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel(dot2, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel(dot3, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel(dot4, smallSize, smallPrefab, smallScale, ecb, ref state);
+            GeneratePointsLevel("small", dot1, smallSize, smallPrefab, smallScale, ecb, ref state);
+            GeneratePointsLevel("small", dot2, smallSize, smallPrefab, smallScale, ecb, ref state);
+            GeneratePointsLevel("small", dot3, smallSize, smallPrefab, smallScale, ecb, ref state);
+            GeneratePointsLevel("small", dot4, smallSize, smallPrefab, smallScale, ecb, ref state);
         }
 
 
-        private void GeneratePointsLevel(float2 start, int2 size, Entity prefab, float scale, EntityCommandBuffer ecb,
+        private void GeneratePointsLevel(string tag, float2 start, int2 size, Entity prefab, float scale,
+            EntityCommandBuffer ecb,
             ref SystemState state)
         {
             var em = state.EntityManager;
@@ -86,6 +87,19 @@ namespace Grid.GridLayout
                     var entity = em.Instantiate(prefab);
 
                     ecb.AddComponent(entity, typeof(PointComponent));
+                    switch (tag)
+                    {
+                        case "main":
+                            ecb.AddComponent(entity, typeof(PointMainTagComponent));
+                            break;
+                        case "mid":
+                            ecb.AddComponent(entity, typeof(PointMidTagComponent));
+                            break;
+                        case "small":
+                            ecb.AddComponent(entity, typeof(PointSmallTagComponent));
+                            break;
+                    }
+
 
                     var point = new PointComponent
                     {
@@ -100,7 +114,7 @@ namespace Grid.GridLayout
                         Rotation = Quaternion.identity,
                         Scale = scale
                     });
-                    ecb.SetComponent(entity,point);
+                    ecb.SetComponent(entity, point);
 
                     _tempPointsList.Add(point);
                 }
