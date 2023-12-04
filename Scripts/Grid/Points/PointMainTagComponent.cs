@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Grid.Points
+namespace Jrd.Grid.Points
 {
     public struct PointMainTagComponent: IComponentData
     {

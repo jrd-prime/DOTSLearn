@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Grid.GridLayout
+namespace Jrd.Grid.GridLayout
 {
     public struct GridComponent : IComponentData
     {

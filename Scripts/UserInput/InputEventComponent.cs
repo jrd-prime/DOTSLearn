@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace UserInput
+namespace Jrd.UserInput
 {
     public struct InputEventComponent : IComponentData
     {

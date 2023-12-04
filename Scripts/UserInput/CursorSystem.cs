@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using Jrd.JCamera;
+using Unity.Entities;
 using UnityEngine;
 
-namespace UserInput
+namespace Jrd.UserInput
 {
     /// <summary>
     /// Устанавливаем позицию курсора в мире

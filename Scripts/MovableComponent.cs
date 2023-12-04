@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace DefaultNamespace
+namespace Jrd
 {
     public struct MovableComponent : IComponentData
     {

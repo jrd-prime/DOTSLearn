@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace UserInput
+namespace Jrd.UserInput
 {
     /// <summary>
     /// Устанавливает вектор движения (пока просто wasd)

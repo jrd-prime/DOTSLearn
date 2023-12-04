@@ -1,11 +1,11 @@
-﻿using Grid.Points;
+﻿using Jrd.Grid.Points;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Grid.GridLayout
+namespace Jrd.Grid.GridLayout
 {
     public partial struct GridSystem : ISystem
     {

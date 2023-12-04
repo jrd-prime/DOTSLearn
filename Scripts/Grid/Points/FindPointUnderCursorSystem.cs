@@ -1,11 +1,11 @@
-﻿using Grid.GridLayout;
+﻿using Jrd.Grid.GridLayout;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using UserInput;
+using Jrd.UserInput;
 
-namespace Grid.Points
+namespace Jrd.Grid.Points
 {
     public partial struct FindPointUnderCursorSystem : ISystem
     {
