@@ -2,7 +2,9 @@
     background-color: bisque;
     margin: 10px;
 }
-
+.too{
+    width: 20px !important;
+}
 #menu-return-button:hover {
     background-color: aquamarine;
 }

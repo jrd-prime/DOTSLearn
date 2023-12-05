@@ -1,4 +1,5 @@
-﻿using Jrd.Grid.GridLayout;
+﻿using Jrd.DebSet;
+using Jrd.Grid.GridLayout;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -11,20 +12,19 @@ namespace Jrd.Grid.Points
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<GridComponent>();
+            // state.RequireForUpdate<GridData>();
             state.RequireForUpdate<CursorComponent>();
-            state.RequireForUpdate<GridData>();
+            // state.RequireForUpdate<GridComponent>();
+            state.RequireForUpdate<DebSetComponent>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
             var em = state.EntityManager;
-            var gridDataEntity = SystemAPI.GetSingletonEntity<GridData>();
-            var gridData = em.GetComponentData<GridData>(gridDataEntity);
-            var cursorEntity = SystemAPI.GetSingletonEntity<CursorComponent>();
-            var cursor = em.GetComponentData<CursorComponent>(cursorEntity);
-            var gridEntity = SystemAPI.GetSingletonEntity<GridComponent>();
-            var grid = em.GetComponentData<GridComponent>(gridEntity);
+            // var gridData = em.GetComponentData<GridData>(SystemAPI.GetSingletonEntity<GridData>());
+            var cursor = em.GetComponentData<CursorComponent>(SystemAPI.GetSingletonEntity<CursorComponent>());
+            // var grid = em.GetComponentData<GridComponent>(SystemAPI.GetSingletonEntity<GridComponent>());
+            var debSet = em.GetComponentData<DebSetComponent>(SystemAPI.GetSingletonEntity<DebSetComponent>());
 
             // round cursor coords
             var coords = new float3(
@@ -33,7 +33,7 @@ namespace Jrd.Grid.Points
                 Mathf.Round(cursor.cursorPosition.z));
 
             // temp checkbox
-            if (!grid.findPoints) return;
+            if (!debSet.mouseRaycast) return;
             foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
             {
                 var p = point.Item1.ValueRO;
