@@ -168,8 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSize:
-    x: 1
-    y: 1
+    x: 7
+    y: 7
   pointPrefabMain: {fileID: 3575273849144887734, guid: c64e0c3f10c35094182594150c07f088,
     type: 3}
   pointPrefabMid: {fileID: 164609751672035426, guid: be76c5b80be95b944a9bc3956d9c0bd2,

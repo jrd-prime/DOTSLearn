@@ -1,0 +1,8 @@
+.menu {
+    background-color: bisque;
+    margin: 10px;
+}
+
+#menu-return-button:hover {
+    background-color: aquamarine;
+}
