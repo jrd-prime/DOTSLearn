@@ -28,12 +28,16 @@ namespace Jrd.JUI
         private void OnEnable()
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
-            _root.style.display = DisplayStyle.None; // TODO 
+
+            var menuPanel = _root.Q<VisualElement>("menu-panel");
             var returnButton = _root.Q<Button>("menu-return-button");
             var restartButton = _root.Q<Button>("menu-restart-button");
             var exitButton = _root.Q<Button>("menu-exit-button");
 
-            returnButton.clicked += () => _root.style.display = DisplayStyle.None; // TODO Return
+
+            HideElemenet(_root); // TODO 
+
+            returnButton.clicked += () => HideElemenet(_root); // TODO Return
             restartButton.clicked += () => Debug.Log("restart"); // TODO restart
             exitButton.clicked += Application.Quit; // TODO
         }
@@ -43,16 +47,25 @@ namespace Jrd.JUI
             if (_root.style.display == DisplayStyle.None)
             {
                 GetComponent<UIDocument>().sortingOrder = 100;
-                _root.style.display = DisplayStyle.Flex;
+                ShowElemenet(_root);
                 // root.experimental.animation.Layout(new Rect(Vector2.zero, root.layout.size), 1500).Ease(Easing.OutCirc);
             }
             else
             {
                 GetComponent<UIDocument>().sortingOrder = 0;
-                _root.style.display = DisplayStyle.None;
+                HideElemenet(_root);
                 // root.experimental.animation.Layout(new Rect(new Vector2(-root.layout.width, 0), root.layout.size), 1500)
                 //     .Ease(Easing.OutCirc);
             }
+        }
+
+        private void HideElemenet(VisualElement e)
+        {
+            e.style.display = DisplayStyle.None;
+        }
+        private void ShowElemenet(VisualElement e)
+        {
+            e.style.display = DisplayStyle.Flex;
         }
     }
 }

@@ -2,9 +2,29 @@
     background-color: bisque;
     margin: 10px;
 }
-.too{
-    width: 20px !important;
-}
-#menu-return-button:hover {
-    background-color: aquamarine;
+
+.too {
+    width: 80%;
+    height: 30px;
+    background-color: rgb(51, 99, 156);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    font-size: 12px;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    color: rgb(255, 255, 255);
+    border-left-color: rgb(48, 124, 144);
+    border-right-color: rgb(48, 124, 144);
+    border-top-color: rgb(48, 124, 144);
+    border-bottom-color: rgb(48, 124, 144);
 }

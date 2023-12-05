@@ -1,5 +1,4 @@
 ﻿using Jrd.DebSet;
-using Jrd.Grid.GridLayout;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
