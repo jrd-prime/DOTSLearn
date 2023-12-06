@@ -7,8 +7,10 @@ using UnityEngine;
 
 namespace Jrd.Grid.GridLayout
 {
+    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
     public partial struct GridSystem : ISystem
     {
+        // TODO CACHE
         private NativeList<PointComponent> _tempPointsList;
 
         public void OnCreate(ref SystemState state)
@@ -19,15 +21,16 @@ namespace Jrd.Grid.GridLayout
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;
+
             var em = state.EntityManager;
+            var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
             var gridEntity = SystemAPI.GetSingletonEntity<GridComponent>();
             var gridComponent = em.GetComponentData<GridComponent>(gridEntity);
-            em.AddComponent<GridData>(gridEntity);
+            ecb.AddComponent<GridData>(gridEntity);
 
             _tempPointsList = new NativeList<PointComponent>(Allocator.Temp);
 
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
             GeneratePoints(ecb, gridComponent, ref state);
             // ecb final
             ecb.Playback(em);

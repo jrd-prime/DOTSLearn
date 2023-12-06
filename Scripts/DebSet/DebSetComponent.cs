@@ -4,6 +4,6 @@ namespace Jrd.DebSet
 {
     public struct DebSetComponent : IComponentData
     {
-        public bool mouseRaycast;
+        public bool MouseRaycast;
     }
 }
