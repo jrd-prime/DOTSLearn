@@ -1,6 +1,7 @@
 ﻿using Jrd.Grid.GridLayout;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Jrd.DebSet
 {
@@ -8,6 +9,7 @@ namespace Jrd.DebSet
     {
         private Entity _entity;
         private EntityManager _em;
+        private bool _isSetted;
 
         public void OnCreate(ref SystemState state)
         {
@@ -19,7 +21,11 @@ namespace Jrd.DebSet
 
         public void OnUpdate(ref SystemState state)
         {
+            if (_isSetted) return;
+            Profiler.BeginSample("test");
             DebSetUI.DebSetApplyButton.clicked += Sett;
+            Profiler.EndSample();
+            _isSetted = true;
         }
 
         private void Sett()
