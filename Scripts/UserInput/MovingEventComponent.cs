@@ -3,7 +3,7 @@ using Unity.Mathematics;
 
 namespace Jrd.UserInput
 {
-    public struct InputEventComponent : IComponentData
+    public struct MovingEventComponent : IComponentData
     {
         public float3 direction;
     }

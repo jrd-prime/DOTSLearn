@@ -18,7 +18,8 @@ namespace Jrd.JCamera
             var cameraArchetype = em.CreateArchetype(
                 typeof(CameraComponent),
                 typeof(MovableComponent),
-                typeof(InputEventComponent)
+                typeof(MovingEventComponent),
+                typeof(ZoomingEventComponent)
             );
 
             // create camera entity with archetype
@@ -39,6 +40,7 @@ namespace Jrd.JCamera
             {
                 instance.transform.position += (Vector3)(camera.Direction * dt * camera.Speed);
                 camera.IsMoving = !Equals(camera.Direction, (float3)Vector3.zero);
+                instance.Camera.fieldOfView = Mathf.Clamp(instance.Camera.fieldOfView - camera.Zoom, 30, 70);
             }
         }
     }

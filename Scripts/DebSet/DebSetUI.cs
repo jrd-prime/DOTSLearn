@@ -7,6 +7,8 @@ namespace Jrd.DebSet
     {
         public static DebSetUI Instance;
         public static Button DebSetApplyButton;
+        
+        public static Label DebSetText;
 
         public static bool IsMouseRaycast; // TODO переделать
         private Toggle _mouseRaycastToggle;
@@ -31,6 +33,7 @@ namespace Jrd.DebSet
             var root = GetComponent<UIDocument>().rootVisualElement;
             _mouseRaycastToggle = root.Q<Toggle>("mouse-raycast");
             DebSetApplyButton = root.Q<Button>("apply-button");
+            DebSetText = root.Q<Label>("txt-lab");
         }
 
         private void FixedUpdate()

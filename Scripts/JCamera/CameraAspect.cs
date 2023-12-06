@@ -1,6 +1,6 @@
-﻿using Unity.Entities;
+﻿using Jrd.UserInput;
+using Unity.Entities;
 using Unity.Mathematics;
-using Jrd.UserInput;
 
 namespace Jrd.JCamera
 {
@@ -10,10 +10,12 @@ namespace Jrd.JCamera
 
         // private readonly RefRO<CameraComponent> _cameraComponent;
         private readonly RefRW<MovableComponent> _movableComponent;
-        private readonly RefRO<InputEventComponent> _inputEventComponent;
-        
+        private readonly RefRO<MovingEventComponent> _movingEventComponent;
+        private readonly RefRW<ZoomingEventComponent> _zoomingEventComponent;
+
         public float Speed => _movableComponent.ValueRO.speed;
-        public float3 Direction => _inputEventComponent.ValueRO.direction;
+        public float3 Direction => _movingEventComponent.ValueRO.direction;
+        public float Zoom => _zoomingEventComponent.ValueRO.zoom;
 
         public bool IsMoving
         {
