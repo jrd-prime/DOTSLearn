@@ -28,3 +28,14 @@
     border-top-color: rgb(48, 124, 144);
     border-bottom-color: rgb(48, 124, 144);
 }
+
+.edit-mode-button {
+    width: 60px;
+    height: 40px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

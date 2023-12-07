@@ -45,12 +45,20 @@ namespace Jrd
             H.T("ChoosePrefabForBuild");
             Entity prefab = default; // TODO choose prefab
 
+            // LOOK show edit mode UI
+            ShowEditModeUI();
+            
             // LOOK test prefab
             prefab = _buildingPrefabComponent.Building1Prefab;
 
             // LOOK подумать и вытащить в отдельную систему и подсистемы,
             // LOOK просто накидывать компоненты и тэги чтобы система подхватывала и в итоге было размещено
             PlacePrefabInCenterScreen(prefab);
+        }
+
+        private void ShowEditModeUI()
+        {
+            
         }
 
         private void PlacePrefabInCenterScreen(Entity prefab)

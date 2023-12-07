@@ -4,7 +4,6 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Jrd.UserInput;
-using UnityEngine.Profiling;
 
 namespace Jrd.Grid.Points
 {
