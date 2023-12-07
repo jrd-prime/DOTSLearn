@@ -1,4 +1,5 @@
 ﻿using Jrd.DebSet;
+using Jrd.Grid.Points;
 using Jrd.JCamera;
 using Jrd.UserInput;
 using Unity.Entities;
@@ -39,7 +40,10 @@ namespace Jrd
         private void ChoosePrefabForBuild()
         {
             H.T("ChoosePrefabForBuild");
-            Entity prefab = default;
+            Entity prefab = default; // TODO choose prefab
+
+            // LOOK test prefab
+            prefab = _buildingPrefabComponent.Building1Prefab;
 
             PlacePrefabInCenterScreen(prefab);
         }
@@ -48,6 +52,63 @@ namespace Jrd
         {
             H.T("PlacePrefabInCenterScreen");
             var screenCenterPoint = Utils.GetScreenCenterPoint();
+
+            var coords = GetPointCoordsInCenterScreen(screenCenterPoint);
+            var point = GetPointByCoords(coords);
+
+            if (point.self == Entity.Null) Debug.LogError("GetPointByCoords Entity NULL"); // ERROR
+
+            PlacePrefab(prefab, point);
+        }
+
+        private void PlacePrefab(Entity prefab, PointComponent point)
+        {
+            var entity = _em.Instantiate(prefab);
+            _em.SetComponentData(entity, new LocalTransform
+            {
+                Position = point.pointPosition,
+                Rotation = Quaternion.identity,
+                Scale = 1
+            });
+        }
+
+        private PointComponent GetPointByCoords(float3 coords)
+        {
+            H.T("GetPointByCoords");
+            // LOOK TODO dublicate, findpointundercursorsystem. FIX
+            foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
+            {
+                var p = point.Item1.ValueRO;
+                if (Equals(coords, p.pointPosition))
+                {
+                    H.T("Entity" + p.self);
+                    return p;
+                    // temp scale +
+                    _em.SetComponentData(p.self, new LocalTransform
+                    {
+                        Position = coords,
+                        Scale = .2f,
+                        Rotation = Quaternion.identity
+                    });
+                }
+            }
+
+            return new PointComponent { self = Entity.Null }; // LOOK FIX
+        }
+
+        private float3 GetPointCoordsInCenterScreen(Vector3 screenCenterPoint)
+        {
+            if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(screenCenterPoint), out var hit))
+            {
+                return new float3
+                (
+                    Mathf.Floor(hit.point.x),
+                    0,
+                    Mathf.Floor(hit.point.z)
+                );
+            }
+
+            return float3.zero;
         }
 
         private void GenBuild()
@@ -56,16 +117,6 @@ namespace Jrd
 
 
             var centerPosition = float3.zero;
-            // if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(screenCenter), out var hit))
-            // {
-            //     centerPosition = new Vector3
-            //     (
-            //         Mathf.Floor(hit.point.x),
-            //         0,
-            //         Mathf.Floor(hit.point.z)
-            //     );
-            //     H.T(centerPosition.ToString());
-            // }
 
 
             var entity = _em.Instantiate(_buildingPrefabComponent.Building1Prefab);
