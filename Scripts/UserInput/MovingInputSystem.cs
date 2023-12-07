@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Burst;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -7,27 +8,27 @@ namespace Jrd.UserInput
     /// <summary>
     /// Устанавливает вектор движения simple
     /// </summary>
+    [BurstCompile]
     public partial struct MovingInputSystem : ISystem
     {
         private const string Horizontal = "Horizontal";
         private const string Vertical = "Vertical";
 
-        private float _xAxis;
         private const float YAxis = 0f;
-        private float _zAxis;
         private int _fingerId;
+        private const float MinDelta = -1;
+        private const float MaxDelta = 1;
 
         public void OnUpdate(ref SystemState state)
         {
-            // var horizontalAxis = Input.GetAxisRaw(Horizontal);
-            // var verticalAxis = Input.GetAxisRaw(Vertical);
 #if UNITY_EDITOR
-            _xAxis = Input.GetAxis(Horizontal);
-            _zAxis = Input.GetAxis(Vertical);
+            SetDirection(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), ref state);
 #endif
 
 #if UNITY_ANDROID
-            if (Input.touchCount > 0)
+            // if (Input.touchCount > 0)
+            // {
+            if (Input.touchCount == 1)
             {
                 if (!Utils.IsPointerOverUIObject())
                 {
@@ -38,49 +39,43 @@ namespace Jrd.UserInput
                     {
                         case TouchPhase.Moved when touch.fingerId == _fingerId:
                         {
-                            // Debug.Log("Moved");
+                            Debug.Log("Moved");
                             var posDelta = touch.deltaPosition * SystemAPI.Time.DeltaTime * -1;
-                            _xAxis = Mathf.Clamp(posDelta.x, -1, 1);
-                            _zAxis = Mathf.Clamp(posDelta.y, -1, 1);
+                            SetDirection(Clamp(posDelta.x), Clamp(posDelta.y), ref state);
                             break;
                         }
                         case TouchPhase.Ended when touch.fingerId == _fingerId:
-                            // Debug.Log("Ended");
-                            _xAxis = 0;
-                            _zAxis = 0;
+                            Debug.Log("Ended");
+                            SetDirection(0, 0, ref state);
                             break;
                         case TouchPhase.Canceled when touch.fingerId == _fingerId:
-                            // Debug.Log("Ended");
-                            _xAxis = 0;
-                            _zAxis = 0;
+                            Debug.Log("Ended");
+                            SetDirection(0, 0, ref state);
                             break;
                     }
                 }
                 else
                 {
-                    _xAxis = 0;
-                    _zAxis = 0;
+                    SetDirection(0, 0, ref state);
                 }
             }
+            // }
 #endif
+        }
 
+        private void SetDirection(float x, float z, ref SystemState state)
+        {
             foreach (var query in SystemAPI.Query<RefRW<MovingEventComponent>>())
             {
-                query.ValueRW.direction = (_xAxis != 0 || _zAxis != 0)
-                    ? new float3(_xAxis, YAxis, _zAxis)
+                query.ValueRW.direction = (x != 0 || z != 0)
+                    ? new float3(x, YAxis, z)
                     : Vector3.zero;
             }
         }
+
+        private float Clamp(float position)
+        {
+            return Mathf.Clamp(position, MinDelta, MaxDelta);
+        }
     }
 }
-
-// if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(touch.position), out var hit))
-// {
-//     Debug.Log(hit.collider.gameObject.name);
-//
-//
-//     //   foreach (var cursor in SystemAPI.Query<RefRW<CursorComponent>>())
-//     //   {
-//     //        cursor.ValueRW.cursorPosition = hit.point;
-//     // }
-// }

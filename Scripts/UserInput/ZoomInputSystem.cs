@@ -17,17 +17,18 @@ namespace Jrd.UserInput
 
         public void OnUpdate(ref SystemState state)
         {
+            // TODO сделать через состояния, когда можно зумить или нет
 #if UNITY_EDITOR
             _zoom = Input.GetAxis(MouseScrollWheel);
 #endif
 
 #if UNITY_ANDROID
-            if (Input.touchCount == 1)
+            if (Input.touchCount == 2)
             {
                 if (!Utils.IsPointerOverUIObject())
                 {
                     var touch1 = Input.GetTouch(0);
-                    var touch2 = Input.GetTouch(0);
+                    var touch2 = Input.GetTouch(1);
                     _fingerId1 = touch1.fingerId;
                     _fingerId2 = touch2.fingerId;
 

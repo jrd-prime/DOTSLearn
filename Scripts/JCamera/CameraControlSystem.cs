@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using Jrd.UserInput;
@@ -36,11 +37,16 @@ namespace Jrd.JCamera
             var instance = CameraSingleton.Instance; // camera ref
             if (instance == null) return;
 
-            foreach (var camera in SystemAPI.Query<CameraAspect>())
+            foreach (var cameraAspect in SystemAPI.Query<CameraAspect>())
             {
-                instance.transform.position += (Vector3)(camera.Direction * dt * camera.Speed);
-                camera.IsMoving = !Equals(camera.Direction, (float3)Vector3.zero);
-                instance.Camera.fieldOfView = Mathf.Clamp(instance.Camera.fieldOfView - camera.Zoom, 30, 70);
+                var transform = instance.Camera.transform;
+
+                // rotate the vector to compensate for camera rotation during movement
+                var cameraDirection = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * cameraAspect.Direction;
+
+                transform.position += cameraDirection * dt * cameraAspect.Speed;
+                cameraAspect.IsMoving = !Equals(cameraAspect.Direction, (float3)Vector3.zero); // set camera moving state
+                instance.Camera.fieldOfView = Mathf.Clamp(instance.Camera.fieldOfView - cameraAspect.Zoom, 30, 70); // zoom
             }
         }
     }
