@@ -17,5 +17,11 @@ namespace Jrd
             EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
             return results.Count > 0;
         }
+
+        public static Vector3 GetScreenCenterPoint()
+        {
+            H.T("GetScreenCenterPoint");
+            return new Vector2(Screen.width / 2f, Screen.height / 2f);
+        }
     }
 }

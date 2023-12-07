@@ -23,12 +23,14 @@ namespace Jrd.DebSet
             if (_isSubscribed) return;
 
             DebSetUI.DebSetApplyButton.clicked += ApplyDebSettings;
+            DebSetUI.DebSetClearLogButton.clicked += () => DebSetUI.DebSetText.text = "";
 
             _isSubscribed = true;
         }
 
         private void ApplyDebSettings()
         {
+            H.T("ApplyDebSettings");
             _em.SetComponentData(_entity, new DebSetComponent
             {
                 MouseRaycast = DebSetUI.IsMouseRaycast
