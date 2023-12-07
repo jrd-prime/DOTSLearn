@@ -10,6 +10,8 @@ namespace Jrd.JCamera
     {
         private const float CameraSpeed = 10f;
         private const string CameraEntityName = "_CameraEntity";
+        private const float MinFOV = 30f;
+        private const float MaxFOV = 70f;
 
         public void OnCreate(ref SystemState state)
         {
@@ -37,16 +39,18 @@ namespace Jrd.JCamera
             var instance = CameraSingleton.Instance; // camera ref
             if (instance == null) return;
 
-            foreach (var cameraAspect in SystemAPI.Query<CameraAspect>())
+            foreach (var aspect in SystemAPI.Query<CameraAspect>())
             {
                 var transform = instance.Camera.transform;
 
                 // rotate the vector to compensate for camera rotation during movement
-                var cameraDirection = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * cameraAspect.Direction;
+                var cameraDirection =
+                    Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * aspect.Direction;
 
-                transform.position += cameraDirection * dt * cameraAspect.Speed;
-                cameraAspect.IsMoving = !Equals(cameraAspect.Direction, (float3)Vector3.zero); // set camera moving state
-                instance.Camera.fieldOfView = Mathf.Clamp(instance.Camera.fieldOfView - cameraAspect.Zoom, 30, 70); // zoom
+                transform.position += cameraDirection * dt * aspect.Speed;
+                aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
+                instance.Camera.fieldOfView =
+                    Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
             }
         }
     }
