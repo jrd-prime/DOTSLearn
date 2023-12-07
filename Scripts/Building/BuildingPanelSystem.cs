@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Jrd
 {
-    public partial struct BuildingPanelSystem : ISystem
+    public partial class BuildingPanelSystem : SystemBase
     {
         private EntityManager _em;
 
@@ -22,11 +22,11 @@ namespace Jrd
             state.RequireForUpdate<BuildingPrefabComponent>();
         }
 
-        public void OnUpdate(ref SystemState state)
+        protected override void OnUpdate()
         {
             if (_isBuildingPanelInitialized) return;
-
-            _em = state.EntityManager;
+            
+            _em = EntityManager;
             var entity = SystemAPI.GetSingletonEntity<BuildingPrefabComponent>();
             _buildingPrefabComponent = _em.GetComponentData<BuildingPrefabComponent>(entity);
 
@@ -37,6 +37,9 @@ namespace Jrd
             _isBuildingPanelInitialized = true;
         }
 
+        // выбираем то что будем строить и происходит цепочка событий которая размещает префаб в центре
+        // экрана, записывает/читает данные по точкам
+        // и в итоге показывает интрефейс для мува строения
         private void ChoosePrefabForBuild()
         {
             H.T("ChoosePrefabForBuild");
@@ -45,6 +48,8 @@ namespace Jrd
             // LOOK test prefab
             prefab = _buildingPrefabComponent.Building1Prefab;
 
+            // LOOK подумать и вытащить в отдельную систему и подсистемы,
+            // LOOK просто накидывать компоненты и тэги чтобы система подхватывала и в итоге было размещено
             PlacePrefabInCenterScreen(prefab);
         }
 
@@ -63,6 +68,7 @@ namespace Jrd
 
         private void PlacePrefab(Entity prefab, PointComponent point)
         {
+            H.T("PlacePrefab");
             var entity = _em.Instantiate(prefab);
             _em.SetComponentData(entity, new LocalTransform
             {
@@ -98,6 +104,7 @@ namespace Jrd
 
         private float3 GetPointCoordsInCenterScreen(Vector3 screenCenterPoint)
         {
+            H.T("GetPointCoordsInCenterScreen");
             if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(screenCenterPoint), out var hit))
             {
                 return new float3
@@ -109,23 +116,6 @@ namespace Jrd
             }
 
             return float3.zero;
-        }
-
-        private void GenBuild()
-        {
-            H.T("GenBuild");
-
-
-            var centerPosition = float3.zero;
-
-
-            var entity = _em.Instantiate(_buildingPrefabComponent.Building1Prefab);
-            _em.SetComponentData(entity, new LocalTransform
-            {
-                Position = centerPosition,
-                Rotation = Quaternion.identity,
-                Scale = 1
-            });
         }
     }
 }
