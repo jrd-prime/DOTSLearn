@@ -24,7 +24,7 @@ namespace Jrd.UserInput
 #if UNITY_EDITOR
             SetDirection(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), ref state);
 #endif
-                // зум. баг. когда отпускаешь 23 пальца, то двигается без контроля мувмент
+                // LOOK зум. баг. когда отпускаешь 23 пальца, то двигается без контроля мувмент
 #if UNITY_ANDROID
             // if (Input.touchCount > 0)
             // {
@@ -49,7 +49,7 @@ namespace Jrd.UserInput
                             SetDirection(0, 0, ref state);
                             break;
                         case TouchPhase.Canceled when touch.fingerId == _fingerId:
-                            // Debug.Log("Ended");
+                            // Debug.Log("Canceled");
                             SetDirection(0, 0, ref state);
                             break;
                     }

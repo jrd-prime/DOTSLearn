@@ -39,7 +39,6 @@ namespace Jrd.UserInput
                     var currMag = (touch1.position - touch2.position).magnitude;
 
                      _zoom = currMag - prevMag;
-                     DebSetUI.DebSetText.text = _zoom.ToString();
                 }
             }
 #endif
