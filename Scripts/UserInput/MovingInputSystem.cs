@@ -39,7 +39,7 @@ namespace Jrd.UserInput
                     {
                         case TouchPhase.Moved when touch.fingerId == _fingerId:
                         {
-                            // Debug.Log("Moved");
+                             Debug.Log("Moved");
                             var posDelta = touch.deltaPosition * SystemAPI.Time.DeltaTime * -1;
                             SetDirection(Clamp(posDelta.x), Clamp(posDelta.y), ref state);
                             break;

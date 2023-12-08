@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Jrd.States;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Jrd.JCamera
         private const float MinFOV = 30f;
         private const float MaxFOV = 70f;
 
+        private Entity entity;
+
         public void OnCreate(ref SystemState state)
         {
             var em = state.EntityManager;
@@ -22,7 +25,8 @@ namespace Jrd.JCamera
                 typeof(CameraComponent),
                 typeof(MovableComponent),
                 typeof(MovingEventComponent),
-                typeof(ZoomingEventComponent)
+                typeof(ZoomingEventComponent),
+                typeof(FollowComponent)
             );
 
             // create camera entity with archetype
@@ -38,6 +42,36 @@ namespace Jrd.JCamera
             var dt = SystemAPI.Time.DeltaTime;
             var instance = CameraSingleton.Instance; // camera ref
             if (instance == null) return;
+
+            var isEditModeState = false;
+
+            foreach (var eState in SystemAPI.Query<RefRO<EditModeStateComponent>>())
+            {
+                isEditModeState = eState.ValueRO.State;
+            }
+
+            if (isEditModeState)
+            {
+                // H.T("CamSystem - EditMode");
+                
+                // foreach (var aspect in SystemAPI.Query<CameraAspect>())
+                // {
+                //     var followTargetPosition = aspect;
+                //     
+                //     var transform = instance.Camera.transform;
+                //
+                //     // rotate the vector to compensate for camera rotation during movement
+                //     var cameraDirection =
+                //         Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * aspect.Direction;
+                //
+                //     transform.position += cameraDirection * dt * aspect.Speed;
+                //     aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
+                //     instance.Camera.fieldOfView =
+                //         Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
+                // }
+                
+                return;
+            }
 
             foreach (var aspect in SystemAPI.Query<CameraAspect>())
             {

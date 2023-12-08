@@ -1,6 +1,8 @@
 ﻿using Jrd.Grid.Points;
 using Jrd.JCamera;
 using Jrd.JUI.EditModeUI;
+using Jrd.States;
+using Jrd.UserInput;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -14,6 +16,7 @@ namespace Jrd
     public partial class BuildingPanelSystem : SystemBase
     {
         private EntityManager _em;
+        private Entity st;
 
         private bool _isBuildingPanelInitialized;
         private BuildingPrefabComponent _buildingPrefabComponent;
@@ -31,9 +34,14 @@ namespace Jrd
             var entity = SystemAPI.GetSingletonEntity<BuildingPrefabComponent>();
             _buildingPrefabComponent = _em.GetComponentData<BuildingPrefabComponent>(entity);
 
+            st = _em.CreateEntity();
+            _em.SetName(st, "Edit Mode State");
+            _em.AddComponent(st, typeof(EditModeStateComponent));
+
+
             BuildingPanelUI.BuildingCancel.clicked += () => H.T("BPU Cancel");
             BuildingPanelUI.Building1.clicked += ChoosePrefabForBuild;
-            BuildingPanelUI.Building2.clicked += () => H.T("BPU 2");
+            BuildingPanelUI.Building2.clicked += () => H.T("BPU 2"); // dispose previous
 
             EditModeUI.EditModeCancelButton.clicked += () =>
             {
@@ -52,6 +60,8 @@ namespace Jrd
                 ecb.DestroyEntity(tempEntity.ValueRO.TempEntity);
             }
 
+            _em.SetComponentData(st, new EditModeStateComponent { State = false });
+            
             ecb.Playback(EntityManager);
             ecb.Dispose();
         }
@@ -72,6 +82,10 @@ namespace Jrd
         // и в итоге показывает интрефейс для мува строения
         private void ChoosePrefabForBuild()
         {
+            // LOOK здесь не место
+            _em.SetComponentData(st, new EditModeStateComponent { State = true });
+
+
             H.T("ChoosePrefabForBuild");
             Entity prefab = default; // TODO choose prefab
 
@@ -84,6 +98,12 @@ namespace Jrd
             // LOOK подумать и вытащить в отдельную систему и подсистемы,
             // LOOK просто накидывать компоненты и тэги чтобы система подхватывала и в итоге было размещено
             PlacePrefabInCenterScreen(prefab);
+
+            // после размещени строения на карте, надо:
+            // 1. камера должна фолоу за кордами префаба
+            // (например камера читает корды префаба с тэгом что это темповый объект)
+            // и держится от него на оффсете
+            // 2. инпут мувмента должен двигать не камеру а префаб
         }
 
         private void ShowEditModeUI()
@@ -121,7 +141,13 @@ namespace Jrd
         {
             H.T("PlacePrefab");
             var entity = _em.Instantiate(prefab);
+            _em.AddComponent<TargetComponent>(entity);
+            _em.SetComponentData(entity, new TargetComponent
+            {
+                TargetPosition = point.pointPosition
+            });
             _em.AddComponent<TempBuildingPrefabTag>(entity);
+            _em.AddComponent<MovingEventComponent>(entity);
             _em.SetComponentData(entity, new TempBuildingPrefabTag
             {
                 TempEntity = entity
