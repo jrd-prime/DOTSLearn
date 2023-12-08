@@ -1,6 +1,7 @@
 ﻿using Jrd.Grid.Points;
 using Jrd.JCamera;
 using Jrd.JUI.EditModeUI;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -34,9 +35,25 @@ namespace Jrd
             BuildingPanelUI.Building1.clicked += ChoosePrefabForBuild;
             BuildingPanelUI.Building2.clicked += () => H.T("BPU 2");
 
-            EditModeUI.EditModeCancelButton.clicked += HideEditMode;
+            EditModeUI.EditModeCancelButton.clicked += () =>
+            {
+                RemoveTempBuilding();
+                HideEditMode();
+            };
 
             _isBuildingPanelInitialized = true;
+        }
+
+        private void RemoveTempBuilding()
+        {
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            foreach (var tempEntity in SystemAPI.Query<RefRO<TempBuildingPrefabTag>>())
+            {
+                ecb.DestroyEntity(tempEntity.ValueRO.TempEntity);
+            }
+
+            ecb.Playback(EntityManager);
+            ecb.Dispose();
         }
 
         private void HideEditMode()
@@ -104,6 +121,11 @@ namespace Jrd
         {
             H.T("PlacePrefab");
             var entity = _em.Instantiate(prefab);
+            _em.AddComponent<TempBuildingPrefabTag>(entity);
+            _em.SetComponentData(entity, new TempBuildingPrefabTag
+            {
+                TempEntity = entity
+            });
             _em.SetComponentData(entity, new LocalTransform
             {
                 Position = point.pointPosition,
