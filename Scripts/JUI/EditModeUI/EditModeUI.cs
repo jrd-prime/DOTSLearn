@@ -6,16 +6,18 @@ namespace Jrd.JUI.EditModeUI
     public class EditModeUI : MonoBehaviour
     {
         public static EditModeUI Instance;
-        
-        // public static Button DebSetApplyButton;
-        // public static Button DebSetClearLogButton;
+
+        public static VisualElement EditModePanel;
+
+        public static VisualElement EditModeRoot;
+         public static Button EditModeCancelButton;
         //
         // public static Label DebSetText;
         //
         // public static bool IsMouseRaycast; // TODO переделать
         // private Toggle _mouseRaycastToggle;
 
-        private EditModeUI() 
+        private EditModeUI()
         {
         }
 
@@ -32,11 +34,13 @@ namespace Jrd.JUI.EditModeUI
 
         private void OnEnable()
         {
-            var root = GetComponent<UIDocument>().rootVisualElement;
+            EditModeRoot = GetComponent<UIDocument>().rootVisualElement;
             // _mouseRaycastToggle = root.Q<Toggle>("mouse-raycast");
-            // DebSetApplyButton = root.Q<Button>("apply-button");
-            // DebSetClearLogButton = root.Q<Button>("clear-button");
+            EditModePanel = EditModeRoot.Q<VisualElement>("edit-mode-panel");
+             EditModeCancelButton = EditModeRoot.Q<Button>("cancel-button");
             // DebSetText = root.Q<Label>("txt-lab");
+            
+            EditModeRoot.style.display = DisplayStyle.None;
         }
 
         private void FixedUpdate()

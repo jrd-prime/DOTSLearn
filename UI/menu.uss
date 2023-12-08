@@ -31,11 +31,31 @@
 
 .edit-mode-button {
     width: 60px;
-    height: 40px;
-    font-size: 10px;
+    height: 25px;
+    font-size: 8px;
     -unity-font-style: bold;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.color-white {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.color-light-blue {
+    background-color: rgb(145, 186, 221);
+}
+
+.color-light-red {
+    background-color: rgb(243, 145, 119);
+}
+
+.color-light-green {
+    background-color: rgb(171, 217, 104);
 }

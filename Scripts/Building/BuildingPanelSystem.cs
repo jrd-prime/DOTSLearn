@@ -1,12 +1,12 @@
-﻿using Jrd.DebSet;
-using Jrd.Grid.Points;
+﻿using Jrd.Grid.Points;
 using Jrd.JCamera;
-using Jrd.UserInput;
+using Jrd.JUI.EditModeUI;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 namespace Jrd
 {
@@ -25,7 +25,7 @@ namespace Jrd
         protected override void OnUpdate()
         {
             if (_isBuildingPanelInitialized) return;
-            
+
             _em = EntityManager;
             var entity = SystemAPI.GetSingletonEntity<BuildingPrefabComponent>();
             _buildingPrefabComponent = _em.GetComponentData<BuildingPrefabComponent>(entity);
@@ -34,7 +34,20 @@ namespace Jrd
             BuildingPanelUI.Building1.clicked += ChoosePrefabForBuild;
             BuildingPanelUI.Building2.clicked += () => H.T("BPU 2");
 
+            EditModeUI.EditModeCancelButton.clicked += HideEditMode;
+
             _isBuildingPanelInitialized = true;
+        }
+
+        private void HideEditMode()
+        {
+            if (EditModeUI.EditModeRoot.style.display == DisplayStyle.None) return;
+
+            var hideEditModePanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
+                new StyleValues { bottom = 0f },
+                new StyleValues { bottom = -100f }, 500).Ease(Easing.InQuad).KeepAlive();
+            hideEditModePanelAnimation.onAnimationCompleted =
+                () => EditModeUI.EditModeRoot.style.display = DisplayStyle.None;
         }
 
         // выбираем то что будем строить и происходит цепочка событий которая размещает префаб в центре
@@ -46,8 +59,8 @@ namespace Jrd
             Entity prefab = default; // TODO choose prefab
 
             // LOOK show edit mode UI
-            ShowEditModeUI();
-            
+            ShowEditModeUI(); // TODO to component
+
             // LOOK test prefab
             prefab = _buildingPrefabComponent.Building1Prefab;
 
@@ -58,12 +71,25 @@ namespace Jrd
 
         private void ShowEditModeUI()
         {
-            
+            if (EditModeUI.EditModeRoot.style.display == DisplayStyle.Flex) return;
+
+            EditModeUI.EditModeRoot.style.display = DisplayStyle.Flex;
+            var showEditMenuPanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
+                new StyleValues { bottom = -100f },
+                new StyleValues { bottom = 0f }, 1000).Ease(Easing.OutElastic).KeepAlive();
+
+            // showEditMenuPanelAnimation.onAnimationCompleted = 
+
+            // EditModeUI.EditModeRoot.style.bottom = -100f;
+            // EditModeUI.EditModeRoot.experimental.animation
+            //     .Start(25f, 200f, 3000, (b, val) => { b.style.display = DisplayStyle.Flex; })
+            //     .Ease(Easing.OutBounce);
+
+            // a.onAnimationCompleted;
         }
 
         private void PlacePrefabInCenterScreen(Entity prefab)
         {
-            H.T("PlacePrefabInCenterScreen");
             var screenCenterPoint = Utils.GetScreenCenterPoint();
 
             var coords = GetPointCoordsInCenterScreen(screenCenterPoint);
@@ -112,7 +138,6 @@ namespace Jrd
 
         private float3 GetPointCoordsInCenterScreen(Vector3 screenCenterPoint)
         {
-            H.T("GetPointCoordsInCenterScreen");
             if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(screenCenterPoint), out var hit))
             {
                 return new float3
