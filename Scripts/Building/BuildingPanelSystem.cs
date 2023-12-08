@@ -40,14 +40,14 @@ namespace Jrd
 
 
             BuildingPanelUI.BuildingCancel.clicked += () => H.T("BPU Cancel");
-            BuildingPanelUI.Building1.clicked += ChoosePrefabForBuild;
+            // BuildingPanelUI.Building1.clicked += ChoosePrefabForBuild;
             BuildingPanelUI.Building2.clicked += () => H.T("BPU 2"); // dispose previous
 
-            EditModeUI.EditModeCancelButton.clicked += () =>
-            {
-                RemoveTempBuilding();
-                HideEditMode();
-            };
+            // EditModeUI.EditModeCancelButton.clicked += () =>
+            // {
+            //     RemoveTempBuilding();
+            //     HideEditMode();
+            // };
 
             _isBuildingPanelInitialized = true;
         }
@@ -90,7 +90,7 @@ namespace Jrd
             Entity prefab = default; // TODO choose prefab
 
             // LOOK show edit mode UI
-            ShowEditModeUI(); // TODO to component
+           // ShowEditModeUI(); // TODO to component
 
             // LOOK test prefab
             prefab = _buildingPrefabComponent.Building1Prefab;
@@ -106,24 +106,24 @@ namespace Jrd
             // 2. инпут мувмента должен двигать не камеру а префаб
         }
 
-        private void ShowEditModeUI()
-        {
-            if (EditModeUI.EditModeRoot.style.display == DisplayStyle.Flex) return;
-
-            EditModeUI.EditModeRoot.style.display = DisplayStyle.Flex;
-            var showEditMenuPanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
-                new StyleValues { bottom = -100f },
-                new StyleValues { bottom = 0f }, 1000).Ease(Easing.OutElastic).KeepAlive();
-
-            // showEditMenuPanelAnimation.onAnimationCompleted = 
-
-            // EditModeUI.EditModeRoot.style.bottom = -100f;
-            // EditModeUI.EditModeRoot.experimental.animation
-            //     .Start(25f, 200f, 3000, (b, val) => { b.style.display = DisplayStyle.Flex; })
-            //     .Ease(Easing.OutBounce);
-
-            // a.onAnimationCompleted;
-        }
+        // private void ShowEditModeUI()
+        // {
+        //     if (EditModeUI.EditModeRoot.style.display == DisplayStyle.Flex) return;
+        //
+        //     EditModeUI.EditModeRoot.style.display = DisplayStyle.Flex;
+        //     var showEditMenuPanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
+        //         new StyleValues { bottom = -100f },
+        //         new StyleValues { bottom = 0f }, 1000).Ease(Easing.OutElastic).KeepAlive();
+        //
+        //     // showEditMenuPanelAnimation.onAnimationCompleted = 
+        //
+        //     // EditModeUI.EditModeRoot.style.bottom = -100f;
+        //     // EditModeUI.EditModeRoot.experimental.animation
+        //     //     .Start(25f, 200f, 3000, (b, val) => { b.style.display = DisplayStyle.Flex; })
+        //     //     .Ease(Easing.OutBounce);
+        //
+        //     // a.onAnimationCompleted;
+        // }
 
         private void PlacePrefabInCenterScreen(Entity prefab)
         {

@@ -22,5 +22,13 @@ namespace Jrd
         {
             return new Vector2(Screen.width / 2f, Screen.height / 2f);
         }
+
+        // public static void OffSystem()
+        // {
+        //     var world = World.DefaultGameObjectInjectionWorld;
+        //     var a =World.DefaultGameObjectInjectionWorld.GetExistingSystem<EditModePanelSystem>();
+        //     ref SystemState state = ref world.Unmanaged.ResolveSystemStateRef(a);
+        //     state.Enabled = false;
+        // }
     }
 }
