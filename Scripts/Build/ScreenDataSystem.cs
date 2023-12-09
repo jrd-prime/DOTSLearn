@@ -31,14 +31,14 @@ namespace Jrd.Build
         {
             var width = Screen.width;
             var height = Screen.height;
-            
+
             // return if screen size not changed
             var screenSizes = SystemAPI.GetComponentRO<ScreenComponent>(_screenSingleton).ValueRO.WidthAndHeight;
-            if (Math.Abs(screenSizes.x - width) < 0.01f && Math.Abs(screenSizes.y - height) < 0.01f) return;
+            if (Utils.IsScreenSizeChanged(screenSizes.x, screenSizes.y)) return;
 
             var screenWidthAndHeight = new float2(width, height);
             var center = new float2(width / 2f, height / 2f);
-            
+
             SystemAPI.SetComponent(_screenSingleton, new ScreenComponent
             {
                 ScreenCenter = center,

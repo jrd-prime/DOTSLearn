@@ -1,7 +1,6 @@
 ﻿using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Build.EditModePanel
 {
@@ -24,7 +23,6 @@ namespace Jrd.Build.EditModePanel
             foreach (var b in SystemAPI.Query<RefRW<EditModePanelComponent>>())
             {
                 var a = b.ValueRW;
-                Debug.Log(a.ShowPanel);
                 switch (a.ShowPanel)
                 {
                     case true:

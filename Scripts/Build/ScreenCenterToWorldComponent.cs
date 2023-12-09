@@ -4,7 +4,7 @@ using Unity.Mathematics;
 namespace Jrd.Build
 {
     /// <summary>
-    /// Хранит координаты мира исходя из центра скрина
+    /// Хранит координаты мира исходя из центра экрана
     /// </summary>
     public struct ScreenCenterToWorldComponent : IComponentData
     {
