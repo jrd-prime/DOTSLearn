@@ -10,8 +10,8 @@ namespace Jrd.Build
         private EntityCommandBuffer _ecb;
         private EntityManager _em;
         private bool _isSubscribed;
-
         private Entity _buildPanelComponent;
+        private Entity _tempBuildPrefabComponent;
 
         protected override void OnCreate()
         {
@@ -19,22 +19,26 @@ namespace Jrd.Build
             _ecb = new EntityCommandBuffer(Allocator.Temp);
             _em = EntityManager;
 
-            var buildPanelArchetype = _em.CreateArchetype(typeof(EditModePanelComponent));
-            var buildPanelEntity = _ecb.CreateEntity(buildPanelArchetype);
-            _ecb.SetName(buildPanelEntity, "_BuildPanelEntity");
+            var editModePanelArchetype = _em.CreateArchetype(typeof(EditModePanelComponent));
+            var editModePanelEntity = _ecb.CreateEntity(editModePanelArchetype);
+            _ecb.SetName(editModePanelEntity, "_EditModePanelEntity");
+
+            var tempBuildPrefabArchetype = _em.CreateArchetype(typeof(TempBuildPrefabComponent));
+            var tempBuildPrefabEntity = _ecb.CreateEntity(tempBuildPrefabArchetype);
+            _ecb.SetName(tempBuildPrefabEntity, "_TempBuildPrefabEntity");
+
             _ecb.Playback(_em);
             _ecb.Dispose();
         }
 
-
         protected override void OnStartRunning()
         {
             _buildPanelComponent = SystemAPI.GetSingletonEntity<EditModePanelComponent>();
+            _tempBuildPrefabComponent = SystemAPI.GetSingletonEntity<TempBuildPrefabComponent>();
         }
 
         protected override void OnUpdate()
         {
-            
             // Debug.Log("BuildSystem up");
             if (_isSubscribed) return;
             BuildingPanelUI.Building1.clicked += EnterInEditMode;
@@ -46,7 +50,7 @@ namespace Jrd.Build
         {
             H.T("ExitFromEditMode");
             // Hide edit mode panel
-            SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = false});
+            SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = false });
             // Destroy temp building TODO
             // Exit from edit mode state TODO
         }
@@ -56,7 +60,7 @@ namespace Jrd.Build
             H.T("EnterInEditMode");
             // Enter in edit mode state TODO
             // Show edit mode panel
-            SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = true});
+            SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = true });
             // Place temp building TODO
         }
     }

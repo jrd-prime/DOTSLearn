@@ -66,16 +66,16 @@ namespace Jrd
             ecb.Dispose();
         }
 
-        private void HideEditMode()
-        {
-            if (EditModeUI.EditModeRoot.style.display == DisplayStyle.None) return;
-
-            var hideEditModePanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
-                new StyleValues { bottom = 0f },
-                new StyleValues { bottom = -100f }, 500).Ease(Easing.InQuad).KeepAlive();
-            hideEditModePanelAnimation.onAnimationCompleted =
-                () => EditModeUI.EditModeRoot.style.display = DisplayStyle.None;
-        }
+        // private void HideEditMode()
+        // {
+        //     if (EditModeUI.EditModeRoot.style.display == DisplayStyle.None) return;
+        //
+        //     var hideEditModePanelAnimation = EditModeUI.EditModePanel.experimental.animation.Start(
+        //         new StyleValues { bottom = 0f },
+        //         new StyleValues { bottom = -100f }, 500).Ease(Easing.InQuad).KeepAlive();
+        //     hideEditModePanelAnimation.onAnimationCompleted =
+        //         () => EditModeUI.EditModeRoot.style.display = DisplayStyle.None;
+        // }
 
         // выбираем то что будем строить и происходит цепочка событий которая размещает префаб в центре
         // экрана, записывает/читает данные по точкам

@@ -8,7 +8,6 @@ namespace Jrd
         public static BuildingPanelUI Instance;
 
         public static VisualElement BuildingPanel;
-
         public static Button BuildingCancel;
         public static Button Building1;
         public static Button Building2;

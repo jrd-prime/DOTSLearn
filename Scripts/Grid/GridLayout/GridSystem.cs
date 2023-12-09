@@ -1,4 +1,5 @@
 ﻿using Jrd.Grid.Points;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace Jrd.Grid.GridLayout
 {
-    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
+    [BurstCompile]
     public partial struct GridSystem : ISystem
     {
         // TODO CACHE
@@ -18,6 +19,7 @@ namespace Jrd.Grid.GridLayout
             state.RequireForUpdate<GridComponent>();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;
