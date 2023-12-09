@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace Jrd.Grid.GridLayout
 {
-    [BurstCompile]
     public partial struct GridSystem : ISystem
     {
         // TODO CACHE
@@ -19,7 +18,6 @@ namespace Jrd.Grid.GridLayout
             state.RequireForUpdate<GridComponent>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;

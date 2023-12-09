@@ -1,12 +1,17 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 
 namespace Jrd.Build
 {
     /// <summary>
-    /// Префаб, который будем размещать при переходе в режим строительства
+    /// Префабы, из которых будем выбирать и размещать при переходе в режим строительства
     /// </summary>
     public struct TempBuildPrefabComponent : IComponentData
     {
-        public Entity TempPrefab;
+    }
+
+    public struct PrefabBufferElements : IBufferElementData
+    {
+        public Entity PrefabEntity;
     }
 }

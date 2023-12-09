@@ -42,7 +42,7 @@ namespace Jrd.Build
             // Debug.Log("BuildSystem up");
             if (_isSubscribed) return;
             BuildingPanelUI.Building1.clicked += EnterInEditMode;
-            EditModeUI.EditModeCancelButton.clicked += ExitFromEditMode; // LOOK rename
+            EditModeUI.EditModeCancelButton.clicked += ExitFromEditMode;
             _isSubscribed = true;
         }
 
@@ -61,6 +61,7 @@ namespace Jrd.Build
             // Enter in edit mode state TODO
             // Show edit mode panel
             SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = true });
+            SystemAPI.SetComponent(_tempBuildPrefabComponent, new TempBuildPrefabComponent());
             // Place temp building TODO
         }
     }

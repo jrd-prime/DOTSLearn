@@ -38,3 +38,20 @@ namespace Jrd
 //     ref SystemState state = ref world.Unmanaged.ResolveSystemStateRef(a);
 //     state.Enabled = false;
 // }
+
+ 
+// public partial struct MapRespawnSystem : ISystem
+// {
+//     [BurstCompile]
+//     public void OnUpdate(ref SystemState state)
+//     {
+//         foreach (var (mapBuffer, entity) in SystemAPI.Query<DynamicBuffer<MapElement>>().WithAll<MapEntities>().WithEntityAccess())
+//         {
+//             for (int i = 0; i < mapBuffer.Length; i++)
+//             {
+//                 state.EntityManager.Instantiate(mapBuffer[i].MapEntity);
+//             }
+//         }
+//         state.Enabled = false;
+//     }
+// }
