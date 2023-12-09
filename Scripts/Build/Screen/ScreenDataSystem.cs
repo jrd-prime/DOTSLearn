@@ -1,10 +1,8 @@
-﻿using System;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace Jrd.Build
+namespace Jrd.Build.Screen
 {
     /// <summary>
     /// Размер экрана / Координаты центра экрана
@@ -29,8 +27,8 @@ namespace Jrd.Build
 
         public void OnUpdate(ref SystemState state)
         {
-            var width = Screen.width;
-            var height = Screen.height;
+            var width = UnityEngine.Screen.width;
+            var height = UnityEngine.Screen.height;
 
             // return if screen size not changed
             var screenSizes = SystemAPI.GetComponentRO<ScreenComponent>(_screenSingleton).ValueRO.WidthAndHeight;

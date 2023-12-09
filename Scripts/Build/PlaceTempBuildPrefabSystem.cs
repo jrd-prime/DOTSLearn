@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using Jrd.Build.Screen;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine.SocialPlatforms;
+using UnityEngine;
 
 namespace Jrd.Build
 {
@@ -17,12 +18,26 @@ namespace Jrd.Build
             var screenCenterToWorldComponent = SystemAPI.GetSingleton<ScreenCenterToWorldComponent>();
 
             // тут сопсна мы должны устанавливать данные для префаба
-            foreach (var (buffer, prefab) in SystemAPI.Query<DynamicBuffer<PrefabBufferElements>>()
-                         .WithAll<TempBuildPrefabComponent>().WithEntityAccess())
+            foreach (var prefab in SystemAPI.Query<RefRO<TempBuildPrefabComponent>>())
             {
                 // LOOK гдет надо устанавливать префаб который хотим плэйсить
-                
-                
+                // типа надо гдето выбирать конкретный префаб, создавать компонент, который тут будем ловить
+                // и сэтить в него префаб, а тут только плэйс
+
+                var tempPrefab = prefab.ValueRO.tempBuildPrefab;
+
+                if (tempPrefab != Entity.Null)
+                {
+                    var instantiate = state.EntityManager.Instantiate(prefab.ValueRO.tempBuildPrefab);
+                    state.EntityManager.SetComponentData(instantiate, new LocalTransform
+                    {
+                        Position = new float3(3, 0, 3),
+                        Rotation = quaternion.identity,
+                        Scale = 1
+                    });
+                }
+
+
                 // var a = prefab.ValueRO.TempPrefab;
                 // state.EntityManager.SetComponentData(a, new LocalTransform
                 // {

@@ -132,8 +132,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 364754391}
+  - component: {fileID: 364754392}
   m_Layer: 0
-  m_Name: BuildPrefabAuthoring
+  m_Name: BuildPrefabsAuthoring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,6 +155,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &364754392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364754390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e08988132a8a4739bc8c5dc150e51829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 8333030599782928362, guid: 1a35c80b3adaaf644b96a93a6e40c862, type: 3}
+  - {fileID: 3268608845866167242, guid: 310a718af8a33234d88aa5f0fd8647cb, type: 3}
 --- !u!1 &1351628546
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,9 @@ namespace Jrd.Build
         private bool _isSubscribed;
         private Entity _buildPanelComponent;
         private Entity _tempBuildPrefabComponent;
+        private Entity _buildPrefabsComponent;
+
+        private Entity _tempPrefab;
 
         protected override void OnCreate()
         {
@@ -33,12 +36,16 @@ namespace Jrd.Build
 
         protected override void OnStartRunning()
         {
+            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
             _buildPanelComponent = SystemAPI.GetSingletonEntity<EditModePanelComponent>();
             _tempBuildPrefabComponent = SystemAPI.GetSingletonEntity<TempBuildPrefabComponent>();
         }
 
         protected override void OnUpdate()
         {
+            var a = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent);
+            _tempPrefab = a.ElementAt(0).PrefabEntity;
+
             // Debug.Log("BuildSystem up");
             if (_isSubscribed) return;
             BuildingPanelUI.Building1.clicked += EnterInEditMode;
@@ -61,7 +68,8 @@ namespace Jrd.Build
             // Enter in edit mode state TODO
             // Show edit mode panel
             SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = true });
-            SystemAPI.SetComponent(_tempBuildPrefabComponent, new TempBuildPrefabComponent());
+            SystemAPI.SetComponent(_tempBuildPrefabComponent,
+                new TempBuildPrefabComponent { tempBuildPrefab = _tempPrefab });
             // Place temp building TODO
         }
     }

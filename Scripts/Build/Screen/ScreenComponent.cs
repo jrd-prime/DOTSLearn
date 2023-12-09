@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Build
+namespace Jrd.Build.Screen
 {
     public struct ScreenComponent : IComponentData
     {

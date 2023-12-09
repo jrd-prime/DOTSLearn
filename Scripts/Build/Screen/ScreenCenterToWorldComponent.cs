@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Build
+namespace Jrd.Build.Screen
 {
     /// <summary>
     /// Хранит координаты мира исходя из центра экрана

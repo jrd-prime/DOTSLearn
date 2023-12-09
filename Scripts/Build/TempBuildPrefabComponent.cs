@@ -1,5 +1,4 @@
-﻿using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace Jrd.Build
 {
@@ -8,10 +7,6 @@ namespace Jrd.Build
     /// </summary>
     public struct TempBuildPrefabComponent : IComponentData
     {
-    }
-
-    public struct PrefabBufferElements : IBufferElementData
-    {
-        public Entity PrefabEntity;
+        public Entity tempBuildPrefab;
     }
 }

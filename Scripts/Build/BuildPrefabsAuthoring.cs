@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Jrd.Build
 {
-    public class TempBuildPrefabAuthoring : MonoBehaviour
+    public class BuildPrefabsAuthoring : MonoBehaviour
     {
         public List<GameObject> prefabs;
-
-        public class TempBuildPrefabBaker : Baker<TempBuildPrefabAuthoring>
+        
+        public class Baker : Baker<BuildPrefabsAuthoring>
         {
-            public override void Bake(TempBuildPrefabAuthoring authoring)
+            public override void Bake(BuildPrefabsAuthoring authoring)
             {
                 var e = GetEntity(TransformUsageFlags.Dynamic);
                 var buffer = AddBuffer<PrefabBufferElements>(e);
@@ -21,9 +21,12 @@ namespace Jrd.Build
                     {
                         PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic)
                     });
-                    AddComponent<TempBuildPrefabComponent>(e);
                 }
+
+                AddComponent<BuildPrefabComponent>(e);
             }
         }
     }
+
+    
 }
