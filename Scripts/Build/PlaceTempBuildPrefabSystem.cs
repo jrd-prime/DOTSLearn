@@ -10,13 +10,13 @@ namespace Jrd.Build
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<ScreenCenterToWorldComponent>();
+            state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            var screenCenterToWorldComponent = SystemAPI.GetSingleton<ScreenCenterToWorldComponent>();
-
+            var screenCenterToWorldComponent = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>();
+            Debug.Log(screenCenterToWorldComponent.ScreenCenterToWorld);
             // тут сопсна мы должны устанавливать данные для префаба
             foreach (var prefab in SystemAPI.Query<RefRO<TempBuildPrefabComponent>>())
             {
@@ -26,16 +26,15 @@ namespace Jrd.Build
 
                 var tempPrefab = prefab.ValueRO.tempBuildPrefab;
 
-                if (tempPrefab != Entity.Null)
+                if (tempPrefab == Entity.Null) return;
+
+                var instantiate = state.EntityManager.Instantiate(prefab.ValueRO.tempBuildPrefab);
+                state.EntityManager.SetComponentData(instantiate, new LocalTransform
                 {
-                    var instantiate = state.EntityManager.Instantiate(prefab.ValueRO.tempBuildPrefab);
-                    state.EntityManager.SetComponentData(instantiate, new LocalTransform
-                    {
-                        Position = new float3(3, 0, 3),
-                        Rotation = quaternion.identity,
-                        Scale = 1
-                    });
-                }
+                    Position = screenCenterToWorldComponent.ScreenCenterToWorld,
+                    Rotation = quaternion.identity,
+                    Scale = 1
+                });
 
 
                 // var a = prefab.ValueRO.TempPrefab;
