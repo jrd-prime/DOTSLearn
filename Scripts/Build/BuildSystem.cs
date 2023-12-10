@@ -59,6 +59,9 @@ namespace Jrd.Build
             // Hide edit mode panel
             SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = false });
             // Destroy temp building TODO
+            // _em.DestroyEntity(SystemAPI.GetComponent<TempBuildPrefabComponent>(_tempBuildPrefabComponent).instantiatedTempEntity);
+            _em.AddComponent<TempPrefabForRemoveTag>(_tempBuildPrefabComponent); // TODO ecb
+            // SystemAPI.SetComponent(_tempBuildPrefabComponent, new TempPrefabForRemoveTag());
             // Exit from edit mode state TODO
         }
 
@@ -70,6 +73,7 @@ namespace Jrd.Build
             SystemAPI.SetComponent(_buildPanelComponent, new EditModePanelComponent { ShowPanel = true });
             SystemAPI.SetComponent(_tempBuildPrefabComponent,
                 new TempBuildPrefabComponent { tempBuildPrefab = _tempPrefab });
+            _em.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabComponent); // tag for place // TODO ecb
             // Place temp building TODO
         }
     }

@@ -10,7 +10,7 @@ namespace Jrd.Build.Screen
     /// Получаем мировые координаты точки с центра экрана
     /// </summary>
     [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
-    public partial struct ScreenCenterToWorldSystem : ISystem
+    public partial struct ScreenCenterInWorldCoordsSystem : ISystem
     {
         private Entity _screenCenterToWorldSingleton;
 

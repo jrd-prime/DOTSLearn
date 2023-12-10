@@ -8,5 +8,6 @@ namespace Jrd.Build
     public struct TempBuildPrefabComponent : IComponentData
     {
         public Entity tempBuildPrefab;
+        public Entity instantiatedTempEntity;
     }
 }
