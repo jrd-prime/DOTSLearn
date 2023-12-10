@@ -10,6 +10,7 @@ namespace Jrd.JUI.EditModeUI
 
         public static VisualElement EditModePanel;
         public static VisualElement EditModeRoot;
+        public static Label EditModeLabel;
         public static Button EditModeCancelButton;
         private const float BottomHided = -100f;
         private const float BottomShowed = 0f;
@@ -43,7 +44,7 @@ namespace Jrd.JUI.EditModeUI
             // _mouseRaycastToggle = root.Q<Toggle>("mouse-raycast");
             EditModePanel = EditModeRoot.Q<VisualElement>("edit-mode-panel");
             EditModeCancelButton = EditModeRoot.Q<Button>("cancel-button");
-            // DebSetText = root.Q<Label>("txt-lab");
+            EditModeLabel = EditModeRoot.Q<Label>("label-text");
 
             EditModeRoot.style.display = DisplayStyle.None;
             EditModeRoot.style.bottom = BottomHided;

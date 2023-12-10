@@ -76,6 +76,7 @@ namespace Jrd.Grid.GridLayout
         }
 
 
+        [BurstCompile] // TODO job
         private void GeneratePointsLevel(string tag, float2 start, int2 size, Entity prefab, float scale,
             EntityCommandBuffer ecb,
             ref SystemState state)
@@ -89,17 +90,17 @@ namespace Jrd.Grid.GridLayout
                     var position = new float3(x, 0, z);
                     var entity = em.Instantiate(prefab);
 
-                    ecb.AddComponent(entity, typeof(PointComponent));
+                    ecb.AddComponent<PointComponent>(entity);
                     switch (tag)
                     {
                         case "main":
-                            ecb.AddComponent(entity, typeof(PointMainTagComponent));
+                            ecb.AddComponent<PointMainTagComponent>(entity);
                             break;
                         case "mid":
-                            ecb.AddComponent(entity, typeof(PointMidTagComponent));
+                            ecb.AddComponent<PointMidTagComponent>(entity);
                             break;
                         case "small":
-                            ecb.AddComponent(entity, typeof(PointSmallTagComponent));
+                            ecb.AddComponent<PointSmallTagComponent>(entity);
                             break;
                     }
 

@@ -7,7 +7,7 @@ namespace Jrd.Build
     public class BuildPrefabsAuthoring : MonoBehaviour
     {
         public List<GameObject> prefabs;
-        
+
         public class Baker : Baker<BuildPrefabsAuthoring>
         {
             public override void Bake(BuildPrefabsAuthoring authoring)
@@ -19,7 +19,7 @@ namespace Jrd.Build
                 {
                     buffer.Add(new PrefabBufferElements
                     {
-                        PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic)
+                        PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic), PrefabName = prefab.name
                     });
                 }
 
@@ -27,6 +27,4 @@ namespace Jrd.Build
             }
         }
     }
-
-    
 }

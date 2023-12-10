@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 
 namespace Jrd.Build
 {
@@ -10,5 +11,6 @@ namespace Jrd.Build
     public struct PrefabBufferElements : IBufferElementData
     {
         public Entity PrefabEntity;
+        public FixedString32Bytes PrefabName;
     }
 }

@@ -9,5 +9,6 @@ namespace Jrd.Build
     {
         public Entity tempBuildPrefab;
         public Entity instantiatedTempEntity;
+        public bool IsPlaced;
     }
 }
