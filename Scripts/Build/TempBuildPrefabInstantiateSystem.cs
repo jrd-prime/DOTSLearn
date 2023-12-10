@@ -3,7 +3,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Jrd.Build
 {
@@ -16,10 +15,6 @@ namespace Jrd.Build
         {
             state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
         }
-
-        // LOOK гдет надо устанавливать префаб который хотим плэйсить
-        // типа надо гдето выбирать конкретный префаб, создавать компонент, который тут будем ловить
-        // и сэтить в него префаб, а тут только плэйс
 
         public void OnUpdate(ref SystemState state)
         {
@@ -57,23 +52,12 @@ namespace Jrd.Build
             foreach (var query in SystemAPI.Query<RefRO<TempBuildPrefabComponent>, TempPrefabForRemoveTag>()
                          .WithEntityAccess())
             {
-                Debug.Log("founded remove tag");
                 ecb.DestroyEntity(query.Item1.ValueRO.instantiatedTempEntity);
                 ecb.RemoveComponent<TempPrefabForRemoveTag>(query.Item3);
             }
-
-
+            
             ecb.Playback(em);
             ecb.Dispose();
         }
     }
 }
-
-// foreach (var (mapBuffer, entity) in SystemAPI.Query<DynamicBuffer<MapElement>>().WithAll<MapEntities>()
-//              .WithEntityAccess())
-//         {
-//             for (int i = 0; i < mapBuffer.Length; i++)
-//             {
-//                 state.EntityManager.Instantiate(mapBuffer[i].MapEntity);
-//             }
-//         }

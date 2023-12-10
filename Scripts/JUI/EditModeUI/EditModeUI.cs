@@ -11,6 +11,10 @@ namespace Jrd.JUI.EditModeUI
         public static VisualElement EditModePanel;
         public static VisualElement EditModeRoot;
         public static Button EditModeCancelButton;
+        private const float BottomHided = -100f;
+        private const float BottomShowed = 0f;
+        private const int ShowDuration = 1000;
+        private const int HideDuration = 500;
 
         //
         // public static Label DebSetText;
@@ -42,6 +46,7 @@ namespace Jrd.JUI.EditModeUI
             // DebSetText = root.Q<Label>("txt-lab");
 
             EditModeRoot.style.display = DisplayStyle.None;
+            EditModeRoot.style.bottom = BottomHided;
         }
 
         private void FixedUpdate()
@@ -51,32 +56,27 @@ namespace Jrd.JUI.EditModeUI
 
         public static void ShowEditModePanel()
         {
-            var root = EditModeRoot;
-            if (root.style.display == DisplayStyle.Flex) return;
-            root.style.display = DisplayStyle.Flex;
-            var showEditMenuPanelAnimation = root.experimental.animation.Start(
-                new StyleValues { bottom = -100f },
-                new StyleValues { bottom = 0f }, 1000).Ease(Easing.OutElastic).KeepAlive();
+            EditModeRoot.style.display = DisplayStyle.Flex;
+            EditModeRoot.experimental.animation
+                .Start(
+                    new StyleValues { bottom = BottomHided },
+                    new StyleValues { bottom = BottomShowed },
+                    ShowDuration)
+                .Ease(Easing.OutElastic)
+                .KeepAlive();
         }
 
         // BUG on hide panel
         public static void HideEditModePanel()
         {
-            if (EditModeRoot.style.display == DisplayStyle.None) return;
-
-            var hideEditModePanelAnimation = EditModePanel.experimental.animation.Start(
-                new StyleValues { bottom = 0f },
-                new StyleValues { bottom = -100f }, 500).Ease(Easing.InQuad).KeepAlive();
-            hideEditModePanelAnimation.onAnimationCompleted =
-                () => EditModeRoot.style.display = DisplayStyle.None;
-            
-            // var root = EditModeRoot;
-            // if (root.style.display == DisplayStyle.None) return;
-            // var hideEditModePanelAnimation = EditModePanel.experimental.animation.Start(
-            //     new StyleValues { bottom = 0f },
-            //     new StyleValues { bottom = -100f }, 500).Ease(Easing.InSine).KeepAlive();
-            // hideEditModePanelAnimation.onAnimationCompleted =
-            //     () => root.style.display = DisplayStyle.None;
+            EditModeRoot.experimental.animation
+                .Start(
+                    new StyleValues { bottom = BottomShowed },
+                    new StyleValues { bottom = BottomHided },
+                    HideDuration)
+                .Ease(Easing.InQuad)
+                .KeepAlive()
+                .onAnimationCompleted = () => EditModeRoot.style.display = DisplayStyle.None;
         }
     }
 }

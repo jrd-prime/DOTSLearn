@@ -1,40 +1,46 @@
-﻿using Jrd.JUI.EditModeUI;
+﻿using Jrd.JUI;
+using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace Jrd.Build.EditModePanel
 {
+    /// <summary>
+    /// Показать/скрыть панель редактирования в режиме строительства
+    /// </summary>
     public partial struct EditModePanelSystem : ISystem
     {
-        private EntityCommandBuffer ecb;
+        private EntityCommandBuffer _ecb;
         private EntityManager _em;
 
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<EditModePanelComponent>();
-            ecb = new EntityCommandBuffer(Allocator.Temp);
             _em = state.EntityManager;
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            // state.Enabled = false;
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            foreach (var b in SystemAPI.Query<RefRW<EditModePanelComponent>>())
+            // show tag
+            foreach (var editPanelShowTagQuery in SystemAPI.Query<EditModePanelComponent, VisualElementShowTag>()
+                         .WithEntityAccess())
             {
-                var a = b.ValueRW;
-                switch (a.ShowPanel)
-                {
-                    case true:
-                        EditModeUI.ShowEditModePanel();
-                        a.IsVisible = true;
-                        break;
-                    case false:
-                        EditModeUI.HideEditModePanel();
-                        a.IsVisible = false;
-                        break;
-                }
+                EditModeUI.ShowEditModePanel();
+                _ecb.RemoveComponent<VisualElementShowTag>(editPanelShowTagQuery.Item3);
             }
+
+            // hide tag
+            foreach (var editPanelHideTagQuery in SystemAPI.Query<EditModePanelComponent, VisualElementHideTag>()
+                         .WithEntityAccess())
+            {
+                EditModeUI.HideEditModePanel();
+                _ecb.RemoveComponent<VisualElementHideTag>(editPanelHideTagQuery.Item3);
+            }
+
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
     }
 }
