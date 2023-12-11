@@ -2,12 +2,14 @@
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.Build.EditModePanel
 {
     /// <summary>
     /// Показать/скрыть панель редактирования в режиме строительства
     /// </summary>
+    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
     public partial struct EditModePanelSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
@@ -15,8 +17,16 @@ namespace Jrd.Build.EditModePanel
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<EditModePanelComponent>();
+            _ecb = new EntityCommandBuffer(Allocator.Temp, PlaybackPolicy.SinglePlayback);
+            Debug.Log("EditModePanelSystem");
+
             _em = state.EntityManager;
+
+            var e = _ecb.CreateEntity();
+            _ecb.SetName(e, "_Entity_EditModePanel");
+            _ecb.AddComponent<EditModePanelComponent>(e);
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
 
         public void OnUpdate(ref SystemState state)

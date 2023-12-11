@@ -7,8 +7,7 @@ namespace Jrd.Build.Screen
     /// <summary>
     /// Размер экрана / Координаты центра экрана
     /// </summary>
-    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
-    [UpdateBefore(typeof(ScreenCenterInWorldCoordsSystem))]
+
     public partial struct ScreenDataSystem : ISystem
     {
         private Entity _screenSingleton;

@@ -4,11 +4,11 @@ using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Jrd.Build
 {
-    public partial class BuildSystem : SystemBase
+    [UpdateInGroup(typeof(LateSimulationSystemGroup), OrderLast = true)]
+    public partial struct BuildSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
         private EntityManager _em;
@@ -17,47 +17,36 @@ namespace Jrd.Build
         private Entity _tempBuildPrefabComponent;
         private Entity _buildPrefabsComponent;
 
-        private int _currentPrefabId = -1;
+        private int _currentPrefabId;
 
         private DynamicBuffer<PrefabBufferElements> _prefabBufferElements;
         private Entity _tempPrefab;
-        private string _editModeState;
 
-        protected override void OnCreate()
+        public void OnCreate(ref SystemState state)
         {
-            // Debug.Log("BuildSystem cre");
+            Debug.Log("BuildSystem");
+            // state.RequireForUpdate<TempBuildPrefabComponent>();
+            state.RequireForUpdate<EditModePanelComponent>();
+
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _em = EntityManager;
-
-            var editModePanelArchetype = _em.CreateArchetype(typeof(EditModePanelComponent));
-            var editModePanelEntity = _ecb.CreateEntity(editModePanelArchetype);
-            _ecb.SetName(editModePanelEntity, "_EditModePanelEntity");
-
-            var tempBuildPrefabArchetype = _em.CreateArchetype(typeof(TempBuildPrefabComponent));
-            var tempBuildPrefabEntity = _ecb.CreateEntity(tempBuildPrefabArchetype);
-            _ecb.SetName(tempBuildPrefabEntity, "_TempBuildPrefabEntity");
-
-            _ecb.Playback(_em);
-            _ecb.Dispose();
-        }
-
-        protected override void OnStartRunning()
-        {
-            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
+            _em = state.EntityManager;
             _editModePanelComponent = SystemAPI.GetSingletonEntity<EditModePanelComponent>();
-            _tempBuildPrefabComponent = SystemAPI.GetSingletonEntity<TempBuildPrefabComponent>();
+            Debug.Log("=== " + _editModePanelComponent);
+            // _tempBuildPrefabComponent = SystemAPI.GetSingletonEntity<TempBuildPrefabComponent>();
+            // Debug.Log("=== " + _tempBuildPrefabComponent);
+            _currentPrefabId = -1;
         }
 
-        protected override void OnUpdate()
+        public void OnUpdate(ref SystemState state)
         {
             _prefabBufferElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent);
 
+
             // LOOK переделать
             if (_isSubscribed) return;
-
-            BuildingPanelUI.Building1.clicked += () => { EnterInEditMode(0); };
-            BuildingPanelUI.Building2.clicked += () => { EnterInEditMode(1); };
-
+            var tmpThis = this;
+            BuildingPanelUI.Building1.clicked += () => { tmpThis.EnterInEditMode(0); };
+            BuildingPanelUI.Building2.clicked += () => { tmpThis.EnterInEditMode(1); };
             EditModeUI.EditModeCancelButton.clicked += ExitFromEditMode;
             _isSubscribed = true;
         }
@@ -65,6 +54,7 @@ namespace Jrd.Build
         private void EnterInEditMode(int a)
         {
             _tempPrefab = _prefabBufferElements.ElementAt(a).PrefabEntity;
+            H.T(_tempPrefab.ToString());
 
             // LOOK ПЕРЕДЕЛАТЬ ЭТО Г
 
@@ -81,7 +71,7 @@ namespace Jrd.Build
                     _editModePanelComponent); // tag for show edit mode panel // TODO ecb
 
                 // Place temp building
-                SystemAPI.SetComponent(_tempBuildPrefabComponent,
+                _em.SetComponentData(_tempBuildPrefabComponent,
                     new TempBuildPrefabComponent { tempBuildPrefab = _tempPrefab });
                 _em.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabComponent); // tag for place // TODO ecb
 
@@ -98,10 +88,10 @@ namespace Jrd.Build
             {
                 _currentPrefabId = _tempPrefab.Index;
                 // Destroy previous prefab
-                _em.DestroyEntity(SystemAPI.GetComponent<TempBuildPrefabComponent>(_tempBuildPrefabComponent)
+                _em.DestroyEntity(_em.GetComponentData<TempBuildPrefabComponent>(_tempBuildPrefabComponent)
                     .instantiatedTempEntity);
                 // Set new temp prefab
-                SystemAPI.SetComponent(_tempBuildPrefabComponent,
+                _em.SetComponentData(_tempBuildPrefabComponent,
                     new TempBuildPrefabComponent { tempBuildPrefab = _tempPrefab });
                 // Place new temp prefab
                 _em.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabComponent); // tag for place // TODO ecb
