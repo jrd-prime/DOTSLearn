@@ -5,7 +5,7 @@ namespace Jrd.Build
     /// <summary>
     /// Префабы, из которых будем выбирать и размещать при переходе в режим строительства
     /// </summary>
-    public struct TempBuildPrefabComponent : IComponentData
+    public struct TempBuildPrefabInstantiateComponent : IComponentData
     {
         public Entity tempBuildPrefab;
         public Entity instantiatedTempEntity;

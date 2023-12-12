@@ -35,6 +35,7 @@ namespace Jrd.JCamera
 
             // set camera speed
             SystemAPI.SetComponent(cameraEntity, new MovableComponent { speed = CameraSpeed });
+            
         }
 
         public void OnUpdate(ref SystemState state)

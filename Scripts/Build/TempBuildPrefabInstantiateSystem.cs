@@ -12,7 +12,8 @@ namespace Jrd.Build
     /// <summary>
     /// Размещаем тэмп префаб
     /// </summary>
-    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
+
+    [UpdateBefore(typeof(BuildSystem))]
     public partial struct TempBuildPrefabInstantiateSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
@@ -23,60 +24,56 @@ namespace Jrd.Build
             Debug.Log("TempBuildPrefabInstantiateSystem");
             state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
 
-            _ecb = new EntityCommandBuffer(Allocator.Temp, PlaybackPolicy.SinglePlayback);
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
             _em = state.EntityManager;
 
-            // state.EntityManager.AddComponent<TempBuildPrefabComponent>(state.SystemHandle);
-
-            // var e = _ecb.CreateEntity();
-            // _ecb.SetName(e, "_Entity_TempBuildPrefab");
-            // _ecb.AddComponent<TempBuildPrefabComponent>(e);
-            // _ecb.Playback(_em);
-            // _ecb.Dispose();
+            _ecb.AddComponent<TempBuildPrefabInstantiateComponent>(_ecb.CreateEntity());
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var em = state.EntityManager;
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
+
             var coordsForPlace = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>().ScreenCenterToWorld;
 
             // Instantiate temp prefab
             foreach (var (prefab, tag, entity) in SystemAPI
-                         .Query<RefRW<TempBuildPrefabComponent>, TempPrefabForPlaceTag>()
+                         .Query<RefRW<TempBuildPrefabInstantiateComponent>, TempPrefabForPlaceTag>()
                          .WithEntityAccess())
             {
                 var tempPrefab = prefab.ValueRO.tempBuildPrefab;
 
                 if (tempPrefab == Entity.Null) return;
 
-                var tempEntity = ecb.Instantiate(tempPrefab);
+                var tempEntity = _ecb.Instantiate(tempPrefab);
 
-                ecb.SetComponent(tempEntity, new LocalTransform
+                _ecb.SetComponent(tempEntity, new LocalTransform
                 {
                     Position = coordsForPlace,
                     Rotation = quaternion.identity,
                     Scale = 1
                 });
-                // ecb.SetComponent(entity, new TempBuildPrefabComponent
-                // {
-                //     tempBuildPrefab = tempPrefab,
-                //     instantiatedTempEntity = tempEntity
-                // });
+                _ecb.SetComponent(entity, new TempBuildPrefabInstantiateComponent
+                {
+                    tempBuildPrefab = tempPrefab,
+                    instantiatedTempEntity = tempEntity
+                });
 
-                ecb.RemoveComponent<TempPrefabForPlaceTag>(entity);
+                _ecb.RemoveComponent<TempPrefabForPlaceTag>(entity);
             }
 
             // Destroy temp prefab if we exit from edit mode
-            foreach (var query in SystemAPI.Query<RefRO<TempBuildPrefabComponent>, TempPrefabForRemoveTag>()
+            foreach (var query in SystemAPI.Query<RefRO<TempBuildPrefabInstantiateComponent>, TempPrefabForRemoveTag>()
                          .WithEntityAccess())
             {
-                ecb.DestroyEntity(query.Item1.ValueRO.instantiatedTempEntity);
-                // ecb.RemoveComponent<TempPrefabForRemoveTag>(query.Item3);
+                _ecb.DestroyEntity(query.Item1.ValueRO.instantiatedTempEntity);
+                _ecb.RemoveComponent<TempPrefabForRemoveTag>(query.Item3);
             }
 
-            ecb.Playback(em);
-            ecb.Dispose();
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
     }
 }

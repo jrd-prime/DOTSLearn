@@ -9,7 +9,7 @@ namespace Jrd.Build.EditModePanel
     /// <summary>
     /// Показать/скрыть панель редактирования в режиме строительства
     /// </summary>
-    [UpdateInGroup(typeof(InitializationSystemGroup), OrderLast = true)]
+    [UpdateBefore(typeof(BuildSystem))]
     public partial struct EditModePanelSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
@@ -17,9 +17,8 @@ namespace Jrd.Build.EditModePanel
 
         public void OnCreate(ref SystemState state)
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp, PlaybackPolicy.SinglePlayback);
             Debug.Log("EditModePanelSystem");
-
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
             _em = state.EntityManager;
 
             var e = _ecb.CreateEntity();
