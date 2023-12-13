@@ -17,6 +17,8 @@ namespace Jrd
         {
         }
 
+        public static VisualElement BuildingsPanelRoot { get; set; }
+
         private void Awake()
         {
             if (Instance != null)
@@ -31,10 +33,23 @@ namespace Jrd
         private void OnEnable()
         {
             var root = GetComponent<UIDocument>().rootVisualElement;
+            BuildingsPanelRoot = root;
             BuildingPanel = root.Q<VisualElement>("building-panel");
             BuildingCancel = root.Q<Button>("building-cancel");
             Building1 = root.Q<Button>("building-1");
             Building2 = root.Q<Button>("building-2");
+
+            HideElement(BuildingsPanelRoot);
+        }
+
+        private void HideElement(VisualElement e)
+        {
+            e.style.display = DisplayStyle.None;
+        }
+
+        public static void SetRootDisplay(DisplayStyle displayStyle)
+        {
+            BuildingsPanelRoot.style.display = displayStyle;
         }
     }
 }

@@ -24,10 +24,11 @@ namespace Jrd.Build
 
         protected override void OnCreate()
         {
+            this.Enabled = false;
             RequireForUpdate<BuildPrefabComponent>();
             RequireForUpdate<EditModePanelComponent>();
             RequireForUpdate<TempBuildPrefabInstantiateComponent>();
-            Debug.Log("BuildSystem");
+            // Debug.Log("BuildSystem");
 
             _em = EntityManager;
             _currentPrefabId = -1;
@@ -35,6 +36,7 @@ namespace Jrd.Build
 
         protected override void OnUpdate()
         {
+            this.Enabled = false;
             _editModePanelEntity = SystemAPI.GetSingletonEntity<EditModePanelComponent>();
             _tempBuildPrefabInstantiateEntity = SystemAPI.GetSingletonEntity<TempBuildPrefabInstantiateComponent>();
             _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
@@ -67,16 +69,16 @@ namespace Jrd.Build
                 _currentPrefabId = _tempPrefab.Index;
                 // Enter in edit mode state TODO
 
+                SetEditModeState(true);
+
                 // Show edit mode panel
-                _ecb.AddComponent<VisualElementShowTag>(
-                    _editModePanelEntity); // tag for show edit mode panel // TODO ecb
+                _ecb.AddComponent<VisualElementShowTag>(_editModePanelEntity);
 
                 // Place temp building
                 _ecb.SetComponent(_tempBuildPrefabInstantiateEntity,
                     new TempBuildPrefabInstantiateComponent { tempBuildPrefab = _tempPrefab });
-                _ecb.AddComponent<TempPrefabForPlaceTag>(
-                    _tempBuildPrefabInstantiateEntity); // tag for place // TODO ecb
-                
+                _ecb.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabInstantiateEntity);
+
                 _ecb.Playback(_em);
                 // TODO DISABLE BUTTON
                 return;
@@ -98,9 +100,7 @@ namespace Jrd.Build
                 _ecb.SetComponent(_tempBuildPrefabInstantiateEntity,
                     new TempBuildPrefabInstantiateComponent { tempBuildPrefab = _tempPrefab });
                 // Place new temp prefab
-                _ecb.AddComponent<TempPrefabForPlaceTag>(
-                    _tempBuildPrefabInstantiateEntity); // tag for place // TODO ecb
-
+                _ecb.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabInstantiateEntity);
 
                 _ecb.Playback(_em);
                 // TODO DISABLE BUTTON
@@ -113,17 +113,27 @@ namespace Jrd.Build
         private void ExitFromEditMode()
         {
             H.T("ExitFromEditMode");
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // Hide edit mode panel
-            _em.AddComponent<VisualElementHideTag>(_editModePanelEntity); // tag for hide edit mode panel // TODO ecb
+            _ecb.AddComponent<VisualElementHideTag>(_editModePanelEntity);
 
             // Destroy temp building TODO
-            _em.AddComponent<TempPrefabForRemoveTag>(_tempBuildPrefabInstantiateEntity); // TODO ecb
+            _ecb.AddComponent<TempPrefabForRemoveTag>(_tempBuildPrefabInstantiateEntity);
 
             // Exit from edit mode state TODO
 
+            SetEditModeState(false);
             // reset init
             _currentPrefabId = -1;
+
+            _ecb.Playback(_em);
+            _ecb.Dispose();
+        }
+
+        private void SetEditModeState(bool b)
+        {
+            // TODO
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Jrd.JUI;
+﻿using Jrd.GameStates;
+using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
@@ -14,6 +15,7 @@ namespace Jrd.Build.EditModePanel
     {
         private EntityCommandBuffer _ecb;
         private EntityManager _em;
+        private Entity _gameStateEntity;
 
         public void OnCreate(ref SystemState state)
         {
@@ -30,6 +32,14 @@ namespace Jrd.Build.EditModePanel
 
         public void OnUpdate(ref SystemState state)
         {
+        
+            _gameStateEntity = SystemAPI
+                .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
+                .GameStateEntity;
+
+            // var a = SystemAPI.HasComponent<ShowVisualElementTag>(_gameStateEntity);
+            // Debug.Log("has component " + a + " " + this);
+
             _ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // show tag

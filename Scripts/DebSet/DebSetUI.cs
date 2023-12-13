@@ -11,6 +11,8 @@ namespace Jrd.DebSet
         public static Button DebSetClearLogButton;
         
         public static Label DebSetText;
+        public static Button BModeButton;
+        public static Button BModeButtonOff;
 
         public static bool IsMouseRaycast; // TODO переделать
         private Toggle _mouseRaycastToggle;
@@ -37,7 +39,11 @@ namespace Jrd.DebSet
             DebSetApplyButton = root.Q<Button>("apply-button");
             DebSetClearLogButton = root.Q<Button>("clear-button");
             DebSetText = root.Q<Label>("txt-lab");
+            BModeButton = root.Q<Button>("bmode-button");
+            BModeButtonOff = root.Q<Button>("bmodeoff-button");
         }
+
+        
 
         private void FixedUpdate()
         {
