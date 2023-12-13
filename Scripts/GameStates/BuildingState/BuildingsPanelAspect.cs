@@ -6,7 +6,7 @@ namespace Jrd.GameStates.BuildingState
     {
         public readonly Entity Self;
 
-        private readonly RefRW<BuildingsPanelData> _buildingsPanelData;
+        private readonly RefRW<BSBuildingsPanelComponent> _buildingsPanelData;
 
         public bool DisplayVisibility
         {

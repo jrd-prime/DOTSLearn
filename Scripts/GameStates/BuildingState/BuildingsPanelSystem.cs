@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Jrd.GameStates.BuildingState.Tag;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,6 +12,7 @@ namespace Jrd.GameStates.BuildingState
     ///
     /// * инициализирует и показывает/скрывает панель построек
     /// </summary>
+     [UpdateAfter(typeof(BSBuildingStateSystem))]
     public partial struct BuildingsPanelSystem : ISystem
     {
         private Entity _gameStateEntity;
@@ -21,22 +23,22 @@ namespace Jrd.GameStates.BuildingState
                 .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
                 .GameStateEntity;
             
-            if (SystemAPI.HasComponent<BuildingsPanelData>(_gameStateEntity)) return;
+            if (!SystemAPI.HasComponent<BSBuildingsPanelComponent>(_gameStateEntity)) return;
             
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            foreach (var q in SystemAPI.Query<BuildingsPanelData, ShowVisualElementTag>())
+            foreach (var q in SystemAPI.Query<BSBuildingsPanelComponent, BSBuildingsPanelShowTag>())
             {
                 // Debug.Log("show");
-                BuildingPanelUI.SetRootDisplay(DisplayStyle.Flex);
-                ecb.RemoveComponent<ShowVisualElementTag>(_gameStateEntity);
+                BuildingPanelUI.ShowEditModePanel();
+                ecb.RemoveComponent<BSBuildingsPanelShowTag>(_gameStateEntity);
             }
 
-            foreach (var q in SystemAPI.Query<BuildingsPanelData, HideVisualElementTag>())
+            foreach (var q in SystemAPI.Query<BSBuildingsPanelComponent, BSBuildingsPanelHideTag>())
             {
                 // Debug.Log("hide");
-                BuildingPanelUI.SetRootDisplay(DisplayStyle.None);
-                ecb.RemoveComponent<HideVisualElementTag>(_gameStateEntity);
+                BuildingPanelUI.HideEditModePanel();
+                ecb.RemoveComponent<BSBuildingsPanelHideTag>(_gameStateEntity);
             }
             
             ecb.Playback(state.EntityManager);

@@ -26,7 +26,7 @@ namespace Jrd.Build
         {
             this.Enabled = false;
             RequireForUpdate<BuildPrefabComponent>();
-            RequireForUpdate<EditModePanelComponent>();
+            RequireForUpdate<BSApplyPanelComponent>();
             RequireForUpdate<TempBuildPrefabInstantiateComponent>();
             // Debug.Log("BuildSystem");
 
@@ -37,7 +37,7 @@ namespace Jrd.Build
         protected override void OnUpdate()
         {
             this.Enabled = false;
-            _editModePanelEntity = SystemAPI.GetSingletonEntity<EditModePanelComponent>();
+            _editModePanelEntity = SystemAPI.GetSingletonEntity<BSApplyPanelComponent>();
             _tempBuildPrefabInstantiateEntity = SystemAPI.GetSingletonEntity<TempBuildPrefabInstantiateComponent>();
             _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
 

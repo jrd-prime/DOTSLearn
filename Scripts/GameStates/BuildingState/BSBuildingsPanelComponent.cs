@@ -2,7 +2,7 @@
 
 namespace Jrd.GameStates.BuildingState
 {
-    public struct BuildingsPanelData : IComponentData
+    public struct BSBuildingsPanelComponent : IComponentData
     {
         public bool Visibility;
     }

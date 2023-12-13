@@ -66,8 +66,7 @@ namespace Jrd.JUI.EditModeUI
                 .Ease(Easing.OutElastic)
                 .KeepAlive();
         }
-
-        // BUG on hide panel
+        
         public static void HideEditModePanel()
         {
             EditModeRoot.experimental.animation
@@ -79,5 +78,7 @@ namespace Jrd.JUI.EditModeUI
                 .KeepAlive()
                 .onAnimationCompleted = () => EditModeRoot.style.display = DisplayStyle.None;
         }
+
+
     }
 }

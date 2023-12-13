@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 namespace Jrd
 {
@@ -11,6 +12,10 @@ namespace Jrd
         public static Button BuildingCancel;
         public static Button Building1;
         public static Button Building2;
+        private const float BottomHided = -100f;
+        private const float BottomShowed = 0f;
+        private const int ShowDuration = 1000;
+        private const int HideDuration = 500;
 
 
         private BuildingPanelUI()
@@ -50,6 +55,31 @@ namespace Jrd
         public static void SetRootDisplay(DisplayStyle displayStyle)
         {
             BuildingsPanelRoot.style.display = displayStyle;
+        }
+        
+        public static void ShowEditModePanel()
+        {
+            BuildingsPanelRoot.style.display = DisplayStyle.Flex;
+            BuildingsPanelRoot.experimental.animation
+                .Start(
+                    new StyleValues { bottom = BottomHided },
+                    new StyleValues { bottom = BottomShowed },
+                    ShowDuration)
+                .Ease(Easing.OutElastic)
+                .KeepAlive();
+        }
+
+        // BUG on hide panel
+        public static void HideEditModePanel()
+        {
+            BuildingsPanelRoot.experimental.animation
+                .Start(
+                    new StyleValues { bottom = BottomShowed },
+                    new StyleValues { bottom = BottomHided },
+                    HideDuration)
+                .Ease(Easing.InQuad)
+                .KeepAlive()
+                .onAnimationCompleted = () => BuildingsPanelRoot.style.display = DisplayStyle.None;
         }
     }
 }

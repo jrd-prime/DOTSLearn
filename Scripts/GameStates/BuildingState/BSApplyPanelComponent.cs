@@ -2,7 +2,7 @@
 
 namespace Jrd.Build.EditModePanel
 {
-    public struct EditModePanelComponent : IComponentData
+    public struct BSApplyPanelComponent : IComponentData
     {
         public bool ShowPanel;
         public bool IsVisible;
