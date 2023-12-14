@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates.BuildingState
+namespace Jrd.GameStates.BuildingState.Tag
 {
     public struct BuildingStateTag : IComponentData
     {

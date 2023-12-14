@@ -1,4 +1,7 @@
+using System;
+using Unity.Entities;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -16,6 +19,13 @@ namespace Jrd
         private const float BottomShowed = 0f;
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
+        private VisualElement root;
+
+
+        private VisualTreeAsset UXMLTree;
+        [SerializeField] private VisualTreeAsset bt;
+
+        public static event Action<Button> OnBuildingButtonClicked;
 
 
         private BuildingPanelUI()
@@ -37,14 +47,37 @@ namespace Jrd
 
         private void OnEnable()
         {
-            var root = GetComponent<UIDocument>().rootVisualElement;
+            UXMLTree = GetComponent<UIDocument>().visualTreeAsset;
+            root = GetComponent<UIDocument>().rootVisualElement;
             BuildingsPanelRoot = root;
             BuildingPanel = root.Q<VisualElement>("building-panel");
-            BuildingCancel = root.Q<Button>("building-cancel");
-            Building1 = root.Q<Button>("building-1");
-            Building2 = root.Q<Button>("building-2");
+
+// LOOK TODO разгребать это
+            var a = root.Q<GroupBox>("groupbox");
+            a.Clear();
+            // var cont = 
+            for (int i = 0; i < 4; i++)
+            {
+                a.Add(bt.Instantiate());
+            }
+
+            var buttons = root.Query<Button>();
+            buttons.ForEach(RegisterHandler);
+            var btns = buttons.ToList();
+            for (var i = 0; i < btns.Count; i++)
+            {
+                btns[i].name = i.ToString();
+                btns[i].text = "b-" + i;
+            }
+
 
             HideElement(BuildingsPanelRoot);
+        }
+
+        private void RegisterHandler(Button button)
+        {
+            button.RegisterCallback<ClickEvent>(
+                evt => OnBuildingButtonClicked?.Invoke(evt.currentTarget as Button));
         }
 
         private void HideElement(VisualElement e)
@@ -56,7 +89,7 @@ namespace Jrd
         {
             BuildingsPanelRoot.style.display = displayStyle;
         }
-        
+
         public static void ShowEditModePanel()
         {
             BuildingsPanelRoot.style.display = DisplayStyle.Flex;
@@ -69,7 +102,6 @@ namespace Jrd
                 .KeepAlive();
         }
 
-        // BUG on hide panel
         public static void HideEditModePanel()
         {
             BuildingsPanelRoot.experimental.animation

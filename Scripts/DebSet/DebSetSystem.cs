@@ -1,5 +1,6 @@
 ﻿using Jrd.GameStates;
 using Jrd.GameStates.BuildingState;
+using Jrd.GameStates.BuildingState.Tag;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;

@@ -28,3 +28,6 @@ VisualElement {
     margin-bottom: 3px;
     margin-left: 3px;
 }
+
+.test-style {
+}
