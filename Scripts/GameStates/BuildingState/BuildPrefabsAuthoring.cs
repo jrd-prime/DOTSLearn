@@ -23,7 +23,7 @@ namespace Jrd.Build.old
                     });
                 }
 
-                AddComponent<BuildPrefabComponent>(e);
+                AddComponent<BuildPrefabsComponent>(e);
             }
         }
     }

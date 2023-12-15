@@ -3,7 +3,7 @@ using Unity.Entities;
 
 namespace Jrd.Build.old
 {
-    public struct BuildPrefabComponent : IComponentData
+    public struct BuildPrefabsComponent : IComponentData
     {
         public Entity BuildPrefab;
     }

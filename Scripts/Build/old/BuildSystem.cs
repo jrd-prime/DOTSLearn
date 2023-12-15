@@ -25,7 +25,7 @@ namespace Jrd.Build.old
         protected override void OnCreate()
         {
             this.Enabled = false;
-            RequireForUpdate<BuildPrefabComponent>();
+            RequireForUpdate<BuildPrefabsComponent>();
             RequireForUpdate<BSApplyPanelComponent>();
             RequireForUpdate<TempBuildPrefabInstantiateComponent>();
             // Debug.Log("BuildSystem");
@@ -39,7 +39,7 @@ namespace Jrd.Build.old
             this.Enabled = false;
             _editModePanelEntity = SystemAPI.GetSingletonEntity<BSApplyPanelComponent>();
             _tempBuildPrefabInstantiateEntity = SystemAPI.GetSingletonEntity<TempBuildPrefabInstantiateComponent>();
-            _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
+            _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
             _prefabBufferElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsEntity);
             _instantiatedTempEntity = _em

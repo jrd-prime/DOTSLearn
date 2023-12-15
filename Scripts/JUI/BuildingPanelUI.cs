@@ -86,7 +86,7 @@ namespace Jrd.JUI
             BuildingsPanelRoot.style.display = displayStyle;
         }
 
-        public static void ShowEditModePanel()
+        public static void ShowApplyPanel()
         {
             BuildingsPanelRoot.style.display = DisplayStyle.Flex;
             BuildingsPanelRoot.experimental.animation
@@ -98,7 +98,7 @@ namespace Jrd.JUI
                 .KeepAlive();
         }
 
-        public static void HideEditModePanel()
+        public static void HideApplyPanel()
         {
             BuildingsPanelRoot.experimental.animation
                 .Start(

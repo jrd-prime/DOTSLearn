@@ -19,7 +19,7 @@ namespace Jrd.GameStates.BuildingState
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BuildPrefabComponent>();
+            state.RequireForUpdate<BuildPrefabsComponent>();
         }
 
         public void OnUpdate(ref SystemState state)

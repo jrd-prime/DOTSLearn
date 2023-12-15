@@ -6,9 +6,10 @@ namespace Jrd.Build
 {
     public struct BuildingDetailsComponent : IComponentData
     {
-        public Entity self;
+        public Entity prefab;
         public float3 position;
         public int id;
         public FixedBytes62 name;
+        public Entity entity;
     }
 }

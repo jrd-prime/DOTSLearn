@@ -1,4 +1,5 @@
-﻿using Jrd.GameStates;
+﻿using Jrd.Build.old;
+using Jrd.GameStates;
 using Jrd.GameStates.BuildingState;
 using Jrd.GameStates.BuildingState.Tag;
 using Unity.Collections;
@@ -16,7 +17,7 @@ namespace Jrd.DebSet
 
         private Entity bmodeEntity;
 
-        private Entity gameStateEntity;
+        private Entity _gameStateEntity;
 
 
         public void OnCreate(ref SystemState state)
@@ -28,7 +29,7 @@ namespace Jrd.DebSet
             _entity = _em.CreateEntity(archetype);
             _em.SetName(_entity, "_DebSetEntity");
 
-            gameStateEntity = SystemAPI
+            _gameStateEntity = SystemAPI
                 .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
                 .GameStateEntity;
         }
@@ -50,15 +51,15 @@ namespace Jrd.DebSet
         private void StartBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _ecb.AddComponent<BuildingStateComponent>(gameStateEntity); // TODO
-            _ecb.AddComponent<InitializeTag>(gameStateEntity); // TODO
+            _ecb.AddComponent<BuildingStateComponent>(_gameStateEntity); // TODO
+            _ecb.AddComponent<InitializeTag>(_gameStateEntity); // TODO
             _ecb.Playback(_em);
         }
 
         private void StopBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _ecb.AddComponent<DeactivateStateTag>(gameStateEntity); // TODO
+            _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity); // TODO
             _ecb.Playback(_em);
         }
 
