@@ -10,5 +10,6 @@ namespace Jrd.GameStates.BuildingState.Tag
         public int SelectedPrefabID;
         public int PrefabsCount;
         public NativeArray<PrefabBufferElements> PrefabsBufferElementsCache; // TODO подумать
+        public Entity TempEntity;
     }
 }

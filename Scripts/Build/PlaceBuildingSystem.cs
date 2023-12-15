@@ -1,6 +1,4 @@
-﻿using Jrd.Build.old;
-using Jrd.Build.Screen;
-using Jrd.GameStates.BuildingState.Tag;
+﻿using Jrd.GameStates.BuildingState.Tag;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -11,11 +9,10 @@ namespace Jrd.Build
     public partial struct PlaceBuildingSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
-        
+
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -24,33 +21,39 @@ namespace Jrd.Build
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (stateComponent, buildingComponent, entity) in SystemAPI
-                         .Query<RefRO<BuildingStateComponent>, RefRO<PlaceBuildingComponent>>().WithEntityAccess())
+            foreach (var (stateComponent, place, entity) in SystemAPI
+                         .Query<RefRW<BuildingStateComponent>, RefRO<PlaceBuildingComponent>>().WithEntityAccess())
             {
-                Debug.Log(
-                    $"{stateComponent.ValueRO.SelectedPrefab} + {buildingComponent.ValueRO.placePosition}");
+                Debug.Log($"PLACE : {place.ValueRO.placePrefab} + {place.ValueRO.placePosition}");
 
-                var tempPrefab = stateComponent.ValueRO.SelectedPrefab;
+                var prefab = place.ValueRO.placePrefab;
 
-                if (tempPrefab == Entity.Null) return;
+                if (prefab == Entity.Null) return;
 
-                var tempEntity = _ecb.Instantiate(tempPrefab);
+                var instantiate = _ecb.Instantiate(prefab);
 
-                _ecb.SetComponent(tempEntity, new LocalTransform
+                // stateComponent.ValueRW.TempEntity = instantiate;
+
+                _ecb.SetComponent(entity, new BuildingStateComponent
                 {
-                    Position = buildingComponent.ValueRO.placePosition,
+                    TempEntity = instantiate
+                });
+                
+                _ecb.SetComponent(instantiate, new LocalTransform
+                {
+                    Position = place.ValueRO.placePosition,
                     Rotation = quaternion.identity,
                     Scale = 1
                 });
-                _ecb.RemoveComponent<PlaceBuildingComponent>(entity);
-            }
 
-            // Destroy temp prefab if we exit from edit mode
-            foreach (var query in SystemAPI.Query<RefRO<TempBuildPrefabInstantiateComponent>, TempPrefabForRemoveTag>()
-                         .WithEntityAccess())
-            {
-                _ecb.DestroyEntity(query.Item1.ValueRO.instantiatedTempEntity);
-                _ecb.RemoveComponent<TempPrefabForRemoveTag>(query.Item3);
+                _ecb.AddComponent(instantiate, new BuildingDetailsComponent
+                {
+                    entity = instantiate,
+                    position = place.ValueRO.placePosition,
+                    prefab = prefab
+                });
+
+                _ecb.RemoveComponent<PlaceBuildingComponent>(entity);
             }
         }
     }

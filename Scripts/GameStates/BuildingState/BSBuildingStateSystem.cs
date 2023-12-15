@@ -1,4 +1,5 @@
-﻿using Jrd.Build;
+﻿using System.Linq;
+using Jrd.Build;
 using Jrd.Build.old;
 using Jrd.Build.Screen;
 using Jrd.GameStates.BuildingState.Tag;
@@ -24,10 +25,10 @@ namespace Jrd.GameStates.BuildingState
         private Entity _gameStateEntity;
         private bool _isSubscribed;
         private EntityManager _em;
+        private EntityCommandBuffer _ecb;
         private int _prefabsCount;
-        private Entity _prefabsComponentEntity;
-        private NativeArray<PrefabBufferElements> _array;
-        private DynamicBuffer<PrefabBufferElements> _prefabsBuffer;
+        private DynamicBuffer<PrefabBufferElements> _array;
+        private Entity _buildingStateComponent;
 
 
         public void OnCreate(ref SystemState state)
@@ -45,47 +46,41 @@ namespace Jrd.GameStates.BuildingState
                 .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
                 .GameStateEntity;
 
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-
-            _prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
-            _prefabsBuffer = _em.GetBuffer<PrefabBufferElements>(_prefabsComponentEntity);
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
 
 
-            if (_prefabsCount != _prefabsBuffer.Length)
+
+            var prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+
+
+            _ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
             {
-                _prefabsCount = _prefabsBuffer.Length;
-                _em.SetComponentData(_gameStateEntity, new BuildingStateComponent
-                {
-                    PrefabsCount = _prefabsCount,
-                    PrefabsBufferElementsCache = _prefabsBuffer.ToNativeArray(Allocator.Persistent)
-                });
-                
-                _array = _em.GetComponentData<BuildingStateComponent>(_gameStateEntity)
-                    .PrefabsBufferElementsCache;
-            }
+                PrefabsCount = SystemAPI.GetBuffer<PrefabBufferElements>(prefabsComponentEntity).Length,
+            });
 
-            
 
+            // Init
             foreach (var unused in SystemAPI.Query<BuildingStateComponent, InitializeTag>())
             {
                 Debug.Log("initialize ".ToUpper() + GetType());
 
-                ecb.AddComponent(_gameStateEntity,
+                _ecb.AddComponent(_gameStateEntity,
                     new ComponentTypeSet(
                         typeof(BSBuildingsPanelComponent),
                         typeof(BSBuildingsPanelShowTag)
                     ));
-                ecb.RemoveComponent<InitializeTag>(_gameStateEntity);
+                _ecb.RemoveComponent<InitializeTag>(_gameStateEntity);
             }
 
+            // deactivate
             foreach (var unused in SystemAPI.Query<BuildingStateComponent, DeactivateStateTag>())
             {
                 Debug.Log("deactivate ".ToUpper() + GetType());
 
-                ecb.AddComponent<BSBuildingsPanelHideTag>(_gameStateEntity); // TODO
-                ecb.AddComponent<BSApplyPanelHideTag>(_gameStateEntity); // TODO
-                ecb.RemoveComponent<BuildingStateComponent>(_gameStateEntity); // TODO
-                ecb.RemoveComponent<DeactivateStateTag>(_gameStateEntity); // TODO
+                _ecb.AddComponent<BSBuildingsPanelHideTag>(_gameStateEntity); // TODO
+                _ecb.AddComponent<BSApplyPanelHideTag>(_gameStateEntity); // TODO
+                _ecb.RemoveComponent<BuildingStateComponent>(_gameStateEntity); // TODO
+                _ecb.RemoveComponent<DeactivateStateTag>(_gameStateEntity); // TODO
 
                 // LOOK возможно этот компонент не удалять, к примеру, можно сохранить в нем какое-нибудь
                 // LOOK состояние панели, для последующего восстановления стэйта
@@ -96,9 +91,8 @@ namespace Jrd.GameStates.BuildingState
                 // ecb.RemoveComponent<BSApplyPanelComponent>(_gameStateEntity); // TODO // LOOK если удлить будет проблема с хайдом панели
             }
 
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
-
+            _ecb.Playback(_em);
+            _ecb.Dispose();
 
             if (_isSubscribed) return;
             BuildingPanelUI.OnBuildSelected += PlaceBuilding;
@@ -109,11 +103,14 @@ namespace Jrd.GameStates.BuildingState
 
         private void PlaceBuilding(Button button, int index)
         {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
-
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
+            var prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+            _array = _em.GetBuffer<PrefabBufferElements>(prefabsComponentEntity);
             // 1. get prefab, set prefab data to BuildingsPanel
             var selectedPrefab = _array[index].PrefabEntity;
-            ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
+            Debug.Log("Select prefab " + selectedPrefab);
+
+            _ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
             {
                 SelectedPrefab = selectedPrefab,
                 SelectedPrefabID = index
@@ -121,43 +118,51 @@ namespace Jrd.GameStates.BuildingState
 
             // 2. open ApplyPanel
             ApplyPanelUI.ApplyPanelLabel.text = "Build " + "b-" + index + "?";
-            ecb.AddComponent(_gameStateEntity,
+            _ecb.AddComponent(_gameStateEntity,
                 new ComponentTypeSet(
                     typeof(BSApplyPanelComponent),
                     typeof(BSApplyPanelShowTag)
                 ));
 
             // 3. instantiate prefab
-            ecb.AddComponent(_gameStateEntity, new PlaceBuildingComponent
+            _ecb.AddComponent(_gameStateEntity, new PlaceBuildingComponent
             {
-                placePosition = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>().ScreenCenterToWorld
-                ,
+                placePosition = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>().ScreenCenterToWorld,
                 placePrefab = selectedPrefab
-                
             });
-            // ecb.AddComponent<>();
 
-            // 4. add to prefab component with details
-            // 5. add to prefab component PlaceBuilding
-            // 6. set temp data/properties to PlaceBuilding
-            // 7. set prefab position to place
-
+            _ecb.Playback(_em);
+            _ecb.Dispose();
             // Debug.Log($"button ID : {index} /// {button}");
-
-
-            ecb.Playback(_em);
-            ecb.Dispose();
         }
 
         private void OnCancelBtnClicked()
         {
+            _buildingStateComponent = _em.GetComponentData<BuildingStateComponent>(_gameStateEntity).TempEntity;
+            Debug.Log(_buildingStateComponent + " building state component entity");
+            
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
             Debug.Log("cancel button");
-            // 1. 
+
+
+            // remove temp building
+            _ecb.DestroyEntity(_buildingStateComponent);
+
+            Debug.Log(_buildingStateComponent);
+
+            _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity);
+
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
 
         private void OnApplyBtnClicked()
         {
+            _ecb = new EntityCommandBuffer(Allocator.Temp);
             Debug.Log("apply button");
+
+            _ecb.Playback(_em);
+            _ecb.Dispose();
         }
 
         public void OnDestroy(ref SystemState state)
