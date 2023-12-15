@@ -1,23 +1,26 @@
-﻿using Jrd.GameStates;
-using Jrd.GameStates.BuildingState;
+﻿using Jrd.Build;
 using Jrd.GameStates.BuildingState.Tag;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
-namespace Jrd.Build.EditModePanel
+namespace Jrd.GameStates.BuildingState
 {
     /// <summary>
     /// Показать/скрыть панель редактирования в режиме строительства
     /// </summary>
     [UpdateAfter(typeof(BSBuildingStateSystem))]
-    public partial struct BSApplyPanelSystem : ISystem
+    public partial struct ApplyPanelSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
         private EntityManager _em;
         private Entity _gameStateEntity;
-        
+
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<BuildPrefabComponent>();
+        }
+
         public void OnUpdate(ref SystemState state)
         {
             _gameStateEntity = SystemAPI
@@ -31,14 +34,14 @@ namespace Jrd.Build.EditModePanel
             foreach (var q in SystemAPI.Query<BSApplyPanelComponent, BSApplyPanelShowTag>())
             {
                 // Debug.Log("show " + this);
-                EditModeUI.ShowEditModePanel();
+                ApplyPanelUI.ShowApplyPanel();
                 ecb.RemoveComponent<BSApplyPanelShowTag>(_gameStateEntity);
             }
 
             foreach (var q in SystemAPI.Query<BSApplyPanelComponent, BSApplyPanelHideTag>())
             {
                 // Debug.Log("hide " + this);
-                EditModeUI.HideEditModePanel();
+                ApplyPanelUI.HideApplyPanel();
                 ecb.RemoveComponent<BSApplyPanelHideTag>(_gameStateEntity);
             }
 

@@ -1,9 +1,8 @@
 ﻿using Jrd.Build;
+using Jrd.Build.EditModePanel;
 using Jrd.GameStates.BuildingState.Tag;
-using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Jrd.GameStates.BuildingState
@@ -19,7 +18,7 @@ namespace Jrd.GameStates.BuildingState
     {
         private EntityManager _em;
         private Entity _buildPrefabComponentEntity;
-
+        private DynamicBuffer<PrefabBufferElements> _prefabsBuffer;
         private Entity _gameStateEntity;
         private bool _isSubscribed;
 
@@ -31,18 +30,21 @@ namespace Jrd.GameStates.BuildingState
 
         public void OnUpdate(ref SystemState state)
         {
-            _buildPrefabComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
             _gameStateEntity = SystemAPI
                 .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
                 .GameStateEntity;
 
             if (!SystemAPI.HasComponent<BSBuildingsPanelComponent>(_gameStateEntity)) return;
 
+            _buildPrefabComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabComponent>();
+            _prefabsBuffer = _em.GetBuffer<PrefabBufferElements>(_buildPrefabComponentEntity);
+
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             foreach (var unused in SystemAPI.Query<BSBuildingsPanelComponent, BSBuildingsPanelShowTag>())
             {
                 // Debug.Log("show");
+                BuildingPanelUI.InstantiateButtons(_prefabsBuffer.Length);
                 BuildingPanelUI.ShowEditModePanel();
                 ecb.RemoveComponent<BSBuildingsPanelShowTag>(_gameStateEntity);
             }
@@ -58,27 +60,46 @@ namespace Jrd.GameStates.BuildingState
             ecb.Dispose();
 
             if (_isSubscribed) return;
-            BuildingPanelUI.OnBuildingButtonClicked += ChooseBuilding;
-            // EditModeUI.EditModeCancelButton.clicked += ExitFromEditMode;
+            BuildingPanelUI.OnBuildSelected += PlaceBuilding;
             _isSubscribed = true;
         }
 
 
-        private void ChooseBuilding(Button button)
+        private void PlaceBuilding(Button button, int index)
         {
-            Debug.Log("button = " + button);
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            var a = _em.GetBuffer<PrefabBufferElements>(_buildPrefabComponentEntity);
+            // 1. get prefab, set prefab data to BuildingsPanel
+            _prefabsBuffer = _em.GetBuffer<PrefabBufferElements>(_buildPrefabComponentEntity);
+            ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
+            {
+                SelectedPrefab = _prefabsBuffer.ElementAt(index).PrefabEntity,
+                SelectedPrefabID = index
+            });
+
+            // 2. open ApplyPanel
+            ecb.AddComponent(_gameStateEntity,
+                new ComponentTypeSet(
+                    typeof(BSApplyPanelComponent),
+                    typeof(BSApplyPanelShowTag)
+                ));
             
-            
+            // 3. instantiate prefab
+            // 4. add to prefab component with details
+            // 5. add to prefab component PlaceBuilding
+            // 6. set temp data/properties to PlaceBuilding
+            // 7. set prefab position to place
+
+            // Debug.Log($"button ID : {index} /// {button}");
+
+
             ecb.Playback(_em);
             ecb.Dispose();
         }
 
         public void OnDestroy(ref SystemState state)
         {
-            BuildingPanelUI.OnBuildingButtonClicked -= ChooseBuilding;
+            BuildingPanelUI.OnBuildSelected -= PlaceBuilding;
         }
     }
 }

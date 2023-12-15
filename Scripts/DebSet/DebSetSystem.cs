@@ -50,7 +50,7 @@ namespace Jrd.DebSet
         private void StartBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _ecb.AddComponent<BuildingStateTag>(gameStateEntity); // TODO
+            _ecb.AddComponent<BuildingStateComponent>(gameStateEntity); // TODO
             _ecb.AddComponent<InitializeTag>(gameStateEntity); // TODO
             _ecb.Playback(_em);
         }

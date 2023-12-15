@@ -1,4 +1,5 @@
 ﻿using Jrd.Build.EditModePanel;
+using Jrd.GameStates.BuildingState;
 using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
@@ -49,9 +50,7 @@ namespace Jrd.Build
 
             // LOOK ПЕРЕДЕЛАТЬ ЭТО Г
             if (_isSubscribed) return;
-            BuildingPanelUI.Building1.clicked += () => { EnterInEditMode(0); };
-            BuildingPanelUI.Building2.clicked += () => { EnterInEditMode(1); };
-            EditModeUI.EditModeCancelButton.clicked += ExitFromEditMode;
+            ApplyPanelUI.ApplyPanelCancelButton.clicked += ExitFromApplyPanel;
             _isSubscribed = true;
         }
 
@@ -110,7 +109,7 @@ namespace Jrd.Build
             _ecb.Dispose();
         }
 
-        private void ExitFromEditMode()
+        private void ExitFromApplyPanel()
         {
             H.T("ExitFromEditMode");
             _ecb = new EntityCommandBuffer(Allocator.Temp);

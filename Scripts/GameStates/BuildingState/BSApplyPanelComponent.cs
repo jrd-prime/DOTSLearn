@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Build.EditModePanel
+namespace Jrd.GameStates.BuildingState
 {
     public struct BSApplyPanelComponent : IComponentData
     {

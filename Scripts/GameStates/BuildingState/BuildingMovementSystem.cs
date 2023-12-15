@@ -1,11 +1,4 @@
-﻿using Jrd.Build;
-using Jrd.UserInput;
-using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Transforms;
-using UnityEngine;
-
-namespace Jrd
+﻿namespace Jrd.GameStates.BuildingState
 {
     // public partial struct BuildingMovementSystem : ISystem
     // {

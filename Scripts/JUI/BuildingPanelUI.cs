@@ -1,7 +1,8 @@
 using System;
-using Unity.Entities;
+using System.Collections.Generic;
+using Jrd.Build;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -12,20 +13,19 @@ namespace Jrd
         public static BuildingPanelUI Instance;
 
         public static VisualElement BuildingPanel;
-        public static Button BuildingCancel;
-        public static Button Building1;
-        public static Button Building2;
         private const float BottomHided = -100f;
         private const float BottomShowed = 0f;
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
-        private VisualElement root;
+        private static VisualElement _root;
 
+        private static GroupBox ButtonsContainer;
+        private const string ButtonsContainerName = "groupbox";
 
-        private VisualTreeAsset UXMLTree;
-        [SerializeField] private VisualTreeAsset bt;
+        [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
+        private static VisualTreeAsset _buttonTemplate;
 
-        public static event Action<Button> OnBuildingButtonClicked;
+        public static event Action<Button, int> OnBuildSelected;
 
 
         private BuildingPanelUI()
@@ -47,42 +47,41 @@ namespace Jrd
 
         private void OnEnable()
         {
-            UXMLTree = GetComponent<UIDocument>().visualTreeAsset;
-            root = GetComponent<UIDocument>().rootVisualElement;
-            BuildingsPanelRoot = root;
-            BuildingPanel = root.Q<VisualElement>("building-panel");
-
-// LOOK TODO разгребать это
-            var a = root.Q<GroupBox>("groupbox");
-            a.Clear();
-            // var cont = 
-            for (int i = 0; i < 4; i++)
+            _root = GetComponent<UIDocument>().rootVisualElement;
+            BuildingsPanelRoot = _root;
+            BuildingPanel = _root.Q<VisualElement>("building-panel");
+            ButtonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
+            BuildingsPanelRoot.style.display = DisplayStyle.None;
+            if (_buildingButtonTemplate == null)
             {
-                a.Add(bt.Instantiate());
+                Debug.LogError("ButtonTemplate not added to script. " + this);
             }
-
-            var buttons = root.Query<Button>();
-            buttons.ForEach(RegisterHandler);
-            var btns = buttons.ToList();
-            for (var i = 0; i < btns.Count; i++)
+            else
             {
-                btns[i].name = i.ToString();
-                btns[i].text = "b-" + i;
+                _buttonTemplate = _buildingButtonTemplate;
             }
-
-
-            HideElement(BuildingsPanelRoot);
         }
 
-        private void RegisterHandler(Button button)
+        public static void InstantiateButtons(int prefabsCount)
         {
-            button.RegisterCallback<ClickEvent>(
-                evt => OnBuildingButtonClicked?.Invoke(evt.currentTarget as Button));
-        }
+            // LOOK TODO разгребать это
+            ButtonsContainer.Clear();
 
-        private void HideElement(VisualElement e)
-        {
-            e.style.display = DisplayStyle.None;
+            for (var i = 0; i < prefabsCount; i++)
+                ButtonsContainer.Add(_buttonTemplate.Instantiate());
+
+            var buttons = _root.Query<Button>();
+
+            var index = 0;
+            buttons.ForEach(element =>
+            {
+                var index1 = index;
+                element.name = index1.ToString(); // TODO
+                element.text = "b-" + index1; // TODO
+                element.RegisterCallback<ClickEvent>(
+                    evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, index1));
+                ++index;
+            });
         }
 
         public static void SetRootDisplay(DisplayStyle displayStyle)
