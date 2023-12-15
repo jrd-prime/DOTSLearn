@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using Jrd.Build;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace Jrd
+namespace Jrd.JUI
 {
     public class BuildingPanelUI : MonoBehaviour
     {

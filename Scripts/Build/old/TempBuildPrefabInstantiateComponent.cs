@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Build
+namespace Jrd.Build.old
 {
     /// <summary>
     /// Префабы, из которых будем выбирать и размещать при переходе в режим строительства

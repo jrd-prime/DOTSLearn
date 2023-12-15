@@ -1,12 +1,11 @@
-﻿using Jrd.Build.EditModePanel;
-using Jrd.GameStates.BuildingState;
+﻿using Jrd.GameStates.BuildingState;
 using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Build
+namespace Jrd.Build.old
 {
     public partial class BuildSystem : SystemBase
     {

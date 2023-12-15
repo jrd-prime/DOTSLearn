@@ -2,7 +2,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Build
+namespace Jrd.Build.old
 {
     public class BuildPrefabsAuthoring : MonoBehaviour
     {

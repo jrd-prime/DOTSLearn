@@ -1,13 +1,11 @@
-﻿using System.Runtime.CompilerServices;
-using Jrd.Build.EditModePanel;
-using Jrd.Build.Screen;
+﻿using Jrd.Build.Screen;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Jrd.Build
+namespace Jrd.Build.old
 {
     /// <summary>
     /// Размещаем тэмп префаб
