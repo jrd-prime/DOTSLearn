@@ -6,5 +6,6 @@ namespace Jrd.Build
     public struct PlaceBuildingComponent: IComponentData
     {
         public float3 placePosition;
+        public Entity placePrefab;
     }
 }
