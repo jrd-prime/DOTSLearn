@@ -2,7 +2,7 @@
 
 namespace Jrd.GameStates.BuildingState
 {
-    public struct TempBuildingTag : IComponentData
+    public partial struct BuildingStateSystem : ISystem
     {
     }
 }

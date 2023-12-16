@@ -1,5 +1,4 @@
-﻿using Jrd.GameStates.BuildingState;
-using Jrd.JUI;
+﻿using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
@@ -18,15 +17,15 @@ namespace Jrd.Build.old
 
         private int _currentPrefabId;
 
-        private DynamicBuffer<PrefabBufferElements> _prefabBufferElements;
+        // private DynamicBuffer<PrefabBufferElements> _prefabBufferElements;
         private Entity _tempPrefab;
         private Entity _instantiatedTempEntity;
 
         protected override void OnCreate()
         {
             this.Enabled = false;
-            RequireForUpdate<BuildPrefabsComponent>();
-            RequireForUpdate<BSApplyPanelComponent>();
+            // RequireForUpdate<BuildPrefabsComponent>();
+            // RequireForUpdate<BSApplyPanelComponent>();
             // Debug.Log("BuildSystem");
 
             _em = EntityManager;
@@ -36,10 +35,10 @@ namespace Jrd.Build.old
         protected override void OnUpdate()
         {
             this.Enabled = false;
-            _editModePanelEntity = SystemAPI.GetSingletonEntity<BSApplyPanelComponent>();
-            _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+            // _editModePanelEntity = SystemAPI.GetSingletonEntity<BSApplyPanelComponent>();
+            // _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
-            _prefabBufferElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsEntity);
+            // _prefabBufferElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsEntity);
 
 
 
@@ -52,7 +51,7 @@ namespace Jrd.Build.old
         private void EnterInEditMode(int a)
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _tempPrefab = _prefabBufferElements.ElementAt(a).PrefabEntity;
+            // _tempPrefab = _prefabBufferElements.ElementAt(a).PrefabEntity;
 
             // LOOK ПЕРЕДЕЛАТЬ ЭТО Г
 
@@ -66,7 +65,7 @@ namespace Jrd.Build.old
                 SetEditModeState(true);
 
                 // Show edit mode panel
-                _ecb.AddComponent<VisualElementShowTag>(_editModePanelEntity);
+                // _ecb.AddComponent<VisualElementShowTag>(_editModePanelEntity);
 
                 _ecb.Playback(_em);
                 // TODO DISABLE BUTTON
@@ -101,7 +100,7 @@ namespace Jrd.Build.old
             _ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // Hide edit mode panel
-            _ecb.AddComponent<VisualElementHideTag>(_editModePanelEntity);
+            // _ecb.AddComponent<VisualElementHideTag>(_editModePanelEntity);
             
 
             // Exit from edit mode state TODO

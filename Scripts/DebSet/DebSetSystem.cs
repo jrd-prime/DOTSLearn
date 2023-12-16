@@ -1,10 +1,6 @@
-﻿using Jrd.Build.old;
-using Jrd.GameStates;
-using Jrd.GameStates.BuildingState;
-using Jrd.GameStates.BuildingState.Tag;
+﻿using Jrd.GameStates;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.DebSet
 {
@@ -51,15 +47,15 @@ namespace Jrd.DebSet
         private void StartBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _ecb.AddComponent<BuildingStateComponent>(_gameStateEntity); // TODO
-            _ecb.AddComponent<InitializeTag>(_gameStateEntity); // TODO
+            // _ecb.AddComponent<BuildingStateComponent>(_gameStateEntity); // TODO
+            // _ecb.AddComponent<InitializeTag>(_gameStateEntity); // TODO
             _ecb.Playback(_em);
         }
 
         private void StopBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity); // TODO
+            // _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity); // TODO
             _ecb.Playback(_em);
         }
 
