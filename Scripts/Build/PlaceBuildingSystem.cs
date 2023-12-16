@@ -1,4 +1,6 @@
-﻿using Jrd.GameStates.BuildingState.Tag;
+﻿using Jrd.GameStates.BuildingState;
+using Jrd.GameStates.BuildingState.Tag;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -8,8 +10,6 @@ namespace Jrd.Build
 {
     public partial struct PlaceBuildingSystem : ISystem
     {
-        private EntityCommandBuffer _ecb;
-
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -17,12 +17,12 @@ namespace Jrd.Build
 
         public void OnUpdate(ref SystemState state)
         {
-            _ecb = SystemAPI
+            var ecb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (stateComponent, place, entity) in SystemAPI
-                         .Query<RefRW<BuildingStateComponent>, RefRO<PlaceBuildingComponent>>().WithEntityAccess())
+            foreach (var (place, entity) in SystemAPI
+                         .Query<RefRO<PlaceBuildingComponent>>().WithAll<BuildingStateComponent>().WithEntityAccess())
             {
                 Debug.Log($"PLACE : {place.ValueRO.placePrefab} + {place.ValueRO.placePosition}");
 
@@ -30,30 +30,26 @@ namespace Jrd.Build
 
                 if (prefab == Entity.Null) return;
 
-                var instantiate = _ecb.Instantiate(prefab);
+                var instantiate = ecb.Instantiate(prefab);
 
-                // stateComponent.ValueRW.TempEntity = instantiate;
-
-                _ecb.SetComponent(entity, new BuildingStateComponent
-                {
-                    TempEntity = instantiate
-                });
-                
-                _ecb.SetComponent(instantiate, new LocalTransform
+                ecb.SetComponent(instantiate, new LocalTransform
                 {
                     Position = place.ValueRO.placePosition,
                     Rotation = quaternion.identity,
                     Scale = 1
                 });
 
-                _ecb.AddComponent(instantiate, new BuildingDetailsComponent
+                ecb.SetName(instantiate, "bl");
+
+                ecb.AddComponent(instantiate, new BuildingDetailsComponent
                 {
                     entity = instantiate,
                     position = place.ValueRO.placePosition,
                     prefab = prefab
                 });
+                ecb.AddComponent<TempBuildingTag>(instantiate);
 
-                _ecb.RemoveComponent<PlaceBuildingComponent>(entity);
+                ecb.RemoveComponent<PlaceBuildingComponent>(entity);
             }
         }
     }

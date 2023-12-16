@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Jrd.Build;
+﻿using Jrd.Build;
 using Jrd.Build.old;
 using Jrd.Build.Screen;
 using Jrd.GameStates.BuildingState.Tag;
@@ -7,12 +6,13 @@ using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Jrd.GameStates.BuildingState
 {
+    
+    // LOOK TODO переделать всё
     /// <summary>
     /// Добавляем компоненты, для подключения систем необходимых в билдинг моде
     /// + панель с выбором построек
@@ -25,10 +25,10 @@ namespace Jrd.GameStates.BuildingState
         private Entity _gameStateEntity;
         private bool _isSubscribed;
         private EntityManager _em;
-        private EntityCommandBuffer _ecb;
         private int _prefabsCount;
         private DynamicBuffer<PrefabBufferElements> _array;
-        private Entity _buildingStateComponent;
+        private RefRW<BuildingStateComponent> _buildingStateComponent;
+        private Entity _prefabsComponentEntity;
 
 
         public void OnCreate(ref SystemState state)
@@ -36,27 +36,27 @@ namespace Jrd.GameStates.BuildingState
             state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
             state.RequireForUpdate<BuildPrefabsComponent>();
             state.RequireForUpdate<BuildingStateComponent>();
-            _em = state.EntityManager;
             _isSubscribed = false;
+            Application.targetFrameRate = default;
         }
 
         public void OnUpdate(ref SystemState state)
         {
+            _em = state.EntityManager;
             _gameStateEntity = SystemAPI
                 .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
                 .GameStateEntity;
 
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
+            _prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
+            _buildingStateComponent = SystemAPI.GetComponentRW<BuildingStateComponent>(_gameStateEntity);
 
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            var prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+            Debug.Log(_buildingStateComponent);
 
-
-            _ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
-            {
-                PrefabsCount = SystemAPI.GetBuffer<PrefabBufferElements>(prefabsComponentEntity).Length,
-            });
+            _buildingStateComponent.ValueRW.PrefabsCount =
+                SystemAPI.GetBuffer<PrefabBufferElements>(_prefabsComponentEntity).Length;
 
 
             // Init
@@ -64,12 +64,12 @@ namespace Jrd.GameStates.BuildingState
             {
                 Debug.Log("initialize ".ToUpper() + GetType());
 
-                _ecb.AddComponent(_gameStateEntity,
+                ecb.AddComponent(_gameStateEntity,
                     new ComponentTypeSet(
                         typeof(BSBuildingsPanelComponent),
                         typeof(BSBuildingsPanelShowTag)
                     ));
-                _ecb.RemoveComponent<InitializeTag>(_gameStateEntity);
+                ecb.RemoveComponent<InitializeTag>(_gameStateEntity);
             }
 
             // deactivate
@@ -77,10 +77,10 @@ namespace Jrd.GameStates.BuildingState
             {
                 Debug.Log("deactivate ".ToUpper() + GetType());
 
-                _ecb.AddComponent<BSBuildingsPanelHideTag>(_gameStateEntity); // TODO
-                _ecb.AddComponent<BSApplyPanelHideTag>(_gameStateEntity); // TODO
-                _ecb.RemoveComponent<BuildingStateComponent>(_gameStateEntity); // TODO
-                _ecb.RemoveComponent<DeactivateStateTag>(_gameStateEntity); // TODO
+                ecb.AddComponent<BSBuildingsPanelHideTag>(_gameStateEntity); // TODO
+                ecb.AddComponent<BSApplyPanelHideTag>(_gameStateEntity); // TODO
+                ecb.RemoveComponent<BuildingStateComponent>(_gameStateEntity); // TODO
+                ecb.RemoveComponent<DeactivateStateTag>(_gameStateEntity); // TODO
 
                 // LOOK возможно этот компонент не удалять, к примеру, можно сохранить в нем какое-нибудь
                 // LOOK состояние панели, для последующего восстановления стэйта
@@ -91,8 +91,13 @@ namespace Jrd.GameStates.BuildingState
                 // ecb.RemoveComponent<BSApplyPanelComponent>(_gameStateEntity); // TODO // LOOK если удлить будет проблема с хайдом панели
             }
 
-            _ecb.Playback(_em);
-            _ecb.Dispose();
+            foreach (var q in SystemAPI.Query<RefRO<TempBuildingTag>, RefRO<BuildingDetailsComponent>>())
+            {
+                _buildingStateComponent.ValueRW.TempEntity = q.Item2.ValueRO.entity;
+            }
+            
+            ecb.Playback(_em);
+            ecb.Dispose();
 
             if (_isSubscribed) return;
             BuildingPanelUI.OnBuildSelected += PlaceBuilding;
@@ -103,14 +108,12 @@ namespace Jrd.GameStates.BuildingState
 
         private void PlaceBuilding(Button button, int index)
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
-            var prefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
-            _array = _em.GetBuffer<PrefabBufferElements>(prefabsComponentEntity);
-            // 1. get prefab, set prefab data to BuildingsPanel
-            var selectedPrefab = _array[index].PrefabEntity;
-            Debug.Log("Select prefab " + selectedPrefab);
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            _ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
+            // 1. get prefab, set prefab data to BuildingsPanel
+            var selectedPrefab = _em.GetBuffer<PrefabBufferElements>(_prefabsComponentEntity)[index].PrefabEntity;
+
+            _em.SetComponentData(_gameStateEntity, new BuildingStateComponent
             {
                 SelectedPrefab = selectedPrefab,
                 SelectedPrefabID = index
@@ -118,51 +121,48 @@ namespace Jrd.GameStates.BuildingState
 
             // 2. open ApplyPanel
             ApplyPanelUI.ApplyPanelLabel.text = "Build " + "b-" + index + "?";
-            _ecb.AddComponent(_gameStateEntity,
+            ecb.AddComponent(_gameStateEntity,
                 new ComponentTypeSet(
                     typeof(BSApplyPanelComponent),
                     typeof(BSApplyPanelShowTag)
                 ));
 
             // 3. instantiate prefab
-            _ecb.AddComponent(_gameStateEntity, new PlaceBuildingComponent
+            ecb.AddComponent(_gameStateEntity, new PlaceBuildingComponent
             {
                 placePosition = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>().ScreenCenterToWorld,
                 placePrefab = selectedPrefab
             });
 
-            _ecb.Playback(_em);
-            _ecb.Dispose();
-            // Debug.Log($"button ID : {index} /// {button}");
+            ecb.Playback(_em);
+            ecb.Dispose();
+            Debug.Log($"button ID : {index} /// {button}");
         }
 
         private void OnCancelBtnClicked()
         {
-            _buildingStateComponent = _em.GetComponentData<BuildingStateComponent>(_gameStateEntity).TempEntity;
-            Debug.Log(_buildingStateComponent + " building state component entity");
-            
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
             Debug.Log("cancel button");
 
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
+           var  building= _em.GetComponentData<BuildingStateComponent>(_gameStateEntity);
+            
             // remove temp building
-            _ecb.DestroyEntity(_buildingStateComponent);
+            ecb.DestroyEntity(building.TempEntity);
 
-            Debug.Log(_buildingStateComponent);
+            ecb.AddComponent<DeactivateStateTag>(_gameStateEntity);
 
-            _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity);
-
-            _ecb.Playback(_em);
-            _ecb.Dispose();
+            ecb.Playback(_em);
+            ecb.Dispose();
         }
 
         private void OnApplyBtnClicked()
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
             Debug.Log("apply button");
 
-            _ecb.Playback(_em);
-            _ecb.Dispose();
+            ecb.Playback(_em);
+            ecb.Dispose();
         }
 
         public void OnDestroy(ref SystemState state)
