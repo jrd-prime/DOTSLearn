@@ -25,12 +25,6 @@ namespace Jrd.Build
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             // Destroy temp prefab if we exit from edit mode
-            foreach (var query in SystemAPI.Query<RefRO<TempBuildPrefabInstantiateComponent>, TempPrefabForRemoveTag>()
-                         .WithEntityAccess())
-            {
-                _ecb.DestroyEntity(query.Item1.ValueRO.instantiatedTempEntity);
-                _ecb.RemoveComponent<TempPrefabForRemoveTag>(query.Item3);
-            }
         }
     }
 }

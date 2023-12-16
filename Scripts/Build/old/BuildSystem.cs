@@ -27,7 +27,6 @@ namespace Jrd.Build.old
             this.Enabled = false;
             RequireForUpdate<BuildPrefabsComponent>();
             RequireForUpdate<BSApplyPanelComponent>();
-            RequireForUpdate<TempBuildPrefabInstantiateComponent>();
             // Debug.Log("BuildSystem");
 
             _em = EntityManager;
@@ -38,13 +37,10 @@ namespace Jrd.Build.old
         {
             this.Enabled = false;
             _editModePanelEntity = SystemAPI.GetSingletonEntity<BSApplyPanelComponent>();
-            _tempBuildPrefabInstantiateEntity = SystemAPI.GetSingletonEntity<TempBuildPrefabInstantiateComponent>();
             _buildPrefabsEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
             _prefabBufferElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsEntity);
-            _instantiatedTempEntity = _em
-                .GetComponentData<TempBuildPrefabInstantiateComponent>(_tempBuildPrefabInstantiateEntity)
-                .instantiatedTempEntity;
+
 
 
             // LOOK ПЕРЕДЕЛАТЬ ЭТО Г
@@ -72,11 +68,6 @@ namespace Jrd.Build.old
                 // Show edit mode panel
                 _ecb.AddComponent<VisualElementShowTag>(_editModePanelEntity);
 
-                // Place temp building
-                _ecb.SetComponent(_tempBuildPrefabInstantiateEntity,
-                    new TempBuildPrefabInstantiateComponent { tempBuildPrefab = _tempPrefab });
-                _ecb.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabInstantiateEntity);
-
                 _ecb.Playback(_em);
                 // TODO DISABLE BUTTON
                 return;
@@ -95,10 +86,6 @@ namespace Jrd.Build.old
                 // Destroy instantiated temp prefab
                 _ecb.DestroyEntity(_instantiatedTempEntity);
                 // Set new temp prefab
-                _ecb.SetComponent(_tempBuildPrefabInstantiateEntity,
-                    new TempBuildPrefabInstantiateComponent { tempBuildPrefab = _tempPrefab });
-                // Place new temp prefab
-                _ecb.AddComponent<TempPrefabForPlaceTag>(_tempBuildPrefabInstantiateEntity);
 
                 _ecb.Playback(_em);
                 // TODO DISABLE BUTTON
@@ -115,9 +102,7 @@ namespace Jrd.Build.old
 
             // Hide edit mode panel
             _ecb.AddComponent<VisualElementHideTag>(_editModePanelEntity);
-
-            // Destroy temp building TODO
-            _ecb.AddComponent<TempPrefabForRemoveTag>(_tempBuildPrefabInstantiateEntity);
+            
 
             // Exit from edit mode state TODO
 

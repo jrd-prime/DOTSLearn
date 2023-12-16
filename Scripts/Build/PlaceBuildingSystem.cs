@@ -2,6 +2,7 @@
 using Jrd.GameStates.BuildingState.Tag;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.Content;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
@@ -22,7 +23,8 @@ namespace Jrd.Build
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (place, entity) in SystemAPI
-                         .Query<RefRO<PlaceBuildingComponent>>().WithAll<BuildingStateComponent>().WithEntityAccess())
+                         .Query<RefRO<PlaceBuildingComponent>>()
+                         .WithAll<BuildingStateComponent>().WithEntityAccess())
             {
                 Debug.Log($"PLACE : {place.ValueRO.placePrefab} + {place.ValueRO.placePosition}");
 
@@ -47,6 +49,7 @@ namespace Jrd.Build
                     position = place.ValueRO.placePosition,
                     prefab = prefab
                 });
+
                 ecb.AddComponent<TempBuildingTag>(instantiate);
 
                 ecb.RemoveComponent<PlaceBuildingComponent>(entity);

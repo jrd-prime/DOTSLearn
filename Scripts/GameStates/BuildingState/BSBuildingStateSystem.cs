@@ -11,7 +11,6 @@ using UnityEngine.UIElements;
 
 namespace Jrd.GameStates.BuildingState
 {
-    
     // LOOK TODO переделать всё
     /// <summary>
     /// Добавляем компоненты, для подключения систем необходимых в билдинг моде
@@ -53,8 +52,6 @@ namespace Jrd.GameStates.BuildingState
 
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            Debug.Log(_buildingStateComponent);
-
             _buildingStateComponent.ValueRW.PrefabsCount =
                 SystemAPI.GetBuffer<PrefabBufferElements>(_prefabsComponentEntity).Length;
 
@@ -81,21 +78,13 @@ namespace Jrd.GameStates.BuildingState
                 ecb.AddComponent<BSApplyPanelHideTag>(_gameStateEntity); // TODO
                 ecb.RemoveComponent<BuildingStateComponent>(_gameStateEntity); // TODO
                 ecb.RemoveComponent<DeactivateStateTag>(_gameStateEntity); // TODO
-
-                // LOOK возможно этот компонент не удалять, к примеру, можно сохранить в нем какое-нибудь
-                // LOOK состояние панели, для последующего восстановления стэйта
-                // ecb.RemoveComponent<BuildingsPanelData>(_gameStateEntity); // TODO // LOOK если удлить будет проблема с хайдом панели
-
-                // LOOK возможно этот компонент не удалять, к примеру, можно сохранить в нем какое-нибудь
-                // LOOK состояние панели, для последующего восстановления стэйта
-                // ecb.RemoveComponent<BSApplyPanelComponent>(_gameStateEntity); // TODO // LOOK если удлить будет проблема с хайдом панели
             }
 
             foreach (var q in SystemAPI.Query<RefRO<TempBuildingTag>, RefRO<BuildingDetailsComponent>>())
             {
                 _buildingStateComponent.ValueRW.TempEntity = q.Item2.ValueRO.entity;
             }
-            
+
             ecb.Playback(_em);
             ecb.Dispose();
 
@@ -109,34 +98,28 @@ namespace Jrd.GameStates.BuildingState
         private void PlaceBuilding(Button button, int index)
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-
             // 1. get prefab, set prefab data to BuildingsPanel
             var selectedPrefab = _em.GetBuffer<PrefabBufferElements>(_prefabsComponentEntity)[index].PrefabEntity;
-
-            _em.SetComponentData(_gameStateEntity, new BuildingStateComponent
+            
+            ecb.SetComponent(_gameStateEntity, new BuildingStateComponent
             {
                 SelectedPrefab = selectedPrefab,
                 SelectedPrefabID = index
             });
-
-            // 2. open ApplyPanel
             ApplyPanelUI.ApplyPanelLabel.text = "Build " + "b-" + index + "?";
             ecb.AddComponent(_gameStateEntity,
                 new ComponentTypeSet(
                     typeof(BSApplyPanelComponent),
                     typeof(BSApplyPanelShowTag)
                 ));
-
-            // 3. instantiate prefab
             ecb.AddComponent(_gameStateEntity, new PlaceBuildingComponent
             {
                 placePosition = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsComponent>().ScreenCenterToWorld,
                 placePrefab = selectedPrefab
             });
-
             ecb.Playback(_em);
             ecb.Dispose();
-            Debug.Log($"button ID : {index} /// {button}");
+            // Debug.Log($"button ID : {index} /// {button}");
         }
 
         private void OnCancelBtnClicked()
@@ -145,8 +128,8 @@ namespace Jrd.GameStates.BuildingState
 
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-           var  building= _em.GetComponentData<BuildingStateComponent>(_gameStateEntity);
-            
+            var building = _em.GetComponentData<BuildingStateComponent>(_gameStateEntity);
+
             // remove temp building
             ecb.DestroyEntity(building.TempEntity);
 
