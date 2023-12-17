@@ -2,8 +2,9 @@
 
 namespace Jrd.GameStates.BuildingState
 {
-    public struct UIVisibilityComponent : IComponentData
+    public struct VisibilityComponent : IComponentData
     {
         public bool Show;
+        public bool IsVisible;
     }
 }

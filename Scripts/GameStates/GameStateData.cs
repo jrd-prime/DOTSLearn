@@ -4,6 +4,7 @@ namespace Jrd.GameStates
 {
     public struct GameStateData : IComponentData
     {
-        public Entity GameStateEntity;
+        public Entity self;
+        public GameState GameState;
     }
 }

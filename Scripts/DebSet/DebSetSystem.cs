@@ -27,8 +27,7 @@ namespace Jrd.DebSet
             _em.SetName(_entity, "_DebSetEntity");
 
             _gameStateEntity = SystemAPI
-                .GetComponent<GameStateData>(state.World.GetExistingSystem(typeof(GameStatesSystem)))
-                .GameStateEntity;
+                .GetSingletonEntity<GameStateData>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -47,21 +46,32 @@ namespace Jrd.DebSet
 
         private void StartBuildingMode()
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
-            
-            // LOOK TODO подумать переделать
-            var e = _ecb.CreateEntity();
-            _ecb.AddComponent<BuildingStateComponent>(e); // TODO
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            _ecb.AddComponent<InitializeTag>(e); // TODO
-            _ecb.Playback(_em);
+            // LOOK TODO подумать переделать
+
+            ecb.SetComponent(_gameStateEntity, new GameStateData
+            {
+                GameState = GameState.BuildingState
+            });
+
+
+            ecb.Playback(_em);
+            ecb.Dispose();
         }
 
         private void StopBuildingMode()
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+
+            ecb.SetComponent(_gameStateEntity, new GameStateData
+            {
+                GameState = GameState.GamePlayState
+            });
+
             // _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity); // TODO
-            _ecb.Playback(_em);
+            ecb.Playback(_em);
+            ecb.Dispose();
         }
 
         private void ApplyDebSettings()
