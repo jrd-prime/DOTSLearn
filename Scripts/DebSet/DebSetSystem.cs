@@ -1,4 +1,5 @@
 ﻿using Jrd.GameStates;
+using Jrd.GameStates.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -47,8 +48,12 @@ namespace Jrd.DebSet
         private void StartBuildingMode()
         {
             _ecb = new EntityCommandBuffer(Allocator.Temp);
-            // _ecb.AddComponent<BuildingStateComponent>(_gameStateEntity); // TODO
-            // _ecb.AddComponent<InitializeTag>(_gameStateEntity); // TODO
+            
+            // LOOK TODO подумать переделать
+            var e = _ecb.CreateEntity();
+            _ecb.AddComponent<BuildingStateComponent>(e); // TODO
+
+            _ecb.AddComponent<InitializeTag>(e); // TODO
             _ecb.Playback(_em);
         }
 

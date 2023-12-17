@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Jrd.GameStates.BuildingState;
+using Unity.Entities;
 
 namespace Jrd.GameStates
 {
@@ -8,7 +9,7 @@ namespace Jrd.GameStates
         {
             var em = state.EntityManager;
             var gameStateEntity = em.CreateEntity();
-            em.SetName(gameStateEntity, "_GameStateEntity");
+            em.SetName(gameStateEntity, "___ Game State Entity");
 
             em.AddComponent<GameStateData>(state.SystemHandle);
             em.SetComponentData(state.SystemHandle, new GameStateData
