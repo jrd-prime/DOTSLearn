@@ -29,7 +29,7 @@ namespace Jrd.JUI
         {
         }
 
-        public static VisualElement BuildingsPanelRoot { get; set; }
+        public static VisualElement BuildingsPanelRoot;
 
         private void Awake()
         {
@@ -86,7 +86,7 @@ namespace Jrd.JUI
             BuildingsPanelRoot.style.display = displayStyle;
         }
 
-        public static void ShowApplyPanel()
+        public static void ShowBPanel()
         {
             BuildingsPanelRoot.style.display = DisplayStyle.Flex;
             BuildingsPanelRoot.experimental.animation
@@ -98,7 +98,7 @@ namespace Jrd.JUI
                 .KeepAlive();
         }
 
-        public static void HideApplyPanel()
+        public static void HideBPanel()
         {
             BuildingsPanelRoot.experimental.animation
                 .Start(

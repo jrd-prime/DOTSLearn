@@ -58,7 +58,7 @@ namespace Jrd.GameStates
                 case GameState.GamePlayState:
                     if (_buildingStateEntity != Entity.Null)
                     {
-                        DisposeStateForSystem<BuildingStateSystem>(_biEcb, _buildingStateEntity, ref state);
+                        // DisposeStateForSystem<BuildingStateSystem>(_biEcb, _buildingStateEntity, ref state);
                         _buildingStateEntity = Entity.Null;
                         _gameStateData.ValueRW.BuildingStateEntity = Entity.Null;
                     }
@@ -72,6 +72,15 @@ namespace Jrd.GameStates
         private void DisposeStateForSystem<T>(EntityCommandBuffer ecb1, Entity stateEntity, ref SystemState state)
             where T : unmanaged, ISystem
         {
+            foreach (var e in SystemAPI.GetComponent<BuildingStateComponent>(stateEntity)
+                         .BuildingStateComponentEntities)
+            {
+                _biEcb.DestroyEntity(e);
+            }
+
+            SystemAPI.GetComponent<BuildingStateComponent>(stateEntity)
+                .BuildingStateComponentEntities.Dispose();
+            // _biEcb.AddComponent<DeactivateTag>(stateEntity);
             _biEcb.DestroyEntity(stateEntity);
             SetUnmanagedSystemEnabled<T>(false);
         }

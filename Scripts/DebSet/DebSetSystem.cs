@@ -48,10 +48,9 @@ namespace Jrd.DebSet
             // building mode stop
             DebSetUI.BModeButtonOff.clicked += () =>
             {
+                
                 _bsEcb.AddComponent<SetStateComponent>(_gameStateEntity);
                 _bsEcb.SetComponent(_gameStateEntity, new SetStateComponent { _gameState = GameState.GamePlayState });
-                _bsEcb.AddComponent<DeactivateTag>(_gameStateData.ValueRO
-                    .BuildingStateEntity);
             }; // TODO
 
             DebSetUI.DebSetApplyButton.clicked += () =>
