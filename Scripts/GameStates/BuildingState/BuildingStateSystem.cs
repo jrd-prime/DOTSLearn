@@ -9,21 +9,27 @@ namespace Jrd.GameStates.BuildingState
     public partial struct BuildingStateSystem : ISystem
     {
         private EntityManager _em;
+        private NativeList<Entity> _createdComponents;
 
         private Entity _buildingPanel;
         private Entity _confirmationPanel;
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<BuildingStateComponent>();
             state.Enabled = false;
-            BuildingPanelUI.OnBuildSelected += BuildSelected;
         }
 
         public void OnUpdate(ref SystemState state)
         {
+            if (!_createdComponents.IsCreated)
+                _createdComponents = new NativeList<Entity>(2, Allocator.Persistent); // TODO подумать
+
+            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            
             _em = state.EntityManager;
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             foreach (var (_, entity) in SystemAPI
                          .Query<InitializeTag>()
@@ -31,21 +37,43 @@ namespace Jrd.GameStates.BuildingState
                          .WithEntityAccess())
             {
                 Debug.Log("BuildingStateComponent + InitializeTag");
+                ecb.RemoveComponent<InitializeTag>(entity);
+
 
                 // create panel entity
                 _buildingPanel = GetCustomEntity<BuildingPanelComponent>(ecb, BSConst.BuildingPanelEntityName);
-
                 // create confirmation panel entity
                 _confirmationPanel =
                     GetCustomEntity<ConfirmationPanelComponent>(ecb, BSConst.ConfirmationPanelEntityName);
 
-                ecb.RemoveComponent<InitializeTag>(entity);
+                BuildingPanelUI.OnBuildSelected += BuildSelected;
             }
 
+            foreach (var (_, entity) in SystemAPI
+                         .Query<DeactivateTag>()
+                         .WithAll<BuildingStateComponent>()
+                         .WithEntityAccess())
+            {
+                Debug.Log("BuildingStateComponent + DeactivateTag");
 
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
-            BuildingPanelUI.OnBuildSelected -= BuildSelected;
+                DestroyEntities(ecb);
+
+                _createdComponents.Dispose();
+
+                BuildingPanelUI.OnBuildSelected -= BuildSelected;
+            }
+
+            if (_createdComponents.IsCreated)
+                Debug.Log(_createdComponents.Length);
+        }
+
+        private void DestroyEntities(EntityCommandBuffer ecb)
+        {
+            foreach (var t in _createdComponents)
+            {
+                Debug.Log("destroy = " + t);
+                ecb.DestroyEntity(t);
+            }
         }
 
         private void BuildSelected(Button button, int index)
@@ -56,10 +84,13 @@ namespace Jrd.GameStates.BuildingState
         private Entity GetCustomEntity<T>(EntityCommandBuffer ecb, FixedString64Bytes entityName)
             where T : unmanaged, IComponentData
         {
-            var entity = ecb.CreateEntity();
+            var entity = _em.CreateEntity(); // TODO
+            _createdComponents.Add(entity);
             var nameWithPrefix = BSConst.Prefix + " " + entityName;
+            Debug.Log("new entity " + nameWithPrefix + " / " + entity);
             ecb.AddComponent<T>(entity);
             ecb.SetName(entity, nameWithPrefix);
+
             return entity;
         }
     }

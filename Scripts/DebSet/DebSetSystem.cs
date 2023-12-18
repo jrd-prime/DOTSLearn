@@ -1,5 +1,4 @@
 ﻿using Jrd.GameStates;
-using Jrd.GameStates.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -15,10 +14,12 @@ namespace Jrd.DebSet
         private Entity bmodeEntity;
 
         private Entity _gameStateEntity;
+        private RefRW<GameStateData> _gameStateData;
 
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<EndInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<GameStateData>();
             _em = state.EntityManager;
             bmodeEntity = _em.CreateEntity();
@@ -26,16 +27,17 @@ namespace Jrd.DebSet
             _entity = _em.CreateEntity(archetype);
             _em.SetName(_entity, "_DebSetEntity");
 
-            _gameStateEntity = SystemAPI
-                .GetSingletonEntity<GameStateData>();
+            _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            _ecb = new EntityCommandBuffer(Allocator.Temp);
+            _ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            _em = state.EntityManager;
+            _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
-            _ecb.Playback(_em);
-            _ecb.Dispose();
+
             if (_isSubscribed) return;
             DebSetUI.DebSetApplyButton.clicked += ApplyDebSettings;
             DebSetUI.DebSetClearLogButton.clicked += () => DebSetUI.DebSetText.text = "";
@@ -47,15 +49,8 @@ namespace Jrd.DebSet
         private void StartBuildingMode()
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-
-            // LOOK TODO подумать переделать
-
-            ecb.SetComponent(_gameStateEntity, new GameStateData
-            {
-                GameState = GameState.BuildingState
-            });
-
-
+            ecb.AddComponent<SetStateComponent>(_gameStateEntity);
+            ecb.SetComponent(_gameStateEntity, new SetStateComponent { _gameState = GameState.BuildingState });
             ecb.Playback(_em);
             ecb.Dispose();
         }
@@ -63,13 +58,10 @@ namespace Jrd.DebSet
         private void StopBuildingMode()
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-
-            ecb.SetComponent(_gameStateEntity, new GameStateData
-            {
-                GameState = GameState.GamePlayState
-            });
-
-            // _ecb.AddComponent<DeactivateStateTag>(_gameStateEntity); // TODO
+            ecb.AddComponent<SetStateComponent>(_gameStateEntity);
+            ecb.SetComponent(_gameStateEntity, new SetStateComponent { _gameState = GameState.GamePlayState });
+            var e = _em.GetComponentData<GameStateData>(_gameStateEntity);
+            ecb.AddComponent<DeactivateTag>(e.BuildingStateEntity); // TODO подумать
             ecb.Playback(_em);
             ecb.Dispose();
         }

@@ -1,4 +1,5 @@
-﻿using Jrd.GameStates.BuildingState;
+﻿using Jrd.DebSet;
+using Jrd.GameStates.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -10,8 +11,9 @@ namespace Jrd.GameStates
         private GameState _gameState;
         private EntityManager _em;
         private Entity _gameStateEntity;
+        private RefRW<GameStateData> _gameStateData;
 
-        private Entity _buiildingStateEntity;
+        private Entity _buildingStateEntity;
 
         public void OnCreate(ref SystemState state)
         {
@@ -21,8 +23,9 @@ namespace Jrd.GameStates
             em.AddComponent<GameStateData>(_gameStateEntity);
             em.SetComponentData(_gameStateEntity, new GameStateData
             {
-                self = _gameStateEntity,
-                GameState = GameState.GamePlayState
+                Self = _gameStateEntity,
+                GameState = GameState.GamePlayState,
+                BuildingStateEntity = Entity.Null
             });
         }
 
@@ -32,26 +35,28 @@ namespace Jrd.GameStates
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).GameState;
+            _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
             Debug.Log(_gameState);
-
-            var buildingStateTypeSet = new ComponentTypeSet(
-                typeof(BuildingStateComponent),
-                typeof(InitializeTag));
 
             switch (_gameState)
             {
                 case GameState.BuildingState:
-                    if (_buiildingStateEntity == Entity.Null)
-                        _buiildingStateEntity = InitStateForSystem<BuildingStateSystem>(ecb, buildingStateTypeSet,
+                    if (_buildingStateEntity == Entity.Null)
+                    {
+                        _buildingStateEntity = InitStateForSystem<BuildingStateSystem>(ecb, new ComponentTypeSet(
+                                typeof(BuildingStateComponent)),
                             BSConst.BuildingStateEntityName);
+                        _gameStateData.ValueRW.BuildingStateEntity = _buildingStateEntity;
+                    }
 
                     break;
                 case GameState.GamePlayState:
-                    if (_buiildingStateEntity != Entity.Null)
+                    if (_buildingStateEntity != Entity.Null)
                     {
-                        DisposeStateForSystem<BuildingStateSystem>(ecb, _buiildingStateEntity, ref state);
-                        _buiildingStateEntity = Entity.Null;
+                        DisposeStateForSystem<BuildingStateSystem>(ecb, _buildingStateEntity, ref state);
+                        _buildingStateEntity = Entity.Null;
+                        _gameStateData.ValueRW.BuildingStateEntity = Entity.Null;
                     }
 
                     break;
@@ -66,6 +71,7 @@ namespace Jrd.GameStates
         private void DisposeStateForSystem<T>(EntityCommandBuffer ecb, Entity stateEntity, ref SystemState state)
             where T : unmanaged, ISystem
         {
+            
             ecb.DestroyEntity(stateEntity);
             SetUnmanagedSystemEnabled<T>(false);
         }
@@ -75,9 +81,12 @@ namespace Jrd.GameStates
             where T : unmanaged, ISystem
         {
             SetUnmanagedSystemEnabled<T>(true); // system enable
-            var entity = _em.CreateEntity(); // create entity
+            
+            var entity = _em.CreateEntity(); // create entity // TODO
+            ecb.AddComponent<InitializeTag>(entity);
             ecb.AddComponent(entity, typeSet); // add components
             ecb.SetName(entity, $"{BSConst.Prefix} {name}");
+            
             return entity;
         }
 
