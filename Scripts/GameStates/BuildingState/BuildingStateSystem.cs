@@ -11,13 +11,14 @@ namespace Jrd.GameStates.BuildingState
     {
         private EntityManager _em;
         private NativeList<Entity> _createdComponents;
+        private EntityCommandBuffer ecb;
 
         private Entity _buildingPanel;
         private Entity _confirmationPanel;
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<EndInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<BuildingStateComponent>();
             state.Enabled = false;
         }
@@ -28,7 +29,7 @@ namespace Jrd.GameStates.BuildingState
             if (!_createdComponents.IsCreated)
                 _createdComponents = new NativeList<Entity>(2, Allocator.Persistent); // TODO подумать
 
-            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+            ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             _em = state.EntityManager;
@@ -69,7 +70,7 @@ namespace Jrd.GameStates.BuildingState
                 Debug.Log(_createdComponents.Length);
         }
 
-        private void DestroyEntities(EntityCommandBuffer ecb)
+        private void DestroyEntities(EntityCommandBuffer ecb1)
         {
             foreach (var t in _createdComponents)
             {
@@ -83,7 +84,7 @@ namespace Jrd.GameStates.BuildingState
             Debug.Log($"Build Selected : {button.name} + {index}");
         }
 
-        private Entity GetCustomEntity<T>(EntityCommandBuffer ecb, FixedString64Bytes entityName)
+        private Entity GetCustomEntity<T>(EntityCommandBuffer ecb1, FixedString64Bytes entityName)
             where T : unmanaged, IComponentData
         {
             var entity = _em.CreateEntity(); // TODO

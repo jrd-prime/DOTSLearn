@@ -12,12 +12,16 @@ namespace Jrd.GameStates
         private EntityManager _em;
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
+        private BeginInitializationEntityCommandBufferSystem.Singleton biEcb;
+        private EntityCommandBuffer ecb;
 
         private Entity _buildingStateEntity;
 
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            biEcb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            
             var em = state.EntityManager;
             _gameStateEntity = em.CreateEntity();
             em.SetName(_gameStateEntity, "___ Game State Entity");
@@ -34,8 +38,7 @@ namespace Jrd.GameStates
         {
             _em = state.EntityManager;
             // var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
+            ecb = biEcb.CreateCommandBuffer(state.WorldUnmanaged);
 
             _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).GameState;
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
@@ -66,12 +69,9 @@ namespace Jrd.GameStates
                 default:
                     break;
             }
-
-            // ecb.Playback(state.EntityManager);
-            // ecb.Dispose();
         }
 
-        private void DisposeStateForSystem<T>(EntityCommandBuffer ecb, Entity stateEntity, ref SystemState state)
+        private void DisposeStateForSystem<T>(EntityCommandBuffer ecb1, Entity stateEntity, ref SystemState state)
             where T : unmanaged, ISystem
         {
             
@@ -79,7 +79,7 @@ namespace Jrd.GameStates
             SetUnmanagedSystemEnabled<T>(false);
         }
 
-        private Entity InitStateForSystem<T>(EntityCommandBuffer ecb, ComponentTypeSet typeSet,
+        private Entity InitStateForSystem<T>(EntityCommandBuffer ecb1, ComponentTypeSet typeSet,
             FixedString32Bytes name)
             where T : unmanaged, ISystem
         {

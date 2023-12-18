@@ -1,3 +1,4 @@
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -43,7 +44,8 @@ namespace Jrd.DebSet
             BModeButtonOff = root.Q<Button>("bmodeoff-button");
         }
 
-        
+
+
 
         private void FixedUpdate()
         {
