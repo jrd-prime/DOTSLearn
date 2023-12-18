@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 namespace Jrd.GameStates.BuildingState
 {
+    [UpdateAfter(typeof(GameStatesSystem))]
     public partial struct BuildingStateSystem : ISystem
     {
         private EntityManager _em;
@@ -23,12 +24,13 @@ namespace Jrd.GameStates.BuildingState
 
         public void OnUpdate(ref SystemState state)
         {
+            Debug.Log("bs system");
             if (!_createdComponents.IsCreated)
                 _createdComponents = new NativeList<Entity>(2, Allocator.Persistent); // TODO подумать
 
             var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
-            
+
             _em = state.EntityManager;
 
             foreach (var (_, entity) in SystemAPI

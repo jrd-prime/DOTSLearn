@@ -17,6 +17,7 @@ namespace Jrd.GameStates
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             var em = state.EntityManager;
             _gameStateEntity = em.CreateEntity();
             em.SetName(_gameStateEntity, "___ Game State Entity");
@@ -32,7 +33,9 @@ namespace Jrd.GameStates
         public void OnUpdate(ref SystemState state)
         {
             _em = state.EntityManager;
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            // var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).GameState;
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
@@ -64,8 +67,8 @@ namespace Jrd.GameStates
                     break;
             }
 
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            // ecb.Playback(state.EntityManager);
+            // ecb.Dispose();
         }
 
         private void DisposeStateForSystem<T>(EntityCommandBuffer ecb, Entity stateEntity, ref SystemState state)

@@ -1,9 +1,11 @@
 ﻿using Jrd.GameStates;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.DebSet
 {
+    [UpdateBefore(typeof(GameStatesSystem))]
     public partial struct DebSetSystem : ISystem
     {
         private Entity _entity;
@@ -11,18 +13,15 @@ namespace Jrd.DebSet
         private EntityCommandBuffer _ecb;
         private bool _isSubscribed;
 
-        private Entity bmodeEntity;
-
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
 
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<EndInitializationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<GameStateData>();
             _em = state.EntityManager;
-            bmodeEntity = _em.CreateEntity();
             var archetype = _em.CreateArchetype(typeof(DebSetComponent));
             _entity = _em.CreateEntity(archetype);
             _em.SetName(_entity, "_DebSetEntity");
@@ -32,7 +31,8 @@ namespace Jrd.DebSet
 
         public void OnUpdate(ref SystemState state)
         {
-            _ecb = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
+            Debug.Log("deb set system");
+            _ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
             _em = state.EntityManager;
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
