@@ -110,6 +110,15 @@ namespace Jrd.GameStates.BuildingState
         private void CancelBuilding()
         {
             Debug.Log("cancel build");
+
+            if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
+            {
+                _eiEcb.AddComponent(tempEntity, new DestroyTempPrefabTag { });
+            }
+            else
+            {
+                Debug.LogWarning("We can't find temp build entity!");
+            }
         }
 
         private void BuildSelected(Button button, int index)

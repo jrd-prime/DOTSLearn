@@ -33,11 +33,11 @@ namespace Jrd.GameStates.MainGameState
             _em.AddComponent<ChangeGameStateComponent>(_gameStateEntity);
             _em.SetComponentData(_gameStateEntity,
                 new ChangeGameStateComponent { GameState = GameState.GamePlayState });
-            _ecbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
+            _ecbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _biEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
 
             _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).CurrentGameState;

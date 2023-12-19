@@ -51,6 +51,9 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                 // set position // TODO
                 BsEcb.SetComponent(instantiate,
                     new LocalTransform { Position = new float3(3, 0, 5), Rotation = quaternion.identity, Scale = 1 });
+                
+                // name
+                BsEcb.SetName(instantiate, "___ # Temp Building Entity");
 
                 // add tag to instantiated prefab
                 BsEcb.AddComponent<TempBuildingTag>(instantiate);

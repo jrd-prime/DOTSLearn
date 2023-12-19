@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.Build.Screen
+namespace Jrd.Screen
 {
     /// <summary>
     /// Получаем мировые координаты точки с центра экрана

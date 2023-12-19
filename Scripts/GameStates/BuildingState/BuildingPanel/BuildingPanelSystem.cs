@@ -19,11 +19,11 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
         {
             RequireForUpdate<BuildPrefabsComponent>();
             RequireForUpdate<ConfirmationPanelComponent>();
-            _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         protected override void OnStartRunning()
         {
+            _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _confirmationPanelEntity = SystemAPI.GetSingletonEntity<ConfirmationPanelComponent>();
         }
 

@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Build.Screen
+namespace Jrd.Screen
 {
     /// <summary>
     /// Размер экрана / Координаты центра экрана
