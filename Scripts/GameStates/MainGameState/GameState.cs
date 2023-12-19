@@ -1,4 +1,4 @@
-﻿namespace Jrd.GameStates
+﻿namespace Jrd.GameStates.MainGameState
 {
     public enum GameState
     {

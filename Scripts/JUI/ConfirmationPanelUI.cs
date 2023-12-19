@@ -4,9 +4,9 @@ using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.JUI.EditModeUI
 {
-    public class ApplyPanelUI : MonoBehaviour
+    public class ConfirmationPanelUI : MonoBehaviour
     {
-        public static ApplyPanelUI Instance;
+        public static ConfirmationPanelUI Instance;
 
         public static VisualElement ApplyPanel;
         public static VisualElement ApplyPanelRoot;
@@ -25,7 +25,7 @@ namespace Jrd.JUI.EditModeUI
         // public static bool IsMouseRaycast; // TODO переделать
         // private Toggle _mouseRaycastToggle;
 
-        private ApplyPanelUI()
+        private ConfirmationPanelUI()
         {
         }
 

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Jrd.GameStates;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Build.old
+namespace Jrd.GameStates.BuildingState.Prefabs
 {
     public class BuildPrefabsAuthoring : MonoBehaviour
     {
@@ -20,7 +19,8 @@ namespace Jrd.Build.old
                 {
                     buffer.Add(new PrefabBufferElements
                     {
-                        PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic), PrefabName = prefab.name
+                        PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic),
+                        PrefabName = prefab.name
                     });
                 }
 

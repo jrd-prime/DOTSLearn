@@ -75,6 +75,18 @@ namespace Jrd.Grid.GridLayout
             GeneratePointsLevel("small", dot4, smallSize, smallPrefab, smallScale, ecb, ref state);
         }
 
+        // LOOK USE
+        // var result = new NativeArray<int>(1, Allocator.TempJob);
+        //
+        // Job.WithCode(() =>
+        // {
+        //     for (int i = 1; i <= 10; i++)
+        //     {
+        //         numbers[0] += i;
+        //     }
+        // }).Schedule();
+        //
+        // result.Dispose();
 
         [BurstCompile] // TODO job
         private void GeneratePointsLevel(string tag, float2 start, int2 size, Entity prefab, float scale,

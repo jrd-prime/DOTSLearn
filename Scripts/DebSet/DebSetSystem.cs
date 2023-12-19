@@ -1,6 +1,8 @@
 ﻿using Jrd.GameStates;
+using Jrd.GameStates.MainGameState;
 using Unity.Burst;
 using Unity.Entities;
+using GameStatesSystem = Jrd.GameStates.MainGameState.GameStatesSystem;
 
 namespace Jrd.DebSet
 {
@@ -41,16 +43,13 @@ namespace Jrd.DebSet
             // building mode start
             DebSetUI.BModeButton.clicked += (() =>
             {
-                _bsEcb.AddComponent<SetStateComponent>(_gameStateEntity);
-                _bsEcb.SetComponent(_gameStateEntity, new SetStateComponent { _gameState = GameState.BuildingState });
+                _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.BuildingState });
             }); // TODO
 
             // building mode stop
             DebSetUI.BModeButtonOff.clicked += () =>
             {
-                
-                _bsEcb.AddComponent<SetStateComponent>(_gameStateEntity);
-                _bsEcb.SetComponent(_gameStateEntity, new SetStateComponent { _gameState = GameState.GamePlayState });
+                _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.GamePlayState });
             }; // TODO
 
             DebSetUI.DebSetApplyButton.clicked += () =>

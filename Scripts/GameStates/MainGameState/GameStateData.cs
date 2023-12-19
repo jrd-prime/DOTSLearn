@@ -1,11 +1,11 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates
+namespace Jrd.GameStates.MainGameState
 {
     public struct GameStateData : IComponentData
     {
         public Entity Self;
-        public GameState GameState;
+        public GameState CurrentGameState;
         public Entity BuildingStateEntity; //TODO подумать, переделать, мб список
     }
 }

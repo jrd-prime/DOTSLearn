@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates.BuildingState
+namespace Jrd.GameStates.SharedComponentAndSystems
 {
     public partial struct VisibilitySystem : ISystem
     {

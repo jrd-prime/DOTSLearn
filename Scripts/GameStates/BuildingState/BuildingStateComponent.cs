@@ -5,6 +5,8 @@ namespace Jrd.GameStates.BuildingState
 {
     public struct BuildingStateComponent : IComponentData
     {
+        public Entity Self;
+        public bool IsInitialized;
         public NativeList<Entity> BuildingStateComponentEntities;
     }
 }

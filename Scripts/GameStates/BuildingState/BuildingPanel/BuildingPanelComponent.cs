@@ -1,8 +1,9 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates
+namespace Jrd.GameStates.BuildingState.BuildingPanel
 {
     public struct BuildingPanelComponent : IComponentData
     {
+        public int BuildingPrefabsCount;
     }
 }

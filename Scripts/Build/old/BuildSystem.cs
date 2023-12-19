@@ -44,7 +44,7 @@ namespace Jrd.Build.old
 
             // LOOK ПЕРЕДЕЛАТЬ ЭТО Г
             if (_isSubscribed) return;
-            ApplyPanelUI.ApplyPanelCancelButton.clicked += ExitFromApplyPanel;
+            ConfirmationPanelUI.ApplyPanelCancelButton.clicked += ExitFromApplyPanel;
             _isSubscribed = true;
         }
 

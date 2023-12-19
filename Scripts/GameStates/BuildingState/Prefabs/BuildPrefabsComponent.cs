@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.GameStates
+namespace Jrd.GameStates.BuildingState.Prefabs
 {
     public struct BuildPrefabsComponent : IComponentData
     {
@@ -11,6 +11,6 @@ namespace Jrd.GameStates
     public struct PrefabBufferElements : IBufferElementData
     {
         public Entity PrefabEntity;
-        public FixedString32Bytes PrefabName;
+        public FixedString64Bytes PrefabName;
     }
 }

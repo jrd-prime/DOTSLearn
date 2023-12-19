@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -16,7 +17,7 @@ namespace Jrd.JUI
         private const int HideDuration = 500;
         private static VisualElement _root;
 
-        private static GroupBox ButtonsContainer;
+        private static GroupBox _buttonsContainer;
         private const string ButtonsContainerName = "groupbox";
 
         [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
@@ -47,7 +48,7 @@ namespace Jrd.JUI
             _root = GetComponent<UIDocument>().rootVisualElement;
             BuildingsPanelRoot = _root;
             BuildingPanel = _root.Q<VisualElement>("building-panel");
-            ButtonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
+            _buttonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
             BuildingsPanelRoot.style.display = DisplayStyle.None;
             if (_buildingButtonTemplate == null)
             {
@@ -62,10 +63,10 @@ namespace Jrd.JUI
         public static void InstantiateButtons(int prefabsCount)
         {
             // LOOK TODO разгребать это
-            ButtonsContainer.Clear();
+            _buttonsContainer.Clear();
 
             for (var i = 0; i < prefabsCount; i++)
-                ButtonsContainer.Add(_buttonTemplate.Instantiate());
+                _buttonsContainer.Add(_buttonTemplate.Instantiate());
 
             var buttons = _root.Query<Button>();
 
@@ -84,6 +85,20 @@ namespace Jrd.JUI
         public static void SetRootDisplay(DisplayStyle displayStyle)
         {
             BuildingsPanelRoot.style.display = displayStyle;
+        }
+
+        public static void DisableButton(int id)
+        {
+            var buttons = _root.Query<Button>();
+
+            buttons.AtIndex(id).SetEnabled(false);
+        }
+
+        public static void EnableButton(int id)
+        {
+            var buttons = _root.Query<Button>();
+
+            buttons.AtIndex(id).SetEnabled(true);
         }
 
         public static void ShowBPanel()
