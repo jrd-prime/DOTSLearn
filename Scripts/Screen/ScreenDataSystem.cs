@@ -18,7 +18,7 @@ namespace Jrd.Screen
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var entity = ecb.CreateEntity();
             ecb.AddComponent<ScreenComponent>(entity);
-            ecb.SetName(entity, "_ScreenComponentSingleton");
+            ecb.SetName(entity, "___ ScreenComponentSingleton");
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
             _screenSingleton = SystemAPI.GetSingletonEntity<ScreenComponent>();

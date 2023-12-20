@@ -20,13 +20,14 @@ namespace Jrd
 
         public static Vector3 GetScreenCenterPoint()
         {
-            return new Vector2(Screen.width / 2f, Screen.height / 2f);
+            return new Vector2(UnityEngine.Screen.width / 2f, UnityEngine.Screen.height / 2f);
         }
 
 
         public static bool IsScreenSizeChanged(float width, float height)
         {
-            return Math.Abs(width - Screen.width) < float.Epsilon && Math.Abs(height - Screen.height) < float.Epsilon;
+            return Math.Abs(width - UnityEngine.Screen.width) < float.Epsilon &&
+                   Math.Abs(height - UnityEngine.Screen.height) < float.Epsilon;
         }
     }
 }
@@ -39,7 +40,7 @@ namespace Jrd
 //     state.Enabled = false;
 // }
 
- 
+
 // public partial struct MapRespawnSystem : ISystem
 // {
 //     [BurstCompile]

@@ -6,7 +6,7 @@ namespace Jrd.Screen
     /// <summary>
     /// Хранит координаты мира исходя из центра экрана
     /// </summary>
-    public struct ScreenCenterInWorldCoordsComponent : IComponentData
+    public struct ScreenCenterInWorldCoordsData : IComponentData
     {
         public float3 ScreenCenterToWorld;
     }

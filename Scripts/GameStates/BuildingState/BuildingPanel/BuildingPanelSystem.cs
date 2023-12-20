@@ -1,6 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.GameStates.SharedComponentAndSystems;
 using Jrd.JUI;
 using Unity.Entities;
 using UnityEngine;

@@ -3,9 +3,9 @@ using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
-using Jrd.GameStates.SharedComponentAndSystems;
 using Jrd.JUI;
 using Jrd.JUI.EditModeUI;
+using Jrd.Screen;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -13,13 +13,13 @@ using UnityEngine.UIElements;
 
 namespace Jrd.GameStates.BuildingState
 {
-    [UpdateAfter(typeof(MainGameState.GameStatesSystem))]
+    [UpdateAfter(typeof(GameStatesSystem))]
     public partial class BuildingStateSystem : SystemBase
     {
         private EntityManager _em;
         private NativeList<Entity> _stateVisualComponents;
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
-        private EntityCommandBuffer _eiEcb;
+        private EntityCommandBuffer _bsEcb;
 
         private Entity _buildingPanel;
         private Entity _confirmationPanel;
@@ -44,14 +44,14 @@ namespace Jrd.GameStates.BuildingState
 
         protected override void OnUpdate()
         {
-            _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             if (!_stateVisualComponents.IsCreated)
                 _stateVisualComponents = new NativeList<Entity>(2, Allocator.Persistent); // TODO подумать
 
             _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
-            _eiEcb = _ecbSystem.CreateCommandBuffer(World.Unmanaged);
+            _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            _bsEcb = _ecbSystem.CreateCommandBuffer(World.Unmanaged);
 
 
             // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
@@ -60,24 +60,22 @@ namespace Jrd.GameStates.BuildingState
                          .WithAll<InitializeTag>()
                          .WithEntityAccess())
             {
-                Debug.Log("init building state system");
+                // Is init?
                 if (buildingStateComponent.ValueRO.IsInitialized) return;
 
-                _eiEcb.RemoveComponent<InitializeTag>(entity);
 
                 _buildingPanel =
-                    GetCustomEntityWithVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
+                    GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
                 _confirmationPanel =
-                    GetCustomEntityWithVisualElementComponent<ConfirmationPanelComponent>(
+                    GetCustomEntityVisualElementComponent<ConfirmationPanelComponent>(
                         BSConst.ConfirmationPanelEntityName);
 
                 if (_stateVisualComponents.Length == 0)
                     Debug.LogWarning("We have a problem with create entities for Building State");
 
-                _eiEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
-
-
-                _eiEcb.SetComponent(_buildingPanel,
+                _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
+                _bsEcb.RemoveComponent<InitializeTag>(entity);
+                _bsEcb.SetComponent(_buildingPanel,
                     new BuildingPanelComponent { BuildingPrefabsCount = _stateVisualComponents.Length });
 
                 buildingStateComponent.ValueRW.Self = entity;
@@ -92,7 +90,7 @@ namespace Jrd.GameStates.BuildingState
             if (_gameStateData.ValueRO.CurrentGameState != GameState.BuildingState)
             {
                 // Hide panel
-                if (_buildingPanel != Entity.Null) _eiEcb.AddComponent<HideVisualElementTag>(_buildingPanel);
+                if (_buildingPanel != Entity.Null) _bsEcb.AddComponent<HideVisualElementTag>(_buildingPanel);
 
                 _stateVisualComponents.Dispose();
 
@@ -110,73 +108,72 @@ namespace Jrd.GameStates.BuildingState
         private void CancelBuilding()
         {
             Debug.Log("cancel build");
+            DestroyTempPrefab();
+        }
+
+        private void DestroyTempPrefab()
+        {
+            var s = SystemAPI
+                .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
-                _eiEcb.AddComponent(tempEntity, new DestroyTempPrefabTag { });
+                s.AddComponent(tempEntity, new DestroyTempPrefabTag());
+                return;
             }
-            else
-            {
-                Debug.LogWarning("We can't find temp build entity!");
-            }
+
+            Debug.LogWarning("We can't find temp build entity!" + this);
         }
 
         private void BuildSelected(Button button, int index)
         {
-            if (_tempSelectedBuildID < 0)
+            if (_tempSelectedBuildID < 0) // temp not set
             {
-                // temp not set
-                BuildingPanelUI.DisableButton(index);
                 _tempSelectedBuildID = index;
             }
-            else if (_tempSelectedBuildID != index)
+            else if (_tempSelectedBuildID != index) // temp != index
             {
-                // temp != index
-                BuildingPanelUI.DisableButton(index);
-                BuildingPanelUI.EnableButton(_tempSelectedBuildID);
+                // destroy temp prefab
+                DestroyTempPrefab();
                 _tempSelectedBuildID = index;
             }
-            else
+            else // temp = index
             {
-                // temp = index
-                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanel.");
+                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanel." + this);
             }
-
-
-            _eiEcb = _ecbSystem.CreateCommandBuffer(World.Unmanaged);
-            _eiEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
 
             var prefabElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent);
 
-            if (prefabElements.IsEmpty)
+            if (!prefabElements.IsEmpty)
             {
-                Debug.LogWarning("Prefabs: " + prefabElements.Length);
+                _bsEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
+                _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
+                    new InstantiateTempPrefabComponent
+                    {
+                        Prefab = prefabElements[index].PrefabEntity
+                    });
+
+                Debug.Log(
+                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {prefabElements[index].PrefabName}");
                 return;
             }
 
-            _eiEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity, new InstantiateTempPrefabComponent
-            {
-                Prefab = prefabElements[index].PrefabEntity
-            });
-
-
-            Debug.Log($"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {prefabElements[index].PrefabName}");
+            Debug.LogError("Prefabs: " + prefabElements.Length);
         }
 
-        private Entity GetCustomEntityWithVisualElementComponent<T>(FixedString64Bytes entityName)
+        private Entity GetCustomEntityVisualElementComponent<T>(FixedString64Bytes entityName)
             where T : unmanaged, IComponentData
         {
             var entity = _em.CreateEntity(); // TODO
             _stateVisualComponents.Add(entity);
 
-            _eiEcb.AddComponent<T>(entity);
-            _eiEcb.AddComponent<VisibilityComponent>(entity);
-            _eiEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
+            _bsEcb.AddComponent<T>(entity);
+            _bsEcb.AddComponent<VisibilityComponent>(entity);
+            _bsEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
 
             var nameWithPrefix = BSConst.Prefix + " " + entityName;
-            _eiEcb.SetName(entity, nameWithPrefix);
-
-            Debug.Log("new entity " + nameWithPrefix + " / " + entity);
+            _bsEcb.SetName(entity, nameWithPrefix);
 
             return entity;
         }

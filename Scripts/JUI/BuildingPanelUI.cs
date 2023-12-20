@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -10,18 +9,19 @@ namespace Jrd.JUI
     {
         public static BuildingPanelUI Instance;
 
-        public static VisualElement BuildingPanel;
         private const float BottomHided = -100f;
         private const float BottomShowed = 0f;
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
-        private static VisualElement _root;
+        private int _tempSelectedBuildID;
 
+        private static VisualElement _root;
+        public static VisualElement BuildingPanel;
         private static GroupBox _buttonsContainer;
         private const string ButtonsContainerName = "groupbox";
-
         [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
         private static VisualTreeAsset _buttonTemplate;
+        public static VisualElement BuildingsPanelRoot;
 
         public static event Action<Button, int> OnBuildSelected;
 
@@ -30,7 +30,6 @@ namespace Jrd.JUI
         {
         }
 
-        public static VisualElement BuildingsPanelRoot;
 
         private void Awake()
         {
@@ -58,7 +57,35 @@ namespace Jrd.JUI
             {
                 _buttonTemplate = _buildingButtonTemplate;
             }
+
+            _tempSelectedBuildID = -1;
+            OnBuildSelected += BuildSelected;
         }
+
+        private void OnDisable()
+        {
+            OnBuildSelected -= BuildSelected;
+        }
+
+        private void BuildSelected(Button button, int index)
+        {
+            if (_tempSelectedBuildID < 0) // temp not set
+            {
+                SetButtonEnabled(index, false);
+                _tempSelectedBuildID = index;
+            }
+            else if (_tempSelectedBuildID != index) // temp != index
+            {
+                SetButtonEnabled(index, false);
+                SetButtonEnabled(_tempSelectedBuildID, true);
+                _tempSelectedBuildID = index;
+            }
+            else // temp = index
+            {
+                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
+            }
+        }
+
 
         public static void InstantiateButtons(int prefabsCount)
         {
@@ -87,18 +114,9 @@ namespace Jrd.JUI
             BuildingsPanelRoot.style.display = displayStyle;
         }
 
-        public static void DisableButton(int id)
+        public static void SetButtonEnabled(int id, bool enabled)
         {
-            var buttons = _root.Query<Button>();
-
-            buttons.AtIndex(id).SetEnabled(false);
-        }
-
-        public static void EnableButton(int id)
-        {
-            var buttons = _root.Query<Button>();
-
-            buttons.AtIndex(id).SetEnabled(true);
+            _root.Query<Button>().AtIndex(id).SetEnabled(enabled);
         }
 
         public static void ShowBPanel()

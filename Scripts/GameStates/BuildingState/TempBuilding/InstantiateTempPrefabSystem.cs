@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Jrd.Screen;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -12,6 +13,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -21,16 +23,21 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             var ecb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
+            
+            var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
 
-            foreach (var (instantiateTempPrefabComponent, entity) in SystemAPI
+            foreach (var query in SystemAPI
                          .Query<RefRO<InstantiateTempPrefabComponent>>()
                          .WithEntityAccess())
             {
                 state.Dependency = new InstantiateTempPrefabJob
                     {
-                        TempPrefabEntity = instantiateTempPrefabComponent.ValueRO.Prefab,
+                        TempPrefabEntity = query.Item1.ValueRO.Prefab,
                         BsEcb = ecb,
-                        BuildingStateEntity = entity
+                        BuildingStateEntity = query.Item2,
+                        Position = position,
+                        Rotation = quaternion.identity,
+                        Scale = 1
                     }
                     .Schedule(state.Dependency);
             }
@@ -42,6 +49,9 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public EntityCommandBuffer BsEcb;
             public Entity TempPrefabEntity;
             public Entity BuildingStateEntity;
+            public float3 Position;
+            public quaternion Rotation;
+            public float Scale;
 
             public void Execute()
             {
@@ -50,8 +60,13 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
                 // set position // TODO
                 BsEcb.SetComponent(instantiate,
-                    new LocalTransform { Position = new float3(3, 0, 5), Rotation = quaternion.identity, Scale = 1 });
-                
+                    new LocalTransform
+                    {
+                        Position = Position,
+                        Rotation = Rotation,
+                        Scale = Scale
+                    });
+
                 // name
                 BsEcb.SetName(instantiate, "___ # Temp Building Entity");
 

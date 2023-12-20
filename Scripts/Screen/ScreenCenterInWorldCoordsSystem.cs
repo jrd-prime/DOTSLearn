@@ -16,16 +16,16 @@ namespace Jrd.Screen
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<ScreenComponent>();
-            state.RequireForUpdate<ScreenCenterInWorldCoordsComponent>();
+            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var entity = ecb.CreateEntity();
-            ecb.AddComponent<ScreenCenterInWorldCoordsComponent>(entity);
-            ecb.SetName(entity, "_ScreenCenterToWorldComponentSingleton");
+            ecb.AddComponent<ScreenCenterInWorldCoordsData>(entity);
+            ecb.SetName(entity, "___ # ScreenCenterToWorldComponentSingleton");
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
             
-            _screenCenterToWorldSingleton = SystemAPI.GetSingletonEntity<ScreenCenterInWorldCoordsComponent>();
+            _screenCenterToWorldSingleton = SystemAPI.GetSingletonEntity<ScreenCenterInWorldCoordsData>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -39,7 +39,7 @@ namespace Jrd.Screen
                     CameraSingleton.Instance.Camera.ScreenPointToRay(new Vector3(screenComponent.ScreenCenter.x,
                         screenComponent.ScreenCenter.y, 0f)), out var hit)) return;
 
-            SystemAPI.SetComponent(_screenCenterToWorldSingleton, new ScreenCenterInWorldCoordsComponent
+            SystemAPI.SetComponent(_screenCenterToWorldSingleton, new ScreenCenterInWorldCoordsData
             {
                 ScreenCenterToWorld = new float3(
                     Mathf.Round(hit.point.x),

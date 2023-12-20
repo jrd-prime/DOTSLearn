@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates.SharedComponentAndSystems
+namespace Jrd.GameStates
 {
     public struct VisibilityComponent : IComponentData
     {
