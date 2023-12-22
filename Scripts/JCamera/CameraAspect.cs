@@ -16,14 +16,16 @@ namespace Jrd.JCamera
         
 
         public float Speed => _movableComponent.ValueRO.speed;
-        public float3 Direction => _movingEventComponent.ValueRO.direction;
+        public float3 Direction => _movingEventComponent.ValueRO.Direction;
         public float Zoom => _zoomingEventComponent.ValueRO.zoom;
-        public Entity FollowTarget => _followComponent.ValueRO.FollowTarget;
+        public Entity TargetPosition => _followComponent.ValueRO.Target;
 
         public bool IsMoving
         {
             get => _movableComponent.ValueRO.isMoving;
             set => _movableComponent.ValueRW.isMoving = value;
         }
+        
+        
     }
 }

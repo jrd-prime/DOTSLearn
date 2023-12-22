@@ -1,6 +1,7 @@
 ﻿using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.JUI;
+using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
     public partial class BuildingPanelSystem : SystemBase
     {
         private Entity _buildPrefabsComponent;
-        private Entity _confirmationPanelEntity;
         private EntityCommandBuffer _eiEcb;
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
 
@@ -23,7 +23,6 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
         protected override void OnStartRunning()
         {
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _confirmationPanelEntity = SystemAPI.GetSingletonEntity<ConfirmationPanelComponent>();
         }
 
         protected override void OnUpdate()
@@ -36,12 +35,13 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                          .WithAll<BuildingPanelComponent, ShowVisualElementTag>()
                          .WithEntityAccess())
             {
-                Debug.Log(entity);
-                BuildingPanelUI.InstantiateButtons(buildingPanelComponent.ValueRO.BuildingPrefabsCount);
-                BuildingPanelUI.ShowBPanel();
-                visibilityComponent.ValueRW.IsVisible = true;
+                Debug.Log("show bpanel");
                 _eiEcb.RemoveComponent<ShowVisualElementTag>(entity);
 
+                BuildingPanelUI.InstantiateButtons(buildingPanelComponent.ValueRO.BuildingPrefabsCount);
+                BuildingPanelUI.ShowBPanel();
+
+                visibilityComponent.ValueRW.IsVisible = true;
             }
 
             // HIDE // LOOK подумать, т.к. в каждой панели будет +- такие же шоу/хайд
@@ -51,11 +51,11 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
             {
                 Debug.Log("hide");
                 _eiEcb.RemoveComponent<HideVisualElementTag>(entity);
-                q.ValueRW.IsVisible = false;
+
                 BuildingPanelUI.HideBPanel();
+
+                q.ValueRW.IsVisible = false;
             }
         }
-
-        
     }
 }

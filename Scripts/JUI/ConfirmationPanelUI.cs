@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -17,13 +18,6 @@ namespace Jrd.JUI.EditModeUI
         private const float BottomShowed = 0f;
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
-
-
-        //
-        // public static Label DebSetText;
-        //
-        // public static bool IsMouseRaycast; // TODO переделать
-        // private Toggle _mouseRaycastToggle;
 
         private ConfirmationPanelUI()
         {
@@ -51,12 +45,18 @@ namespace Jrd.JUI.EditModeUI
 
             ApplyPanelRoot.style.display = DisplayStyle.None;
             ApplyPanelRoot.style.bottom = BottomHided;
+            
+            ApplyPanelCancelButton.clicked += CancelBuilding;
         }
 
-
-        private void FixedUpdate()
+        private void CancelBuilding()
         {
-            // IsMouseRaycast = _mouseRaycastToggle.value;
+            HideApplyPanel();
+        }
+
+        private void OnDisable()
+        {
+            ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
 
         public static void ShowApplyPanel()

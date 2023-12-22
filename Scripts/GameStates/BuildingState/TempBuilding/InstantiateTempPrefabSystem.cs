@@ -1,4 +1,5 @@
 ﻿using Jrd.Screen;
+using Jrd.UserInput;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
@@ -23,8 +24,9 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             var ecb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
-            
+
             var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
+
 
             foreach (var query in SystemAPI
                          .Query<RefRO<InstantiateTempPrefabComponent>>()
@@ -53,6 +55,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public quaternion Rotation;
             public float Scale;
 
+            [BurstCompile]
             public void Execute()
             {
                 // instantiate selected building prefab
@@ -72,6 +75,8 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
                 // add tag to instantiated prefab
                 BsEcb.AddComponent<TempBuildingTag>(instantiate);
+                BsEcb.AddComponent<MoveByPlayerTag>(instantiate);
+                BsEcb.AddComponent<MovingEventComponent>(instantiate);
 
                 // remove tag fo instantiate from building mode entity
                 BsEcb.RemoveComponent<InstantiateTempPrefabComponent>(BuildingStateEntity);

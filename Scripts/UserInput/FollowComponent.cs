@@ -5,6 +5,6 @@ namespace Jrd.UserInput
 {
     public struct FollowComponent : IComponentData
     {
-        public Entity FollowTarget;
+        public Entity Target;
     }
 }

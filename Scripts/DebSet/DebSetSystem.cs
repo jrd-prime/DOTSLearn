@@ -2,6 +2,7 @@
 using Jrd.GameStates.MainGameState;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 using GameStatesSystem = Jrd.GameStates.MainGameState.GameStatesSystem;
 
 namespace Jrd.DebSet

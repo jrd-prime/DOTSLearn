@@ -1,20 +1,20 @@
-﻿using System.Collections;
-using Jrd.States;
+﻿using Jrd.GameStates.BuildingState.TempBuilding;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using Jrd.UserInput;
+using Unity.Transforms;
 
 namespace Jrd.JCamera
 {
     public partial struct CameraControlSystem : ISystem
     {
         private const float CameraSpeed = 10f;
-        private const string CameraEntityName = "_CameraEntity";
+        private const string CameraEntityName = "___ Main Camera Entity";
         private const float MinFOV = 30f;
         private const float MaxFOV = 70f;
 
-        private Entity entity;
+        private Entity _entity;
 
         public void OnCreate(ref SystemState state)
         {
@@ -26,66 +26,65 @@ namespace Jrd.JCamera
                 typeof(MovableComponent),
                 typeof(MovingEventComponent),
                 typeof(ZoomingEventComponent),
-                typeof(FollowComponent)
+                typeof(FollowComponent),
+                typeof(MoveByPlayerTag),
+                typeof(LocalTransform)
             );
 
             // create camera entity with archetype
-            var cameraEntity = em.CreateEntity(cameraArchetype);
-            em.SetName(cameraEntity, CameraEntityName);
+            _entity = em.CreateEntity(cameraArchetype);
+            em.SetName(_entity, CameraEntityName);
 
             // set camera speed
-            SystemAPI.SetComponent(cameraEntity, new MovableComponent { speed = CameraSpeed });
-            
+            SystemAPI.SetComponent(_entity, new MovableComponent { speed = CameraSpeed });
         }
 
         public void OnUpdate(ref SystemState state)
         {
             var dt = SystemAPI.Time.DeltaTime;
             var instance = CameraSingleton.Instance; // camera ref
+
             if (instance == null) return;
 
-            var isEditModeState = false;
-
-            foreach (var eState in SystemAPI.Query<RefRO<EditModeStateComponent>>())
+            state.EntityManager.SetComponentData(_entity, new CameraComponent
             {
-                isEditModeState = eState.ValueRO.State;
-            }
+                RotationAngleY = instance.Camera.transform.eulerAngles.y
+            });
 
-            if (isEditModeState)
-            {
-                // H.T("CamSystem - EditMode");
-                
-                // foreach (var aspect in SystemAPI.Query<CameraAspect>())
-                // {
-                //     var followTargetPosition = aspect;
-                //     
-                //     var transform = instance.Camera.transform;
-                //
-                //     // rotate the vector to compensate for camera rotation during movement
-                //     var cameraDirection =
-                //         Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * aspect.Direction;
-                //
-                //     transform.position += cameraDirection * dt * aspect.Speed;
-                //     aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
-                //     instance.Camera.fieldOfView =
-                //         Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
-                // }
-                
-                return;
-            }
 
             foreach (var aspect in SystemAPI.Query<CameraAspect>())
             {
-                var transform = instance.Camera.transform;
+                Debug.Log("Moved by player " + this);
+                // var followTargetPosition = aspect;
+                //
+                // var transform = instance.Camera.transform;
+                //
+                // // rotate the vector to compensate for camera rotation during movement
+                // var cameraDirection =
+                //     Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * aspect.Direction;
+                //
+                // transform.position += cameraDirection * dt * aspect.Speed;
+                // aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
+                // instance.Camera.fieldOfView =
+                //     Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
 
-                // rotate the vector to compensate for camera rotation during movement
-                var cameraDirection =
-                    Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * aspect.Direction;
-
-                transform.position += cameraDirection * dt * aspect.Speed;
-                aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
-                instance.Camera.fieldOfView =
-                    Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
+                // var transform = instance.Camera.transform;
+                //
+                // Debug.LogWarning(" transform.position " +  transform.position);
+                // // rotate the vector to compensate for camera rotation during movement
+                // var cameraDirection =
+                //     Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) *
+                //     aspect.Direction;
+                //
+                // Debug.LogWarning("camera dir " + cameraDirection);
+                //
+                //
+                // // transform.position += (Vector3)cameraDirection * dt * aspect.Speed;
+                //
+                // aspect.IsMoving = !Equals(aspect.Direction, (float3)Vector3.zero); // set camera moving state
+                //
+                // instance.Camera.fieldOfView =
+                //     Mathf.Clamp(instance.Camera.fieldOfView - aspect.Zoom, MinFOV, MaxFOV); // zoom
             }
         }
     }

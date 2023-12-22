@@ -5,6 +5,6 @@ namespace Jrd.UserInput
 {
     public struct MovingEventComponent : IComponentData
     {
-        public float3 direction;
+        public float3 Direction;
     }
 }

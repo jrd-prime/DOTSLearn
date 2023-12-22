@@ -27,6 +27,7 @@ namespace Jrd.GameStates.BuildingState
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
         private Entity _buildPrefabsComponent;
+        private RefRW<BuildingStateComponent> _buildingStateComponent;
 
         protected override void OnCreate()
         {
@@ -40,6 +41,18 @@ namespace Jrd.GameStates.BuildingState
         {
             _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
             _tempSelectedBuildID = -1;
+
+            BuildingPanelUI.OnBuildSelected += BuildSelected;
+            ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
+            ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
+        }
+
+        protected override void OnStopRunning()
+        {
+            _stateVisualComponents.Dispose();
+            BuildingPanelUI.OnBuildSelected -= BuildSelected;
+            ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
+            ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
 
         protected override void OnUpdate()
@@ -63,9 +76,20 @@ namespace Jrd.GameStates.BuildingState
                 // Is init?
                 if (buildingStateComponent.ValueRO.IsInitialized) return;
 
+                _buildingStateComponent = buildingStateComponent;
 
-                _buildingPanel =
-                    GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
+                {
+                    _buildingPanel =
+                        GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
+                    _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
+                    _bsEcb.SetComponent(_buildingPanel,
+                        new BuildingPanelComponent
+                        {
+                            BuildingPrefabsCount =
+                                SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent).Length
+                        });
+                }
+
                 _confirmationPanel =
                     GetCustomEntityVisualElementComponent<ConfirmationPanelComponent>(
                         BSConst.ConfirmationPanelEntityName);
@@ -73,42 +97,34 @@ namespace Jrd.GameStates.BuildingState
                 if (_stateVisualComponents.Length == 0)
                     Debug.LogWarning("We have a problem with create entities for Building State");
 
-                _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
                 _bsEcb.RemoveComponent<InitializeTag>(entity);
-                _bsEcb.SetComponent(_buildingPanel,
-                    new BuildingPanelComponent { BuildingPrefabsCount = _stateVisualComponents.Length });
 
                 buildingStateComponent.ValueRW.Self = entity;
                 buildingStateComponent.ValueRW.IsInitialized = true;
-
-
-                BuildingPanelUI.OnBuildSelected += BuildSelected;
-                ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
-                ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
             }
-
-            if (_gameStateData.ValueRO.CurrentGameState != GameState.BuildingState)
-            {
-                // Hide panel
-                if (_buildingPanel != Entity.Null) _bsEcb.AddComponent<HideVisualElementTag>(_buildingPanel);
-
-                _stateVisualComponents.Dispose();
-
-                BuildingPanelUI.OnBuildSelected -= BuildSelected;
-                ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
-                ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
-            }
+            //LOOK что это за х
+            // if (_gameStateData.ValueRO.CurrentGameState != GameState.BuildingState)
+            // {
+            //     // Hide panel
+            //     if (_buildingPanel != Entity.Null) _bsEcb.AddComponent<HideVisualElementTag>(_buildingPanel);
+            //
+            //     _buildingStateComponent.ValueRW.IsInitialized = false;
+            // }
         }
 
         private void ConfirmBuilding()
         {
             Debug.Log("confirm  build");
+            // need temp entity 
+            // add tag for confirm place
         }
 
         private void CancelBuilding()
         {
             Debug.Log("cancel build");
+
             DestroyTempPrefab();
+            _tempSelectedBuildID = -1; // reset temp id
         }
 
         private void DestroyTempPrefab()
@@ -120,14 +136,12 @@ namespace Jrd.GameStates.BuildingState
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
                 s.AddComponent(tempEntity, new DestroyTempPrefabTag());
-                return;
             }
-
-            Debug.LogWarning("We can't find temp build entity!" + this);
         }
 
         private void BuildSelected(Button button, int index)
         {
+            // here + BuildingPanelUI
             if (_tempSelectedBuildID < 0) // temp not set
             {
                 _tempSelectedBuildID = index;

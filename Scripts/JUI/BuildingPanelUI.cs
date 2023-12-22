@@ -1,4 +1,5 @@
 using System;
+using Jrd.JUI.EditModeUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -25,11 +26,9 @@ namespace Jrd.JUI
 
         public static event Action<Button, int> OnBuildSelected;
 
-
         private BuildingPanelUI()
         {
         }
-
 
         private void Awake()
         {
@@ -60,15 +59,24 @@ namespace Jrd.JUI
 
             _tempSelectedBuildID = -1;
             OnBuildSelected += BuildSelected;
+            ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
+        }
+
+        private void CancelBuilding()
+        {
+            SetButtonEnabled(_tempSelectedBuildID, true);
+            _tempSelectedBuildID = -1; // reset temp id
         }
 
         private void OnDisable()
         {
             OnBuildSelected -= BuildSelected;
+            ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
 
         private void BuildSelected(Button button, int index)
         {
+            // here + buildingStateSystem
             if (_tempSelectedBuildID < 0) // temp not set
             {
                 SetButtonEnabled(index, false);

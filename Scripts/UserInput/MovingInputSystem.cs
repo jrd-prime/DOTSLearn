@@ -67,7 +67,7 @@ namespace Jrd.UserInput
         {
             foreach (var query in SystemAPI.Query<RefRW<MovingEventComponent>>())
             {
-                query.ValueRW.direction = (x != 0 || z != 0)
+                query.ValueRW.Direction = (x != 0 || z != 0)
                     ? new float3(x, YAxis, z)
                     : Vector3.zero;
             }
