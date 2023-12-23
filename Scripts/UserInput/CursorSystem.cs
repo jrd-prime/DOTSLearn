@@ -37,7 +37,7 @@ namespace Jrd.UserInput
 
             if (_lookingOnGroundPosition)
             {
-                if (Physics.Raycast(CameraSingleton.Instance.Camera.ScreenPointToRay(mousePosition), out var hit))
+                if (Physics.Raycast(CameraMono.Instance.Camera.ScreenPointToRay(mousePosition), out var hit))
                 {
                     foreach (var cursor in SystemAPI.Query<RefRW<CursorComponent>>())
                     {

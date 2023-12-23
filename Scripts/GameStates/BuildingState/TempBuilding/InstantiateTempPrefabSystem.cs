@@ -27,7 +27,6 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
             var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
 
-
             foreach (var query in SystemAPI
                          .Query<RefRO<InstantiateTempPrefabComponent>>()
                          .WithEntityAccess())
@@ -75,7 +74,6 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
                 // add tag to instantiated prefab
                 BsEcb.AddComponent<TempBuildingTag>(instantiate);
-                BsEcb.AddComponent<MoveByPlayerTag>(instantiate);
                 BsEcb.AddComponent<MovingEventComponent>(instantiate);
 
                 // remove tag fo instantiate from building mode entity

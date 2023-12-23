@@ -1,4 +1,4 @@
-﻿namespace Jrd
+﻿namespace Jrd.Utils.Const
 {
     public static class UIConst
     {

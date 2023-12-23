@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Jrd.Utils.Const;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace Jrd.JUI.EditModeUI
+namespace Jrd.JUI
 {
     public class ConfirmationPanelUI : MonoBehaviour
     {

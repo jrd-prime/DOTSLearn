@@ -12,13 +12,11 @@ namespace Jrd.JCamera
         private readonly RefRW<MovableComponent> _movableComponent;
         private readonly RefRO<MovingEventComponent> _movingEventComponent;
         private readonly RefRW<ZoomingEventComponent> _zoomingEventComponent;
-        private readonly RefRO<FollowComponent> _followComponent;
         
 
         public float Speed => _movableComponent.ValueRO.speed;
         public float3 Direction => _movingEventComponent.ValueRO.Direction;
         public float Zoom => _zoomingEventComponent.ValueRO.zoom;
-        public Entity TargetPosition => _followComponent.ValueRO.Target;
 
         public bool IsMoving
         {

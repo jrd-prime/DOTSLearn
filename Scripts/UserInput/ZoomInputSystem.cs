@@ -25,7 +25,7 @@ namespace Jrd.UserInput
 #if UNITY_ANDROID
             if (Input.touchCount == 2)
             {
-                if (!Utils.IsPointerOverUIObject())
+                if (!Utils.Utils.IsPointerOverUIObject())
                 {
                     var touch1 = Input.GetTouch(0);
                     var touch2 = Input.GetTouch(1);

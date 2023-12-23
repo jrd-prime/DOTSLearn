@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Jrd.JUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd
+namespace Jrd.JUI
 {
     public class MenuButtonUI : MonoBehaviour
     {

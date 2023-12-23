@@ -1,7 +1,6 @@
 ﻿using Unity.Entities;
-using Unity.Mathematics;
 
-namespace Jrd.UserInput
+namespace Jrd
 {
     public struct FollowComponent : IComponentData
     {

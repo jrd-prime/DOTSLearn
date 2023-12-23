@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Jrd
+namespace Jrd.Utils
 {
     public static class Utils
     {
