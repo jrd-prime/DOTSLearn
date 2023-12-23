@@ -1,4 +1,6 @@
-﻿using Unity.Burst;
+﻿using Jrd.JCamera;
+using Jrd.UserInput;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
 
@@ -10,13 +12,14 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<CameraComponent>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = SystemAPI
+            var bsEcb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
@@ -24,10 +27,13 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .Query<TempBuildingTag>().WithAll<DestroyTempPrefabTag>()
                          .WithEntityAccess())
             {
+                var cameraEntity = SystemAPI.GetSingletonEntity<CameraComponent>();
+
                 state.Dependency = new DestroyTempPrefabJob
                     {
-                        BsEcb = ecb,
-                        TempPrefabEntity = entity
+                        BsEcb = bsEcb,
+                        TempPrefabEntity = entity,
+                        CameraEntity = cameraEntity
                     }
                     .Schedule(state.Dependency);
             }
@@ -38,9 +44,12 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         {
             public EntityCommandBuffer BsEcb;
             public Entity TempPrefabEntity;
+            public Entity CameraEntity;
 
             public void Execute()
             {
+                BsEcb.RemoveComponent<FollowComponent>(CameraEntity);
+                BsEcb.AddComponent<MovingEventComponent>(CameraEntity);
                 BsEcb.DestroyEntity(TempPrefabEntity);
             }
         }
