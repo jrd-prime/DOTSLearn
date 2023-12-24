@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.JUI
 {

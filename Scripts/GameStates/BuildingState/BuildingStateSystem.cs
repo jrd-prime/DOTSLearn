@@ -38,7 +38,6 @@ namespace Jrd.GameStates.BuildingState
 
         protected override void OnStartRunning()
         {
-            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
             _tempSelectedBuildID = -1;
 
             BuildingPanelUI.OnBuildSelected += BuildSelected;
@@ -62,9 +61,11 @@ namespace Jrd.GameStates.BuildingState
             _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
+
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _ecbSystem.CreateCommandBuffer(World.Unmanaged);
 
+            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
             // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
             foreach (var (buildingStateComponent, entity) in SystemAPI
@@ -76,18 +77,16 @@ namespace Jrd.GameStates.BuildingState
                 if (buildingStateComponent.ValueRO.IsInitialized) return;
 
                 _buildingStateComponent = buildingStateComponent;
-
-                {
-                    _buildingPanel =
-                        GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
-                    _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
-                    _bsEcb.SetComponent(_buildingPanel,
-                        new BuildingPanelComponent
-                        {
-                            BuildingPrefabsCount =
-                                SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent).Length
-                        });
-                }
+                
+                _buildingPanel =
+                    GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
+                _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
+                _bsEcb.SetComponent(_buildingPanel,
+                    new BuildingPanelComponent
+                    {
+                        BuildingPrefabsCount =
+                            SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent).Length
+                    });
 
                 _confirmationPanel =
                     GetCustomEntityVisualElementComponent<ConfirmationPanelComponent>(
@@ -101,14 +100,6 @@ namespace Jrd.GameStates.BuildingState
                 buildingStateComponent.ValueRW.Self = entity;
                 buildingStateComponent.ValueRW.IsInitialized = true;
             }
-            //LOOK что это за х
-            // if (_gameStateData.ValueRO.CurrentGameState != GameState.BuildingState)
-            // {
-            //     // Hide panel
-            //     if (_buildingPanel != Entity.Null) _bsEcb.AddComponent<HideVisualElementTag>(_buildingPanel);
-            //
-            //     _buildingStateComponent.ValueRW.IsInitialized = false;
-            // }
         }
 
         private void ConfirmBuilding()

@@ -1,10 +1,13 @@
-﻿using Jrd.Grid.Points;
+﻿using System.Diagnostics;
+using Jrd.Grid.Points;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Jrd.Grid.GridLayout
 {
@@ -15,6 +18,7 @@ namespace Jrd.Grid.GridLayout
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<GridComponent>();
         }
 
@@ -22,6 +26,9 @@ namespace Jrd.Grid.GridLayout
         {
             state.Enabled = false;
 
+            var biEcb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            
             var em = state.EntityManager;
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
@@ -31,7 +38,118 @@ namespace Jrd.Grid.GridLayout
 
             _tempPointsList = new NativeList<PointComponent>(Allocator.Temp);
 
-            GeneratePoints(ecb, gridComponent, ref state);
+            // 5tests 100x100 ticks / mills 243 + 230 + 477 + 213 + 207
+            // 5tests 1000x1000 ticks / mills 21870 + 21250 + 21930 + 21200 + 21250
+
+            _tempPointsList = new NativeList<PointComponent>(1, Allocator.TempJob);
+
+            var stopwatch = Stopwatch.StartNew();
+
+            var gridSize = gridComponent.gridSize;
+            var mainPrefab = gridComponent.pointPrefabMain;
+            var midPrefab = gridComponent.pointPrefabMid;
+            var smallPrefab = gridComponent.pointPrefabSmall;
+
+            {
+                // Main grid
+                var mainStart = new float2(0f, 0f);
+
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 1,
+                        Start = mainStart,
+                        Size = gridSize,
+                        Prefab = mainPrefab,
+                        Scale = 0.1f,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+            }
+
+            {
+                // Middle grid
+                var midStart = new float2(0.5f, 0.5f);
+                var midSize = new int2(gridSize.x - 1, gridSize.y - 1);
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 2,
+                        Start = midStart,
+                        Size = midSize,
+                        Prefab = midPrefab,
+                        Scale = 0.05f,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+            }
+
+            {
+                // Small grid
+                const float defOff = 0.375f;
+                const float smallOffset = 0.25f;
+                const float smallScale = 0.02f;
+                var smallSize = new int2(gridSize.x - 1, gridSize.y - 1);
+
+                var dot1 = new float2(defOff, defOff);
+                var dot2 = new float2(defOff + smallOffset, defOff);
+                var dot3 = new float2(defOff, defOff + smallOffset);
+                var dot4 = new float2(defOff + smallOffset, defOff + smallOffset);
+
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 3,
+                        Start = dot1,
+                        Size = smallSize,
+                        Prefab = smallPrefab,
+                        Scale = smallScale,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 3,
+                        Start = dot2,
+                        Size = smallSize,
+                        Prefab = smallPrefab,
+                        Scale = smallScale,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 3,
+                        Start = dot3,
+                        Size = smallSize,
+                        Prefab = smallPrefab,
+                        Scale = smallScale,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+
+                state.Dependency = new GeneratePointsJob
+                    {
+                        Tag = 3,
+                        Start = dot4,
+                        Size = smallSize,
+                        Prefab = smallPrefab,
+                        Scale = smallScale,
+                        Ecb = biEcb,
+                        TempPointsList = _tempPointsList
+                    }
+                    .Schedule(state.Dependency);
+            }
+
+            stopwatch.Stop();
+            Debug.Log(stopwatch.ElapsedTicks);
+            Debug.Log(stopwatch.ElapsedMilliseconds);
+
+
             // ecb final
             ecb.Playback(em);
             ecb.Dispose();
@@ -39,40 +157,6 @@ namespace Jrd.Grid.GridLayout
             // set data
             em.SetComponentData(gridEntity, new GridData { PointsData = _tempPointsList });
             _tempPointsList.Dispose();
-        }
-
-
-        private void GeneratePoints(EntityCommandBuffer ecb, GridComponent gc, ref SystemState state)
-        {
-            var gridSize = gc.gridSize;
-            var mainPrefab = gc.pointPrefabMain;
-            var midPrefab = gc.pointPrefabMid;
-            var smallPrefab = gc.pointPrefabSmall;
-
-            // Main grid
-            var mainStart = new float2(0f, 0f);
-            GeneratePointsLevel("main", mainStart, gridSize, mainPrefab, 0.1f, ecb, ref state);
-
-            // Middle grid
-            var midStart = new float2(0.5f, 0.5f);
-            var midSize = new int2(gridSize.x - 1, gridSize.y - 1);
-            GeneratePointsLevel("mid", midStart, midSize, midPrefab, 0.05f, ecb, ref state);
-
-            // Small grid
-            const float defOff = 0.375f;
-            const float smallOffset = 0.25f;
-            const float smallScale = 0.02f;
-            var smallSize = new int2(gridSize.x - 1, gridSize.y - 1);
-
-            var dot1 = new float2(defOff, defOff);
-            var dot2 = new float2(defOff + smallOffset, defOff);
-            var dot3 = new float2(defOff, defOff + smallOffset);
-            var dot4 = new float2(defOff + smallOffset, defOff + smallOffset);
-
-            GeneratePointsLevel("small", dot1, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel("small", dot2, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel("small", dot3, smallSize, smallPrefab, smallScale, ecb, ref state);
-            GeneratePointsLevel("small", dot4, smallSize, smallPrefab, smallScale, ecb, ref state);
         }
 
         // LOOK USE
@@ -88,52 +172,59 @@ namespace Jrd.Grid.GridLayout
         //
         // result.Dispose();
 
-        [BurstCompile] // TODO job
-        private void GeneratePointsLevel(string tag, float2 start, int2 size, Entity prefab, float scale,
-            EntityCommandBuffer ecb,
-            ref SystemState state)
+        [BurstCompile]
+        private struct GeneratePointsJob : IJob // переделать,стремно выглядит
         {
-            var em = state.EntityManager;
+            public int Tag;
+            public float2 Start;
+            public int2 Size;
+            public Entity Prefab;
+            public float Scale;
+            public EntityCommandBuffer Ecb;
+            public NativeList<PointComponent> TempPointsList;
 
-            for (var x = start.x; x < size.x; x++)
+            public void Execute()
             {
-                for (var z = start.y; z < size.y; z++)
+                for (var x = Start.x; x < Size.x; x++)
                 {
-                    var position = new float3(x, 0, z);
-                    var entity = em.Instantiate(prefab);
-
-                    ecb.AddComponent<PointComponent>(entity);
-                    switch (tag)
+                    for (var z = Start.y; z < Size.y; z++)
                     {
-                        case "main":
-                            ecb.AddComponent<PointMainTagComponent>(entity);
-                            break;
-                        case "mid":
-                            ecb.AddComponent<PointMidTagComponent>(entity);
-                            break;
-                        case "small":
-                            ecb.AddComponent<PointSmallTagComponent>(entity);
-                            break;
+                        var position = new float3(x, 0, z);
+                        var entity = Ecb.Instantiate(Prefab);
+
+                        switch (Tag)
+                        {
+                            case 1: // main
+                                Ecb.AddComponent<PointMainTagComponent>(entity);
+                                break;
+                            case 2: // mid
+                                Ecb.AddComponent<PointMidTagComponent>(entity);
+                                break;
+                            case 3: // small
+                                Ecb.AddComponent<PointSmallTagComponent>(entity);
+                                break;
+                        }
+
+                        Ecb.SetComponent(entity,
+                            new LocalTransform
+                            {
+                                Position = position,
+                                Rotation = Quaternion.identity,
+                                Scale = Scale
+                            });
+
+                        Ecb.AddComponent(entity,
+                            new PointComponent
+                            {
+                                id = TempPointsList.Length,
+                                pointPosition = position,
+                                isBlocked = false,
+                                self = entity,
+                                prefab = Prefab
+                            });
+
+                        // TempPointsList.Add(point);
                     }
-
-
-                    var point = new PointComponent
-                    {
-                        id = _tempPointsList.Length,
-                        pointPosition = position,
-                        isBlocked = false,
-                        self = entity,
-                        prefab = prefab
-                    };
-                    ecb.SetComponent(entity, new LocalTransform
-                    {
-                        Position = position,
-                        Rotation = Quaternion.identity,
-                        Scale = scale
-                    });
-                    ecb.SetComponent(entity, point);
-
-                    _tempPointsList.Add(point);
                 }
             }
         }
