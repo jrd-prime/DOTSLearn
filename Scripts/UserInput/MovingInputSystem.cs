@@ -23,7 +23,7 @@ namespace Jrd.UserInput
             SetDirection(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), ref state);
 #endif
             // LOOK зум. баг. когда отпускаешь 23 пальца, то двигается без контроля мувмент
- // #if UNITY_ANDROID
+            // #if UNITY_ANDROID
             // if (Input.touchCount > 0)
             // {
             if (Input.touchCount == 1)
@@ -37,7 +37,7 @@ namespace Jrd.UserInput
                     {
                         case TouchPhase.Moved when touch.fingerId == _fingerId:
                         {
-                             // Debug.Log("Moved");
+                            // Debug.Log("Moved");
                             var posDelta = touch.deltaPosition * SystemAPI.Time.DeltaTime * -1;
                             SetDirection(Clamp(posDelta.x), Clamp(posDelta.y), ref state);
                             break;

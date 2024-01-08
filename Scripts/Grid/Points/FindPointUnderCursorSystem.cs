@@ -13,7 +13,7 @@ namespace Jrd.Grid.Points
         {
             // state.RequireForUpdate<GridComponent>();
             // state.RequireForUpdate<GridData>();
-            state.RequireForUpdate<CursorComponent>();
+            state.RequireForUpdate<InputCursorData>();
             state.RequireForUpdate<DebSetComponent>();
         }
 
@@ -24,15 +24,15 @@ namespace Jrd.Grid.Points
             
             if (!debSet.MouseRaycast) return;
             
-            var cursor = em.GetComponentData<CursorComponent>(SystemAPI.GetSingletonEntity<CursorComponent>());
+            var cursor = em.GetComponentData<InputCursorData>(SystemAPI.GetSingletonEntity<InputCursorData>());
             // var grid = em.GetComponentData<GridComponent>(SystemAPI.GetSingletonEntity<GridComponent>());
             // var gridData = em.GetComponentData<GridData>(SystemAPI.GetSingletonEntity<GridData>());
 
             // round cursor coords
             var coords = new float3(
-                Mathf.Round(cursor.cursorPosition.x),
-                Mathf.Round(cursor.cursorPosition.y),
-                Mathf.Round(cursor.cursorPosition.z));
+                Mathf.Round(cursor.CursorWorldPosition.x),
+                Mathf.Round(cursor.CursorWorldPosition.y),
+                Mathf.Round(cursor.CursorWorldPosition.z));
             
             foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
             {

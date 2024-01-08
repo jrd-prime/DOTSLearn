@@ -1,6 +1,7 @@
 ﻿using Jrd.JCamera;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Jrd.UserInput
@@ -11,7 +12,7 @@ namespace Jrd.UserInput
     public partial struct CursorSystem : ISystem
     {
         // TODO mobile logic
-        private const string CursorSystemEntityName = "_CursorSystemEntity";
+        private const string CursorSystemEntityName = "___ CursorSystemEntity";
         private bool _lookingOnGroundPosition;
         private Entity _entity;
         private EntityManager _em;
@@ -22,7 +23,7 @@ namespace Jrd.UserInput
             _em = state.EntityManager;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             _entity = ecb.CreateEntity();
-            ecb.AddComponent<CursorComponent>(_entity);
+            ecb.AddComponent<InputCursorData>(_entity);
             ecb.SetName(_entity, CursorSystemEntityName);
             ecb.Playback(_em);
             ecb.Dispose();
@@ -37,14 +38,33 @@ namespace Jrd.UserInput
 
             if (_lookingOnGroundPosition)
             {
-                if (Physics.Raycast(CameraMono.Instance.Camera.ScreenPointToRay(mousePosition), out var hit))
+                foreach (var cursor in SystemAPI.Query<RefRW<InputCursorData>>())
                 {
-                    foreach (var cursor in SystemAPI.Query<RefRW<CursorComponent>>())
+                    if (Physics.Raycast(CameraMono.Instance.Camera.ScreenPointToRay(mousePosition), out var hit))
                     {
-                        cursor.ValueRW.cursorPosition = hit.point;
+                        cursor.ValueRW.CursorWorldPosition = hit.point;
                     }
+
+                    cursor.ValueRW.CursorScreenPosition = new float3(
+                        math.clamp(Input.mousePosition.x, 0, UnityEngine.Screen.width),
+                        math.clamp(Input.mousePosition.y, 0, UnityEngine.Screen.height),
+                        0);
+                    
+                    cursor.ValueRW.CursorState = GetCursorState();
                 }
             }
+        }
+
+        private CursorState GetCursorState()
+        {
+            if (Input.touchCount == 1)
+            {
+                //TODO add delay and fix
+                return Input.touches[0].phase != TouchPhase.Ended || Input.touches[0].phase != TouchPhase.Canceled ? CursorState.ClickAndHold : CursorState.Click;
+
+            }
+            
+            return CursorState.Default;
         }
     }
 }

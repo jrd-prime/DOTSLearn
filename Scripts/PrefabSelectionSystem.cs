@@ -1,4 +1,5 @@
 ﻿using Jrd.JCamera;
+using Jrd.UserInput;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -21,10 +22,14 @@ namespace Jrd
 
         protected override void OnUpdate()
         {
+            var inputCursorData = SystemAPI.GetSingleton<InputCursorData>();
+            
+            
             _camera = CameraMono.Instance.Camera;
-            if (Input.GetMouseButtonDown(0))
+            
+            if (Input.touchCount == 1)
             {
-                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera.ScreenPointToRay(inputCursorData.CursorScreenPosition);
 
                 Vector3 rayStart = ray.origin;
                 Vector3 rayEnd = ray.GetPoint(200f);
@@ -33,6 +38,13 @@ namespace Jrd
                 {
                     Debug.Log(entity);
                 }
+
+                if (inputCursorData.CursorState == CursorState.ClickAndHold)
+                {
+                    Debug.Log("do move");
+                }
+                
+                
             }
         }
 
@@ -40,11 +52,11 @@ namespace Jrd
         {
             _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
             
-            var input = new RaycastInput()
+            var input = new RaycastInput
             {
                 Start = from,
                 End = to,
-                Filter = new CollisionFilter()
+                Filter = new CollisionFilter
                 {
                     BelongsTo = (uint)1 << 31,
                     CollidesWith = (uint)1 << 31,
