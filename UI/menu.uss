@@ -6,18 +6,18 @@
 .too {
     width: 80%;
     height: 30px;
-    background-color: rgb(51, 99, 156);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
+    background-color: rgba(0, 0, 0, 0.55);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
     -unity-text-align: middle-center;
     white-space: nowrap;
-    font-size: 12px;
+    font-size: 10px;
     align-self: center;
     justify-content: center;
     align-items: center;
@@ -27,6 +27,7 @@
     border-right-color: rgb(48, 124, 144);
     border-top-color: rgb(48, 124, 144);
     border-bottom-color: rgb(48, 124, 144);
+    -unity-font-style: normal;
 }
 
 .edit-mode-button {

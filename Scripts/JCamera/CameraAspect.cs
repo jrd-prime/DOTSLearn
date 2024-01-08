@@ -10,7 +10,7 @@ namespace Jrd.JCamera
 
         // private readonly RefRO<CameraComponent> _cameraComponent;
         private readonly RefRW<MovableComponent> _movableComponent;
-        private readonly RefRO<MovingEventComponent> _movingEventComponent;
+        private readonly RefRO<MoveDirectionData> _movingEventComponent;
         private readonly RefRW<ZoomingEventComponent> _zoomingEventComponent;
         
 

@@ -49,7 +49,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public void Execute()
             {
                 BsEcb.RemoveComponent<FollowComponent>(CameraEntity);
-                BsEcb.AddComponent<MovingEventComponent>(CameraEntity);
+                BsEcb.AddComponent<MoveDirectionData>(CameraEntity);
                 BsEcb.DestroyEntity(TempPrefabEntity);
             }
         }

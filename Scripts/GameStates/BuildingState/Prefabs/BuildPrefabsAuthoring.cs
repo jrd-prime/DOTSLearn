@@ -14,7 +14,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
             {
                 var e = GetEntity(TransformUsageFlags.Dynamic);
                 var buffer = AddBuffer<PrefabBufferElements>(e);
-
+        
                 foreach (var prefab in authoring.prefabs)
                 {
                     buffer.Add(new PrefabBufferElements
@@ -23,7 +23,8 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                         PrefabName = prefab.name
                     });
                 }
-
+        
+                // buffer.Clear();
                 AddComponent<BuildPrefabsComponent>(e);
             }
         }

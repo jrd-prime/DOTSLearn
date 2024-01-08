@@ -23,7 +23,7 @@ namespace Jrd.JCamera
             var cameraArchetype = em.CreateArchetype(
                 typeof(CameraComponent),
                 typeof(MovableComponent),
-                typeof(MovingEventComponent),
+                typeof(MoveDirectionData),
                 typeof(ZoomingEventComponent)
             );
 

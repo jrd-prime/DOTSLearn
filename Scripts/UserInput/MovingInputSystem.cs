@@ -1,5 +1,4 @@
-﻿using Unity.Burst;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -8,7 +7,6 @@ namespace Jrd.UserInput
     /// <summary>
     /// Устанавливает вектор движения simple
     /// </summary>
-    [BurstCompile]
     public partial struct MovingInputSystem : ISystem
     {
         private const string Horizontal = "Horizontal";
@@ -24,8 +22,8 @@ namespace Jrd.UserInput
 #if UNITY_EDITOR
             SetDirection(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), ref state);
 #endif
-                // LOOK зум. баг. когда отпускаешь 23 пальца, то двигается без контроля мувмент
-#if UNITY_ANDROID
+            // LOOK зум. баг. когда отпускаешь 23 пальца, то двигается без контроля мувмент
+ // #if UNITY_ANDROID
             // if (Input.touchCount > 0)
             // {
             if (Input.touchCount == 1)
@@ -60,12 +58,12 @@ namespace Jrd.UserInput
                 }
             }
             // }
-#endif
+// #endif
         }
 
         private void SetDirection(float x, float z, ref SystemState state)
         {
-            foreach (var query in SystemAPI.Query<RefRW<MovingEventComponent>>())
+            foreach (var query in SystemAPI.Query<RefRW<MoveDirectionData>>())
             {
                 query.ValueRW.Direction = (x != 0 || z != 0)
                     ? new float3(x, YAxis, z)

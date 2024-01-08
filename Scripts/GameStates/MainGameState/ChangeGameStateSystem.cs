@@ -12,8 +12,8 @@ namespace Jrd.GameStates.MainGameState
 
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
+            // var ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+            //     .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (gameStateData, newState, entity) in SystemAPI
                          .Query<RefRW<GameStateData>, RefRO<ChangeGameStateComponent>>()

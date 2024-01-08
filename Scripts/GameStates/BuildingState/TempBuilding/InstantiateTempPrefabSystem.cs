@@ -1,6 +1,7 @@
 ﻿using Jrd.Screen;
 using Jrd.UserInput;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -27,15 +28,16 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
             var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
 
-            foreach (var query in SystemAPI
+            foreach (var (query, entity) in SystemAPI
                          .Query<RefRO<InstantiateTempPrefabComponent>>()
                          .WithEntityAccess())
             {
                 state.Dependency = new InstantiateTempPrefabJob
                     {
-                        TempPrefabEntity = query.Item1.ValueRO.Prefab,
+                        TempPrefabEntity = query.ValueRO.Prefab,
+                        TempPrefabName = query.ValueRO.Name,
                         BsEcb = ecb,
-                        BuildingStateEntity = query.Item2,
+                        BuildingStateEntity = entity,
                         Position = position,
                         Rotation = quaternion.identity,
                         Scale = 1
@@ -49,6 +51,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         {
             public EntityCommandBuffer BsEcb;
             public Entity TempPrefabEntity;
+            public FixedString64Bytes TempPrefabName;
             public Entity BuildingStateEntity;
             public float3 Position;
             public quaternion Rotation;
@@ -58,23 +61,28 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public void Execute()
             {
                 // instantiate selected building prefab
-                var instantiate = BsEcb.Instantiate(TempPrefabEntity);
+                Entity instantiate = BsEcb.Instantiate(TempPrefabEntity);
 
                 // set position // TODO
-                BsEcb.SetComponent(instantiate,
-                    new LocalTransform
-                    {
-                        Position = Position,
-                        Rotation = Rotation,
-                        Scale = Scale
-                    });
+                BsEcb.SetComponent(instantiate, new LocalTransform
+                {
+                    Position = Position,
+                    Rotation = Rotation,
+                    Scale = Scale
+                });
 
                 // name
                 BsEcb.SetName(instantiate, "___ # Temp Building Entity");
 
                 // add tag to instantiated prefab
-                BsEcb.AddComponent<TempBuildingTag>(instantiate);
-                BsEcb.AddComponent<MovingEventComponent>(instantiate);
+                BsEcb.AddComponent<TempBuildingTag>(instantiate); // mark as temp
+                BsEcb.AddComponent<SelectableTag>(instantiate); // mark as selectable
+                BsEcb.AddComponent<MoveDirectionData>(instantiate);
+                BsEcb.AddComponent(instantiate, new BuildingData
+                {
+                    Prefab = TempPrefabEntity,
+                    Name = TempPrefabName
+                });
 
                 // remove tag fo instantiate from building mode entity
                 BsEcb.RemoveComponent<InstantiateTempPrefabComponent>(BuildingStateEntity);

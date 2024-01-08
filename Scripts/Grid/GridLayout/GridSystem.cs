@@ -8,9 +8,12 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using Unity.Physics;
+using Unity.Physics.Systems;
 
 namespace Jrd.Grid.GridLayout
 {
+    // TODO https://app.asana.com/0/1206217975075068/1206234441074580/f
     public partial struct GridSystem : ISystem
     {
         // TODO CACHE
@@ -28,15 +31,14 @@ namespace Jrd.Grid.GridLayout
 
             var biEcb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
-            
+
             var em = state.EntityManager;
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
             var gridEntity = SystemAPI.GetSingletonEntity<GridComponent>();
             var gridComponent = em.GetComponentData<GridComponent>(gridEntity);
-            ecb.AddComponent<GridData>(gridEntity);
+            biEcb.AddComponent<GridData>(gridEntity);
 
-            _tempPointsList = new NativeList<PointComponent>(Allocator.Temp);
+            // _tempPointsList = new NativeList<PointComponent>(Allocator.Temp);
 
             // 5tests 100x100 ticks / mills 243 + 230 + 477 + 213 + 207
             // 5tests 1000x1000 ticks / mills 21870 + 21250 + 21930 + 21200 + 21250
@@ -50,112 +52,107 @@ namespace Jrd.Grid.GridLayout
             var midPrefab = gridComponent.pointPrefabMid;
             var smallPrefab = gridComponent.pointPrefabSmall;
 
-            {
-                // Main grid
-                var mainStart = new float2(0f, 0f);
+            // Main grid
 
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 1,
-                        Start = mainStart,
-                        Size = gridSize,
-                        Prefab = mainPrefab,
-                        Scale = 0.1f,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
-            }
+            var mainStart = new float2(0f, 0f);
+            var j1 = new GeneratePointsJob
+                {
+                    Tag = 1,
+                    Start = mainStart,
+                    Size = gridSize,
+                    Prefab = mainPrefab,
+                    Scale = 0.1f,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(state.Dependency);
 
-            {
-                // Middle grid
-                var midStart = new float2(0.5f, 0.5f);
-                var midSize = new int2(gridSize.x - 1, gridSize.y - 1);
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 2,
-                        Start = midStart,
-                        Size = midSize,
-                        Prefab = midPrefab,
-                        Scale = 0.05f,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
-            }
 
-            {
-                // Small grid
-                const float defOff = 0.375f;
-                const float smallOffset = 0.25f;
-                const float smallScale = 0.02f;
-                var smallSize = new int2(gridSize.x - 1, gridSize.y - 1);
+            // Middle grid
 
-                var dot1 = new float2(defOff, defOff);
-                var dot2 = new float2(defOff + smallOffset, defOff);
-                var dot3 = new float2(defOff, defOff + smallOffset);
-                var dot4 = new float2(defOff + smallOffset, defOff + smallOffset);
 
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 3,
-                        Start = dot1,
-                        Size = smallSize,
-                        Prefab = smallPrefab,
-                        Scale = smallScale,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
+            var midStart = new float2(0.5f, 0.5f);
+            var midSize = new int2(gridSize.x - 1, gridSize.y - 1);
+            var j2 = new GeneratePointsJob
+                {
+                    Tag = 2,
+                    Start = midStart,
+                    Size = midSize,
+                    Prefab = midPrefab,
+                    Scale = 0.05f,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(j1);
 
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 3,
-                        Start = dot2,
-                        Size = smallSize,
-                        Prefab = smallPrefab,
-                        Scale = smallScale,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
 
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 3,
-                        Start = dot3,
-                        Size = smallSize,
-                        Prefab = smallPrefab,
-                        Scale = smallScale,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
+            // Small grid
 
-                state.Dependency = new GeneratePointsJob
-                    {
-                        Tag = 3,
-                        Start = dot4,
-                        Size = smallSize,
-                        Prefab = smallPrefab,
-                        Scale = smallScale,
-                        Ecb = biEcb,
-                        TempPointsList = _tempPointsList
-                    }
-                    .Schedule(state.Dependency);
-            }
+            const float defOff = 0.375f;
+            const float smallOffset = 0.25f;
+            const float smallScale = 0.02f;
+            var smallSize = new int2(gridSize.x - 1, gridSize.y - 1);
+            var dot1 = new float2(defOff, defOff);
+            var dot2 = new float2(defOff + smallOffset, defOff);
+            var dot3 = new float2(defOff, defOff + smallOffset);
+            var dot4 = new float2(defOff + smallOffset, defOff + smallOffset);
+
+            var j3 = new GeneratePointsJob
+                {
+                    Tag = 3,
+                    Start = dot1,
+                    Size = smallSize,
+                    Prefab = smallPrefab,
+                    Scale = smallScale,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(j2);
+
+            var j4 = new GeneratePointsJob
+                {
+                    Tag = 3,
+                    Start = dot2,
+                    Size = smallSize,
+                    Prefab = smallPrefab,
+                    Scale = smallScale,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(j3);
+
+            var j5 = new GeneratePointsJob
+                {
+                    Tag = 3,
+                    Start = dot3,
+                    Size = smallSize,
+                    Prefab = smallPrefab,
+                    Scale = smallScale,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(j4);
+
+            var j6 = new GeneratePointsJob
+                {
+                    Tag = 3,
+                    Start = dot4,
+                    Size = smallSize,
+                    Prefab = smallPrefab,
+                    Scale = smallScale,
+                    Ecb = biEcb,
+                    TempPointsList = _tempPointsList
+                }
+                .Schedule(j5);
+
+            j6.Complete();
 
             stopwatch.Stop();
             Debug.Log(stopwatch.ElapsedTicks);
             Debug.Log(stopwatch.ElapsedMilliseconds);
 
-
-            // ecb final
-            ecb.Playback(em);
-            ecb.Dispose();
-
             // set data
-            em.SetComponentData(gridEntity, new GridData { PointsData = _tempPointsList });
+            biEcb.SetComponent(gridEntity, new GridData { PointsData = _tempPointsList });
             _tempPointsList.Dispose();
         }
 

@@ -20,23 +20,22 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
             foreach (var (move, transform, tempPrefabEntity) in SystemAPI
-                         .Query<RefRO<MovingEventComponent>, RefRW<LocalTransform>>()
+                         .Query<RefRO<MoveDirectionData>, RefRW<LocalTransform>>()
                          .WithAll<TempBuildingTag>().WithEntityAccess())
             {
-                // set camera to follow this entity
-                if (SystemAPI.TryGetSingletonEntity<CameraComponent>(out var e))
-                {
-                    ecb.AddComponent(e, new FollowComponent { Target = tempPrefabEntity });
-                    ecb.RemoveComponent<MovingEventComponent>(e);
-                }
-
                 var cameraComponent = SystemAPI.GetSingleton<CameraComponent>();
                 float3 cameraDirection =
                     Quaternion.AngleAxis(cameraComponent.RotationAngleY, Vector3.up) *
                     move.ValueRO.Direction;
-                
+
+
+                var a = math.round(move.ValueRO.Direction);
+
+
+                // Debug.Log(a);
+                // TODO https://app.asana.com/0/1206217975075068/1206234441074577/f
                 var currentPosition = transform.ValueRO.Position;
-                transform.ValueRW.Position = currentPosition + (cameraDirection * SystemAPI.Time.DeltaTime * -10);
+                transform.ValueRW.Position = Vector3.Lerp(currentPosition, currentPosition + a, 100);
             }
 
             ecb.Playback(state.EntityManager);

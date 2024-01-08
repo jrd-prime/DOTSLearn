@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -94,7 +95,7 @@ namespace Jrd.JUI
         }
 
 
-        public static void InstantiateButtons(int prefabsCount)
+        public static void InstantiateButtons(int prefabsCount, NativeList<FixedString32Bytes> names)
         {
             // LOOK TODO разгребать это
             _buttonsContainer.Clear();
@@ -109,7 +110,7 @@ namespace Jrd.JUI
             {
                 var index1 = index;
                 element.name = index1.ToString(); // TODO
-                element.text = "b-" + index1; // TODO
+                element.text = names.ElementAt(index1).ToString(); // TODO
                 element.RegisterCallback<ClickEvent>(
                     evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, index1));
                 ++index;

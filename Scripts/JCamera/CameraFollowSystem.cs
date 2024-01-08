@@ -9,6 +9,15 @@ namespace Jrd.JCamera
     {
         private Vector3 _lastPosition;
 
+
+        //     // set camera to follow this entity
+        //     if (SystemAPI.TryGetSingletonEntity<CameraComponent>(out var e))
+        // {
+        //     ecb.AddComponent(e, new FollowComponent { Target = tempPrefabEntity });
+        //     ecb.RemoveComponent<MovingEventComponent>(e);
+        // }
+
+
         public void OnUpdate(ref SystemState state)
         {
             // TODO camera jump fix

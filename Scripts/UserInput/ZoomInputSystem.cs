@@ -18,7 +18,10 @@ namespace Jrd.UserInput
         public void OnUpdate(ref SystemState state)
         {
             // TODO сделать через состояния, когда можно зумить или нет
+            
+            
 #if UNITY_EDITOR
+
             _zoom = Input.GetAxis(MouseScrollWheel);
 #endif
 

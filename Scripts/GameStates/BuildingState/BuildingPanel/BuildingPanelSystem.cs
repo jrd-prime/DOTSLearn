@@ -2,6 +2,7 @@
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.JUI;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -38,8 +39,18 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 Debug.Log("show bpanel");
                 _eiEcb.RemoveComponent<ShowVisualElementTag>(entity);
 
-                BuildingPanelUI.InstantiateButtons(buildingPanelComponent.ValueRO.BuildingPrefabsCount);
+                var names = new NativeList<FixedString32Bytes>(buildingPanelComponent.ValueRO.BuildingPrefabsCount,
+                    Allocator.Temp);
+                names.Add("1x1");
+                names.Add("2x2");
+                names.Add("coll");
+                names.Add("coll+rig");
+                names.Add("coll+rig+kin");
+
+                BuildingPanelUI.InstantiateButtons(buildingPanelComponent.ValueRO.BuildingPrefabsCount, names
+                );
                 BuildingPanelUI.ShowBPanel();
+                names.Dispose();
 
                 visibilityComponent.ValueRW.IsVisible = true;
             }

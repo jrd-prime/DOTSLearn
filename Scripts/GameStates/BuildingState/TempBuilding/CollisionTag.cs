@@ -2,7 +2,7 @@
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
-    public struct TempBuildingTag : IComponentData
+    public struct CollisionTag : IComponentData
     {
     }
 }

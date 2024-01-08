@@ -4,7 +4,6 @@ using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.JUI;
-using Jrd.Screen;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -40,6 +39,9 @@ namespace Jrd.GameStates.BuildingState
         {
             _tempSelectedBuildID = -1;
 
+            if (!_stateVisualComponents.IsCreated)
+                _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent); // TODO подумать
+
             BuildingPanelUI.OnBuildSelected += BuildSelected;
             ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
@@ -55,9 +57,6 @@ namespace Jrd.GameStates.BuildingState
 
         protected override void OnUpdate()
         {
-            if (!_stateVisualComponents.IsCreated)
-                _stateVisualComponents = new NativeList<Entity>(2, Allocator.Persistent); // TODO подумать
-
             _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
@@ -77,7 +76,7 @@ namespace Jrd.GameStates.BuildingState
                 if (buildingStateComponent.ValueRO.IsInitialized) return;
 
                 _buildingStateComponent = buildingStateComponent;
-                
+
                 _buildingPanel =
                     GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
                 _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
@@ -105,8 +104,15 @@ namespace Jrd.GameStates.BuildingState
         private void ConfirmBuilding()
         {
             Debug.Log("confirm  build");
-            // need temp entity 
-            // add tag for confirm place
+
+            if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
+            {
+                _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
+            }
+            else
+            {
+                Debug.LogWarning("We can't find temp building entity!");
+            }
         }
 
         private void CancelBuilding()
@@ -155,7 +161,8 @@ namespace Jrd.GameStates.BuildingState
                 _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
                     new InstantiateTempPrefabComponent
                     {
-                        Prefab = prefabElements[index].PrefabEntity
+                        Prefab = prefabElements[index].PrefabEntity,
+                        Name = prefabElements[index].PrefabName
                     });
 
                 Debug.Log(
