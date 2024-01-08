@@ -1,44 +1,65 @@
-﻿using Jrd.Utils.Const;
+﻿using Jrd.JCamera;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Systems;
 using UnityEngine;
+using Ray = UnityEngine.Ray;
+using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd
 {
-    public partial struct PrefabSelectionSystem : ISystem
+    public partial class PrefabSelectionSystem : SystemBase
     {
         private Camera _camera;
         private PhysicsWorldSingleton _buildPhysicsWorld;
         private CollisionWorld _collisionWorld;
 
-        public void OnCreate(ref SystemState state)
+        protected override void OnCreate()
         {
-            state.RequireForUpdate<PhysicsWorldSingleton>();
-            _camera = Camera.main;
-            _buildPhysicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+            RequireForUpdate<PhysicsWorldSingleton>();
         }
 
-        public void OnUpdate(ref SystemState state)
+        protected override void OnUpdate()
         {
+            _camera = CameraMono.Instance.Camera;
             if (Input.GetMouseButtonDown(0))
             {
-                _collisionWorld = _buildPhysicsWorld.PhysicsWorld.CollisionWorld;
-                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-                var rayStart = ray.origin;
-                var rayEnd = ray.GetPoint(100f);
+                Vector3 rayStart = ray.origin;
+                Vector3 rayEnd = ray.GetPoint(200f);
 
-                var raycastInput = new RaycastInput
+                if (Raycast(rayStart, rayEnd, out Entity entity))
                 {
-                    Start = rayStart,
-                    End = rayEnd,
-                    Filter = new CollisionFilter
-                    {
-                        BelongsTo = unchecked((uint)CollisionLayers.Selectable),
-                    }
-                };
+                    Debug.Log(entity);
+                }
             }
+        }
+
+        public bool Raycast(float3 from, float3 to, out Entity entity)
+        {
+            _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
+            
+            var input = new RaycastInput()
+            {
+                Start = from,
+                End = to,
+                Filter = new CollisionFilter()
+                {
+                    BelongsTo = (uint)1 << 31,
+                    CollidesWith = (uint)1 << 31,
+                    GroupIndex = 0
+                }
+            };
+
+            if (_collisionWorld.CastRay(input, out RaycastHit hit))
+            {
+                entity = hit.Entity;
+                return true;
+            }
+
+            entity = Entity.Null;
+            return false;
         }
     }
 }
