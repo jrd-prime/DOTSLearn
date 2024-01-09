@@ -9,9 +9,8 @@ using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd
 {
-    public partial class PrefabSelectionSystem : SystemBase
+    public partial class PrefabSelectionSystem : SystemBase // TODO unmanaged rework, +job + burst
     {
-        private CollisionWorld _collisionWorld;
         private const float RayDistance = 200f;
 
         protected override void OnCreate()
@@ -21,31 +20,42 @@ namespace Jrd
 
         protected override void OnUpdate()
         {
+            // click
             if (Input.touchCount == 1)
             {
                 Debug.Log("Click");
+
                 if (!SystemAPI.TryGetSingleton(out InputCursorData inputCursor)) return;
 
                 Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
-                float3 rayFrom = ray.origin;
-                float3 rayTo = ray.GetPoint(RayDistance);
 
-                if (Raycast(rayFrom, rayTo, out Entity entity))
+                // hit
+                if (Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity entity))
                 {
-                    Debug.Log("Entity = " + entity);
+                    Debug.Log("Hit. Entity = " + entity);
 
+                    // still holding btn/finger
                     if (inputCursor.CursorState == CursorState.ClickAndHold)
                     {
                         // camera stop, prefab move
-                        Debug.Log("move");
+                        Debug.Log("camera stop, prefab move");
                     }
+                    else
+                    {
+                        // prefab stop, camera move
+                        Debug.Log("prefab stop, camera move");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Didn't hit.");
                 }
             }
         }
 
         public bool Raycast(float3 from, float3 to, out Entity entity)
         {
-            _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
+            CollisionWorld collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
 
             var input = new RaycastInput
             {
@@ -59,7 +69,7 @@ namespace Jrd
                 }
             };
 
-            if (_collisionWorld.CastRay(input, out RaycastHit hit))
+            if (collisionWorld.CastRay(input, out RaycastHit hit))
             {
                 entity = hit.Entity;
                 return true;
