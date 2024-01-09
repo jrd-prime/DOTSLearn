@@ -11,9 +11,8 @@ namespace Jrd
 {
     public partial class PrefabSelectionSystem : SystemBase
     {
-        private Camera _camera;
-        private PhysicsWorldSingleton _buildPhysicsWorld;
         private CollisionWorld _collisionWorld;
+        private const float RayDistance = 200f;
 
         protected override void OnCreate()
         {
@@ -22,36 +21,32 @@ namespace Jrd
 
         protected override void OnUpdate()
         {
-            var inputCursorData = SystemAPI.GetSingleton<InputCursorData>();
-            
-            
-            _camera = CameraMono.Instance.Camera;
-            
             if (Input.touchCount == 1)
             {
-                Ray ray = _camera.ScreenPointToRay(inputCursorData.CursorScreenPosition);
+                Debug.Log("Click");
+                if (!SystemAPI.TryGetSingleton(out InputCursorData inputCursor)) return;
 
-                Vector3 rayStart = ray.origin;
-                Vector3 rayEnd = ray.GetPoint(200f);
+                Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
+                float3 rayFrom = ray.origin;
+                float3 rayTo = ray.GetPoint(RayDistance);
 
-                if (Raycast(rayStart, rayEnd, out Entity entity))
+                if (Raycast(rayFrom, rayTo, out Entity entity))
                 {
-                    Debug.Log(entity);
-                }
+                    Debug.Log("Entity = " + entity);
 
-                if (inputCursorData.CursorState == CursorState.ClickAndHold)
-                {
-                    Debug.Log("do move");
+                    if (inputCursor.CursorState == CursorState.ClickAndHold)
+                    {
+                        // camera stop, prefab move
+                        Debug.Log("move");
+                    }
                 }
-                
-                
             }
         }
 
         public bool Raycast(float3 from, float3 to, out Entity entity)
         {
             _collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
-            
+
             var input = new RaycastInput
             {
                 Start = from,
@@ -74,4 +69,10 @@ namespace Jrd
             return false;
         }
     }
+
+    // [MaterialProperty("_jrd")]
+    // public struct MyOwnColor : IComponentData
+    // {
+    //     public float4 Value;
+    // }
 }
