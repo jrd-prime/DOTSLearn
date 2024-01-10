@@ -12,43 +12,68 @@ namespace Jrd
     public partial class PrefabSelectionSystem : SystemBase // TODO unmanaged rework, +job + burst
     {
         private const float RayDistance = 200f;
+        private Entity _tempTargetEntity;
+        private int _tempFingerId;
 
         protected override void OnCreate()
         {
             RequireForUpdate<PhysicsWorldSingleton>();
+            RequireForUpdate<InputCursorData>();
+            _tempFingerId = -1;
         }
 
         protected override void OnUpdate()
         {
-            // click
+            // not building state
+            //  if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState) return; //TODO refact
+
+            // Click.
             if (Input.touchCount == 1)
             {
-                Debug.Log("Click");
+                Touch touch = Input.GetTouch(0);
 
-                if (!SystemAPI.TryGetSingleton(out InputCursorData inputCursor)) return;
+                // Set FingerID.
+                if (_tempFingerId == -1) _tempFingerId = touch.fingerId;
 
-                Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
-
-                // hit
-                if (Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity entity))
+                // Touch began.
+                if (touch.fingerId == _tempFingerId && (touch.phase is not (TouchPhase.Ended or TouchPhase.Canceled)))
                 {
-                    Debug.Log("Hit. Entity = " + entity);
+                    Debug.Log("Touch began.");
 
-                    // still holding btn/finger
-                    if (inputCursor.CursorState == CursorState.ClickAndHold)
+                    // Temp target entity doesn't exists
+                    if (_tempTargetEntity == Entity.Null)
                     {
-                        // camera stop, prefab move
-                        Debug.Log("camera stop, prefab move");
+                        Debug.Log("Target doesn't exist. Raycast..");
+                        InputCursorData inputCursor = SystemAPI.GetSingleton<InputCursorData>();
+
+                        // Raycast.
+                        Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
+
+                        if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity))
+                        {
+                            Debug.Log("Missed. Return..");
+                            return;
+                        }
+
+                        Debug.Log("Hit. Set target");
+
+                        // Set temp target entity.
+                        _tempTargetEntity = targetEntity;
                     }
-                    else
-                    {
-                        // prefab stop, camera move
-                        Debug.Log("prefab stop, camera move");
-                    }
+                    
+                    Debug.Log("Do stuff.");
+                    
                 }
                 else
                 {
-                    Debug.Log("Didn't hit.");
+                    // Touch ended or cancelled or TouchID doesn't match.
+                    Debug.Log("Touch ended or cancelled or TouchID doesn't match.");
+
+                    // Reset temp finger id.
+                    _tempFingerId = -1;
+
+                    // Reset temp target entity.
+                    _tempTargetEntity = Entity.Null;
                 }
             }
         }
