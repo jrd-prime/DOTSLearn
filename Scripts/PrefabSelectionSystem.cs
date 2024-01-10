@@ -1,4 +1,5 @@
-﻿using Jrd.JCamera;
+﻿using Jrd.GameStates.MainGameState;
+using Jrd.JCamera;
 using Jrd.UserInput;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -25,7 +26,8 @@ namespace Jrd
         protected override void OnUpdate()
         {
             // not building state
-            //  if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState) return; //TODO refact
+            if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
+                return; //TODO refact
 
             // Click.
             if (Input.touchCount == 1) //TODO more than 1 touch???
