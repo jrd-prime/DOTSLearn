@@ -28,46 +28,35 @@ namespace Jrd
             //  if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState) return; //TODO refact
 
             // Click.
-            if (Input.touchCount == 1)
+            if (Input.touchCount == 1) //TODO more than 1 touch???
             {
                 Touch touch = Input.GetTouch(0);
 
-                // Set FingerID.
+                // Set temp finger id.
                 if (_tempFingerId == -1) _tempFingerId = touch.fingerId;
 
                 // Touch began.
                 if (touch.fingerId == _tempFingerId && (touch.phase is not (TouchPhase.Ended or TouchPhase.Canceled)))
                 {
-                    Debug.Log("Touch began.");
-
-                    // Temp target entity doesn't exists
+                    // Temp target doesn't exist. Raycast..
                     if (_tempTargetEntity == Entity.Null)
                     {
-                        Debug.Log("Target doesn't exist. Raycast..");
                         InputCursorData inputCursor = SystemAPI.GetSingleton<InputCursorData>();
 
-                        // Raycast.
                         Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
 
-                        if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity))
-                        {
-                            Debug.Log("Missed. Return..");
-                            return;
-                        }
+                        // If missed. Return..
+                        if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity)) return;
 
-                        Debug.Log("Hit. Set target");
-
-                        // Set temp target entity.
+                        // Hit. Set temp target entity.
                         _tempTargetEntity = targetEntity;
                     }
-                    
+
                     Debug.Log("Do stuff.");
-                    
                 }
                 else
                 {
                     // Touch ended or cancelled or TouchID doesn't match.
-                    Debug.Log("Touch ended or cancelled or TouchID doesn't match.");
 
                     // Reset temp finger id.
                     _tempFingerId = -1;

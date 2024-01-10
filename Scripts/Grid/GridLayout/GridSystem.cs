@@ -45,7 +45,7 @@ namespace Jrd.Grid.GridLayout
 
             _tempPointsList = new NativeList<PointComponent>(1, Allocator.TempJob);
 
-            var stopwatch = Stopwatch.StartNew();
+            // var stopwatch = Stopwatch.StartNew();
 
             var gridSize = gridComponent.gridSize;
             var mainPrefab = gridComponent.pointPrefabMain;
@@ -147,9 +147,9 @@ namespace Jrd.Grid.GridLayout
 
             j6.Complete();
 
-            stopwatch.Stop();
-            Debug.Log(stopwatch.ElapsedTicks);
-            Debug.Log(stopwatch.ElapsedMilliseconds);
+            // stopwatch.Stop();
+            // Debug.Log(stopwatch.ElapsedTicks);
+            // Debug.Log(stopwatch.ElapsedMilliseconds);
 
             // set data
             biEcb.SetComponent(gridEntity, new GridData { PointsData = _tempPointsList });
