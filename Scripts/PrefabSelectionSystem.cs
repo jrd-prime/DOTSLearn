@@ -1,6 +1,6 @@
 ﻿using Jrd.GameStates.MainGameState;
-using Jrd.JCamera;
 using Jrd.UserInput;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -10,20 +10,23 @@ using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd
 {
-    public partial class PrefabSelectionSystem : SystemBase // TODO unmanaged rework, +job + burst
+    [BurstCompile]
+    public partial struct PrefabSelectionSystem : ISystem // TODO +job
     {
         private const float RayDistance = 200f;
         private Entity _tempTargetEntity;
         private int _tempFingerId;
 
-        protected override void OnCreate()
+        public void OnCreate(ref SystemState state)
         {
-            RequireForUpdate<PhysicsWorldSingleton>();
-            RequireForUpdate<InputCursorData>();
+            state.RequireForUpdate<GameStateData>();
+            state.RequireForUpdate<PhysicsWorldSingleton>();
+            state.RequireForUpdate<InputCursorData>();
             _tempFingerId = -1;
         }
 
-        protected override void OnUpdate()
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
             // not building state
             if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
@@ -45,7 +48,7 @@ namespace Jrd
                     {
                         InputCursorData inputCursor = SystemAPI.GetSingleton<InputCursorData>();
 
-                        Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
+                        Ray ray = inputCursor.ClickToRay;
 
                         // If missed. Return..
                         if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity)) return;
@@ -69,6 +72,7 @@ namespace Jrd
             }
         }
 
+        [BurstCompile]
         public bool Raycast(float3 from, float3 to, out Entity entity)
         {
             CollisionWorld collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
