@@ -21,13 +21,13 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
             foreach (var (move, transform, tempPrefabEntity) in SystemAPI
                          .Query<RefRO<MoveDirectionData>, RefRW<LocalTransform>>()
-                         .WithAll<TempBuildingTag>().WithEntityAccess())
+                         .WithAll<TempBuildingTag, SelectedTag, SelectableTag>().WithEntityAccess())
             {
                 var cameraComponent = SystemAPI.GetSingleton<CameraComponent>();
                 float3 cameraDirection =
                     Quaternion.AngleAxis(cameraComponent.RotationAngleY, Vector3.up) *
                     move.ValueRO.Direction;
-
+                Debug.Log("mooove");
 
                 var a = math.round(move.ValueRO.Direction);
 

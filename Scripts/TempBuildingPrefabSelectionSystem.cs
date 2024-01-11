@@ -1,4 +1,5 @@
 ﻿using Jrd.GameStates.MainGameState;
+using Jrd.JCamera;
 using Jrd.UserInput;
 using Unity.Burst;
 using Unity.Entities;
@@ -10,8 +11,10 @@ using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd
 {
+    // make common
+
     [BurstCompile]
-    public partial struct PrefabSelectionSystem : ISystem // TODO +job
+    public partial struct TempBuildingPrefabSelectionSystem : ISystem // TODO +job
     {
         private const float RayDistance = 200f;
         private Entity _tempTargetEntity;
@@ -31,43 +34,57 @@ namespace Jrd
             // not building state
             if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
                 return; //TODO refact
-
             // Click.
             if (Input.touchCount == 1) //TODO more than 1 touch???
             {
+                Debug.Log("// Click.");
                 Touch touch = Input.GetTouch(0);
 
+                Debug.Log("// Set temp finger id.");
                 // Set temp finger id.
                 if (_tempFingerId == -1) _tempFingerId = touch.fingerId;
 
+                Debug.Log("// Touch began.");
                 // Touch began.
                 if (touch.fingerId == _tempFingerId && (touch.phase is not (TouchPhase.Ended or TouchPhase.Canceled)))
                 {
+                    Debug.Log("// Temp target doesn't exist. Raycast..");
                     // Temp target doesn't exist. Raycast..
                     if (_tempTargetEntity == Entity.Null)
                     {
                         InputCursorData inputCursor = SystemAPI.GetSingleton<InputCursorData>();
+                        Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(inputCursor.CursorScreenPosition);
+                        
 
-                        Ray ray = inputCursor.ClickToRay;
-
+                        Debug.Log("// If missed. Return..");
                         // If missed. Return..
                         if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity)) return;
 
+                        Debug.Log("// Hit. Set temp target entity.");
                         // Hit. Set temp target entity.
                         _tempTargetEntity = targetEntity;
                     }
+                    else
+                    {
+                        Debug.Log(_tempTargetEntity);
+                        Debug.Log("Do stuff.");
 
-                    Debug.Log("Do stuff.");
+                        state.EntityManager.AddComponent<SelectedTag>(_tempTargetEntity);
+                    }
                 }
                 else
                 {
+                    Debug.Log("// Touch ended or cancelled or TouchID doesn't match.");
                     // Touch ended or cancelled or TouchID doesn't match.
 
                     // Reset temp finger id.
                     _tempFingerId = -1;
 
+                    state.EntityManager.RemoveComponent<SelectedTag>(_tempTargetEntity);
                     // Reset temp target entity.
+                    Debug.Log("// Reset temp target entity.");
                     _tempTargetEntity = Entity.Null;
+                    Debug.Log("_tempTargetEntity = " + _tempTargetEntity);
                 }
             }
         }

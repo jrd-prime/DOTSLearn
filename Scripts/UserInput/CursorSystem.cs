@@ -1,4 +1,6 @@
 ﻿using Jrd.JCamera;
+using Jrd.Utils.Const;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -9,26 +11,28 @@ namespace Jrd.UserInput
     /// <summary>
     /// Устанавливаем позицию курсора в мире
     /// </summary>
+    [BurstCompile]
     public partial struct CursorSystem : ISystem
     {
         // TODO mobile logic
-        private const string CursorSystemEntityName = "___ CursorSystemEntity";
         private bool _lookingOnGroundPosition;
         private Entity _entity;
         private EntityManager _em;
 
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             _lookingOnGroundPosition = true; //TODO OFF/ON raycast mouse to ground
             _em = state.EntityManager;
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.Temp); //TODO ecb refact
             _entity = ecb.CreateEntity();
             ecb.AddComponent<InputCursorData>(_entity);
-            ecb.SetName(_entity, CursorSystemEntityName);
+            ecb.SetName(_entity, ENames.InputCursorDataEntityName);
             ecb.Playback(_em);
             ecb.Dispose();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var mousePosition = Input.mousePosition;
@@ -49,21 +53,23 @@ namespace Jrd.UserInput
                         math.clamp(Input.mousePosition.x, 0, UnityEngine.Screen.width),
                         math.clamp(Input.mousePosition.y, 0, UnityEngine.Screen.height),
                         0);
-                    
+
                     cursor.ValueRW.CursorState = GetCursorState();
                 }
             }
         }
 
+        [BurstCompile]
         private CursorState GetCursorState()
         {
             if (Input.touchCount == 1)
             {
                 //TODO add delay and fix
-                return Input.touches[0].phase != TouchPhase.Ended || Input.touches[0].phase != TouchPhase.Canceled ? CursorState.ClickAndHold : CursorState.Click;
-
+                return Input.touches[0].phase != TouchPhase.Ended || Input.touches[0].phase != TouchPhase.Canceled
+                    ? CursorState.ClickAndHold
+                    : CursorState.Click;
             }
-            
+
             return CursorState.Default;
         }
     }
