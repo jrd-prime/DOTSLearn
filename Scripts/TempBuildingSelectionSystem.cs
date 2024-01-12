@@ -1,6 +1,7 @@
 ﻿using System;
 using Jrd.GameStates.MainGameState;
 using Jrd.JCamera;
+using Jrd.UserInput;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -26,6 +27,7 @@ namespace Jrd
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<CameraComponent>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
             _isSelectTagAdded = false;
@@ -34,13 +36,14 @@ namespace Jrd
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            // if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
-            // return; //TODO refact
+            if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
+                return; //TODO refact
 
             if (Input.touchCount != 1) return; //TODO more than 1 touch???
 
             var touch = Input.GetTouch(0);
 
+            var b = SystemAPI.GetSingletonEntity<CameraComponent>();
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -57,9 +60,13 @@ namespace Jrd
                     if (_tempTargetEntity != Entity.Null)
                     {
                         Debug.Log("Temp target exist. Do stuff.");
+                        
+                        //TODO bad idea
+                        state.EntityManager.RemoveComponent<MoveDirectionData>(b);
                         if (!_isSelectTagAdded)
                         {
                             state.EntityManager.AddComponent<SelectedTag>(_tempTargetEntity); //TODO ecb
+
                             _isSelectTagAdded = true;
                         }
                     }
@@ -68,6 +75,10 @@ namespace Jrd
                 case TouchPhase.Ended:
                 case TouchPhase.Canceled:
                     Debug.Log("Touch ended or cancelled.");
+
+                    //TODO bad idea
+                    state.EntityManager.AddComponent<MoveDirectionData>(b);
+
                     if (_isSelectTagAdded)
                     {
                         state.EntityManager.RemoveComponent<SelectedTag>(_tempTargetEntity); //TODO ecb
