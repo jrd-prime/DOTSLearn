@@ -108,7 +108,7 @@ namespace Jrd.JUI
             var index = 0;
             buttons.ForEach(element =>
             {
-                var index1 = index;
+                int index1 = index;
                 element.name = index1.ToString(); // TODO
                 element.text = names.ElementAt(index1).ToString(); // TODO
                 element.RegisterCallback<ClickEvent>(

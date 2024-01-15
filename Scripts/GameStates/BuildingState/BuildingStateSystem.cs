@@ -66,7 +66,7 @@ namespace Jrd.GameStates.BuildingState
 
             _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
-            // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную?
+            // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
             foreach (var (buildingStateComponent, entity) in SystemAPI
                          .Query<RefRW<BuildingStateComponent>>()
                          .WithAll<InitializeTag>()
@@ -74,8 +74,6 @@ namespace Jrd.GameStates.BuildingState
             {
                 // Is init?
                 if (buildingStateComponent.ValueRO.IsInitialized) return;
-
-                _buildingStateComponent = buildingStateComponent;
 
                 _buildingPanel =
                     GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
@@ -183,7 +181,7 @@ namespace Jrd.GameStates.BuildingState
 
             _bsEcb.AddComponent<T>(entity);
             _bsEcb.AddComponent<VisibilityComponent>(entity);
-            
+
             _bsEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
 
             _bsEcb.SetName(entity, $"{BSConst.Prefix} {entityName}");

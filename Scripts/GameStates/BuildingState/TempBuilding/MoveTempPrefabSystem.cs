@@ -26,7 +26,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            var touch = Input.GetTouch(0);
+            Touch touch = Input.GetTouch(0);
 
             Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
@@ -37,8 +37,8 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .Query<RefRO<MoveDirectionData>, RefRW<LocalTransform>>()
                          .WithAll<TempBuildingTag, SelectedTag, SelectableTag>().WithEntityAccess())
             {
-                var pos = new float3(math.round(hitPosition.x), 0, math.round(hitPosition.z));
-                
+                float3 pos = new(math.round(hitPosition.x), 0, math.round(hitPosition.z));
+
                 // Debug.Log(pos);
                 transform.ValueRW.Position = pos;
             }
