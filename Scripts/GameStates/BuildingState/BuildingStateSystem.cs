@@ -26,8 +26,7 @@ namespace Jrd.GameStates.BuildingState
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
-        private Entity _buildPrefabsComponent;
-        private RefRW<BuildingStateComponent> _buildingStateComponent;
+        private Entity _buildPrefabsComponentEntity;
 
         protected override void OnCreate()
         {
@@ -59,17 +58,15 @@ namespace Jrd.GameStates.BuildingState
 
         protected override void OnUpdate()
         {
-            _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
-            _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
+            _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
 
+            _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
-            _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
 
+            _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
-            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
-
-            // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
+            // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную?
             foreach (var (buildingStateComponent, entity) in SystemAPI
                          .Query<RefRW<BuildingStateComponent>>()
                          .WithAll<InitializeTag>()
@@ -87,7 +84,7 @@ namespace Jrd.GameStates.BuildingState
                     new BuildingPanelComponent
                     {
                         BuildingPrefabsCount =
-                            SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent).Length
+                            SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity).Length
                     });
 
                 _confirmationPanel =
@@ -132,6 +129,7 @@ namespace Jrd.GameStates.BuildingState
         private void DestroyTempPrefab()
         {
             _biEcb = _biEcbSystem.CreateCommandBuffer(World.Unmanaged);
+
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
                 _biEcb.AddComponent(tempEntity, new DestroyTempPrefabTag());
@@ -140,23 +138,24 @@ namespace Jrd.GameStates.BuildingState
 
         private void BuildSelected(Button button, int index)
         {
-            // here + BuildingPanelUI
-            if (_tempSelectedBuildID < 0) // temp not set
+            // temp not set
+            if (_tempSelectedBuildID == -1)
             {
                 _tempSelectedBuildID = index;
             }
-            else if (_tempSelectedBuildID != index) // temp != index
+            // temp != index
+            else if (_tempSelectedBuildID != index)
             {
-                // destroy temp prefab
                 DestroyTempPrefab();
                 _tempSelectedBuildID = index;
             }
-            else // temp = index
+            // temp = index
+            else
             {
                 Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanel." + this);
             }
 
-            var prefabElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponent);
+            var prefabElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity);
 
             if (!prefabElements.IsEmpty)
             {
@@ -184,6 +183,7 @@ namespace Jrd.GameStates.BuildingState
 
             _bsEcb.AddComponent<T>(entity);
             _bsEcb.AddComponent<VisibilityComponent>(entity);
+            
             _bsEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
 
             _bsEcb.SetName(entity, $"{BSConst.Prefix} {entityName}");
