@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Jrd.Utils
+namespace Jrd.JUtils
 {
     public static class Utils
     {
@@ -29,6 +29,13 @@ namespace Jrd.Utils
             return Math.Abs(width - UnityEngine.Screen.width) < float.Epsilon &&
                    Math.Abs(height - UnityEngine.Screen.height) < float.Epsilon;
         }
+
+        public static string GetGuid()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+
     }
 }
 

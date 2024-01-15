@@ -1,4 +1,4 @@
-﻿namespace Jrd.Utils.Const
+﻿namespace Jrd.JUtils.Const
 {
     public enum CollisionLayers
     {

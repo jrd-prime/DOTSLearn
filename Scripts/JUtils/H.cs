@@ -1,6 +1,6 @@
 ﻿using Jrd.DebSet;
 
-namespace Jrd.Utils
+namespace Jrd.JUtils
 {
     public static class H
     {

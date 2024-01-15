@@ -1,6 +1,6 @@
 ﻿using Jrd.GameStates;
 using Jrd.GameStates.MainGameState;
-using Jrd.Utils;
+using Jrd.JUtils;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;

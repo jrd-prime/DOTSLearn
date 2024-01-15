@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Jrd.JUtils;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -37,7 +38,7 @@ namespace Jrd.Screen
             {
                 // continue if screen size not changed
                 var widthAndHeight = screenComponent.ValueRO.WidthAndHeight;
-                if (Utils.Utils.IsScreenSizeChanged(widthAndHeight.x, widthAndHeight.y)) continue;
+                if (Utils.IsScreenSizeChanged(widthAndHeight.x, widthAndHeight.y)) continue;
 
                 var width = UnityEngine.Screen.width;
                 var height = UnityEngine.Screen.height;

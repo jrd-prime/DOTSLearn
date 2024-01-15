@@ -2,7 +2,7 @@
 
 namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 {
-    public struct ConfirmationPanelComponent : IComponentData
+    public struct ConfirmationPanelTag : IComponentData
     {
     }
 }

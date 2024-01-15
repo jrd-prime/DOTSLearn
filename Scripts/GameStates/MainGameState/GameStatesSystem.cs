@@ -21,9 +21,11 @@ namespace Jrd.GameStates.MainGameState
 
             _em = state.EntityManager;
 
+
             _gameStateEntity = _em.CreateEntity();
             _em.SetName(_gameStateEntity, "___ Game State Entity");
             _em.AddComponent<GameStateData>(_gameStateEntity);
+            _em.AddComponent<GameBuildingsData>(_gameStateEntity);
             _em.SetComponentData(_gameStateEntity, new GameStateData
             {
                 Self = _gameStateEntity,

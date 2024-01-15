@@ -1,4 +1,4 @@
-﻿using Jrd.Utils.Const;
+﻿using Jrd.JUtils.Const;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;

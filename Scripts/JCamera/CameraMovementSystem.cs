@@ -1,15 +1,15 @@
-﻿using Unity.Entities;
+﻿using Jrd.JUtils.Const;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using Jrd.UserInput;
-using Jrd.Utils.Const;
 using Unity.Collections;
 
 namespace Jrd.JCamera
 {
     public partial struct CameraMovementSystem : ISystem
     {
-        private const float CameraSpeed = 10f;
+        private const float CameraSpeed = 30f;
         private const float MinFOV = 30f;
         private const float MaxFOV = 70f;
         private const float RotationAngle = 30f;

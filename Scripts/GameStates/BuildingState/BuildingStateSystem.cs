@@ -16,8 +16,10 @@ namespace Jrd.GameStates.BuildingState
     {
         private EntityManager _em;
         private NativeList<Entity> _stateVisualComponents;
-        private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
+        private BeginSimulationEntityCommandBufferSystem.Singleton _bsEcbSystem;
+        private BeginInitializationEntityCommandBufferSystem.Singleton _biEcbSystem;
         private EntityCommandBuffer _bsEcb;
+        private EntityCommandBuffer _biEcb;
 
         private Entity _buildingPanel;
         private Entity _confirmationPanel;
@@ -60,9 +62,10 @@ namespace Jrd.GameStates.BuildingState
             _gameStateEntity = SystemAPI.GetSingletonEntity<GameStateData>();
             _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
+            _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
+            _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
 
-            _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _bsEcb = _ecbSystem.CreateCommandBuffer(World.Unmanaged);
 
             _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
@@ -88,7 +91,7 @@ namespace Jrd.GameStates.BuildingState
                     });
 
                 _confirmationPanel =
-                    GetCustomEntityVisualElementComponent<ConfirmationPanelComponent>(
+                    GetCustomEntityVisualElementComponent<ConfirmationPanelTag>(
                         BSConst.ConfirmationPanelEntityName);
 
                 if (_stateVisualComponents.Length == 0)
@@ -108,6 +111,9 @@ namespace Jrd.GameStates.BuildingState
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
+
+                BuildingPanelUI.SetButtonEnabled(_tempSelectedBuildID, true);
+                _tempSelectedBuildID = -1;
             }
             else
             {
@@ -125,13 +131,10 @@ namespace Jrd.GameStates.BuildingState
 
         private void DestroyTempPrefab()
         {
-            var s = SystemAPI
-                .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(World.Unmanaged);
-
+            _biEcb = _biEcbSystem.CreateCommandBuffer(World.Unmanaged);
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
-                s.AddComponent(tempEntity, new DestroyTempPrefabTag());
+                _biEcb.AddComponent(tempEntity, new DestroyTempPrefabTag());
             }
         }
 
@@ -183,8 +186,7 @@ namespace Jrd.GameStates.BuildingState
             _bsEcb.AddComponent<VisibilityComponent>(entity);
             _bsEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
 
-            var nameWithPrefix = BSConst.Prefix + " " + entityName;
-            _bsEcb.SetName(entity, nameWithPrefix);
+            _bsEcb.SetName(entity, $"{BSConst.Prefix} {entityName}");
 
             return entity;
         }

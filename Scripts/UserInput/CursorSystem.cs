@@ -1,5 +1,5 @@
 ﻿using Jrd.JCamera;
-using Jrd.Utils.Const;
+using Jrd.JUtils.Const;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -35,10 +35,10 @@ namespace Jrd.UserInput
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var mousePosition = Input.mousePosition;
-
-            if (float.IsPositiveInfinity(mousePosition.x) &&
-                float.IsNegativeInfinity(mousePosition.y)) return;
+            var mousePosition = new float3(
+                math.clamp(Input.mousePosition.x, 0, UnityEngine.Screen.width),
+                math.clamp(Input.mousePosition.y, 0, UnityEngine.Screen.height),
+                0);
 
             if (_lookingOnGroundPosition)
             {
