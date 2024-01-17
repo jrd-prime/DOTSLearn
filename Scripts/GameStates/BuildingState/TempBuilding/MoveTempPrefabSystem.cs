@@ -19,7 +19,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PhysicsWorldSingleton>();
-            state.RequireForUpdate<CameraComponent>();
+            state.RequireForUpdate<CameraData>();
         }
 
         public void OnUpdate(ref SystemState state)

@@ -17,7 +17,6 @@ namespace Jrd
     /// Add the SelectedTag to the clicked temp building
     /// </summary>
     // make common?
-    [BurstCompile]
     public partial struct TempBuildingSelectionSystem : ISystem // TODO +job
     {
         private const float RayDistance = 200f;
@@ -27,13 +26,12 @@ namespace Jrd
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CameraComponent>();
+            state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
             _isSelectTagAdded = false;
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
@@ -43,7 +41,7 @@ namespace Jrd
 
             var touch = Input.GetTouch(0);
 
-            var b = SystemAPI.GetSingletonEntity<CameraComponent>();
+            var b = SystemAPI.GetSingletonEntity<CameraData>();
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -53,6 +51,7 @@ namespace Jrd
                     // if (SystemAPI.HasComponent<TempBuildingTag>(targetEntity)) Debug.Log("it's temp building!"); 
 
                     _tempTargetEntity = targetEntity;
+                    
 
                     break;
                 case TouchPhase.Moved:
@@ -60,6 +59,7 @@ namespace Jrd
                     if (_tempTargetEntity != Entity.Null)
                     {
                         Debug.Log("Temp target exist. Do stuff.");
+                        Debug.LogWarning(_tempTargetEntity);
                         
                         //TODO bad idea
                         state.EntityManager.RemoveComponent<MoveDirectionData>(b);
@@ -93,7 +93,6 @@ namespace Jrd
             }
         }
 
-        [BurstCompile]
         public bool Raycast(float3 from, float3 to, out Entity entity)
         {
             var input = new RaycastInput

@@ -121,7 +121,7 @@ namespace Jrd.GameStates.BuildingState
             Debug.Log("cancel build");
 
             DestroyTempPrefab();
-            _tempSelectedBuildID = -1; // reset temp id
+            _tempSelectedBuildID = -1;
         }
 
         private void DestroyTempPrefab()
@@ -136,12 +136,10 @@ namespace Jrd.GameStates.BuildingState
 
         private void BuildSelected(Button button, int index)
         {
-            // temp not set
             if (_tempSelectedBuildID == -1)
             {
                 _tempSelectedBuildID = index;
             }
-            // temp != index
             else if (_tempSelectedBuildID != index)
             {
                 DestroyTempPrefab();

@@ -11,13 +11,13 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
     /// <summary>
     /// Place temp building prefab
     /// </summary>
-    [BurstCompile]
+    // [BurstCompile]
     public partial struct PlaceTempBuildingSystem : ISystem
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _bsEcb;
 
-        [BurstCompile]
+        // [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -25,7 +25,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             state.RequireForUpdate<GameBuildingsData>();
         }
 
-        [BurstCompile]
+        // [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();

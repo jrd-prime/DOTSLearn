@@ -11,7 +11,7 @@ namespace Jrd.UserInput
     /// <summary>
     /// Устанавливаем позицию курсора в мире
     /// </summary>
-    [BurstCompile]
+    // [BurstCompile]
     public partial struct CursorSystem : ISystem
     {
         // TODO mobile logic
@@ -19,7 +19,7 @@ namespace Jrd.UserInput
         private Entity _entity;
         private EntityManager _em;
 
-        [BurstCompile]
+        // [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             _lookingOnGroundPosition = true; //TODO OFF/ON raycast mouse to ground
@@ -32,7 +32,7 @@ namespace Jrd.UserInput
             ecb.Dispose();
         }
 
-        [BurstCompile]
+        // [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var mousePosition = new float3(
@@ -59,7 +59,7 @@ namespace Jrd.UserInput
             }
         }
 
-        [BurstCompile]
+        // [BurstCompile]
         private CursorState GetCursorState()
         {
             if (Input.touchCount == 1)

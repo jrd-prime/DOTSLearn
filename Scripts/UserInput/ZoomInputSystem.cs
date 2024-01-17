@@ -1,6 +1,5 @@
-﻿using Jrd.DebSet;
+﻿using Jrd.JUtils;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Jrd.UserInput
@@ -12,43 +11,37 @@ namespace Jrd.UserInput
         private float _zoom;
         private const float YAxis = 0f;
         private float _zAxis;
-        private int _fingerId1;
-        private int _fingerId2;
 
         public void OnUpdate(ref SystemState state)
         {
-            // TODO сделать через состояния, когда можно зумить или нет
-            
-            
 #if UNITY_EDITOR
-
             _zoom = Input.GetAxis(MouseScrollWheel);
 #endif
 
 #if UNITY_ANDROID
             if (Input.touchCount == 2)
             {
-                if (!Utils.Utils.IsPointerOverUIObject())
+                if (!Utils.IsPointerOverUIObject())
                 {
-                    var touch1 = Input.GetTouch(0);
-                    var touch2 = Input.GetTouch(1);
-                    _fingerId1 = touch1.fingerId;
-                    _fingerId2 = touch2.fingerId;
+                    Touch touch1 = Input.GetTouch(0);
+                    Touch touch2 = Input.GetTouch(1);
+                    int fingerId1 = touch1.fingerId;
+                    int fingerId2 = touch2.fingerId;
 
-                    var t1 = touch1.position - touch1.deltaPosition;
-                    var t2 = touch2.position - touch2.deltaPosition;
+                    Vector2 t1 = touch1.position - touch1.deltaPosition;
+                    Vector2 t2 = touch2.position - touch2.deltaPosition;
 
-                    var prevMag = (t1 - t2).magnitude;
-                    var currMag = (touch1.position - touch2.position).magnitude;
+                    float prevMag = (t1 - t2).magnitude;
+                    float currMag = (touch1.position - touch2.position).magnitude;
 
-                     _zoom = currMag - prevMag;
+                    _zoom = currMag - prevMag;
                 }
             }
 #endif
 
-            foreach (var query in SystemAPI.Query<RefRW<ZoomingEventComponent>>())
+            foreach (var query in SystemAPI.Query<RefRW<ZoomDirectionData>>())
             {
-                query.ValueRW.zoom = _zoom != 0 ? _zoom : 0;
+                query.ValueRW.ZoomDirection = _zoom != 0 ? _zoom : 0;
             }
         }
     }

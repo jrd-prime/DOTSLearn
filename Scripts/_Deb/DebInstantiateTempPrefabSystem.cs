@@ -10,16 +10,16 @@ using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
-    [BurstCompile]
+    // [BurstCompile]
     public partial struct DebInstantiateTempPrefabSystem : ISystem
     {
-        [BurstCompile]
+        // [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
-        [BurstCompile]
+        // [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;
@@ -42,24 +42,24 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             c.Add(new float3(6, 0, 7));
             c.Add(new float3(0, 0, 4));
 
-            for (int i = 0; i < b.Length; i++)
-            {
-                var entity = state.EntityManager.CreateEntity();
-                state.Dependency = new InstantiateTempPrefabJob
-                    {
-                        TempPrefabEntity = b[i].PrefabEntity,
-                        TempPrefabName = b[i].PrefabName,
-                        BsEcb = ecb,
-                        BuildingStateEntity = entity,
-                        Position = c.ElementAt(i),
-                        Rotation = quaternion.identity,
-                        Scale = 1
-                    }
-                    .Schedule(state.Dependency);
-            }
+            // for (int i = 0; i < b.Length; i++)
+            // {
+            //     var entity = state.EntityManager.CreateEntity();
+            //     state.Dependency = new InstantiateTempPrefabJob
+            //         {
+            //             TempPrefabEntity = b[i].PrefabEntity,
+            //             TempPrefabName = b[i].PrefabName,
+            //             BsEcb = ecb,
+            //             BuildingStateEntity = entity,
+            //             Position = c.ElementAt(i),
+            //             Rotation = quaternion.identity,
+            //             Scale = 1
+            //         }
+            //         .Schedule(state.Dependency);
+            // }
         }
 
-        [BurstCompile]
+        // [BurstCompile]
         private struct InstantiateTempPrefabJob : IJob
         {
             public EntityCommandBuffer BsEcb;
@@ -70,7 +70,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public quaternion Rotation;
             public float Scale;
 
-            [BurstCompile]
+            // [BurstCompile]
             public void Execute()
             {
                 // instantiate selected building prefab

@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 2 1
-  m_Shader: {fileID: -6465566751694194690, guid: 6dda3690c35fba0409ce8cfdd81752f2,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 8d20e20455f351e4c975ffa9db58fd86, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -49,6 +48,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -99,24 +102,30 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _GraduationScale: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Scale: 1
+    - _SecondaryFadeInSpeed: 0.5
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _Thickness: 0.005
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - _BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 0.8392157, g: 0.64705884, b: 0.35294122, a: 1}
     - _Color: {r: 0.8392157, g: 0.64705884, b: 0.3529412, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SecondaryColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _jrd: {r: 0.8773585, g: 0.27727836, b: 0.27727836, a: 0}
   m_BuildTextureStacks: []

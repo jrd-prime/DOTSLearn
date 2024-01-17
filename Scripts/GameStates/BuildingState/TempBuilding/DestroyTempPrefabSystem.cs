@@ -12,7 +12,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<CameraComponent>();
+            state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -27,7 +27,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .Query<TempBuildingTag>().WithAll<DestroyTempPrefabTag>()
                          .WithEntityAccess())
             {
-                var cameraEntity = SystemAPI.GetSingletonEntity<CameraComponent>();
+                var cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
 
                 state.Dependency = new DestroyTempPrefabJob
                     {

@@ -7,7 +7,6 @@ namespace Jrd.JCamera
     public class CameraMono : MonoBehaviour
     {
         public static CameraMono Instance;
-        [SerializeField] private Vector3 _cursorInWorld;
         [SerializeField] private float3 _cameraOffset;
 
         private CameraMono()
@@ -15,7 +14,6 @@ namespace Jrd.JCamera
         }
 
         public float Speed => Speed;
-        public float3 CursorPosition => _cursorInWorld;
         public Camera Camera { get; private set; }
         public GameObject CameraHolder { get; private set; }
 

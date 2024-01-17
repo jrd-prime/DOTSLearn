@@ -23,7 +23,7 @@ namespace Jrd.JCamera
             // TODO camera jump fix
             foreach (var follow in SystemAPI
                          .Query<RefRO<FollowComponent>>()
-                         .WithAll<CameraComponent>())
+                         .WithAll<CameraData>())
             {
                 // Debug.Log("// follow movement");
                 var instance = CameraMono.Instance;
