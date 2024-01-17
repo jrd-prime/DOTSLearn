@@ -4,6 +4,7 @@ using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.JUI;
+using Jrd.JUtils;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -64,7 +65,12 @@ namespace Jrd.GameStates.BuildingState
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
 
+            Debug.Log("err start");
             _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+
+            SystemAPI.TryGetSingletonEntity<BuildPrefabsComponent>(out Entity ga);
+            H.T(ga.ToString());
+            Debug.Log("err stop");
 
             // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
             foreach (var (buildingStateComponent, entity) in SystemAPI
