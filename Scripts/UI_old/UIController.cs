@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Jrd.JUI
+namespace Jrd.UI_old
 {
     public class UIController : MonoBehaviour
     {

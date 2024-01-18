@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace Jrd.JUI
+namespace Jrd.UI_old
 {
-    public class BuildingPanelUI : MonoBehaviour
+    public class BuildingPanel : MonoBehaviour
     {
-        public static BuildingPanelUI Instance;
+        public static BuildingPanel Instance;
 
         private const float BottomHided = -100f;
         private const float BottomShowed = 0f;
@@ -17,7 +17,7 @@ namespace Jrd.JUI
         private int _tempSelectedBuildID;
 
         private static VisualElement _root;
-        public static VisualElement BuildingPanel;
+        public static VisualElement MainPanel;
         private static GroupBox _buttonsContainer;
         private const string ButtonsContainerName = "groupbox";
         [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
@@ -25,10 +25,6 @@ namespace Jrd.JUI
         public static VisualElement BuildingsPanelRoot;
 
         public static event Action<Button, int> OnBuildSelected;
-
-        private BuildingPanelUI()
-        {
-        }
 
         private void Awake()
         {
@@ -45,7 +41,7 @@ namespace Jrd.JUI
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
             BuildingsPanelRoot = _root;
-            BuildingPanel = _root.Q<VisualElement>("building-panel");
+            MainPanel = _root.Q<VisualElement>("building-panel");
             _buttonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
             BuildingsPanelRoot.style.display = DisplayStyle.None;
             if (_buildingButtonTemplate == null)

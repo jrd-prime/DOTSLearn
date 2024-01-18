@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
-namespace Jrd.JUI
+namespace Jrd.UI_old
 {
     public class ConfirmationPanelUI : MonoBehaviour
     {
@@ -18,10 +18,6 @@ namespace Jrd.JUI
         private const float BottomShowed = 0f;
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
-
-        private ConfirmationPanelUI()
-        {
-        }
 
         private void Awake()
         {

@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.JUI
+namespace Jrd.UI_old
 {
     public class MainMenuUI : MonoBehaviour
     {
-        public static MainMenuUI Instance;
+        public static MainMenuUI Instance { private set; get; }
         private VisualElement _root;
-
-        private MainMenuUI()
-        {
-        }
 
         private void Awake()
         {
@@ -61,6 +57,7 @@ namespace Jrd.JUI
         {
             e.style.display = DisplayStyle.None;
         }
+
         private void ShowElemenet(VisualElement e)
         {
             e.style.display = DisplayStyle.Flex;

@@ -1,0 +1,15 @@
+.color-1 {
+    background-color: rgb(137, 161, 11);
+}
+
+.color-2 {
+    background-color: rgb(244, 102, 80);
+}
+
+.color-3 {
+    background-color: rgb(240, 252, 238);
+}
+
+.bg-white-with-transparent {
+    background-color: rgba(240, 252, 238, 0.5);
+}

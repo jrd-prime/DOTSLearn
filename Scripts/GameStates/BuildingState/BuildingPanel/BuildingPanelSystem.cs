@@ -1,6 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.JUI;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -47,9 +46,9 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 names.Add("coll+rig");
                 names.Add("coll+rig+kin");
 
-                BuildingPanelUI.InstantiateButtons(buildingPanel.ValueRO.BuildingPrefabsCount, names
+                UI_old.BuildingPanel.InstantiateButtons(buildingPanel.ValueRO.BuildingPrefabsCount, names
                 );
-                BuildingPanelUI.ShowBPanel();
+                UI_old.BuildingPanel.ShowBPanel();
                 names.Dispose();
 
                 visibility.ValueRW.IsVisible = true;
@@ -63,7 +62,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 Debug.Log("hide");
                 _bsEcb.RemoveComponent<HideVisualElementTag>(entity);
 
-                BuildingPanelUI.HideBPanel();
+                UI_old.BuildingPanel.HideBPanel();
 
                 q.ValueRW.IsVisible = false;
             }

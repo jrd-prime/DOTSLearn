@@ -1,5 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.JUI;
+using Jrd.UI_old;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.JUI
+namespace Jrd.UI_old
 {
     public class MenuButtonUI : MonoBehaviour
     {
