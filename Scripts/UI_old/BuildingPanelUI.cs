@@ -6,9 +6,9 @@ using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.UI_old
 {
-    public class BuildingPanel : MonoBehaviour
+    public class BuildingPanelUI : MonoBehaviour
     {
-        public static BuildingPanel Instance;
+        public static BuildingPanelUI Instance;
 
         private const float BottomHided = -100f;
         private const float BottomShowed = 0f;

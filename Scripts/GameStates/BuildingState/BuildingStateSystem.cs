@@ -44,7 +44,7 @@ namespace Jrd.GameStates.BuildingState
             if (!_stateVisualComponents.IsCreated)
                 _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent); // TODO подумать
 
-            UI_old.BuildingPanel.OnBuildSelected += BuildSelected;
+            UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
             ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
         }
@@ -52,7 +52,7 @@ namespace Jrd.GameStates.BuildingState
         protected override void OnStopRunning()
         {
             _stateVisualComponents.Dispose();
-            UI_old.BuildingPanel.OnBuildSelected -= BuildSelected;
+            UI_old.BuildingPanelUI.OnBuildSelected -= BuildSelected;
             ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
             ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
@@ -65,11 +65,10 @@ namespace Jrd.GameStates.BuildingState
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
 
-            Debug.Log("err start");
+            // Debug.Log("err start");
             _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
             SystemAPI.TryGetSingletonEntity<BuildPrefabsComponent>(out Entity ga);
-            H.T(ga.ToString());
             Debug.Log("err stop");
 
             // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
@@ -113,7 +112,7 @@ namespace Jrd.GameStates.BuildingState
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
 
-                UI_old.BuildingPanel.SetButtonEnabled(_tempSelectedBuildID, true);
+                UI_old.BuildingPanelUI.SetButtonEnabled(_tempSelectedBuildID, true);
                 _tempSelectedBuildID = -1;
             }
             else

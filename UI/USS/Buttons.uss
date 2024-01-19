@@ -1,21 +1,31 @@
 .bottom-panel {
     flex-grow: 1;
     position: absolute;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     display: flex;
-    bottom: 10px;
+    bottom: 0;
+    height: 34px;
+    align-self: center;
+    width: 300px;
+    flex-basis: auto;
+    top: auto;
+    flex-wrap: wrap;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 
 .button {
-    height: 30px;
+    height: 24px;
     width: 70px;
     border-radius: 0;
     border-width: 0;
     margin: 5px;
     -unity-background-scale-mode: stretch-to-fill;
-    font-size: 10px;
+    font-size: 8px;
     justify-content: center;
     align-items: center;
     align-self: center;
@@ -24,4 +34,54 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     -unity-font-style: bold;
+    padding: 7px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-bottom-width: 1px;
+    border-right-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(0, 0, 0, 0.59);
+    border-right-color: rgba(0, 0, 0, 0.59);
+    border-top-color: rgba(0, 0, 0, 0.59);
+    border-bottom-color: rgba(0, 0, 0, 0.59);
+}
+
+.button-sq {
+    height: 32px;
+    width: 32px;
+    border-radius: 0;
+    border-width: 0;
+    margin: 5px;
+    -unity-background-scale-mode: stretch-to-fill;
+    font-size: 8px;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    -unity-font-style: bold;
+    padding: 7px;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    border-bottom-width: 1px;
+    border-right-width: 0;
+    border-left-width: 0;
+    border-left-color: rgba(0, 0, 0, 0.59);
+    border-right-color: rgba(0, 0, 0, 0.59);
+    border-top-color: rgba(0, 0, 0, 0.59);
+    border-bottom-color: rgba(0, 0, 0, 0.59);
 }

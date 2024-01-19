@@ -46,9 +46,9 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 names.Add("coll+rig");
                 names.Add("coll+rig+kin");
 
-                UI_old.BuildingPanel.InstantiateButtons(buildingPanel.ValueRO.BuildingPrefabsCount, names
+                UI_old.BuildingPanelUI.InstantiateButtons(buildingPanel.ValueRO.BuildingPrefabsCount, names
                 );
-                UI_old.BuildingPanel.ShowBPanel();
+                UI_old.BuildingPanelUI.ShowBPanel();
                 names.Dispose();
 
                 visibility.ValueRW.IsVisible = true;
@@ -62,7 +62,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 Debug.Log("hide");
                 _bsEcb.RemoveComponent<HideVisualElementTag>(entity);
 
-                UI_old.BuildingPanel.HideBPanel();
+                UI_old.BuildingPanelUI.HideBPanel();
 
                 q.ValueRW.IsVisible = false;
             }

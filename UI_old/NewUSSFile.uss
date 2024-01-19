@@ -31,3 +31,26 @@ VisualElement {
 
 .test-style {
 }
+
+.header-button {
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size: 8px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+}
