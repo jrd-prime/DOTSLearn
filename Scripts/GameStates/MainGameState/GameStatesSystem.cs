@@ -51,7 +51,7 @@ namespace Jrd.GameStates.MainGameState
                     if (_buildingStateEntity == Entity.Null)
                     {
                         _buildingStateEntity = InitState(new ComponentTypeSet(
-                                typeof(BuildingStateComponent)),
+                                typeof(BuildingStateComponent), typeof(BuildingStateData)),
                             BSConst.BuildingStateEntityName);
                         _gameStateData.ValueRW.BuildingStateEntity = _buildingStateEntity;
                     }

@@ -8,6 +8,8 @@ namespace Jrd
 {
     public class BuildingPanel : MonoBehaviour
     {
+        [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
+
         private VisualElement _root;
 
         private VisualElement _buildingPanel;
@@ -30,6 +32,10 @@ namespace Jrd
 
 
             if (_buildingPanel != null) _buildingPanel.style.display = DisplayStyle.None;
+            if (_buildingButtonTemplate == null)
+            {
+                Debug.LogError("ButtonTemplate not added to script. " + this);
+            }
         }
 
         public void Show()

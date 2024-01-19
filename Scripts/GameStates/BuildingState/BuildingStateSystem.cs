@@ -1,4 +1,6 @@
-﻿using Jrd.GameStates.BuildingState.BuildingPanel;
+﻿using System;
+using System.Collections.Generic;
+using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
@@ -37,6 +39,7 @@ namespace Jrd.GameStates.BuildingState
             _em = EntityManager;
         }
 
+
         protected override void OnStartRunning()
         {
             _tempSelectedBuildID = -1;
@@ -44,17 +47,17 @@ namespace Jrd.GameStates.BuildingState
             if (!_stateVisualComponents.IsCreated)
                 _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent); // TODO подумать
 
-            UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
-            ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
-            ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
+            // UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
+            // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
+            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
         }
 
         protected override void OnStopRunning()
         {
             _stateVisualComponents.Dispose();
-            UI_old.BuildingPanelUI.OnBuildSelected -= BuildSelected;
-            ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
-            ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
+            // UI_old.BuildingPanelUI.OnBuildSelected -= BuildSelected;
+            // ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
+            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
 
         protected override void OnUpdate()

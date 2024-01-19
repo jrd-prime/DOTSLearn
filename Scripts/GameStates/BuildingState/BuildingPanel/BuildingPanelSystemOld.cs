@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Jrd.GameStates.BuildingState.BuildingPanel
 {
     [UpdateAfter(typeof(BuildingStateSystem))]
-    public partial class BuildingPanelSystem : SystemBase
+    public partial class BuildingPanelSystemOld : SystemBase
     {
         private Entity _buildPrefabsComponent;
         private EntityCommandBuffer _bsEcb;
@@ -48,7 +48,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
 
                 UI_old.BuildingPanelUI.InstantiateButtons(buildingPanel.ValueRO.BuildingPrefabsCount, names
                 );
-                UI_old.BuildingPanelUI.ShowBPanel();
+                // UI_old.BuildingPanelUI.ShowBPanel();
                 names.Dispose();
 
                 visibility.ValueRW.IsVisible = true;
@@ -62,7 +62,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
                 Debug.Log("hide");
                 _bsEcb.RemoveComponent<HideVisualElementTag>(entity);
 
-                UI_old.BuildingPanelUI.HideBPanel();
+                // UI_old.BuildingPanelUI.HideBPanel();
 
                 q.ValueRW.IsVisible = false;
             }

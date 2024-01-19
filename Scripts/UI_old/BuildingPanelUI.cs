@@ -55,7 +55,7 @@ namespace Jrd.UI_old
 
             _tempSelectedBuildID = -1;
             OnBuildSelected += BuildSelected;
-            ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
+            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
         }
 
         private void CancelBuilding()
@@ -67,7 +67,7 @@ namespace Jrd.UI_old
         private void OnDisable()
         {
             OnBuildSelected -= BuildSelected;
-            ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
+            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
         }
 
         private void BuildSelected(Button button, int index)
@@ -113,38 +113,9 @@ namespace Jrd.UI_old
             });
         }
 
-        public static void SetRootDisplay(DisplayStyle displayStyle)
-        {
-            BuildingsPanelRoot.style.display = displayStyle;
-        }
-
         public static void SetButtonEnabled(int id, bool enabled)
         {
             _root.Query<Button>().AtIndex(id).SetEnabled(enabled);
-        }
-
-        public static void ShowBPanel()
-        {
-            BuildingsPanelRoot.style.display = DisplayStyle.Flex;
-            BuildingsPanelRoot.experimental.animation
-                .Start(
-                    new StyleValues { bottom = BottomHided },
-                    new StyleValues { bottom = BottomShowed },
-                    ShowDuration)
-                .Ease(Easing.OutElastic)
-                .KeepAlive();
-        }
-
-        public static void HideBPanel()
-        {
-            BuildingsPanelRoot.experimental.animation
-                .Start(
-                    new StyleValues { bottom = BottomShowed },
-                    new StyleValues { bottom = BottomHided },
-                    HideDuration)
-                .Ease(Easing.InQuad)
-                .KeepAlive()
-                .onAnimationCompleted = () => BuildingsPanelRoot.style.display = DisplayStyle.None;
         }
     }
 }

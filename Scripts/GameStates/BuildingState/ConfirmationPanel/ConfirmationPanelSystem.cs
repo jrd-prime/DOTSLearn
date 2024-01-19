@@ -31,7 +31,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
                          .WithAll<ConfirmationPanelTag, ShowVisualElementTag>()
                          .WithEntityAccess())
             {
-                ConfirmationPanelUI.ShowApplyPanel();
+                // ConfirmationPanelUI.ShowApplyPanel();
                 visibilityComponent.ValueRW.IsVisible = true;
                 ecb.RemoveComponent<ShowVisualElementTag>(entity);
             }
@@ -44,7 +44,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
                 Debug.Log("hide");
                 ecb.RemoveComponent<HideVisualElementTag>(entity);
                 q.ValueRW.IsVisible = false;
-                ConfirmationPanelUI.HideApplyPanel();
+                // ConfirmationPanelUI.HideApplyPanel();
             }
 
             ecb.Playback(EntityManager);
