@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 namespace Jrd
 {
-    public class MainUIButtons : MonoBehaviour
+    public class MainUIButtonsMono : MonoBehaviour, IVisibleElement
     {
         private VisualElement _root;
         private VisualElement _confirmationPanel;
@@ -14,10 +14,10 @@ namespace Jrd
 
         // Right bottom
         private VisualElement _buildingStateButtonContainer;
-        private Button _buildingStateButton;
+        public static Button BuildingStateButton;
 
-        public static MainUIButtons Instance { private set; get; }
-        
+        public static MainUIButtonsMono Instance { private set; get; }
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -28,10 +28,20 @@ namespace Jrd
             _root = GetComponent<UIDocument>().rootVisualElement;
 
             _buildingStateButtonContainer = _root.Q<VisualElement>("building-state-button-container");
-            _buildingStateButton = _root.Q<Button>("building-state-button");
+            BuildingStateButton = _root.Q<Button>("building-state-button");
 
 
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
+        }
+
+        public void Show()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Hide()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

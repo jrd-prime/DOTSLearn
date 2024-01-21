@@ -1,4 +1,5 @@
 using System;
+using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.UI.BuildingState;
 using Unity.Entities;
 using UnityEngine;
@@ -51,13 +52,11 @@ namespace Jrd.DebSet
 
             Ton.clicked += () =>
             {
-                BuildingPanel.Instance.Show();
-                ConfirmationPanel.Instance.Show();
+                ConfirmationPanelMono.Instance.Show();
             };
             Toff.clicked += () =>
             {
-                BuildingPanel.Instance.Hide();
-                ConfirmationPanel.Instance.Hide();
+                ConfirmationPanelMono.Instance.Hide();
             };
         }
 
@@ -69,8 +68,8 @@ namespace Jrd.DebSet
 
         private void OnDisable()
         {
-            Ton.clicked -= ConfirmationPanel.Instance.Show;
-            Toff.clicked -= ConfirmationPanel.Instance.Hide;
+            Ton.clicked -= ConfirmationPanelMono.Instance.Show;
+            Toff.clicked -= ConfirmationPanelMono.Instance.Hide;
         }
     }
 }

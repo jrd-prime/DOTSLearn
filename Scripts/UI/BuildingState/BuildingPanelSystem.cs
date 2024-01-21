@@ -1,29 +1,28 @@
-﻿using Jrd.GameStates;
+﻿using Jrd.GameStates.BuildingState.BuildingPanel;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.UI.BuildingState
 {
+    [UpdateAfter(typeof(InitUISystem))]
     public partial struct BuildingPanelSystem : ISystem
     {
+        private EntityManager _entityManager;
         private Entity _buildingPanelEntity;
 
         public void OnCreate(ref SystemState state)
         {
-            _buildingPanelEntity = state.EntityManager.CreateEntity();
-        }
+            _entityManager = state.EntityManager;
+            _buildingPanelEntity = SystemAPI.GetSingletonEntity<BuildingPanelData>();
 
-        public void OnDestroy(ref SystemState state)
-        {
+            state.RequireForUpdate<BuildingPanelData>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            if (!SystemAPI.HasComponent<ShowVisualElementTag>(_buildingPanelEntity))
-            {
-                Debug.Log("dont show");
-            }else{
-                Debug.Log("SHOW");}
+            var buildingPanelData = SystemAPI.GetComponentRO<BuildingPanelData>(_buildingPanelEntity).ValueRO;
+
+
+            BuildingPanelMono.Instance.ShowElement(buildingPanelData.SetVisible);
         }
     }
 }

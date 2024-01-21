@@ -729,6 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bc8c04d9e8afd4baf621f2b2fa20b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _buildingButtonTemplate: {fileID: 0}
 --- !u!114 &1251201943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,7 +746,7 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: aa837bfa037e03242a2080bfb619be9c,
     type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 10
 --- !u!1 &1264200694
 GameObject:
   m_ObjectHideFlags: 0

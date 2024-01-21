@@ -1,12 +1,10 @@
-﻿using System;
-using Jrd.DebSet;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.UI.BuildingState
 {
-    public class ConfirmationPanel : MonoBehaviour
+    public class ConfirmationPanelMono : MonoBehaviour, IVisibleElement
     {
         private VisualElement _root;
         private VisualElement _confirmationPanel;
@@ -14,7 +12,7 @@ namespace Jrd.UI.BuildingState
         private Button _applyButton;
         private Label _text;
 
-        public static ConfirmationPanel Instance { private set; get; }
+        public static ConfirmationPanelMono Instance { private set; get; }
 
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;

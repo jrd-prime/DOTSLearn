@@ -21,7 +21,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<ConfirmationPanelTag>();
+            state.RequireForUpdate<ConfirmationPanelData>();
             state.RequireForUpdate<GameBuildingsData>();
         }
 
@@ -31,7 +31,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
 
-            Entity confirmationPanelEntity = SystemAPI.GetSingletonEntity<ConfirmationPanelTag>();
+            Entity confirmationPanelEntity = SystemAPI.GetSingletonEntity<ConfirmationPanelData>();
 
             NativeHashMap<FixedString64Bytes, BuildingData> gameBuildings =
                 SystemAPI.GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;

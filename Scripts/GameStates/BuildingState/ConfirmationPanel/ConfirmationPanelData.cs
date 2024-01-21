@@ -2,7 +2,8 @@
 
 namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 {
-    public struct ConfirmationPanelTag : IComponentData
+    public struct ConfirmationPanelData :  IComponentData
     {
+        public bool SetVisible;
     }
 }

@@ -17,7 +17,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
         protected override void OnCreate()
         {
             RequireForUpdate<BuildPrefabsComponent>();
-            RequireForUpdate<ConfirmationPanelTag>();
+            RequireForUpdate<ConfirmationPanelData>();
         }
 
         protected override void OnStartRunning()

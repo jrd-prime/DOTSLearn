@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Jrd.GameStates.BuildingState.BuildingPanel;
+﻿using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
-using Jrd.JUtils;
-using Jrd.UI_old;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -17,7 +13,8 @@ namespace Jrd.GameStates.BuildingState
     [UpdateAfter(typeof(GameStatesSystem))]
     public partial class BuildingStateSystem : SystemBase
     {
-        private EntityManager _em;
+        private RefRW<BuildingPanelData> _a;
+        private EntityManager _entityManager;
         private NativeList<Entity> _stateVisualComponents;
         private BeginSimulationEntityCommandBufferSystem.Singleton _bsEcbSystem;
         private BeginInitializationEntityCommandBufferSystem.Singleton _biEcbSystem;
@@ -31,26 +28,36 @@ namespace Jrd.GameStates.BuildingState
         private int _tempSelectedBuildID;
         private Entity _buildPrefabsComponentEntity;
 
+        private RefRW<BuildingPanelData> _buildingPanelData;
+
         protected override void OnCreate()
         {
             RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             RequireForUpdate<GameStateData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _em = EntityManager;
+            _entityManager = EntityManager;
         }
-
 
         protected override void OnStartRunning()
         {
             _tempSelectedBuildID = -1;
 
+            // TODO think
             if (!_stateVisualComponents.IsCreated)
-                _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent); // TODO подумать
+                _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent);
 
             // UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
+
+            MainUIButtonsMono.BuildingStateButton.clicked += SetBuildingPanelVisibility;
         }
+
+        private void SetBuildingPanelVisibility()
+        {
+            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
+        }
+
 
         protected override void OnStopRunning()
         {
@@ -58,11 +65,13 @@ namespace Jrd.GameStates.BuildingState
             // UI_old.BuildingPanelUI.OnBuildSelected -= BuildSelected;
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
             // ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
+            MainUIButtonsMono.BuildingStateButton.clicked -= SetBuildingPanelVisibility;
         }
 
         protected override void OnUpdate()
         {
             _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
+            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
 
             _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -74,7 +83,7 @@ namespace Jrd.GameStates.BuildingState
             SystemAPI.TryGetSingletonEntity<BuildPrefabsComponent>(out Entity ga);
             Debug.Log("err stop");
 
-            // Init by tag // LOOK TODO вытащить в отдельную систему обобщенную
+            // Init by tag
             foreach (var (buildingStateComponent, entity) in SystemAPI
                          .Query<RefRW<BuildingStateComponent>>()
                          .WithAll<InitializeTag>()
@@ -94,7 +103,7 @@ namespace Jrd.GameStates.BuildingState
                     });
 
                 _confirmationPanel =
-                    GetCustomEntityVisualElementComponent<ConfirmationPanelTag>(
+                    GetCustomEntityVisualElementComponent<ConfirmationPanelData>(
                         BSConst.ConfirmationPanelEntityName);
 
                 if (_stateVisualComponents.Length == 0)
@@ -182,14 +191,11 @@ namespace Jrd.GameStates.BuildingState
         private Entity GetCustomEntityVisualElementComponent<T>(FixedString64Bytes entityName)
             where T : unmanaged, IComponentData
         {
-            var entity = _em.CreateEntity(); // TODO
+            var entity = _entityManager.CreateEntity(); // TODO
             _stateVisualComponents.Add(entity);
 
             _bsEcb.AddComponent<T>(entity);
-            _bsEcb.AddComponent<VisibilityComponent>(entity);
-
-            _bsEcb.SetComponent(entity, new VisibilityComponent { IsVisible = false });
-
+            _bsEcb.AddComponent(entity, new VisibilityComponent { IsVisible = false });
             _bsEcb.SetName(entity, $"{BSConst.Prefix} {entityName}");
 
             return entity;

@@ -27,8 +27,8 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 
             // SHOW // LOOK подумать, т.к. в каждой панели будет +- такие же шоу/хайд
             foreach (var (buildingPanelComponent, visibilityComponent, entity) in SystemAPI
-                         .Query<RefRO<ConfirmationPanelTag>, RefRW<VisibilityComponent>>()
-                         .WithAll<ConfirmationPanelTag, ShowVisualElementTag>()
+                         .Query<RefRO<ConfirmationPanelData>, RefRW<VisibilityComponent>>()
+                         .WithAll<ConfirmationPanelData, ShowVisualElementTag>()
                          .WithEntityAccess())
             {
                 // ConfirmationPanelUI.ShowApplyPanel();
@@ -38,7 +38,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 
             // HIDE // LOOK подумать, т.к. в каждой панели будет +- такие же шоу/хайд
             foreach (var (q, entity) in SystemAPI.Query<RefRW<VisibilityComponent>>()
-                         .WithAll<ConfirmationPanelTag, HideVisualElementTag>()
+                         .WithAll<ConfirmationPanelData, HideVisualElementTag>()
                          .WithEntityAccess())
             {
                 Debug.Log("hide");
