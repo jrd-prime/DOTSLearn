@@ -16,10 +16,11 @@ namespace Jrd
         private static GroupBox _buttonsContainer;
 
         public static BuildingPanelMono Instance { private set; get; }
+        public bool IsVisible { private set; get; }
 
-        private const int ShowDuration = 1000;
-        private const int HideDuration = 500;
-        private const float PanelHeight = 34f;
+        private const int ShowDuration = 1;
+        private const int HideDuration = 1;
+        private const float PanelHeight = 333f;
         private const float BottomMargin = 10f;
 
         private void Awake()
@@ -30,31 +31,46 @@ namespace Jrd
         private void OnEnable()
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
-
             _buildingPanel = _root.Q<VisualElement>(BuildingPanelName);
             _buttonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
 
 
-            if (_buildingPanel != null) _buildingPanel.style.display = DisplayStyle.None;
+            if (_buildingPanel != null)
+            {
+                _buildingPanel.style.display = DisplayStyle.None;
+                IsVisible = false;
+            }
+
             if (_buildingButtonTemplate == null)
             {
                 Debug.LogError("ButtonTemplate not added to script. " + this);
             }
         }
 
-        public void ShowElement(bool value)
+        #region Show/Hide Panel
+
+        public void SetElementVisible(bool value)
         {
-            _buildingPanel.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
-            // TODO set animations
+            switch (IsVisible)
+            {
+                case false when value:
+                    Show();
+                    IsVisible = true;
+                    break;
+                case true when !value:
+                    Hide();
+                    IsVisible = false;
+                    break;
+            }
         }
 
         public void Show()
         {
-            Debug.Log("show ui");
             _buildingPanel.style.display = DisplayStyle.Flex;
+
             _buildingPanel.experimental.animation
                 .Start(
-                    new StyleValues { bottom = PanelHeight * -1 },
+                    new StyleValues { bottom = PanelHeight },
                     new StyleValues { bottom = BottomMargin },
                     ShowDuration)
                 .Ease(Easing.OutElastic)
@@ -66,12 +82,13 @@ namespace Jrd
             _buildingPanel.experimental.animation
                 .Start(
                     new StyleValues { bottom = BottomMargin },
-                    new StyleValues { bottom = PanelHeight * -1 },
+                    new StyleValues { bottom = PanelHeight },
                     HideDuration)
                 .Ease(Easing.InQuad)
                 .KeepAlive()
-                .onAnimationCompleted = () =>
-                _buildingPanel.style.display = DisplayStyle.None;
+                .onAnimationCompleted = () => _buildingPanel.style.display = DisplayStyle.None;
         }
+
+        #endregion
     }
 }

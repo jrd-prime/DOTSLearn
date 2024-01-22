@@ -1,4 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.BuildingPanel;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace Jrd.UI.BuildingState
@@ -21,8 +22,19 @@ namespace Jrd.UI.BuildingState
         {
             var buildingPanelData = SystemAPI.GetComponentRO<BuildingPanelData>(_buildingPanelEntity).ValueRO;
 
+            BuildingPanelMono.Instance.SetElementVisible(buildingPanelData.SetVisible);
 
-            BuildingPanelMono.Instance.ShowElement(buildingPanelData.SetVisible);
+            var names = new NativeList<FixedString32Bytes>(buildingPanelData.BuildingPrefabsCount,
+                Allocator.Temp);
+            names.Add("1x1");
+            names.Add("2x2");
+            names.Add("coll");
+            names.Add("coll+rig");
+            names.Add("coll+rig+kin");
+
+            // UI_old.BuildingPanelUI.InstantiateButtons(buildingPanelData.BuildingPrefabsCount, names);
+
+            names.Dispose();
         }
     }
 }

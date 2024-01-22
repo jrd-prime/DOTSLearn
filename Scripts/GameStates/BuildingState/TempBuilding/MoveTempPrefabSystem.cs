@@ -26,6 +26,8 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
+            if (Input.touchCount == 0) return;
+
             Touch touch = Input.GetTouch(0);
 
             Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);

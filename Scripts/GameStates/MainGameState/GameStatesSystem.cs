@@ -4,6 +4,7 @@ using Unity.Entities;
 
 namespace Jrd.GameStates.MainGameState
 {
+    [UpdateAfter(typeof(InitStatesSystem))]
     public partial struct GameStatesSystem : ISystem
     {
         private GameState _gameState;
@@ -20,54 +21,40 @@ namespace Jrd.GameStates.MainGameState
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
 
             _em = state.EntityManager;
-
-
-            _gameStateEntity = _em.CreateEntity();
-            _em.SetName(_gameStateEntity, "___ Game State Entity");
-            _em.AddComponent<GameStateData>(_gameStateEntity);
-            _em.AddComponent<GameBuildingsData>(_gameStateEntity);
-            _em.SetComponentData(_gameStateEntity, new GameStateData
-            {
-                Self = _gameStateEntity,
-                CurrentGameState = GameState.GamePlayState,
-                BuildingStateEntity = Entity.Null
-            });
-            _em.AddComponent<ChangeGameStateComponent>(_gameStateEntity);
-            _em.SetComponentData(_gameStateEntity,
-                new ChangeGameStateComponent { GameState = GameState.GamePlayState });
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            _ecbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            _biEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
+            // _ecbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            // _biEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
 
-            _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).CurrentGameState;
-            _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
+            // _gameState = SystemAPI.GetComponent<GameStateData>(_gameStateEntity).CurrentGameState;
+            // _gameStateData = SystemAPI.GetComponentRW<GameStateData>(_gameStateEntity); // TODO aspect
 
-            switch (_gameState)
-            {
-                case GameState.BuildingState:
-                    if (_buildingStateEntity == Entity.Null)
-                    {
-                        _buildingStateEntity = InitState(new ComponentTypeSet(
-                                typeof(BuildingStateComponent), typeof(BuildingStateData)),
-                            BSConst.BuildingStateEntityName);
-                        _gameStateData.ValueRW.BuildingStateEntity = _buildingStateEntity;
-                    }
-
-                    break;
-                case GameState.GamePlayState:
-                    if (_buildingStateEntity != Entity.Null)
-                    {
-                        _buildingStateEntity = Entity.Null;
-                        _gameStateData.ValueRW.BuildingStateEntity = Entity.Null;
-                    }
-
-                    break;
-                default:
-                    break;
-            }
+            // switch (_gameState)
+            // {
+            //     case GameState.BuildingState:
+            //         if (_buildingStateEntity == Entity.Null)
+            //         {
+            //             // Debug.Log("we create");
+            //             // _buildingStateEntity = InitState(new ComponentTypeSet(
+            //             //         typeof(BuildingStateComponent), typeof(BuildingStateData)),
+            //             //     BSConst.BuildingStateEntityName);
+            //             _gameStateData.ValueRW.BuildingStateEntity = _buildingStateEntity;
+            //         }
+            //
+            //         break;
+            //     case GameState.GamePlayState:
+            //         if (_buildingStateEntity != Entity.Null)
+            //         {
+            //             _buildingStateEntity = Entity.Null;
+            //             _gameStateData.ValueRW.BuildingStateEntity = Entity.Null;
+            //         }
+            //
+            //         break;
+            //     default:
+            //         break;
+            // }
         }
 
 

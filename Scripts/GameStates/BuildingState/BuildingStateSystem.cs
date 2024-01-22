@@ -1,5 +1,4 @@
 ﻿using Jrd.GameStates.BuildingState.BuildingPanel;
-using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
@@ -21,13 +20,13 @@ namespace Jrd.GameStates.BuildingState
         private EntityCommandBuffer _bsEcb;
         private EntityCommandBuffer _biEcb;
 
-        private Entity _buildingPanel;
         private Entity _confirmationPanel;
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
         private Entity _buildPrefabsComponentEntity;
 
+        private RefRW<BuildingStateData> _buildingStateData;
         private RefRW<BuildingPanelData> _buildingPanelData;
 
         protected override void OnCreate()
@@ -41,79 +40,50 @@ namespace Jrd.GameStates.BuildingState
         protected override void OnStartRunning()
         {
             _tempSelectedBuildID = -1;
-
-            // TODO think
-            if (!_stateVisualComponents.IsCreated)
-                _stateVisualComponents = new NativeList<Entity>(Allocator.Persistent);
+            MainUIButtonsMono.BuildingStateButton.clicked += OnBuildingStateSelected;
 
             // UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
-
-            MainUIButtonsMono.BuildingStateButton.clicked += SetBuildingPanelVisibility;
         }
-
-        private void SetBuildingPanelVisibility()
-        {
-            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
-        }
-
-
+        
         protected override void OnStopRunning()
         {
-            _stateVisualComponents.Dispose();
-            // UI_old.BuildingPanelUI.OnBuildSelected -= BuildSelected;
-            // ConfirmationPanelUI.ApplyPanelApplyButton.clicked -= ConfirmBuilding;
-            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked -= CancelBuilding;
-            MainUIButtonsMono.BuildingStateButton.clicked -= SetBuildingPanelVisibility;
+            MainUIButtonsMono.BuildingStateButton.clicked -= OnBuildingStateSelected;
+        }
+
+        private void OnBuildingStateSelected()
+        {
+            // Building Panel
+            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
         }
 
         protected override void OnUpdate()
         {
+            {
+                _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
+                _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
+                _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
+            }
+
             _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
+
+            _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
             _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
-
-            _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
-
-            // Debug.Log("err start");
             _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
 
-            SystemAPI.TryGetSingletonEntity<BuildPrefabsComponent>(out Entity ga);
-            Debug.Log("err stop");
+            if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
+        }
 
-            // Init by tag
-            foreach (var (buildingStateComponent, entity) in SystemAPI
-                         .Query<RefRW<BuildingStateComponent>>()
-                         .WithAll<InitializeTag>()
-                         .WithEntityAccess())
-            {
-                // Is init?
-                if (buildingStateComponent.ValueRO.IsInitialized) return;
+        private void Initialize()
+        {
+            Debug.Log("Initialize Building State Data");
 
-                _buildingPanel =
-                    GetCustomEntityVisualElementComponent<BuildingPanelComponent>(BSConst.BuildingPanelEntityName);
-                _bsEcb.AddComponent<ShowVisualElementTag>(_buildingPanel);
-                _bsEcb.SetComponent(_buildingPanel,
-                    new BuildingPanelComponent
-                    {
-                        BuildingPrefabsCount =
-                            SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity).Length
-                    });
+            int buildingsPrefabsCount = SystemAPI
+                .GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity).Length;
 
-                _confirmationPanel =
-                    GetCustomEntityVisualElementComponent<ConfirmationPanelData>(
-                        BSConst.ConfirmationPanelEntityName);
-
-                if (_stateVisualComponents.Length == 0)
-                    Debug.LogWarning("We have a problem with create entities for Building State");
-
-                _bsEcb.RemoveComponent<InitializeTag>(entity);
-
-                buildingStateComponent.ValueRW.Self = entity;
-                buildingStateComponent.ValueRW.IsInitialized = true;
-            }
+            _buildingStateData.ValueRW.BuildingPrefabsCount = buildingsPrefabsCount;
+            _buildingStateData.ValueRW.IsInitialized = true;
         }
 
         private void ConfirmBuilding()
@@ -186,19 +156,6 @@ namespace Jrd.GameStates.BuildingState
             }
 
             Debug.LogError("Prefabs: " + prefabElements.Length);
-        }
-
-        private Entity GetCustomEntityVisualElementComponent<T>(FixedString64Bytes entityName)
-            where T : unmanaged, IComponentData
-        {
-            var entity = _entityManager.CreateEntity(); // TODO
-            _stateVisualComponents.Add(entity);
-
-            _bsEcb.AddComponent<T>(entity);
-            _bsEcb.AddComponent(entity, new VisibilityComponent { IsVisible = false });
-            _bsEcb.SetName(entity, $"{BSConst.Prefix} {entityName}");
-
-            return entity;
         }
     }
 }

@@ -34,6 +34,11 @@ namespace Jrd
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
         }
 
+        public void SetElementVisible(bool value)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Show()
         {
             throw new System.NotImplementedException();

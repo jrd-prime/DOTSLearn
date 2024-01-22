@@ -36,6 +36,11 @@ namespace Jrd.UI.BuildingState
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
         }
 
+        public void SetElementVisible(bool value)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Show()
         {
             _confirmationPanel.style.display = DisplayStyle.Flex;
