@@ -3,21 +3,24 @@
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
-    <ui:VisualElement name="building-panel" focusable="false" picking-mode="Ignore" class="bg-white-with-transparent building-panel">
-        <ui:VisualElement name="head-container" class="head-container" style="-unity-text-align: middle-center; height: 40px; width: 590px;">
-            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" style="position: absolute; left: 8px;" />
-            <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="head-text" style="align-self: center; align-items: center; justify-content: center; width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
-            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" style="position: absolute; right: 8px;" />
+    <ui:VisualElement name="building-panel" focusable="false" picking-mode="Ignore" class="building-panel">
+        <ui:VisualElement name="head-container" class="head-container">
+            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" style="position: absolute; left: 20px;" />
+            <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="head-text" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" style="position: absolute; right: 20px;" />
         </ui:VisualElement>
         <ui:VisualElement name="content-container" class="content-container">
-            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="background-color: rgba(173, 87, 87, 0); width: 600px; height: 240px; align-self: flex-start; align-items: flex-start; flex-direction: row;">
-                <ui:GroupBox name="groupbox" class="groupbox" style="flex-direction: row; align-items: flex-start; align-self: center; height: 240px; overflow: hidden;">
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="background-color: rgba(173, 87, 87, 0); width: 580px; height: 200px; align-self: flex-start; align-items: flex-start; flex-direction: row; overflow: hidden;">
+                <ui:GroupBox name="groupbox" class="groupbox">
                     <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
                     <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
                     <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
                     <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
                 </ui:GroupBox>
             </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="foot-container" class="foot-container">
+            <ui:Label tabindex="-1" text="Coins" parse-escape-sequences="true" display-tooltip-when-elided="true" name="foot-text" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
