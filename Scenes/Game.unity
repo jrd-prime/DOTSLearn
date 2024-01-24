@@ -166,7 +166,6 @@ GameObject:
   m_Component:
   - component: {fileID: 159037458}
   - component: {fileID: 159037459}
-  - component: {fileID: 159037460}
   m_Layer: 0
   m_Name: EditModeUI
   m_TagString: Untagged
@@ -206,18 +205,6 @@ MonoBehaviour:
   sourceAsset: {fileID: 9197481963319205126, guid: 51195544f052aec46b9b814006ed5cd3,
     type: 3}
   m_SortingOrder: 0
---- !u!114 &159037460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 159037457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a2e26ba6eaa4de7a109b59d7a9c6120, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,7 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bc8c04d9e8afd4baf621f2b2fa20b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingButtonTemplate: {fileID: 9197481963319205126, guid: 3fbde254982dc1e47ae103883f76e418,
+  _buildingButtonTemplate: {fileID: 9197481963319205126, guid: 94372e4d90ea01a4fb6a80d170c4b2b0,
     type: 3}
 --- !u!114 &1251201943
 MonoBehaviour:
@@ -1428,7 +1415,7 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: fe727aaf619320b428fbf988afbbd134,
     type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 12
 --- !u!114 &2037710765
 MonoBehaviour:
   m_ObjectHideFlags: 0

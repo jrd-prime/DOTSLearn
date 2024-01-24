@@ -24,7 +24,7 @@ namespace Jrd.GameStates.BuildingState
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
-        private Entity _buildPrefabsComponentEntity;
+        private DynamicBuffer<BuildingsPrefabsBuffer> _buildingsPrefabsBuffer;
 
         private RefRW<BuildingStateData> _buildingStateData;
         private RefRW<BuildingPanelData> _buildingPanelData;
@@ -46,7 +46,7 @@ namespace Jrd.GameStates.BuildingState
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
         }
-        
+
         protected override void OnStopRunning()
         {
             MainUIButtonsMono.BuildingStateButton.clicked -= OnBuildingStateSelected;
@@ -54,12 +54,22 @@ namespace Jrd.GameStates.BuildingState
 
         private void OnBuildingStateSelected()
         {
+            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
             // Building Panel
             _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
         }
 
         protected override void OnUpdate()
         {
+            // LOOK wait load
+            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsPrefabsBuffer> buffer))
+            {
+                Debug.LogError("Buffer error. Return.. " + this);
+                return;
+            }
+
+            _buildingsPrefabsBuffer = buffer;
+
             {
                 _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
                 _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -70,7 +80,7 @@ namespace Jrd.GameStates.BuildingState
 
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
             _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
-            _buildPrefabsComponentEntity = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
+
 
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
@@ -79,8 +89,7 @@ namespace Jrd.GameStates.BuildingState
         {
             Debug.Log("Initialize Building State Data");
 
-            int buildingsPrefabsCount = SystemAPI
-                .GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity).Length;
+            int buildingsPrefabsCount = _buildingsPrefabsBuffer.Length;
 
             _buildingStateData.ValueRW.BuildingPrefabsCount = buildingsPrefabsCount;
             _buildingStateData.ValueRW.IsInitialized = true;
@@ -138,24 +147,22 @@ namespace Jrd.GameStates.BuildingState
                 Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanel." + this);
             }
 
-            var prefabElements = SystemAPI.GetBuffer<PrefabBufferElements>(_buildPrefabsComponentEntity);
-
-            if (!prefabElements.IsEmpty)
+            if (!_buildingsPrefabsBuffer.IsEmpty)
             {
                 _bsEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
                 _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
                     new InstantiateTempPrefabComponent
                     {
-                        Prefab = prefabElements[index].PrefabEntity,
-                        Name = prefabElements[index].PrefabName
+                        Prefab = _buildingsPrefabsBuffer[index].PrefabEntity,
+                        Name = _buildingsPrefabsBuffer[index].PrefabName
                     });
 
                 Debug.Log(
-                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {prefabElements[index].PrefabName}");
+                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].PrefabName}");
                 return;
             }
 
-            Debug.LogError("Prefabs: " + prefabElements.Length);
+            Debug.LogError("Prefabs: " + _buildingsPrefabsBuffer.Length);
         }
     }
 }

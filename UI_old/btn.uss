@@ -3,9 +3,10 @@
 }
 
 .btn-active:hover {
-
     background-color: rgb(33, 20, 50);
 }
 
 .manu-button {
+    width: 100px;
+    height: 24px;
 }

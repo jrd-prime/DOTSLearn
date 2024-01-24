@@ -6,26 +6,27 @@ namespace Jrd.GameStates.BuildingState.Prefabs
 {
     public class BuildPrefabsAuthoring : MonoBehaviour
     {
-        public List<GameObject> prefabs;
+        public List<GameObject> _prefabs;
 
-        public class Baker : Baker<BuildPrefabsAuthoring>
+        private class Baker : Baker<BuildPrefabsAuthoring>
         {
             public override void Bake(BuildPrefabsAuthoring authoring)
             {
-                var e = GetEntity(TransformUsageFlags.Dynamic);
-                var buffer = AddBuffer<PrefabBufferElements>(e);
-        
-                foreach (var prefab in authoring.prefabs)
+                var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+                
+                AddComponent<BuildPrefabsComponent>(entity);
+                
+                var buffer = AddBuffer<BuildingsPrefabsBuffer>(entity);
+
+                foreach (var prefab in authoring._prefabs)
                 {
-                    buffer.Add(new PrefabBufferElements
+                    buffer.Add(new BuildingsPrefabsBuffer
                     {
                         PrefabEntity = GetEntity(prefab, TransformUsageFlags.Dynamic),
                         PrefabName = prefab.name
                     });
                 }
-        
-                // buffer.Clear();
-                AddComponent<BuildPrefabsComponent>(e);
+
             }
         }
     }

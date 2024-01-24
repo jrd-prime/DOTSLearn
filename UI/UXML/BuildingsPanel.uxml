@@ -1,23 +1,21 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="buildings-button-template" src="project://database/Assets/UI_old/Templates/buildings-button-template.uxml?fileID=9197481963319205126&amp;guid=9b6daf195c9c1304f8baabc235f0ac5d&amp;type=3#buildings-button-template" />
+    <ui:Template name="card" src="project://database/Assets/UI/UXML/Templates/card.uxml?fileID=9197481963319205126&amp;guid=94372e4d90ea01a4fb6a80d170c4b2b0&amp;type=3#card" />
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
-    <ui:VisualElement name="building-panel" focusable="false" picking-mode="Ignore" class="bg-white-with-transparent" style="flex-grow: 1; flex-direction: column; width: 70%; align-items: center; justify-content: center; align-self: center; bottom: auto; transform-origin: right bottom; height: 80%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-wrap: nowrap; -unity-text-align: middle-center; position: absolute; left: 15%; top: 10%; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
-        <ui:VisualElement name="head-container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; padding-bottom: 0; margin-bottom: 10px; align-items: center; justify-content: center; align-self: center; font-size: 10px; -unity-font-style: bold;">
-            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" />
-            <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="head-text" style="flex-grow: 1;" />
-            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" />
+    <ui:VisualElement name="building-panel" focusable="false" picking-mode="Ignore" class="bg-white-with-transparent building-panel">
+        <ui:VisualElement name="head-container" class="head-container" style="-unity-text-align: middle-center; height: 40px; width: 590px;">
+            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" style="position: absolute; left: 8px;" />
+            <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="head-text" style="align-self: center; align-items: center; justify-content: center; width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" style="position: absolute; right: 8px;" />
         </ui:VisualElement>
-        <ui:VisualElement name="content-container" style="flex-grow: 7; background-color: rgba(178, 178, 178, 0.7); align-items: center; justify-content: center; align-self: center; flex-direction: column; flex-shrink: 1; transform-origin: center; overflow: hidden; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgba(0, 0, 0, 0.7); border-right-color: rgba(0, 0, 0, 0.7); border-top-color: rgba(0, 0, 0, 0.7); border-bottom-color: rgba(0, 0, 0, 0.7); border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px;">
-            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" style="align-items: center; justify-content: center; align-self: center; overflow: visible; flex-grow: 1;">
-                <ui:GroupBox name="groupbox" style="flex-direction: row; flex-grow: 1;">
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row; width: 55px; height: 55px;" />
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row;" />
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row;" />
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row;" />
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row;" />
-                    <ui:Instance template="buildings-button-template" name="buildings-button-template" style="flex-wrap: wrap; flex-grow: 2; flex-direction: row;" />
+        <ui:VisualElement name="content-container" class="content-container">
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="background-color: rgba(173, 87, 87, 0); width: 600px; height: 240px; align-self: flex-start; align-items: flex-start; flex-direction: row;">
+                <ui:GroupBox name="groupbox" class="groupbox" style="flex-direction: row; align-items: flex-start; align-self: center; height: 240px; overflow: hidden;">
+                    <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
+                    <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
+                    <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
+                    <ui:Instance template="card" name="card" style="align-items: flex-start; align-self: flex-start;" />
                 </ui:GroupBox>
             </ui:ScrollView>
         </ui:VisualElement>

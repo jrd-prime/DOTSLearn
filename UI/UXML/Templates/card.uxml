@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="buildings-button-template" src="project://database/Assets/UI_old/Templates/buildings-button-template.uxml?fileID=9197481963319205126&amp;guid=9b6daf195c9c1304f8baabc235f0ac5d&amp;type=3#buildings-button-template" />
+    <Style src="project://database/Assets/UI/USS/BuildingPanel.uss?fileID=7433441132597879392&amp;guid=d249e53f780efe14d99ee2377627985a&amp;type=3#BuildingPanel" />
+    <ui:VisualElement name="card" class="card">
+        <ui:Instance template="buildings-button-template" name="buildings-button-template" class="bbtn" style="flex-wrap: nowrap; flex-grow: 1; flex-direction: row; width: auto; height: auto; justify-content: center; align-self: stretch;" />
+    </ui:VisualElement>
+</ui:UXML>

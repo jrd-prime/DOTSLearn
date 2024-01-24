@@ -8,7 +8,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         public Entity BuildPrefab;
     }
 
-    public struct PrefabBufferElements : IBufferElementData
+    public struct BuildingsPrefabsBuffer : IBufferElementData
     {
         public Entity PrefabEntity;
         public FixedString64Bytes PrefabName;

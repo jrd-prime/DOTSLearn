@@ -1,0 +1,12 @@
+.card {
+    width: 140px;
+    height: 240px;
+    background-image: url('project://database/Assets/UI/Images/card1.png?fileID=21300000&guid=385e6bded820b284b8db338a1b66217f&type=3#card1');
+    align-items: auto;
+    align-self: auto;
+    margin-left: 5px;
+    margin-right: 5px;
+    justify-content: flex-start;
+    flex-direction: column;
+    -unity-text-align: lower-center;
+}

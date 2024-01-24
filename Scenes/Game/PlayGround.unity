@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968f076478dbdf146902c301664b279a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs:
+  _prefabs:
   - {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682, type: 3}
   - {fileID: 7688369451615698592, guid: 6c33616d76f3fe14fbc68aeea8e7329a, type: 3}
   - {fileID: 4580157719952510684, guid: 8be633c79ce9c0d43a85195a3f60c36b, type: 3}
@@ -220,7 +220,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997743469}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -514,7 +514,7 @@ BoxCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 757518468}
   - {fileID: 997743471}
-  - {fileID: 1759445306}
+  - {fileID: 757518468}
   - {fileID: 1222018510}
+  - {fileID: 1759445306}

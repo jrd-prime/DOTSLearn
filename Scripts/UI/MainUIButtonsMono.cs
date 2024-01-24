@@ -32,6 +32,8 @@ namespace Jrd
 
 
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
+
+            BuildingStateButton.clicked += () => Debug.LogWarning("click");
         }
 
         public void SetElementVisible(bool value)
