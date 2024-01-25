@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/USS/BuildingPanel.uss?fileID=7433441132597879392&amp;guid=d249e53f780efe14d99ee2377627985a&amp;type=3#BuildingPanel" />
+    <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
+    <Style src="project://database/Assets/UI_old/btn.uss?fileID=7433441132597879392&amp;guid=a691038e511db8244b164cbc59bf28eb&amp;type=3#btn" />
+    <ui:VisualElement name="card" class="card">
+        <ui:VisualElement name="head" class="card-head" style="flex-grow: 1; width: 130px; position: absolute; top: 0; height: 20px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 10px; align-items: center; justify-content: center; align-self: center; -unity-text-align: middle-center; font-size: 10px;">
+            <ui:Label tabindex="-1" text="title" parse-escape-sequences="true" display-tooltip-when-elided="true" name="head-text" />
+        </ui:VisualElement>
+        <ui:VisualElement name="image" class="card-image" style="flex-grow: 1; width: 130px; height: 130px; position: absolute; top: 30px; align-items: center; justify-content: center; align-self: center;">
+            <ui:VisualElement name="img" style="flex-grow: 0; background-image: url(&apos;project://database/Assets/UI/Images/img1.png?fileID=21300000&amp;guid=64a62883e3720ca41b9bfc22c7d9e58f&amp;type=3#img1&apos;); width: 100px; height: 100px; color: rgb(156, 73, 73); background-color: rgba(173, 47, 47, 0);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="button" style="flex-grow: 1; width: 130px; height: 30px; top: 160px; align-items: center; justify-content: center; align-self: center; position: absolute; margin-bottom: 10px;">
+            <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn" class="manu-button" style="font-size: 8px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 0; border-bottom-width: 1px; border-left-width: 0;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

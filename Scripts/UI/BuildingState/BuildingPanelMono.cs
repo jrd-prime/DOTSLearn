@@ -1,4 +1,5 @@
 using System;
+using Jrd.GameStates.BuildingState.BuildingPanel;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,7 +9,6 @@ namespace Jrd
 {
     public class BuildingPanelMono : MonoBehaviour, IVisibleElement
     {
-        [SerializeField] private VisualTreeAsset _buildingCardTemplate;
         private VisualElement _root;
         private VisualElement _buildingPanel;
         private static GroupBox _cardsContainer;
@@ -20,9 +20,8 @@ namespace Jrd
         private const string BuildingPanelName = "building-panel";
         private const string BuildingPanelTitleName = "head-text";
         private const string CardsContainerName = "groupbox";
-        private const string CardNamePrefix = "card-";
-        private const string CardButtonNamePrefix = "building-";
         private const string BuildingPanelTitle = "blueprints";
+
 
         private const int ShowDuration = 1;
         private const int HideDuration = 1;
@@ -48,14 +47,11 @@ namespace Jrd
                 IsVisible = false;
             }
 
-            if (_buildingCardTemplate == null)
-            {
-                Debug.LogError("ButtonTemplate not added to script. " + this);
-            }
-
             _tempSelectedBuildID = -1;
             OnBuildSelected += BuildSelected;
         }
+
+        #region Select / Deselect Building
 
         private void CancelBuilding()
         {
@@ -70,25 +66,24 @@ namespace Jrd
 
         private void BuildSelected(Button button, int index)
         {
-            // temp not set
             if (_tempSelectedBuildID < 0)
             {
                 SetButtonEnabled(index, false);
                 _tempSelectedBuildID = index;
             }
-            // temp != index
             else if (_tempSelectedBuildID != index)
             {
                 SetButtonEnabled(index, false);
                 SetButtonEnabled(_tempSelectedBuildID, true);
                 _tempSelectedBuildID = index;
             }
-            // temp = index
             else
             {
                 Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
             }
         }
+
+        #endregion
 
         #region Show/Hide Panel
 
@@ -150,36 +145,13 @@ namespace Jrd
 
             for (var i = 0; i < buildingsCount; i++)
             {
-                var filledCard = GetCardWithData(names[i].ToString(), i);
-                _cardsContainer.Add(filledCard);
+                var card = new BuildingCard(names[i].ToString(), i);
+                
+                _cardsContainer.Add(card.GetFilledCard());
+                
+                card.Button.RegisterCallback<ClickEvent>(
+                    evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, card.Id));
             }
-        }
-
-        private TemplateContainer GetCardWithData(string buildingName, int buildingIndex)
-        {
-            TemplateContainer newCard = _buildingCardTemplate.Instantiate();
-
-            var cardHead = newCard.Q<Label>("head-text");
-            var cardImage = newCard.Q<VisualElement>("img");
-            var cardButton = newCard.Q<Button>("btn");
-
-            newCard.name = CardNamePrefix + buildingIndex;
-
-            // Head
-            cardHead.text = $"{buildingIndex} {buildingName}";
-
-            // Icon
-            cardImage.style.backgroundColor = new StyleColor(Color.green);
-
-            // Button
-            cardButton.text = buildingName;
-            cardButton.name = CardButtonNamePrefix + buildingIndex;
-            cardButton.RegisterCallback<ClickEvent>(
-                evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, buildingIndex));
-
-            Debug.Log($"card = {buildingIndex} = {newCard}");
-
-            return newCard;
         }
 
         public void ClearBuildingsCards() => _cardsContainer.Clear();
