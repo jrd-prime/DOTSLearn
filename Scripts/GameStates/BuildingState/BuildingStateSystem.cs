@@ -24,7 +24,7 @@ namespace Jrd.GameStates.BuildingState
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
-        private DynamicBuffer<BuildingsPrefabsBuffer> _buildingsPrefabsBuffer;
+        private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffer;
 
         private RefRW<BuildingStateData> _buildingStateData;
         private RefRW<BuildingPanelData> _buildingPanelData;
@@ -62,7 +62,7 @@ namespace Jrd.GameStates.BuildingState
         protected override void OnUpdate()
         {
             // LOOK wait load
-            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsPrefabsBuffer> buffer))
+            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsBuffer> buffer))
             {
                 Debug.LogError("Buffer error. Return.. " + this);
                 return;
@@ -153,12 +153,12 @@ namespace Jrd.GameStates.BuildingState
                 _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
                     new InstantiateTempPrefabComponent
                     {
-                        Prefab = _buildingsPrefabsBuffer[index].PrefabEntity,
-                        Name = _buildingsPrefabsBuffer[index].PrefabName
+                        Prefab = _buildingsPrefabsBuffer[index].Self,
+                        Name = _buildingsPrefabsBuffer[index].Name
                     });
 
                 Debug.Log(
-                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].PrefabName}");
+                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
                 return;
             }
 

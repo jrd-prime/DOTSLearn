@@ -12,6 +12,10 @@ namespace Jrd.UI.BuildingState
     {
         private EntityManager _entityManager;
         private Entity _buildingPanelEntity;
+        private BuildingStateData _buildingStateData;
+        private BuildingPanelData _buildingPanelData;
+        private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffers;
+        private int _buildingsCount;
 
         public void OnCreate(ref SystemState state)
         {
@@ -24,26 +28,44 @@ namespace Jrd.UI.BuildingState
 
         public void OnUpdate(ref SystemState state)
         {
-          //  Debug.Log("in update !!!!! " + this);
-            var buildingPanelData = SystemAPI.GetComponentRO<BuildingPanelData>(_buildingPanelEntity).ValueRO;
-            var buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>().ValueRO;
+            _buildingPanelData = SystemAPI.GetComponentRO<BuildingPanelData>(_buildingPanelEntity).ValueRO;
+            _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>().ValueRO;
+            _buildingsCount = _buildingStateData.BuildingPrefabsCount;
 
+            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsBuffer> buildingsPrefabsBuffers))
+            {
+                Debug.Log("NO BUFF " + this);
+                return;
+            }
 
-            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsPrefabsBuffer > a))
+            _buildingsPrefabsBuffers = buildingsPrefabsBuffers;
+
             {
-                Debug.Log("NO BUFF TOO " + this );
+                var instance = BuildingPanelMono.Instance;
+                switch (instance.IsVisible)
+                {
+                    case false when _buildingPanelData.SetVisible:
+                        instance.InstantiateBuildingsCards(_buildingsCount, GetNamesList());
+                        instance.SetElementVisible(true);
+                        break;
+                    case true when !_buildingPanelData.SetVisible:
+                        instance.SetElementVisible(false);
+                        instance.ClearBuildingsCards();
+                        break;
+                }
             }
-            
-            var names = new NativeList<FixedString32Bytes>(buildingPanelData.BuildingPrefabsCount, Allocator.Temp);
-            foreach (var q in a)
+        }
+
+        private NativeList<FixedString32Bytes> GetNamesList()
+        {
+            NativeList<FixedString32Bytes> namesList = new(_buildingsCount, Allocator.Temp);
+
+            foreach (var building in _buildingsPrefabsBuffers)
             {
-                names.Add(new FixedString32Bytes(q.PrefabName));
+                namesList.Add(new FixedString32Bytes(building.Name));
             }
-          //  Debug.Log(buildingPanelData.SetVisible + " " + this);
-            BuildingPanelMono.Instance.InstantiateButtons(buildingStateData.BuildingPrefabsCount, names);
-            BuildingPanelMono.Instance.SetElementVisible(buildingPanelData.SetVisible);
-            
-            names.Dispose();
+
+            return namesList;
         }
     }
 }

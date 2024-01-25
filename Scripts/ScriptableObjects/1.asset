@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
+  m_Name: 1
+  m_EditorClassIdentifier: 
+  _buildingPrefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682,
+    type: 3}
+  _buildingName: Mill
+  _buildingSize: {x: 5, y: 5}
+  _buildingCategory: 0

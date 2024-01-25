@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -8,14 +9,16 @@ namespace Jrd
 {
     public class BuildingPanelMono : MonoBehaviour, IVisibleElement
     {
-        [SerializeField] private VisualTreeAsset _buildingButtonTemplate;
+        [SerializeField] private VisualTreeAsset _buildingCardTemplate;
 
         private VisualElement _root;
 
         private VisualElement _buildingPanel;
-        private static GroupBox _buttonsContainer;
+        private static GroupBox _cardsContainer;
         private const string BuildingPanelName = "building-panel";
-        private const string ButtonsContainerName = "groupbox";
+        private const string CardsContainerName = "groupbox";
+
+        private const string CardNamePrefix = "card-";
 
         private int _tempSelectedBuildID;
 
@@ -38,7 +41,7 @@ namespace Jrd
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
             _buildingPanel = _root.Q<VisualElement>(BuildingPanelName);
-            _buttonsContainer = _root.Q<GroupBox>(ButtonsContainerName);
+            _cardsContainer = _root.Q<GroupBox>(CardsContainerName);
 
 
             if (_buildingPanel != null)
@@ -47,7 +50,7 @@ namespace Jrd
                 IsVisible = false;
             }
 
-            if (_buildingButtonTemplate == null)
+            if (_buildingCardTemplate == null)
             {
                 Debug.LogError("ButtonTemplate not added to script. " + this);
             }
@@ -91,7 +94,7 @@ namespace Jrd
 
         public void SetElementVisible(bool value)
         {
-         //   Debug.LogWarning(value + " " + this);
+            //   Debug.LogWarning(value + " " + this);
             switch (IsVisible)
             {
                 case false when value:
@@ -134,17 +137,21 @@ namespace Jrd
 
         #endregion
 
-        public void InstantiateButtons(int buildingPrefabsCount, NativeList<FixedString32Bytes> names)
+        // TODO cache
+        public void InstantiateBuildingsCards(int buildingsCount, NativeList<FixedString32Bytes> names)
         {
-            _buttonsContainer.Clear();
+            _cardsContainer.Clear();
 
-      //      Debug.LogWarning(buildingPrefabsCount);
-            for (var i = 0; i < buildingPrefabsCount; i++)
+            for (var i = 0; i < buildingsCount; i++)
             {
-                _buttonsContainer.Add(_buildingButtonTemplate.Instantiate());
+                var card = _buildingCardTemplate.Instantiate();
+                card.name = CardNamePrefix + i;
+                _cardsContainer.Add(card);
+                Debug.Log($"card = {i} = {card}");
             }
 
-            var buttons = _buttonsContainer.Query<Button>();
+
+            var buttons = _cardsContainer.Query<Button>();
 
             var index = 0;
             buttons.ForEach(element =>
@@ -157,6 +164,11 @@ namespace Jrd
                     evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, index1));
                 ++index;
             });
+        }
+
+        public void ClearBuildingsCards()
+        {
+            _cardsContainer.Clear();
         }
     }
 }
