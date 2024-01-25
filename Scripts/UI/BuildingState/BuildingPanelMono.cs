@@ -1,7 +1,6 @@
 using System;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -10,20 +9,20 @@ namespace Jrd
     public class BuildingPanelMono : MonoBehaviour, IVisibleElement
     {
         [SerializeField] private VisualTreeAsset _buildingCardTemplate;
-
         private VisualElement _root;
-
         private VisualElement _buildingPanel;
         private static GroupBox _cardsContainer;
-        private const string BuildingPanelName = "building-panel";
-        private const string CardsContainerName = "groupbox";
-
-        private const string CardNamePrefix = "card-";
-
         private int _tempSelectedBuildID;
 
         public static BuildingPanelMono Instance { private set; get; }
         public bool IsVisible { private set; get; }
+
+        private const string BuildingPanelName = "building-panel";
+        private const string BuildingPanelTitleName = "head-text";
+        private const string CardsContainerName = "groupbox";
+        private const string CardNamePrefix = "card-";
+        private const string CardButtonNamePrefix = "building-";
+        private const string BuildingPanelTitle = "blueprints";
 
         private const int ShowDuration = 1;
         private const int HideDuration = 1;
@@ -42,7 +41,6 @@ namespace Jrd
             _root = GetComponent<UIDocument>().rootVisualElement;
             _buildingPanel = _root.Q<VisualElement>(BuildingPanelName);
             _cardsContainer = _root.Q<GroupBox>(CardsContainerName);
-
 
             if (_buildingPanel != null)
             {
@@ -67,24 +65,26 @@ namespace Jrd
 
         private void SetButtonEnabled(int id, bool value)
         {
-            _root.Query<Button>().AtIndex(id).SetEnabled(value);
+            _cardsContainer.Query<Button>().AtIndex(id).SetEnabled(value);
         }
 
         private void BuildSelected(Button button, int index)
         {
-            // here + buildingStateSystem
-            if (_tempSelectedBuildID < 0) // temp not set
+            // temp not set
+            if (_tempSelectedBuildID < 0)
             {
                 SetButtonEnabled(index, false);
                 _tempSelectedBuildID = index;
             }
-            else if (_tempSelectedBuildID != index) // temp != index
+            // temp != index
+            else if (_tempSelectedBuildID != index)
             {
                 SetButtonEnabled(index, false);
                 SetButtonEnabled(_tempSelectedBuildID, true);
                 _tempSelectedBuildID = index;
             }
-            else // temp = index
+            // temp = index
+            else
             {
                 Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
             }
@@ -94,10 +94,10 @@ namespace Jrd
 
         public void SetElementVisible(bool value)
         {
-            //   Debug.LogWarning(value + " " + this);
             switch (IsVisible)
             {
                 case false when value:
+                    SetPanelTitle(BuildingPanelTitle);
                     Show();
                     IsVisible = true;
                     break;
@@ -108,9 +108,9 @@ namespace Jrd
             }
         }
 
+
         public void Show()
         {
-            Debug.LogWarning("show " + this);
             _buildingPanel.style.display = DisplayStyle.Flex;
 
             _buildingPanel.experimental.animation
@@ -124,7 +124,6 @@ namespace Jrd
 
         public void Hide()
         {
-            Debug.LogWarning("hide " + this);
             _buildingPanel.experimental.animation
                 .Start(
                     new StyleValues { bottom = BottomMargin },
@@ -137,6 +136,13 @@ namespace Jrd
 
         #endregion
 
+        #region Set Data / Instantiate
+
+        private void SetPanelTitle(string titleText)
+        {
+            _buildingPanel.Q<Label>(BuildingPanelTitleName).text = titleText.ToUpper();
+        }
+
         // TODO cache
         public void InstantiateBuildingsCards(int buildingsCount, NativeList<FixedString32Bytes> names)
         {
@@ -144,31 +150,40 @@ namespace Jrd
 
             for (var i = 0; i < buildingsCount; i++)
             {
-                var card = _buildingCardTemplate.Instantiate();
-                card.name = CardNamePrefix + i;
-                _cardsContainer.Add(card);
-                Debug.Log($"card = {i} = {card}");
+                var filledCard = GetCardWithData(names[i].ToString(), i);
+                _cardsContainer.Add(filledCard);
             }
-
-
-            var buttons = _cardsContainer.Query<Button>();
-
-            var index = 0;
-            buttons.ForEach(element =>
-            {
-//                Debug.LogWarning(element);
-                int index1 = index;
-                element.name = index1.ToString(); // TODO
-                element.text = names.ElementAt(index1).ToString(); // TODO
-                element.RegisterCallback<ClickEvent>(
-                    evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, index1));
-                ++index;
-            });
         }
 
-        public void ClearBuildingsCards()
+        private TemplateContainer GetCardWithData(string buildingName, int buildingIndex)
         {
-            _cardsContainer.Clear();
+            TemplateContainer newCard = _buildingCardTemplate.Instantiate();
+
+            var cardHead = newCard.Q<Label>("head-text");
+            var cardImage = newCard.Q<VisualElement>("img");
+            var cardButton = newCard.Q<Button>("btn");
+
+            newCard.name = CardNamePrefix + buildingIndex;
+
+            // Head
+            cardHead.text = $"{buildingIndex} {buildingName}";
+
+            // Icon
+            cardImage.style.backgroundColor = new StyleColor(Color.green);
+
+            // Button
+            cardButton.text = buildingName;
+            cardButton.name = CardButtonNamePrefix + buildingIndex;
+            cardButton.RegisterCallback<ClickEvent>(
+                evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, buildingIndex));
+
+            Debug.Log($"card = {buildingIndex} = {newCard}");
+
+            return newCard;
         }
+
+        public void ClearBuildingsCards() => _cardsContainer.Clear();
+
+        #endregion
     }
 }

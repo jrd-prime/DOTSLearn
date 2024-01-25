@@ -206,22 +206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968f076478dbdf146902c301664b279a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _test:
-  - _go: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682, type: 3}
-    _name: Mill
-    _size: {x: 5, y: 5}
-  - _go: {fileID: 7688369451615698592, guid: 6c33616d76f3fe14fbc68aeea8e7329a, type: 3}
-    _name: Cube 1
-    _size: {x: 1, y: 1}
-  - _go: {fileID: 4580157719952510684, guid: 8be633c79ce9c0d43a85195a3f60c36b, type: 3}
-    _name: Cube Orange
-    _size: {x: 1, y: 1}
-  - _go: {fileID: 2800642191170894869, guid: adf93ab392496d1499c197818919d286, type: 3}
-    _name: Cube LightGreen
-    _size: {x: 1, y: 1}
-  - _go: {fileID: 6529448112366552166, guid: f6a85a01ab9fc9442a7f85570b86faff, type: 3}
-    _name: Cube DarkBlue
-    _size: {x: 1, y: 1}
+  _buildings:
+  - {fileID: 11400000, guid: 5476f95d3de0212459e9c0a7db8ab3ce, type: 2}
+  - {fileID: 11400000, guid: d108a12fd367dad489dfd081b651be1f, type: 2}
+  - {fileID: 11400000, guid: 433163d9519ce654cb3031d064807378, type: 2}
+  - {fileID: 11400000, guid: e675b6173f7e9eb4f816278b35cc41ac, type: 2}
+  - {fileID: 11400000, guid: 74939d4aa5dc32840bbb3a97b656a2c6, type: 2}
 --- !u!4 &997743471
 Transform:
   m_ObjectHideFlags: 0

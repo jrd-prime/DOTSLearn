@@ -716,7 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bc8c04d9e8afd4baf621f2b2fa20b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingButtonTemplate: {fileID: 9197481963319205126, guid: 94372e4d90ea01a4fb6a80d170c4b2b0,
+  _buildingCardTemplate: {fileID: 9197481963319205126, guid: 94372e4d90ea01a4fb6a80d170c4b2b0,
     type: 3}
 --- !u!114 &1251201943
 MonoBehaviour:
