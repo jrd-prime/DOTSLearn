@@ -1,4 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.BuildingPanel;
+using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
@@ -20,12 +21,14 @@ namespace Jrd.GameStates.BuildingState
         private EntityCommandBuffer _bsEcb;
         private EntityCommandBuffer _biEcb;
 
-        private Entity _confirmationPanel;
+        private RefRW<ConfirmationPanelData> _confirmationPanelData;
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
+        private int _prefabsCount;
         private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffer;
 
+        private Entity _buildingStateEntity;
         private RefRW<BuildingStateData> _buildingStateData;
         private RefRW<BuildingPanelData> _buildingPanelData;
 
@@ -58,29 +61,65 @@ namespace Jrd.GameStates.BuildingState
             }
 
             _buildingsPrefabsBuffer = buffer;
+            _prefabsCount = buffer.Length;
 
-            {
-                _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
-                _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-                _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
-            }
+
+            _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
+
 
             _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
 
+            _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
             _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
+            _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>();
 
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
 
         private void BuildingStateSelected()
         {
-            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
-            // Building Panel
-            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
+            SetBuildingPanelVisible(true);
+        }
+
+        private void SetBuildingPanelVisible(bool value)
+        {
+            _buildingPanelData.ValueRW.SetVisible = value;
+        }
+
+        private void SetConfirmationPanelVisible(bool value)
+        {
+            _confirmationPanelData.ValueRW.SetVisible = value;
         }
 
         private void BuildSelected(Button button, int index)
+        {
+            SetTempSelectedBuildingId(index);
+            SetBuildingPanelVisible(false);
+
+            if (!_buildingsPrefabsBuffer.IsEmpty)
+            {
+                SetConfirmationPanelVisible(true);
+
+                _bsEcb.AddComponent(_buildingStateEntity,
+                    new InstantiateTempPrefabComponent
+                    {
+                        Prefab = _buildingsPrefabsBuffer[index].Self,
+                        Name = _buildingsPrefabsBuffer[index].Name
+                    });
+
+                Debug.Log(
+                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
+                return;
+            }
+
+            Debug.LogError("Prefabs: " + _prefabsCount);
+        }
+
+
+        private void SetTempSelectedBuildingId(int index)
         {
             if (_tempSelectedBuildID < 0)
             {
@@ -95,25 +134,8 @@ namespace Jrd.GameStates.BuildingState
             }
             else
             {
-                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
+                Debug.LogWarning("Temp = Index! / We have a problem with enable/disable buttons in " + this);
             }
-
-            if (!_buildingsPrefabsBuffer.IsEmpty)
-            {
-                _bsEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
-                _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
-                    new InstantiateTempPrefabComponent
-                    {
-                        Prefab = _buildingsPrefabsBuffer[index].Self,
-                        Name = _buildingsPrefabsBuffer[index].Name
-                    });
-
-                Debug.Log(
-                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
-                return;
-            }
-
-            Debug.LogError("Prefabs: " + _buildingsPrefabsBuffer.Length);
         }
 
         private void CancelBuilding()
@@ -122,7 +144,9 @@ namespace Jrd.GameStates.BuildingState
 
             DestroyTempPrefab();
             // SetButtonEnabled(_tempSelectedBuildID, true);
-            _tempSelectedBuildID = -1; // reset temp id
+            
+            // reset temp id
+            _tempSelectedBuildID = -1;
         }
 
         private void ConfirmBuilding()
@@ -162,9 +186,7 @@ namespace Jrd.GameStates.BuildingState
         {
             Debug.Log("Initialize Building State Data");
 
-            int buildingsPrefabsCount = _buildingsPrefabsBuffer.Length;
-
-            _buildingStateData.ValueRW.BuildingPrefabsCount = buildingsPrefabsCount;
+            _buildingStateData.ValueRW.BuildingPrefabsCount = _prefabsCount;
             _buildingStateData.ValueRW.IsInitialized = true;
         }
     }

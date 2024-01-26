@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Unity.Collections;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Jrd
         private VisualElement _root;
         private VisualElement _buildingPanel;
         private static GroupBox _cardsContainer;
-        private static NativeArray<BuildingCard> _cards;
+        private static List<BuildingCard> _cards;
 
         public static BuildingPanelMono Instance { private set; get; }
         public bool IsVisible { private set; get; }
@@ -115,13 +116,13 @@ namespace Jrd
         {
             _cardsContainer.Clear();
 
-            _cards = new NativeArray<BuildingCard>(buildingsCount, Allocator.Persistent);
+            _cards = new List<BuildingCard>(buildingsCount);
 
             for (var i = 0; i < buildingsCount; i++)
             {
                 var card = new BuildingCard(names[i].ToString(), i);
 
-                _cards[i] = card;
+                _cards.Add(card);
                 _cardsContainer.Add(card.GetFilledCard());
 
                 card.Button.RegisterCallback<ClickEvent>(

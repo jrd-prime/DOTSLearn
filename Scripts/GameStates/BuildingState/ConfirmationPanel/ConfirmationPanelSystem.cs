@@ -1,54 +1,34 @@
 ﻿using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.UI_old;
-using Unity.Collections;
+using Jrd.UI.BuildingState;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 {
     [UpdateBefore(typeof(BuildingStateSystem))]
-    public partial class ConfirmationPanelSystem : SystemBase
+    public partial struct ConfirmationPanelSystem : ISystem
     {
-        private Entity _buildPrefabsComponent;
+        private ConfirmationPanelData _confirmationPanelData;
 
-        protected override void OnCreate()
+        public void OnCreate(ref SystemState state)
         {
-            RequireForUpdate<BuildPrefabsComponent>();
+            state.RequireForUpdate<BuildPrefabsComponent>();
         }
 
-        protected override void OnStartRunning()
+        public void OnUpdate(ref SystemState state)
         {
-            _buildPrefabsComponent = SystemAPI.GetSingletonEntity<BuildPrefabsComponent>();
-        }
+            _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>().ValueRO;
 
-        protected override void OnUpdate()
-        {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var instance = ConfirmationPanelMono.Instance;
 
-            // SHOW // LOOK подумать, т.к. в каждой панели будет +- такие же шоу/хайд
-            foreach (var (buildingPanelComponent, visibilityComponent, entity) in SystemAPI
-                         .Query<RefRO<ConfirmationPanelData>, RefRW<VisibilityComponent>>()
-                         .WithAll<ConfirmationPanelData, ShowVisualElementTag>()
-                         .WithEntityAccess())
+            switch (instance.IsVisible)
             {
-                // ConfirmationPanelUI.ShowApplyPanel();
-                visibilityComponent.ValueRW.IsVisible = true;
-                ecb.RemoveComponent<ShowVisualElementTag>(entity);
+                case false when _confirmationPanelData.SetVisible:
+                    instance.SetElementVisible(true);
+                    break;
+                case true when !_confirmationPanelData.SetVisible:
+                    instance.SetElementVisible(false);
+                    break;
             }
-
-            // HIDE // LOOK подумать, т.к. в каждой панели будет +- такие же шоу/хайд
-            foreach (var (q, entity) in SystemAPI.Query<RefRW<VisibilityComponent>>()
-                         .WithAll<ConfirmationPanelData, HideVisualElementTag>()
-                         .WithEntityAccess())
-            {
-                Debug.Log("hide");
-                ecb.RemoveComponent<HideVisualElementTag>(entity);
-                q.ValueRW.IsVisible = false;
-                // ConfirmationPanelUI.HideApplyPanel();
-            }
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
     }
 }

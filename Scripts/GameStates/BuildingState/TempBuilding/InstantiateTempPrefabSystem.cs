@@ -6,6 +6,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
@@ -30,6 +31,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
             foreach (var (query, entity) in SystemAPI
                          .Query<RefRO<InstantiateTempPrefabComponent>>()
+                         .WithAll<BuildingStateData>()
                          .WithEntityAccess())
             {
                 state.Dependency = new InstantiateTempPrefabJob

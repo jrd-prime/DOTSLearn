@@ -10,9 +10,17 @@ namespace Jrd.UI.BuildingState
         private VisualElement _confirmationPanel;
         private Button _cancelButton;
         private Button _applyButton;
-        private Label _text;
+
+        private const string ConfirmationPanelName = "confirmation-container";
+        private const string ConfirmationPanelTitleName = "text";
+        public const string ConfirmationPanelTitle = "Build";
 
         public static ConfirmationPanelMono Instance { private set; get; }
+        public bool IsVisible { private set; get; }
+
+        public Label Title { get; set; }
+        public Button CancelButton { get; private set; }
+        public Button ApplyButton { get; private set; }
 
         private const int ShowDuration = 1000;
         private const int HideDuration = 500;
@@ -28,17 +36,37 @@ namespace Jrd.UI.BuildingState
         private void OnEnable()
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
-            _confirmationPanel = _root.Q<VisualElement>("confirmation-container");
-            _cancelButton = _root.Q<Button>("cancel-button");
-            _applyButton = _root.Q<Button>("apply-button");
-            _text = _root.Q<Label>("text");
+            _confirmationPanel = _root.Q<VisualElement>(ConfirmationPanelName);
+            CancelButton = _root.Q<Button>("cancel-button");
+            ApplyButton = _root.Q<Button>("apply-button");
+            Title = _root.Q<Label>(ConfirmationPanelTitleName);
 
-            if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
+            if (_confirmationPanel != null)
+            {
+                _confirmationPanel.style.display = DisplayStyle.None;
+                IsVisible = false;
+            }
+        }
+
+        private void SetPanelTitle(string titleText)
+        {
+            _confirmationPanel.Q<Label>(ConfirmationPanelTitleName).text = titleText.ToUpper();
         }
 
         public void SetElementVisible(bool value)
         {
-            throw new System.NotImplementedException();
+            switch (IsVisible)
+            {
+                case false when value:
+                    SetPanelTitle(ConfirmationPanelTitle);
+                    Show();
+                    IsVisible = true;
+                    break;
+                case true when !value:
+                    Hide();
+                    IsVisible = false;
+                    break;
+            }
         }
 
         public void Show()
