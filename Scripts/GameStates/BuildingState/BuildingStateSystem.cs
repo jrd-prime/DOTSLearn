@@ -1,4 +1,5 @@
-﻿using Jrd.GameStates.BuildingState.BuildingPanel;
+﻿using System;
+using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
@@ -62,13 +63,11 @@ namespace Jrd.GameStates.BuildingState
 
             _buildingsPrefabsBuffer = buffer;
             _prefabsCount = buffer.Length;
-
-
+            
             _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
-
-
+            
             _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
 
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
@@ -84,41 +83,35 @@ namespace Jrd.GameStates.BuildingState
             SetBuildingPanelVisible(true);
         }
 
-        private void SetBuildingPanelVisible(bool value)
-        {
-            _buildingPanelData.ValueRW.SetVisible = value;
-        }
+        private void SetBuildingPanelVisible(bool value) => _buildingPanelData.ValueRW.SetVisible = value;
+        private void SetConfirmationPanelVisible(bool value) => _confirmationPanelData.ValueRW.SetVisible = value;
 
-        private void SetConfirmationPanelVisible(bool value)
-        {
-            _confirmationPanelData.ValueRW.SetVisible = value;
-        }
 
         private void BuildSelected(Button button, int index)
         {
-            SetTempSelectedBuildingId(index);
             SetBuildingPanelVisible(false);
-
-            if (!_buildingsPrefabsBuffer.IsEmpty)
-            {
-                SetConfirmationPanelVisible(true);
-
-                _bsEcb.AddComponent(_buildingStateEntity,
-                    new InstantiateTempPrefabComponent
-                    {
-                        Prefab = _buildingsPrefabsBuffer[index].Self,
-                        Name = _buildingsPrefabsBuffer[index].Name
-                    });
-
-                Debug.Log(
-                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
-                return;
-            }
-
-            Debug.LogError("Prefabs: " + _prefabsCount);
+            SetConfirmationPanelVisible(true);
+            SetTempSelectedBuildingId(index);
+            InstantiateTempPrefab(index);
         }
 
+        private void InstantiateTempPrefab(int index)
+        {
+            if (_buildingsPrefabsBuffer.IsEmpty)
+            {
+                throw new NullReferenceException("Buffer empty!");
+            }
 
+            _bsEcb.AddComponent(_buildingStateEntity,
+                new InstantiateTempPrefabComponent
+                {
+                    Prefab = _buildingsPrefabsBuffer[index].Self,
+                    Name = _buildingsPrefabsBuffer[index].Name
+                });
+
+            Debug.Log($"Build ID: {index} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
+        }
+        
         private void SetTempSelectedBuildingId(int index)
         {
             if (_tempSelectedBuildID < 0)
@@ -144,7 +137,7 @@ namespace Jrd.GameStates.BuildingState
 
             DestroyTempPrefab();
             // SetButtonEnabled(_tempSelectedBuildID, true);
-            
+
             // reset temp id
             _tempSelectedBuildID = -1;
         }
@@ -157,7 +150,7 @@ namespace Jrd.GameStates.BuildingState
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
 
-                UI_old.BuildingPanelUI.SetButtonEnabled(_tempSelectedBuildID, true);
+                // UI_old.BuildingPanelUI.SetButtonEnabled(_tempSelectedBuildID, true);
                 _tempSelectedBuildID = -1;
             }
             else

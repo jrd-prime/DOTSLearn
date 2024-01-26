@@ -1,8 +1,8 @@
 ﻿using System;
+using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.JCamera;
 using Jrd.UserInput;
-using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -23,25 +23,31 @@ namespace Jrd
         private Entity _tempTargetEntity;
         private bool _isSelectTagAdded;
         private const uint TargetLayer = 1u << 31;
+        private EntityCommandBuffer _bsEcb;
 
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<TempBuildingTag>();
+
             state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
+
             _isSelectTagAdded = false;
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            if (SystemAPI.GetSingleton<GameStateData>().CurrentGameState != GameState.BuildingState)
-                return; //TODO refact
-
             if (Input.touchCount != 1) return; //TODO more than 1 touch???
 
-            var touch = Input.GetTouch(0);
+            _bsEcb = SystemAPI
+                .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
-            var b = SystemAPI.GetSingletonEntity<CameraData>();
+            Touch touch = Input.GetTouch(0);
+            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -51,22 +57,18 @@ namespace Jrd
                     // if (SystemAPI.HasComponent<TempBuildingTag>(targetEntity)) Debug.Log("it's temp building!"); 
 
                     _tempTargetEntity = targetEntity;
-                    
-
                     break;
                 case TouchPhase.Moved:
                 case TouchPhase.Stationary:
                     if (_tempTargetEntity != Entity.Null)
                     {
-                        Debug.Log("Temp target exist. Do stuff.");
-                        Debug.LogWarning(_tempTargetEntity);
-                        
+                        Debug.Log($"Temp target exist. Do stuff. {_tempTargetEntity}");
+
                         //TODO bad idea
-                        state.EntityManager.RemoveComponent<MoveDirectionData>(b);
+                        _bsEcb.RemoveComponent<MoveDirectionData>(cameraEntity);
                         if (!_isSelectTagAdded)
                         {
-                            state.EntityManager.AddComponent<SelectedTag>(_tempTargetEntity); //TODO ecb
-
+                            _bsEcb.AddComponent<SelectedTag>(_tempTargetEntity);
                             _isSelectTagAdded = true;
                         }
                     }
@@ -77,11 +79,11 @@ namespace Jrd
                     Debug.Log("Touch ended or cancelled.");
 
                     //TODO bad idea
-                    state.EntityManager.AddComponent<MoveDirectionData>(b);
+                    _bsEcb.AddComponent<MoveDirectionData>(cameraEntity);
 
                     if (_isSelectTagAdded)
                     {
-                        state.EntityManager.RemoveComponent<SelectedTag>(_tempTargetEntity); //TODO ecb
+                        _bsEcb.RemoveComponent<SelectedTag>(_tempTargetEntity);
                         _isSelectTagAdded = false;
                     }
 
