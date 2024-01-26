@@ -12,7 +12,7 @@ namespace Jrd
         private VisualElement _root;
         private VisualElement _buildingPanel;
         private static GroupBox _cardsContainer;
-        private int _tempSelectedBuildID;
+        private static NativeArray<BuildingCard> _cards;
 
         public static BuildingPanelMono Instance { private set; get; }
         public bool IsVisible { private set; get; }
@@ -21,7 +21,6 @@ namespace Jrd
         private const string BuildingPanelTitleName = "head-text";
         private const string CardsContainerName = "groupbox";
         private const string BuildingPanelTitle = "blueprints";
-
 
         private const int ShowDuration = 1;
         private const int HideDuration = 1;
@@ -46,44 +45,12 @@ namespace Jrd
                 _buildingPanel.style.display = DisplayStyle.None;
                 IsVisible = false;
             }
-
-            _tempSelectedBuildID = -1;
-            OnBuildSelected += BuildSelected;
-        }
-
-        #region Select / Deselect Building
-
-        private void CancelBuilding()
-        {
-            SetButtonEnabled(_tempSelectedBuildID, true);
-            _tempSelectedBuildID = -1; // reset temp id
         }
 
         private void SetButtonEnabled(int id, bool value)
         {
             _cardsContainer.Query<Button>().AtIndex(id).SetEnabled(value);
         }
-
-        private void BuildSelected(Button button, int index)
-        {
-            if (_tempSelectedBuildID < 0)
-            {
-                SetButtonEnabled(index, false);
-                _tempSelectedBuildID = index;
-            }
-            else if (_tempSelectedBuildID != index)
-            {
-                SetButtonEnabled(index, false);
-                SetButtonEnabled(_tempSelectedBuildID, true);
-                _tempSelectedBuildID = index;
-            }
-            else
-            {
-                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
-            }
-        }
-
-        #endregion
 
         #region Show/Hide Panel
 
@@ -131,6 +98,11 @@ namespace Jrd
 
         #endregion
 
+        public static BuildingCard GetSelectedCard(int cardId)
+        {
+            return _cards[cardId];
+        }
+
         #region Set Data / Instantiate
 
         private void SetPanelTitle(string titleText)
@@ -143,12 +115,15 @@ namespace Jrd
         {
             _cardsContainer.Clear();
 
+            _cards = new NativeArray<BuildingCard>(buildingsCount, Allocator.Persistent);
+
             for (var i = 0; i < buildingsCount; i++)
             {
                 var card = new BuildingCard(names[i].ToString(), i);
-                
+
+                _cards[i] = card;
                 _cardsContainer.Add(card.GetFilledCard());
-                
+
                 card.Button.RegisterCallback<ClickEvent>(
                     evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, card.Id));
             }

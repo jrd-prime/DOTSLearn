@@ -34,29 +34,18 @@ namespace Jrd.GameStates.BuildingState
             RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             RequireForUpdate<GameStateData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _entityManager = EntityManager;
         }
 
         protected override void OnStartRunning()
         {
+            _entityManager = EntityManager;
             _tempSelectedBuildID = -1;
-            MainUIButtonsMono.BuildingStateButton.clicked += OnBuildingStateSelected;
 
-            // UI_old.BuildingPanelUI.OnBuildSelected += BuildSelected;
+            MainUIButtonsMono.BuildingStateButton.clicked += BuildingStateSelected;
+            BuildingPanelMono.OnBuildSelected += BuildSelected;
+
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
             // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
-        }
-
-        protected override void OnStopRunning()
-        {
-            MainUIButtonsMono.BuildingStateButton.clicked -= OnBuildingStateSelected;
-        }
-
-        private void OnBuildingStateSelected()
-        {
-            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
-            // Building Panel
-            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
         }
 
         protected override void OnUpdate()
@@ -81,18 +70,59 @@ namespace Jrd.GameStates.BuildingState
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
             _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
 
-
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
 
-        private void Initialize()
+        private void BuildingStateSelected()
         {
-            Debug.Log("Initialize Building State Data");
+            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
+            // Building Panel
+            _buildingPanelData.ValueRW.SetVisible = !_buildingPanelData.ValueRO.SetVisible;
+        }
 
-            int buildingsPrefabsCount = _buildingsPrefabsBuffer.Length;
+        private void BuildSelected(Button button, int index)
+        {
+            if (_tempSelectedBuildID < 0)
+            {
+                // SetButtonEnabled(index, false);
+                _tempSelectedBuildID = index;
+            }
+            else if (_tempSelectedBuildID != index)
+            {
+                // SetButtonEnabled(index, false);
+                // SetButtonEnabled(_tempSelectedBuildID, true);
+                _tempSelectedBuildID = index;
+            }
+            else
+            {
+                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanelUI." + this);
+            }
 
-            _buildingStateData.ValueRW.BuildingPrefabsCount = buildingsPrefabsCount;
-            _buildingStateData.ValueRW.IsInitialized = true;
+            if (!_buildingsPrefabsBuffer.IsEmpty)
+            {
+                _bsEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
+                _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
+                    new InstantiateTempPrefabComponent
+                    {
+                        Prefab = _buildingsPrefabsBuffer[index].Self,
+                        Name = _buildingsPrefabsBuffer[index].Name
+                    });
+
+                Debug.Log(
+                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
+                return;
+            }
+
+            Debug.LogError("Prefabs: " + _buildingsPrefabsBuffer.Length);
+        }
+
+        private void CancelBuilding()
+        {
+            Debug.Log("cancel build");
+
+            DestroyTempPrefab();
+            // SetButtonEnabled(_tempSelectedBuildID, true);
+            _tempSelectedBuildID = -1; // reset temp id
         }
 
         private void ConfirmBuilding()
@@ -112,14 +142,6 @@ namespace Jrd.GameStates.BuildingState
             }
         }
 
-        private void CancelBuilding()
-        {
-            Debug.Log("cancel build");
-
-            DestroyTempPrefab();
-            _tempSelectedBuildID = -1;
-        }
-
         private void DestroyTempPrefab()
         {
             _biEcb = _biEcbSystem.CreateCommandBuffer(World.Unmanaged);
@@ -130,39 +152,20 @@ namespace Jrd.GameStates.BuildingState
             }
         }
 
-        private void BuildSelected(Button button, int index)
+        protected override void OnStopRunning()
         {
-            if (_tempSelectedBuildID == -1)
-            {
-                _tempSelectedBuildID = index;
-            }
-            else if (_tempSelectedBuildID != index)
-            {
-                DestroyTempPrefab();
-                _tempSelectedBuildID = index;
-            }
-            // temp = index
-            else
-            {
-                Debug.LogWarning("We have a problem with enable/disable buttons in BuildPanel." + this);
-            }
+            MainUIButtonsMono.BuildingStateButton.clicked -= BuildingStateSelected;
+            BuildingPanelMono.OnBuildSelected -= BuildSelected;
+        }
 
-            if (!_buildingsPrefabsBuffer.IsEmpty)
-            {
-                _bsEcb.AddComponent<ShowVisualElementTag>(_confirmationPanel);
-                _bsEcb.AddComponent(_gameStateData.ValueRO.BuildingStateEntity,
-                    new InstantiateTempPrefabComponent
-                    {
-                        Prefab = _buildingsPrefabsBuffer[index].Self,
-                        Name = _buildingsPrefabsBuffer[index].Name
-                    });
+        private void Initialize()
+        {
+            Debug.Log("Initialize Building State Data");
 
-                Debug.Log(
-                    $"Build Selected. ID: {index} / Btn: {button.name} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
-                return;
-            }
+            int buildingsPrefabsCount = _buildingsPrefabsBuffer.Length;
 
-            Debug.LogError("Prefabs: " + _buildingsPrefabsBuffer.Length);
+            _buildingStateData.ValueRW.BuildingPrefabsCount = buildingsPrefabsCount;
+            _buildingStateData.ValueRW.IsInitialized = true;
         }
     }
 }

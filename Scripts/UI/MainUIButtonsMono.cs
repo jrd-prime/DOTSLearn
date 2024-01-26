@@ -29,11 +29,8 @@ namespace Jrd
 
             _buildingStateButtonContainer = _root.Q<VisualElement>("building-state-button-container");
             BuildingStateButton = _root.Q<Button>("building-state-button");
-
-
+            
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
-
-            BuildingStateButton.clicked += () => Debug.LogWarning("click");
         }
 
         public void SetElementVisible(bool value)

@@ -1,9 +1,12 @@
-﻿using Jrd.GameStates.BuildingState;
+﻿using Jrd.GameStates;
+using Jrd.GameStates.BuildingState;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.GameStates.BuildingState.TempBuilding;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Jrd.UI.BuildingState
 {
@@ -16,14 +19,14 @@ namespace Jrd.UI.BuildingState
         private BuildingPanelData _buildingPanelData;
         private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffers;
         private int _buildingsCount;
-
         public void OnCreate(ref SystemState state)
         {
             _entityManager = state.EntityManager;
             _buildingPanelEntity = SystemAPI.GetSingletonEntity<BuildingPanelData>();
-
+            
             state.RequireForUpdate<BuildingPanelData>();
             // state.RequireForUpdate<BuildPrefabsComponent>();
+
         }
 
         public void OnUpdate(ref SystemState state)
@@ -56,6 +59,7 @@ namespace Jrd.UI.BuildingState
             }
         }
 
+    
         private NativeList<FixedString32Bytes> GetNamesList()
         {
             NativeList<FixedString32Bytes> namesList = new(_buildingsCount, Allocator.Temp);
