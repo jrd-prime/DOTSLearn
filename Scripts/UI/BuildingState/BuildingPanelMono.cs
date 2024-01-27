@@ -70,8 +70,7 @@ namespace Jrd
                     break;
             }
         }
-
-
+        
         public void Show()
         {
             _buildingPanel.style.display = DisplayStyle.Flex;
@@ -104,8 +103,6 @@ namespace Jrd
             return _cards[cardId];
         }
 
-        #region Set Data / Instantiate
-
         private void SetPanelTitle(string titleText)
         {
             _buildingPanel.Q<Label>(BuildingPanelTitleName).text = titleText.ToUpper();
@@ -131,7 +128,5 @@ namespace Jrd
         }
 
         public void ClearBuildingsCards() => _cardsContainer.Clear();
-
-        #endregion
     }
 }

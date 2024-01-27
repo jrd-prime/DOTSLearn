@@ -716,8 +716,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bc8c04d9e8afd4baf621f2b2fa20b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingCardTemplate: {fileID: 9197481963319205126, guid: 94372e4d90ea01a4fb6a80d170c4b2b0,
-    type: 3}
 --- !u!114 &1251201943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -961,8 +959,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e18dd0e02f1d6a478afcd57905d6755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingButtonTemplate: {fileID: 9197481963319205126, guid: 9b6daf195c9c1304f8baabc235f0ac5d,
-    type: 3}
 --- !u!115 &1691706581
 MonoScript:
   m_ObjectHideFlags: 0

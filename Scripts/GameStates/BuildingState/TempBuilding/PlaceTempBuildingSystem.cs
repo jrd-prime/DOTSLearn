@@ -1,6 +1,5 @@
-﻿using Jrd.GameStates.BuildingState.ConfirmationPanel;
+﻿using Jrd.GameplayBuildings;
 using Jrd.JUtils;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
@@ -20,8 +19,8 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         // [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<PlaceTempBuildingTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<ConfirmationPanelData>();
             state.RequireForUpdate<GameBuildingsData>();
         }
 
@@ -31,47 +30,37 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
 
-            Entity confirmationPanelEntity = SystemAPI.GetSingletonEntity<ConfirmationPanelData>();
-
-            NativeHashMap<FixedString64Bytes, BuildingData> gameBuildings =
-                SystemAPI.GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;
-
-            //TODO replace init
-            if (!gameBuildings.IsCreated)
-                gameBuildings = new NativeHashMap<FixedString64Bytes, BuildingData>(1, Allocator.Persistent);
+            NativeHashMap<FixedString64Bytes, BuildingData> gameBuildingsMap = SystemAPI
+                .GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;
 
             foreach (var (buildingData, transform, entity) in SystemAPI
                          .Query<RefRW<BuildingData>, RefRO<LocalTransform>>()
                          .WithAll<PlaceTempBuildingTag, TempBuildingTag>()
                          .WithEntityAccess())
             {
-                {
-                    //TODO убрать
-                    string guid = Utils.GetGuid();
-                    Debug.LogWarning("build position = " + transform.ValueRO.Position);
-                    buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
-                    buildingData.ValueRW.Guid = guid;
-                }
+                string guid = Utils.GetGuid();
+                buildingData.ValueRW.Self = entity;
+                buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
+                buildingData.ValueRW.Guid = guid;
 
-                var data = buildingData.ValueRO;
+                _bsEcb.SetName(entity, $"{buildingData.ValueRO.Name}_{guid}");
+                _bsEcb.AddComponent<AddBuildingToDBTag>(entity);
 
-                gameBuildings.Add(data.Guid, new BuildingData
-                {
-                    Guid = data.Guid,
-                    Name = data.Name,
-                    Prefab = data.Prefab,
-                    WorldPosition = data.WorldPosition
-                });
-
-                _bsEcb.SetName(entity, $"{data.Name}_{data.Guid}");
-
-                Debug.LogWarning("New building added");
+                Debug.Log("New building added");
 
                 _bsEcb.RemoveComponent<PlaceTempBuildingTag>(entity);
                 _bsEcb.RemoveComponent<TempBuildingTag>(entity);
 
-                // Hide confirmation panel
-                _bsEcb.AddComponent<HideVisualElementTag>(confirmationPanelEntity);
+                //TODO to new system, add tag for add to game buildings map or db
+                var data = buildingData.ValueRO;
+                gameBuildingsMap.Add(data.Guid, new BuildingData
+                {
+                    Guid = data.Guid,
+                    Self = entity,
+                    Name = data.Name,
+                    Prefab = data.Prefab,
+                    WorldPosition = data.WorldPosition
+                });
             }
         }
     }

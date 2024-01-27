@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -27,6 +28,8 @@ namespace Jrd.UI.BuildingState
         private const float PanelHeight = 34f;
         private const float BottomMargin = 10f;
 
+        public static event Action OnTempBuildCancelled;
+        public static event Action OnTempBuildApply;
 
         private void Awake()
         {
@@ -46,6 +49,9 @@ namespace Jrd.UI.BuildingState
                 _confirmationPanel.style.display = DisplayStyle.None;
                 IsVisible = false;
             }
+
+            CancelButton.RegisterCallback<ClickEvent>(evt => OnTempBuildCancelled?.Invoke());
+            ApplyButton.RegisterCallback<ClickEvent>(evt => OnTempBuildApply?.Invoke());
         }
 
         private void SetPanelTitle(string titleText)

@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
-  m_Name: 1
+  m_Name: Seedbed_01
   m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682,
+  _buildingPrefab: {fileID: 3613048971494491005, guid: 6082214d97aa7f641a41d27ffbaa7048,
     type: 3}
-  _buildingName: Mill
-  _buildingSize: {x: 5, y: 5}
+  _buildingName: Seedbed 01
+  _buildingSize: {x: 3, y: 5}
   _buildingCategory: 0
+  _buildingPreviewImage: {fileID: 0}

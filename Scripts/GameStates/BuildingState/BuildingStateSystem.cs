@@ -4,6 +4,7 @@ using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
+using Jrd.UI.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -47,9 +48,10 @@ namespace Jrd.GameStates.BuildingState
 
             MainUIButtonsMono.BuildingStateButton.clicked += BuildingStateSelected;
             BuildingPanelMono.OnBuildSelected += BuildSelected;
+            ConfirmationPanelMono.OnTempBuildCancelled += CancelBuilding;
+            ConfirmationPanelMono.OnTempBuildApply += ConfirmBuilding;
 
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
-            // ConfirmationPanelUI.ApplyPanelCancelButton.clicked += CancelBuilding;
         }
 
         protected override void OnUpdate()
@@ -63,11 +65,11 @@ namespace Jrd.GameStates.BuildingState
 
             _buildingsPrefabsBuffer = buffer;
             _prefabsCount = buffer.Length;
-            
+
             _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
-            
+
             _gameStateData = SystemAPI.GetSingletonRW<GameStateData>();
 
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
@@ -111,7 +113,7 @@ namespace Jrd.GameStates.BuildingState
 
             Debug.Log($"Build ID: {index} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
         }
-        
+
         private void SetTempSelectedBuildingId(int index)
         {
             if (_tempSelectedBuildID < 0)
@@ -134,9 +136,8 @@ namespace Jrd.GameStates.BuildingState
         private void CancelBuilding()
         {
             Debug.Log("cancel build");
-
+            SetConfirmationPanelVisible(false);
             DestroyTempPrefab();
-            // SetButtonEnabled(_tempSelectedBuildID, true);
 
             // reset temp id
             _tempSelectedBuildID = -1;
@@ -146,6 +147,7 @@ namespace Jrd.GameStates.BuildingState
         {
             Debug.Log("confirm  build");
 
+            SetConfirmationPanelVisible(false);
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
@@ -173,6 +175,8 @@ namespace Jrd.GameStates.BuildingState
         {
             MainUIButtonsMono.BuildingStateButton.clicked -= BuildingStateSelected;
             BuildingPanelMono.OnBuildSelected -= BuildSelected;
+            ConfirmationPanelMono.OnTempBuildCancelled -= CancelBuilding;
+            ConfirmationPanelMono.OnTempBuildApply -= ConfirmBuilding;
         }
 
         private void Initialize()

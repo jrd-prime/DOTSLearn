@@ -23,10 +23,6 @@ namespace Jrd.DebSet
         public static bool IsMouseRaycast; // TODO переделать
         private Toggle _mouseRaycastToggle;
 
-        private DebSetUI()
-        {
-        }
-
         private void Awake()
         {
             if (Instance != null)

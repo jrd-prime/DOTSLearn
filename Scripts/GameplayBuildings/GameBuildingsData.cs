@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd
+namespace Jrd.GameplayBuildings
 {
     public struct GameBuildingsData : IComponentData
     {
