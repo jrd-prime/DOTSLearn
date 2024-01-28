@@ -44,6 +44,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                 buildingData.ValueRW.Guid = guid;
 
                 _bsEcb.SetName(entity, $"{buildingData.ValueRO.Name}_{guid}");
+                _bsEcb.AddComponent<BuildingTag>(entity);
                 _bsEcb.AddComponent<AddBuildingToDBTag>(entity);
 
                 Debug.Log("New building added");

@@ -2,6 +2,7 @@
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.Prefabs

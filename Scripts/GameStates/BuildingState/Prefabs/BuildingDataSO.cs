@@ -9,12 +9,12 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         [SerializeField] private string _buildingName;
         [SerializeField] private Vector2 _buildingSize;
         [SerializeField] private BuildingCategory _buildingCategory;
-        [SerializeField] private Sprite _buildingPreviewImage;
+        
 
         public GameObject Prefab => _buildingPrefab;
         public string Name => _buildingName;
         public Vector2 Size => _buildingSize;
         public BuildingCategory Category => _buildingCategory;
-        public Sprite Image => _buildingPreviewImage;
+
     }
 }
