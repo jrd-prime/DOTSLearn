@@ -4,11 +4,9 @@ using Jrd.GameStates.MainGameState;
 using Jrd.JCamera;
 using Jrd.UserInput;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Physics;
 using UnityEngine;
 using Ray = UnityEngine.Ray;
-using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd
 {
@@ -52,7 +50,10 @@ namespace Jrd
             {
                 case TouchPhase.Began:
                     Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
-                    if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity)) break;
+
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity targetEntity);
+                    
+                    if (!isHit) break;
 
                     // if (SystemAPI.HasComponent<TempBuildingTag>(targetEntity)) Debug.Log("it's temp building!"); 
 
@@ -93,32 +94,6 @@ namespace Jrd
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        public bool Raycast(float3 from, float3 to, out Entity entity)
-        {
-            var input = new RaycastInput
-            {
-                Start = from,
-                End = to,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = TargetLayer,
-                    CollidesWith = TargetLayer,
-                    GroupIndex = 0
-                }
-            };
-
-            CollisionWorld collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
-
-            if (collisionWorld.CastRay(input, out RaycastHit hit))
-            {
-                entity = hit.Entity;
-                return true;
-            }
-
-            entity = Entity.Null;
-            return false;
         }
     }
 

@@ -48,11 +48,11 @@ namespace Jrd.DebSet
 
             Ton.clicked += () =>
             {
-                ConfirmationPanelMono.Instance.Show();
+                ConfirmationPanelMono.Instance.SetElementVisible(true);
             };
             Toff.clicked += () =>
             {
-                ConfirmationPanelMono.Instance.Hide();
+                ConfirmationPanelMono.Instance.SetElementVisible(false);
             };
         }
 
@@ -64,8 +64,8 @@ namespace Jrd.DebSet
 
         private void OnDisable()
         {
-            Ton.clicked -= ConfirmationPanelMono.Instance.Show;
-            Toff.clicked -= ConfirmationPanelMono.Instance.Hide;
+            Ton.clicked -= ConfirmationPanelMono.Instance.ShowPanel;
+            Toff.clicked -= ConfirmationPanelMono.Instance.HidePanel;
         }
     }
 }

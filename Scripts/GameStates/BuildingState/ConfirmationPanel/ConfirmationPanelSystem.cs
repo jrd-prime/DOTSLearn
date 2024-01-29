@@ -20,7 +20,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 
             var instance = ConfirmationPanelMono.Instance;
 
-            switch (instance.IsVisible)
+            switch (instance.IsPanelVisible)
             {
                 case false when _confirmationPanelData.SetVisible:
                     instance.SetElementVisible(true);

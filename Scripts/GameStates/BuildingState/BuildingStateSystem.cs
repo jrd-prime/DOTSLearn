@@ -181,8 +181,6 @@ namespace Jrd.GameStates.BuildingState
 
         private void Initialize()
         {
-            Debug.Log("Initialize Building State Data");
-
             _buildingStateData.ValueRW.BuildingPrefabsCount = _prefabsCount;
             _buildingStateData.ValueRW.IsInitialized = true;
         }

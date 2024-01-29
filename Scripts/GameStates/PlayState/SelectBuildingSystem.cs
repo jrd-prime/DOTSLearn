@@ -2,21 +2,17 @@
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.JCamera;
+using Jrd.PlayState;
 using Jrd.UI.BuildingState;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Physics;
 using UnityEngine;
-using Ray = Unity.Physics.Ray;
-using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Jrd.GameStates.PlayState
 {
     public partial struct SelectBuildingSystem : ISystem
     {
-        private const float RayDistance = 200f;
         private Entity _tempTargetEntity;
-        private bool _isSelectTagAdded;
         private const uint TargetLayer = 1u << 31;
         private EntityCommandBuffer _bsEcb;
         private Entity _tempFirstTargetEntity;
@@ -29,14 +25,12 @@ namespace Jrd.GameStates.PlayState
             state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
-            _isSelectTagAdded = false;
             _tempFirstTargetEntity = Entity.Null;
         }
 
+        // TODO KISS //LOOK
         public void OnUpdate(ref SystemState state)
         {
-            // TODO KISS //LOOK
-
             if (Input.touchCount != 1) return;
 
             _bsEcb = SystemAPI
@@ -51,7 +45,9 @@ namespace Jrd.GameStates.PlayState
             {
                 case TouchPhase.Began:
                 {
-                    if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity firstEntity))
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity firstEntity);
+
+                    if (!isHit)
                     {
                         _tempFirstTargetEntity = Entity.Null;
                         return;
@@ -68,14 +64,15 @@ namespace Jrd.GameStates.PlayState
                 {
                     if (Time.time - _timeStart > .3f) return;
 
-                    if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity secondEntity)) return;
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity secondEntity);
+
+                    if (!isHit) return;
 
                     if (!IsMatchingTarget(secondEntity, ref state)) return;
 
                     if (_tempFirstTargetEntity != Entity.Null && _tempFirstTargetEntity == secondEntity)
                     {
-                        Debug.LogWarning(" DO STUFF !");
-                        ConfirmationPanelMono.Instance.Show();
+                        BuildingConfigPanelMono.Instance.SetElementVisible(true);
                     }
 
                     _tempFingerId = -1;
@@ -90,32 +87,6 @@ namespace Jrd.GameStates.PlayState
             bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(entity);
 
             return !isTempBuilding || isBuilding;
-        }
-
-        public bool Raycast(float3 from, float3 to, out Entity entity)
-        {
-            var input = new RaycastInput
-            {
-                Start = from,
-                End = to,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = TargetLayer,
-                    CollidesWith = TargetLayer,
-                    GroupIndex = 0
-                }
-            };
-
-            CollisionWorld collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
-
-            if (collisionWorld.CastRay(input, out RaycastHit hit))
-            {
-                entity = hit.Entity;
-                return true;
-            }
-
-            entity = Entity.Null;
-            return false;
         }
     }
 }

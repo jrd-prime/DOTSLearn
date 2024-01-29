@@ -2,7 +2,11 @@
 {
     public interface IVisibleElement
     {
-        void SetElementVisible(bool value);
+        virtual void SetElementVisible(bool value)
+        {
+            Show();
+        }
+
         void Show();
         void Hide();
     }

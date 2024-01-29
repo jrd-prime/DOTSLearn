@@ -1,25 +1,17 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.UI.BuildingState
 {
-    public class ConfirmationPanelMono : MonoBehaviour, IVisibleElement
+    public class ConfirmationPanelMono : PanelMono
     {
-        private VisualElement _root;
-        private VisualElement _confirmationPanel;
         private Button _cancelButton;
         private Button _applyButton;
 
-        private const string ConfirmationPanelName = "confirmation-container";
-        private const string ConfirmationPanelTitleName = "text";
-        public const string ConfirmationPanelTitle = "Build";
+        public const string ConfirmationPanelTitle = "Confirmation Title";
 
         public static ConfirmationPanelMono Instance { private set; get; }
-        public bool IsVisible { private set; get; }
-
-        public Label Title { get; set; }
         public Button CancelButton { get; private set; }
         public Button ApplyButton { get; private set; }
 
@@ -38,15 +30,18 @@ namespace Jrd.UI.BuildingState
 
         private void OnEnable()
         {
-            _root = GetComponent<UIDocument>().rootVisualElement;
-            _confirmationPanel = _root.Q<VisualElement>(ConfirmationPanelName);
-            CancelButton = _root.Q<Button>("cancel-button");
-            ApplyButton = _root.Q<Button>("apply-button");
-            Title = _root.Q<Label>(ConfirmationPanelTitleName);
+            PanelIdName = "confirmation-container";
+            PanelTitleIdName = "text";
 
-            if (_confirmationPanel != null)
+            PanelRoot = GetComponent<UIDocument>().rootVisualElement;
+            PanelVisualElement = PanelRoot.Q<VisualElement>(PanelIdName);
+            PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
+            CancelButton = PanelRoot.Q<Button>("cancel-button");
+            ApplyButton = PanelRoot.Q<Button>("apply-button");
+
+            if (PanelVisualElement != null)
             {
-                _confirmationPanel.style.display = DisplayStyle.None;
+                base.HidePanel();
                 IsVisible = false;
             }
 
@@ -54,31 +49,20 @@ namespace Jrd.UI.BuildingState
             ApplyButton.RegisterCallback<ClickEvent>(evt => OnTempBuildApply?.Invoke());
         }
 
-        private void SetPanelTitle(string titleText)
+        public override void SetPanelTitle(string titleText)
         {
-            _confirmationPanel.Q<Label>(ConfirmationPanelTitleName).text = titleText.ToUpper();
+            base.SetPanelTitle(ConfirmationPanelTitle);
         }
 
-        public void SetElementVisible(bool value)
+        protected override void OnCloseButton()
         {
-            switch (IsVisible)
-            {
-                case false when value:
-                    SetPanelTitle(ConfirmationPanelTitle);
-                    Show();
-                    IsVisible = true;
-                    break;
-                case true when !value:
-                    Hide();
-                    IsVisible = false;
-                    break;
-            }
+            throw new NotImplementedException();
         }
 
-        public void Show()
+        public override void ShowPanel()
         {
-            _confirmationPanel.style.display = DisplayStyle.Flex;
-            _confirmationPanel.experimental.animation
+            base.ShowPanel();
+            PanelVisualElement.experimental.animation
                 .Start(
                     new StyleValues { bottom = PanelHeight * -1 },
                     new StyleValues { bottom = BottomMargin },
@@ -87,16 +71,16 @@ namespace Jrd.UI.BuildingState
                 .KeepAlive();
         }
 
-        public void Hide()
+        public override void HidePanel()
         {
-            _confirmationPanel.experimental.animation
+            PanelVisualElement.experimental.animation
                 .Start(
                     new StyleValues { bottom = BottomMargin },
                     new StyleValues { bottom = PanelHeight * -1 },
                     HideDuration)
                 .Ease(Easing.InQuad)
                 .KeepAlive()
-                .onAnimationCompleted = () => _confirmationPanel.style.display = DisplayStyle.None;
+                .onAnimationCompleted = () => base.HidePanel();
         }
     }
 }
