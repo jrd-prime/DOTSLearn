@@ -1,9 +1,8 @@
-﻿using System;
-using Jrd.GameplayBuildings;
+﻿using Jrd.GameplayBuildings;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.JCamera;
-using Jrd.UserInput;
+using Jrd.UI.BuildingState;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -20,57 +19,76 @@ namespace Jrd.GameStates.PlayState
         private bool _isSelectTagAdded;
         private const uint TargetLayer = 1u << 31;
         private EntityCommandBuffer _bsEcb;
+        private Entity tempFirstTargetEntity;
+        private int tempFingerId;
 
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            // state.RequireForUpdate<TempBuildingTag>();
-
             state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
-
             _isSelectTagAdded = false;
+            tempFirstTargetEntity = Entity.Null;
         }
 
         public void OnUpdate(ref SystemState state)
         {
+            // LOOK TODO refactor with wait time and deltapos
+
             if (Input.touchCount != 1) return; //TODO more than 1 touch???
 
             _bsEcb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            Touch touch = Input.GetTouch(0);
-            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
+            var touch = Input.GetTouch(0);
 
             UnityEngine.Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
-            if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity targetEntity)) return;
 
-            bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(targetEntity);
-            bool isBuilding = SystemAPI.HasComponent<BuildingTag>(targetEntity);
-
-            if (isTempBuilding || !isBuilding)
+            if (touch.phase == TouchPhase.Began)
             {
-                Debug.Log("ITS TEMP OR NOT BUILDING. Return");
-                return;
+                if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity firstEntity))
+                {
+                    tempFirstTargetEntity = Entity.Null;
+                    return;
+                }
+
+                tempFingerId = touch.fingerId;
+                tempFirstTargetEntity = firstEntity;
+                bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(firstEntity);
+                bool isBuilding = SystemAPI.HasComponent<BuildingTag>(firstEntity);
+
+                if (isTempBuilding || !isBuilding)
+                {
+                    Debug.Log("ITS TEMP OR NOT BUILDING. Return");
+                    return;
+                }
             }
 
-            switch (touch.phase)
+            int fingerId = touch.fingerId;
+            if (touch.phase is TouchPhase.Ended or TouchPhase.Canceled && tempFingerId == fingerId)
             {
-                case TouchPhase.Began:
+                if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity secondEntity)) return;
 
-                    Debug.Log("click in building " + targetEntity);
-                    _tempTargetEntity = targetEntity;
-                    break;
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    Debug.Log("RETURN");
+                bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(secondEntity);
+                bool isBuilding = SystemAPI.HasComponent<BuildingTag>(secondEntity);
+
+
+                if (isTempBuilding || !isBuilding)
+                {
+                    Debug.Log("ITS TEMP OR NOT BUILDING. Return");
                     return;
-                default:
-                    return;
+                }
+
+
+                if (tempFirstTargetEntity != Entity.Null && tempFirstTargetEntity == secondEntity)
+                {
+                    Debug.LogWarning(" DO STUFF !");
+                    ConfirmationPanelMono.Instance.Show();
+                }
+
+                tempFingerId = -1;
             }
         }
 
