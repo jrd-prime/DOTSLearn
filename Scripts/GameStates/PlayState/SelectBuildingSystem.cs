@@ -56,14 +56,21 @@ namespace Jrd.GameStates.PlayState
 
                 tempFingerId = touch.fingerId;
                 tempFirstTargetEntity = firstEntity;
-                bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(firstEntity);
-                bool isBuilding = SystemAPI.HasComponent<BuildingTag>(firstEntity);
 
-                if (isTempBuilding || !isBuilding)
+                if (!IsMatchingTarget(firstEntity, ref state))
                 {
                     Debug.Log("ITS TEMP OR NOT BUILDING. Return");
                     return;
                 }
+
+                // bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(firstEntity);
+                // bool isBuilding = SystemAPI.HasComponent<BuildingTag>(firstEntity);
+                //
+                // if (isTempBuilding || !isBuilding)
+                // {
+                //     Debug.Log("ITS TEMP OR NOT BUILDING. Return");
+                //     return;
+                // }
             }
 
             int fingerId = touch.fingerId;
@@ -71,15 +78,20 @@ namespace Jrd.GameStates.PlayState
             {
                 if (!Raycast(ray.origin, ray.GetPoint(RayDistance), out Entity secondEntity)) return;
 
-                bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(secondEntity);
-                bool isBuilding = SystemAPI.HasComponent<BuildingTag>(secondEntity);
-
-
-                if (isTempBuilding || !isBuilding)
+                if (!IsMatchingTarget(secondEntity, ref state))
                 {
                     Debug.Log("ITS TEMP OR NOT BUILDING. Return");
                     return;
                 }
+
+                // bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(secondEntity);
+                // bool isBuilding = SystemAPI.HasComponent<BuildingTag>(secondEntity);
+                //
+                // if (isTempBuilding || !isBuilding)
+                // {
+                //     Debug.Log("ITS TEMP OR NOT BUILDING. Return");
+                //     return;
+                // }
 
 
                 if (tempFirstTargetEntity != Entity.Null && tempFirstTargetEntity == secondEntity)
@@ -90,6 +102,13 @@ namespace Jrd.GameStates.PlayState
 
                 tempFingerId = -1;
             }
+        }
+
+        private bool IsMatchingTarget(Entity entity, ref SystemState state)
+        {
+            bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(entity);
+            bool isBuilding = SystemAPI.HasComponent<BuildingTag>(entity);
+            return !isTempBuilding || isBuilding;
         }
 
         public bool Raycast(float3 from, float3 to, out Entity entity)
