@@ -23,6 +23,14 @@ namespace Jrd.PlayState
             PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
             PanelCloseButton = PanelVisualElement.Q<Button>(PanelCloseButtonIdName);
 
+            var ToogleCheck = PanelVisualElement.Q<VisualElement>("toggle-check");
+
+            ToogleCheck.RegisterCallback<ClickEvent>(evt =>
+            {
+                Debug.Log("togg click");
+                ToogleCheck.style.backgroundColor = new StyleColor(new Color(74,91,63,1));
+            });
+
             if (PanelVisualElement == null) return;
             base.HidePanel();
             IsVisible = false;

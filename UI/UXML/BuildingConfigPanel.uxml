@@ -2,21 +2,8 @@
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
-    <ui:VisualElement name="building-config-panel" focusable="false" picking-mode="Ignore" class="building-panel" style="background-image: url(&apos;project://database/Assets/UI/Images/bcp.png?fileID=21300000&amp;guid=55374e806a777e9408ffa9280698216d&amp;type=3#bcp&apos;);">
-        <ui:VisualElement name="head-container" class="head-container" style="display: none;">
-            <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" style="position: absolute; left: 20px;" />
-            <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="panel-title" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
-            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" style="position: absolute; right: 20px;" />
-        </ui:VisualElement>
-        <ui:VisualElement name="content-container" class="content-container" style="overflow: visible; display: none;">
-            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="background-color: rgba(173, 87, 87, 0); width: 580px; height: 200px; align-self: flex-start; align-items: flex-start; flex-direction: row; overflow: hidden;">
-                <ui:GroupBox name="groupbox" class="groupbox" />
-            </ui:ScrollView>
-        </ui:VisualElement>
-        <ui:VisualElement name="foot-container" class="foot-container" style="overflow: visible; display: none;">
-            <ui:Label tabindex="-1" text="Coins" parse-escape-sequences="true" display-tooltip-when-elided="true" name="foot-text" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
-        </ui:VisualElement>
-        <ui:VisualElement name="bcp-stats-container-140x280" class="bcp-stats-container" style="background-color: rgba(250, 193, 114, 0);">
+    <ui:VisualElement name="building-config-panel" focusable="false" picking-mode="Ignore" class="building-panel" style="background-image: none;">
+        <ui:VisualElement name="bcp-stats-container-140x280" class="bcp-stats-container" style="background-color: rgb(250, 193, 114); border-left-color: rgba(255, 131, 87, 0); border-right-color: rgba(255, 131, 87, 0); border-top-color: rgba(255, 131, 87, 0); border-bottom-color: rgba(255, 131, 87, 0); height: 320px;">
             <ui:VisualElement name="bcp-icon" class="bcp-icon" style="flex-grow: 1; -unity-text-align: upper-center; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 3px; background-color: rgba(0, 0, 0, 0.2); border-left-color: rgba(78, 78, 78, 0.67); border-right-color: rgba(78, 78, 78, 0.67); border-top-color: rgba(78, 78, 78, 0.67); border-bottom-color: rgba(78, 78, 78, 0.67);">
                 <ui:VisualElement name="icon-holder" style="flex-grow: 1; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; background-image: url(&apos;project://database/Assets/UI/Images/img1.png?fileID=21300000&amp;guid=64a62883e3720ca41b9bfc22c7d9e58f&amp;type=3#img1&apos;);" />
                 <ui:VisualElement style="flex-grow: 1; position: absolute; top: 0; height: auto; margin-top: 10px; min-height: 20px; min-width: auto; background-color: rgba(0, 0, 0, 0.53); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-left: 0; margin-right: 0; width: auto; align-items: center; justify-content: center; align-self: center; padding-right: 10px; padding-left: 10px; max-height: 30px;">
@@ -52,12 +39,70 @@
                     <ui:Label tabindex="-1" text="Max flour in mill storage" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-left-text" />
                     <ui:Label tabindex="-1" text="5" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-right-text" />
                 </ui:VisualElement>
-                <ui:VisualElement style="flex-grow: 1; background-color: rgba(52, 192, 173, 0); width: 130px; height: 40px; position: absolute; bottom: 0; align-items: center; justify-content: center; align-self: center; font-size: 10px;">
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(52, 192, 173, 0); width: 130px; height: 32px; position: absolute; bottom: 0; align-items: center; justify-content: center; align-self: center; font-size: 10px;">
                     <ui:Button text="upgrade" parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 88px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); background-color: rgb(126, 160, 14);" />
                     <ui:Button text="add&#10;buff" parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; right: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 32px; width: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(120, 120, 120); border-right-color: rgb(120, 120, 120); border-top-color: rgb(120, 120, 120); border-bottom-color: rgb(120, 120, 120); background-color: rgb(8, 151, 157);" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement class="bcp-content-container" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: rgba(171, 167, 133, 0.4);" />
+        <ui:VisualElement name="VisualElement" class="bcp-content-container" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: rgb(255, 221, 148);">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: 430px; height: 160px; position: absolute; padding-top: 0; top: 0; bottom: auto; border-top-right-radius: 30px; left: 0; border-bottom-width: 2px; border-left-color: rgb(250, 193, 114); border-right-color: rgb(250, 193, 114); border-top-color: rgb(250, 193, 114); border-bottom-color: rgb(250, 193, 114); flex-direction: row;">
+                <ui:VisualElement style="flex-grow: 1; width: 33px; background-color: rgba(129, 81, 173, 0.51); height: auto; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                    <ui:VisualElement name="ico1" style="flex-grow: 0; width: 33px; height: 33px; background-color: rgba(61, 164, 128, 0.59);" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 3; width: 33px; background-color: rgba(130, 224, 69, 0.46); height: auto;">
+                    <ui:VisualElement style="flex-grow: 1; height: 55px; background-color: rgba(214, 78, 78, 0.49); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                        <ui:ProgressBar value="22" title="my-progress" name="pb1" style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; height: 55px; background-color: rgba(78, 164, 155, 0.49); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                        <ui:ProgressBar value="22" title="my-progress" name="pb2" style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 0; height: 55px; background-color: rgba(214, 78, 78, 0.49); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                        <ui:Label tabindex="-1" text="start" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; width: 33px; height: auto; background-color: rgba(200, 24, 24, 0.42); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px;">
+                    <ui:VisualElement name="ico2" style="flex-grow: 0; width: 33px; height: 33px; background-color: rgba(61, 164, 128, 0.59);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 390px; height: 140px; position: absolute; padding-top: 0; top: auto; bottom: 20px;">
+                <ui:VisualElement class="grid-cont" style="flex-direction: row; flex-wrap: wrap; width: 120px; height: auto; border-top-width: 3px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-width: 3px; background-color: rgba(0, 0, 0, 0.2); padding-bottom: 5px; padding-left: 2px; padding-top: 2px; padding-right: 5px; min-height: auto; min-width: auto; align-self: flex-start; justify-content: flex-start; align-items: flex-start;">
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement style="flex-grow: 1; position: absolute; top: -25px; width: 100%; height: 20px; background-color: rgba(0, 0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; overflow: hidden;">
+                        <ui:Label tabindex="-1" text="Mill Storage" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-direction: row; align-items: center; justify-content: center; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 10px; height: 20px; -unity-text-align: middle-center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 120px; height: 118px; width: 150px; margin-top: 22px;">
+                    <ui:VisualElement style="flex-grow: 1; width: 130px; height: 30px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 0; margin-top: 10px; font-size: 10px; flex-direction: column; margin-left: 10px; margin-right: 10px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgba(0, 0, 0, 0.1); border-right-color: rgba(0, 0, 0, 0.1); border-top-color: rgba(0, 0, 0, 0.1); border-bottom-color: rgba(0, 0, 0, 0.1); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;">
+                        <ui:VisualElement name="toogle-text" style="flex-grow: 1; width: 100px; height: 30px; right: 0; position: absolute;">
+                            <ui:Label tabindex="-1" text="AUTO MOVE (Pro)" parse-escape-sequences="true" display-tooltip-when-elided="true" style="height: 28px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-left; font-size: 7px; color: rgba(27, 27, 27, 0.6);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="toogle-img" style="flex-grow: 1; position: absolute; left: 0; width: 22px; height: 22px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(229, 198, 133); border-right-color: rgb(229, 198, 133); border-top-color: rgb(229, 198, 133); border-bottom-color: rgb(229, 198, 133); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px;">
+                            <ui:VisualElement name="toggle-check" style="flex-grow: 1; background-color: rgba(126, 160, 14, 0); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; width: 150px; height: 32px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 42px; margin-top: 10px;">
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 130px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); background-color: rgb(126, 160, 14); font-size: 10px;">
+                            <ui:VisualElement style="flex-grow: 1; min-width: auto; min-height: auto; width: 34px; height: 32px; position: absolute; right: 0; background-color: rgba(108, 108, 108, 0.65); border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-width: 2px; border-left-color: rgba(0, 0, 0, 0.34); border-right-color: rgba(0, 0, 0, 0.34); border-top-color: rgba(0, 0, 0, 0.34); border-bottom-color: rgba(0, 0, 0, 0.34);">
+                                <ui:Label tabindex="-1" text="=&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 32px; height: 32px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                            </ui:VisualElement>
+                            <ui:Label tabindex="-1" text="Move to&#10;main storage" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" style="position: absolute; left: 0; height: 32px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 90px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 10px; -unity-text-align: middle-left;" />
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="VisualElement" class="grid-cont" style="flex-direction: row; flex-wrap: wrap; width: 120px; height: auto; border-top-width: 3px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-width: 3px; background-color: rgba(0, 0, 0, 0.2); padding-bottom: 5px; padding-left: 2px; padding-top: 2px; padding-right: 5px; min-height: auto; min-width: auto; align-self: center; justify-content: center; align-items: center; right: 0; left: auto;">
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement style="flex-grow: 1; position: absolute; top: -25px; width: 100%; height: 20px; background-color: rgba(0, 0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; overflow: hidden;">
+                        <ui:Label tabindex="-1" text="Farm Storage" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-direction: row; align-items: center; justify-content: center; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 10px; height: 20px; -unity-text-align: middle-center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

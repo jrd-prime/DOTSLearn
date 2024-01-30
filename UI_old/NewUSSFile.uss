@@ -190,10 +190,10 @@ VisualElement {
     border-right-width: 0;
     border-bottom-width: 0;
     border-left-width: 0;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(255, 131, 87);
+    border-right-color: rgb(255, 131, 87);
+    border-top-color: rgb(255, 131, 87);
+    border-bottom-color: rgb(255, 131, 87);
     border-top-left-radius: 30px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -206,6 +206,10 @@ VisualElement {
     width: 430px;
     height: 320px;
     background-color: rgba(0, 0, 0, 0.59);
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
 }
 
 .bcp-icon {
@@ -304,4 +308,57 @@ VisualElement {
     border-top-color: rgb(33, 53, 2);
     border-bottom-color: rgb(33, 53, 2);
     color: rgb(33, 53, 2);
+}
+
+.grid {
+    background-color: rgb(200, 202, 163);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    width: 48px;
+    height: 48px;
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgba(132, 132, 132, 0.5);
+    border-right-color: rgba(132, 132, 132, 0.5);
+    border-top-color: rgba(132, 132, 132, 0.5);
+    border-bottom-color: rgba(132, 132, 132, 0.5);
+    background-image: url('project://database/Assets/UI/Images/img1.png?fileID=21300000&guid=64a62883e3720ca41b9bfc22c7d9e58f&type=3#img1');
+}
+
+.grid-cont {
+    flex-grow: 1;
+    position: absolute;
+    width: 111px;
+    height: 111px;
+    background-color: rgba(183, 97, 97, 0.6);
+    bottom: 0;
+    left: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-self: flex-start;
+}
+
+.tess {
+    width: 110px;
+    overflow: visible;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    align-self: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    background-color: rgb(221, 32, 32);
+    position: absolute;
+    right: auto;
 }
