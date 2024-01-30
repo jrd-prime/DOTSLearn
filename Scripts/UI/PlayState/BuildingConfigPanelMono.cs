@@ -26,19 +26,15 @@ namespace Jrd.PlayState
             if (PanelVisualElement == null) return;
             base.HidePanel();
             IsVisible = false;
-            
+
             PanelCloseButton.clicked += OnCloseButton;
         }
-        
+
         private void OnDisable()
         {
             PanelCloseButton.clicked -= OnCloseButton;
         }
 
-        protected override void OnCloseButton()
-        {
-            Debug.Log("click");
-            HidePanel();
-        }
+        protected override void OnCloseButton() => HidePanel();
     }
 }

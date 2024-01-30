@@ -2,19 +2,49 @@
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
-    <ui:VisualElement name="building-config-panel" focusable="false" picking-mode="Ignore" class="building-panel">
-        <ui:VisualElement name="head-container" class="head-container">
+    <ui:VisualElement name="building-config-panel" focusable="false" picking-mode="Ignore" class="building-panel" style="background-image: none;">
+        <ui:VisualElement name="head-container" class="head-container" style="display: none;">
             <ui:Button text="&lt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="back-button" class="header-button color-blue-1" style="position: absolute; left: 20px;" />
             <ui:Label tabindex="-1" text="Head" parse-escape-sequences="true" display-tooltip-when-elided="true" name="panel-title" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
             <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" class="header-button color-red-1" style="position: absolute; right: 20px;" />
         </ui:VisualElement>
-        <ui:VisualElement name="content-container" class="content-container">
+        <ui:VisualElement name="content-container" class="content-container" style="overflow: visible; display: none;">
             <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="ScrollView" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="background-color: rgba(173, 87, 87, 0); width: 580px; height: 200px; align-self: flex-start; align-items: flex-start; flex-direction: row; overflow: hidden;">
                 <ui:GroupBox name="groupbox" class="groupbox" />
             </ui:ScrollView>
         </ui:VisualElement>
-        <ui:VisualElement name="foot-container" class="foot-container">
+        <ui:VisualElement name="foot-container" class="foot-container" style="overflow: visible; display: none;">
             <ui:Label tabindex="-1" text="Coins" parse-escape-sequences="true" display-tooltip-when-elided="true" name="foot-text" style="align-self: center; align-items: center; justify-content: center; width: 580px; height: 30px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-direction: column; -unity-font-style: bold;" />
         </ui:VisualElement>
+        <ui:VisualElement name="bcp-stats-container-140x280" class="bcp-stats-container">
+            <ui:VisualElement name="bcp-icon" class="bcp-icon" style="flex-grow: 1; -unity-text-align: upper-center; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 3px; background-color: rgba(0, 0, 0, 0.2); border-left-color: rgba(78, 78, 78, 0.67); border-right-color: rgba(78, 78, 78, 0.67); border-top-color: rgba(78, 78, 78, 0.67); border-bottom-color: rgba(78, 78, 78, 0.67);">
+                <ui:VisualElement name="icon-holder" style="flex-grow: 1; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; background-image: url(&apos;project://database/Assets/UI/Images/img1.png?fileID=21300000&amp;guid=64a62883e3720ca41b9bfc22c7d9e58f&amp;type=3#img1&apos;);" />
+                <ui:VisualElement style="flex-grow: 1; position: absolute; top: 0; height: auto; margin-top: 10px; min-height: 20px; min-width: auto; background-color: rgba(0, 0, 0, 0.53); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-left: 0; margin-right: 0; width: auto; align-items: center; justify-content: center; align-self: center; padding-right: 10px; padding-left: 10px; max-height: 30px;">
+                    <ui:Label tabindex="-1" text="FARM MILL" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-style: normal; font-size: 10px; min-width: auto; min-height: 20px; height: auto; -unity-text-align: middle-center; color: rgb(255, 255, 255); max-height: 30px;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; width: 24px; height: 25px; background-color: rgb(51, 89, 54); position: absolute; bottom: 10px; right: 10px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; -unity-text-align: middle-center; flex-direction: row; align-items: center; justify-content: center; align-self: center; font-size: 10px; -unity-font-style: normal; color: rgb(255, 255, 255); border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                    <ui:Label tabindex="-1" text="16" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font: url(&apos;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Anton.ttf?fileID=12800000&amp;guid=997a43b767814dd0a7642ec9b78cba41&amp;type=3#Anton&apos;); width: 24px; height: 24px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="bcp-stats" class="bcp-stats" style="background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement class="stat-line">
+                    <ui:Label tabindex="-1" text="Stat name" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="10" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-line" style="top: 45px;">
+                    <ui:Label tabindex="-1" text="Stat name" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="10" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="VisualElement" class="stat-line" style="position: absolute; top: 70px;">
+                    <ui:Label tabindex="-1" text="Stat name" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="10" parse-escape-sequences="true" display-tooltip-when-elided="true" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(52, 192, 173, 0); width: 130px; height: 40px; position: absolute; bottom: 0; align-items: center; justify-content: center; align-self: center; font-size: 10px;">
+                    <ui:Button text="upgrade" parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 88px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101);" />
+                    <ui:Button text="add&#10;buff" parse-escape-sequences="true" display-tooltip-when-elided="true" style="position: absolute; right: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 32px; width: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(120, 120, 120); border-right-color: rgb(120, 120, 120); border-top-color: rgb(120, 120, 120); border-bottom-color: rgb(120, 120, 120);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="bcp-content-container" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: rgb(171, 167, 133);" />
     </ui:VisualElement>
 </ui:UXML>
