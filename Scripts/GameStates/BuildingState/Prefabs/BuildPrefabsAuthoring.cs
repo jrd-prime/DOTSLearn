@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Jrd.Goods;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Rendering;
 using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.Prefabs
@@ -10,7 +10,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
     public class BuildPrefabsAuthoring : MonoBehaviour
     {
         // public List<GameObject> _prefabs;
-        public List<BuildingDataSO> _buildings;
+        public List<BuildingDataSo> _buildings;
 
         private class Baker : Baker<BuildPrefabsAuthoring>
         {
@@ -29,12 +29,14 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                         Self = GetEntity(prefab.Prefab, TransformUsageFlags.Dynamic),
                         Name = prefab.Name,
                         Size = prefab.Size,
-                        Category = prefab.Category
+                        Category = prefab.Category,
+                        test = prefab.Required // TODO
                     });
                 }
             }
         }
     }
+
 
     public struct BuildPrefabsComponent : IComponentData
     {
@@ -47,5 +49,6 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         public FixedString64Bytes Name;
         public float2 Size;
         public BuildingCategory Category;
+        public NativeArray<GoodsDataStruct> test;
     }
 }

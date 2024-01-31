@@ -17,9 +17,3 @@ MonoBehaviour:
   _buildingName: Windmill
   _buildingSize: {x: 5, y: 5}
   _buildingCategory: 0
-  _requiredProducts:
-  - _count: 5
-    _product: {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
-  _manufacturedProducts:
-  - _count: 1
-    _product: {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}
