@@ -1,4 +1,4 @@
-﻿using Jrd.JCamera;
+﻿using Jrd.CameraControl;
 using Jrd.UserInput;
 using Unity.Burst;
 using Unity.Entities;

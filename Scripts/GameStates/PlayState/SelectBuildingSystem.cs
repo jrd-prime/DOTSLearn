@@ -1,7 +1,7 @@
 ﻿using Jrd.GameplayBuildings;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
-using Jrd.JCamera;
+using Jrd.CameraControl;
 using Jrd.PlayState;
 using Jrd.UI.BuildingState;
 using Unity.Entities;

@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.JCamera
+namespace Jrd.CameraControl
 {
     // TODO переделать камеру на синемашин
     public class CameraMono : MonoBehaviour

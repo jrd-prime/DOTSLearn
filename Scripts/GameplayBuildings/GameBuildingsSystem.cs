@@ -5,6 +5,8 @@ namespace Jrd.GameplayBuildings
 {
     public partial struct GameBuildingsSystem : ISystem
     {
+        private RefRW<GameBuildingsData> _gameBuildingsData;
+
         public void OnCreate(ref SystemState state)
         {
             var entityManager = state.EntityManager;
@@ -17,13 +19,19 @@ namespace Jrd.GameplayBuildings
         {
             state.Enabled = false;
 
-            var gameBuildingsData = SystemAPI.GetSingletonRW<GameBuildingsData>();
+            _gameBuildingsData = SystemAPI.GetSingletonRW<GameBuildingsData>();
 
-            if (!gameBuildingsData.ValueRO.GameBuildings.IsCreated)
+            if (!_gameBuildingsData.ValueRO.GameBuildings.IsCreated)
             {
-                gameBuildingsData.ValueRW.GameBuildings =
+                _gameBuildingsData.ValueRW.GameBuildings =
                     new NativeHashMap<FixedString64Bytes, BuildingData>(1, Allocator.Persistent);
             }
+        }
+
+        public void OnDestroy(ref SystemState state)
+        {
+            _gameBuildingsData = SystemAPI.GetSingletonRW<GameBuildingsData>();
+            _gameBuildingsData.ValueRW.GameBuildings.Dispose();
         }
     }
 }

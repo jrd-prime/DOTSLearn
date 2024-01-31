@@ -1,9 +1,8 @@
-﻿using Jrd.UserInput;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Jrd.JCamera
+namespace Jrd.CameraControl
 {
     public partial struct CameraFollowSystem : ISystem
     {

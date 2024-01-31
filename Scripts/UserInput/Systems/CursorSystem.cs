@@ -1,5 +1,5 @@
-﻿using Jrd.JCamera;
-using Jrd.JUtils.Const;
+﻿using Jrd.CameraControl;
+using Jrd.Utils.Const;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

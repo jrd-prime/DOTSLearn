@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
-  m_Name: Mill
+  m_Script: {fileID: 11500000, guid: 89432a90999d4e7d9a0d2d53f3512cd3, type: 3}
+  m_Name: Flour
   m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682,
-    type: 3}
-  _buildingName: Mill
-  _buildingSize: {x: 5, y: 5}
-  _buildingCategory: 0
+  productPrefabOrImageMB: {fileID: 0}
+  _productName: Flour
+  _productPackSize: 5
+  _goodsCategory: 1

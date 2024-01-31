@@ -1,6 +1,6 @@
 ﻿using Jrd.GameStates;
 using Jrd.GameStates.MainGameState;
-using Jrd.JUtils;
+using Jrd.Utils;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
@@ -42,28 +42,28 @@ namespace Jrd.DebSet
 
             if (_isSubscribed) return;
 
-            // building mode start
-            DebSetUI.BModeButton.clicked += (() =>
-            {
-                _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.BuildingState });
-            }); // TODO
-
-            // building mode stop
-            DebSetUI.BModeButtonOff.clicked += () =>
-            {
-                _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.GamePlayState });
-            }; // TODO
-
-            DebSetUI.DebSetApplyButton.clicked += () =>
-            {
-                H.T("ApplyDebSettings");
-                _bsEcb.SetComponent(_entity, new DebSetComponent
-                {
-                    MouseRaycast = DebSetUI.IsMouseRaycast
-                });
-            };
-
-            DebSetUI.DebSetClearLogButton.clicked += () => { DebSetUI.DebSetText.text = ""; };
+            // // building mode start
+            // DebSetUI.BModeButton.clicked += (() =>
+            // {
+            //     _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.BuildingState });
+            // }); // TODO
+            //
+            // // building mode stop
+            // DebSetUI.BModeButtonOff.clicked += () =>
+            // {
+            //     _bsEcb.SetComponent(_gameStateEntity, new ChangeGameStateComponent { GameState = GameState.GamePlayState });
+            // }; // TODO
+            //
+            // DebSetUI.DebSetApplyButton.clicked += () =>
+            // {
+            //     H.T("ApplyDebSettings");
+            //     _bsEcb.SetComponent(_entity, new DebSetComponent
+            //     {
+            //         MouseRaycast = DebSetUI.IsMouseRaycast
+            //     });
+            // };
+            //
+            // DebSetUI.DebSetClearLogButton.clicked += () => { DebSetUI.DebSetText.text = ""; };
             _isSubscribed = true;
         }
     }

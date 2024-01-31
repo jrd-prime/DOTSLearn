@@ -1,4 +1,4 @@
-﻿using Jrd.JCamera;
+﻿using Jrd.CameraControl;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;

@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Jrd.JCamera
+namespace Jrd.CameraControl
 {
     public struct CameraData : IComponentData
     {
