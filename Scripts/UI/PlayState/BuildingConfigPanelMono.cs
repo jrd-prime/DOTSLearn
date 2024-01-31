@@ -1,14 +1,17 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.UIElements.Experimental;
 
 namespace Jrd.PlayState
 {
     public class BuildingConfigPanelMono : PanelMono
     {
+        // Buttons
+        protected Button ButtonTake;
+        protected Button ButtonLoad;
+        protected Button ButtonMove;
+        protected Button ButtonBuff;
+        protected Button ButtonUpgrade;
+
         public static BuildingConfigPanelMono Instance { private set; get; }
 
         private void Awake()
@@ -27,11 +30,11 @@ namespace Jrd.PlayState
             PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
             PanelCloseButton = PanelVisualElement.Q<Button>(PanelCloseButtonIdName);
 
-            var ButtonUpgrade = PanelVisualElement.Q<Button>("btn-upgrade");
-            var ButtonBuff = PanelVisualElement.Q<Button>("btn-buff");
-            var ButtonMove = PanelVisualElement.Q<Button>("btn-move");
-            var ButtonLoad = PanelVisualElement.Q<Button>("btn-load");
-            var ButtonTake = PanelVisualElement.Q<Button>("btn-take");
+            ButtonUpgrade = PanelVisualElement.Q<Button>("btn-upgrade");
+            ButtonBuff = PanelVisualElement.Q<Button>("btn-buff");
+            ButtonMove = PanelVisualElement.Q<Button>("btn-move");
+            ButtonLoad = PanelVisualElement.Q<Button>("btn-load");
+            ButtonTake = PanelVisualElement.Q<Button>("btn-take");
 
 
             ButtonUpgrade.RegisterCallback<ClickEvent>(Callback);
@@ -55,6 +58,7 @@ namespace Jrd.PlayState
 
             PanelCloseButton.clicked += OnCloseButton;
         }
+
 
         private void Callback(ClickEvent evt)
         {

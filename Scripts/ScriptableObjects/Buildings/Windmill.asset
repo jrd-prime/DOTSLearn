@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
-  m_Name: Mill
+  m_Name: Windmill
   m_EditorClassIdentifier: 
   _buildingPrefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682,
     type: 3}
-  _buildingName: Mill
+  _buildingName: Windmill
   _buildingSize: {x: 5, y: 5}
   _buildingCategory: 0
+  _requiredProducts:
+  - _count: 5
+    _product: {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
+  _manufacturedProducts:
+  - _count: 1
+    _product: {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}

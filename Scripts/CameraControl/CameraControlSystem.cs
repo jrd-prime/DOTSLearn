@@ -1,12 +1,11 @@
 ﻿using System;
-using Jrd.JUtils.Const;
+using Jrd.UserInput;
+using Jrd.Utils.Const;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using Jrd.UserInput;
-using Unity.Collections;
 
-namespace Jrd.JCamera
+namespace Jrd.CameraControl
 {
     public partial struct CameraControlSystem : ISystem
     {

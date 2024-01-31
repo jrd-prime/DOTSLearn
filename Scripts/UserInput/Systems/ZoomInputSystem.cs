@@ -1,5 +1,4 @@
-﻿using Jrd.JUtils;
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
 
 namespace Jrd.UserInput
@@ -21,7 +20,7 @@ namespace Jrd.UserInput
 #if UNITY_ANDROID
             if (Input.touchCount == 2)
             {
-                if (!Utils.IsPointerOverUIObject())
+                if (!Utils.Utils.IsPointerOverUIObject())
                 {
                     Touch touch1 = Input.GetTouch(0);
                     Touch touch2 = Input.GetTouch(1);

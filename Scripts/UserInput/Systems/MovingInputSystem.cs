@@ -1,5 +1,4 @@
-﻿using Jrd.JUtils;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -29,7 +28,7 @@ namespace Jrd.UserInput
             // {
             if (Input.touchCount == 1)
             {
-                if (!Utils.IsPointerOverUIObject())
+                if (!Utils.Utils.IsPointerOverUIObject())
                 {
                     var touch = Input.GetTouch(0);
                     _fingerId = touch.fingerId;

@@ -1,5 +1,4 @@
 ﻿using Jrd.GameplayBuildings;
-using Jrd.JUtils;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
@@ -38,7 +37,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .WithAll<PlaceTempBuildingTag, TempBuildingTag>()
                          .WithEntityAccess())
             {
-                string guid = Utils.GetGuid();
+                string guid = Utils.Utils.GetGuid();
                 buildingData.ValueRW.Self = entity;
                 buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
                 buildingData.ValueRW.Guid = guid;

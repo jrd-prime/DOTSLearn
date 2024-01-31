@@ -362,3 +362,15 @@ VisualElement {
     position: absolute;
     right: auto;
 }
+
+.green-color {
+    background-color: rgb(173, 200, 101);
+}
+
+.green-color2 {
+    background-color: rgb(221, 230, 165);
+}
+
+.green-color3 {
+    background-color: rgb(138, 201, 74);
+}

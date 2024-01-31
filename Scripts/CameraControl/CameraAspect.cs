@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.JCamera
+namespace Jrd.CameraControl
 {
     public readonly partial struct CameraAspect : IAspect
     {

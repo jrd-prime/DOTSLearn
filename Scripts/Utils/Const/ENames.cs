@@ -1,4 +1,4 @@
-﻿namespace Jrd.JUtils.Const
+﻿namespace Jrd.Utils.Const
 {
     /// <summary>
     /// Entity names
