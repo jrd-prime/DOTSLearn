@@ -1,8 +1,9 @@
 ﻿namespace Jrd.GameStates.BuildingState.Prefabs
 {
-    public enum BuildingCategory
+    public enum BuildingCategoryId
     {
+        Default,
         Factory,
-        Field
+        Field,
     }
 }

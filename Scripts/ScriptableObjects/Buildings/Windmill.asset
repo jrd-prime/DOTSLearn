@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
   m_Name: Windmill
   m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682,
-    type: 3}
-  _buildingName: Windmill
-  _buildingSize: {x: 5, y: 5}
-  _buildingCategory: 0
+  _prefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682, type: 3}
+  _name: Windmill
+  _nameId: 1
+  _size: {x: 5, y: 5}
+  _categoryId: 1
+  _requiredItems:
+  - _requiredItem: 0
+    _count: 5
+  _manufacturedItems:
+  - _manufacturedItem: 1
+    _count: 1

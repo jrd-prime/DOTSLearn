@@ -4,6 +4,8 @@ using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
+using Jrd.GameStates.PlayState;
+using Jrd.PlayState;
 using Jrd.UI.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
@@ -50,8 +52,17 @@ namespace Jrd.GameStates.BuildingState
             BuildingPanelMono.OnBuildSelected += BuildSelected;
             ConfirmationPanelMono.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelMono.OnTempBuildApply += ConfirmBuilding;
+            BuildingConfigPanelMono.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
 
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
+        }
+
+        private void ClosePanelAndRemoveSelectedTag()
+        {
+            BuildingConfigPanelMono.Instance.SetElementVisible(false);
+            
+            var e = SystemAPI.GetSingletonEntity<SelectedBuildingTag>();
+            _bsEcb.RemoveComponent<SelectedBuildingTag>(e);
         }
 
         protected override void OnUpdate()
@@ -108,7 +119,8 @@ namespace Jrd.GameStates.BuildingState
                 new InstantiateTempPrefabComponent
                 {
                     Prefab = _buildingsPrefabsBuffer[index].Self,
-                    Name = _buildingsPrefabsBuffer[index].Name
+                    Name = _buildingsPrefabsBuffer[index].Name,
+                    NameId = _buildingsPrefabsBuffer[index].NameId
                 });
 
             Debug.Log($"Build ID: {index} / Prefab: {_buildingsPrefabsBuffer[index].Name}");

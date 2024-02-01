@@ -72,6 +72,7 @@ namespace Jrd.GameStates.PlayState
 
                     if (_tempFirstTargetEntity != Entity.Null && _tempFirstTargetEntity == secondEntity)
                     {
+                        _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         BuildingConfigPanelMono.Instance.SetElementVisible(true);
                     }
 

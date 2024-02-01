@@ -7,5 +7,6 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
     {
         public Entity Prefab;
         public FixedString64Bytes Name;
+        public BuildingNameId NameId;
     }
 }

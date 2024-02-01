@@ -41,6 +41,10 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                 buildingData.ValueRW.Self = entity;
                 buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
                 buildingData.ValueRW.Guid = guid;
+                buildingData.ValueRW.Level = 1;
+                buildingData.ValueRW.LoadCapacity = 20;
+                buildingData.ValueRW.MaxStorage = 10;
+                buildingData.ValueRW.Speed = 5;
 
                 _bsEcb.SetName(entity, $"{buildingData.ValueRO.Name}_{guid}");
                 _bsEcb.AddComponent<BuildingTag>(entity);
@@ -59,7 +63,14 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                     Self = entity,
                     Name = data.Name,
                     Prefab = data.Prefab,
-                    WorldPosition = data.WorldPosition
+                    WorldPosition = data.WorldPosition,
+                    NameId = data.NameId,
+                    
+                    // TODO from build settings
+                    Level = 1,
+                    LoadCapacity = 20,
+                    MaxStorage = 10,
+                    Speed = 5
                 });
             }
         }

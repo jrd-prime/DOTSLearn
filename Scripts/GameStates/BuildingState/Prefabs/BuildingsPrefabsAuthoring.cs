@@ -40,7 +40,8 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                     Self = GetEntity(buildingData.Prefab, TransformUsageFlags.Dynamic),
                     Name = buildingData.Name,
                     Size = buildingData.Size,
-                    Category = buildingData.Category
+                    CategoryId = buildingData.CategoryId,
+                    NameId = buildingData.NameId
                 });
             }
 
@@ -69,7 +70,8 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         public Entity Self;
         public FixedString64Bytes Name;
         public float2 Size;
-        public BuildingCategory Category;
+        public BuildingCategoryId CategoryId;
+        public BuildingNameId NameId;
     }
 
     [Serializable]

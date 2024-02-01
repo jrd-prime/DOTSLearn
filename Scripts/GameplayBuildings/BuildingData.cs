@@ -11,5 +11,12 @@ namespace Jrd.GameplayBuildings
         public Entity Prefab;
         public FixedString64Bytes Guid;
         public float3 WorldPosition;
+        public BuildingNameId NameId;
+        
+        // TODO remove, buff
+        public int Level;
+        public float Speed;
+        public int LoadCapacity;
+        public int MaxStorage;
     }
 }

@@ -7,25 +7,25 @@ namespace Jrd.Goods
 {
     public partial struct TestSystem : ISystem
     {
-        public void OnCreate(ref SystemState state)
+        public void OnUpdate(ref SystemState state)
         {
+            state.Enabled = false;
             foreach (var q in SystemAPI.Query<JBuildingsPrefabsTag>().WithEntityAccess())
             {
                 var a = SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(q.Item2);
                 var c = SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(q.Item2);
                 var b = SystemAPI.GetBuffer<BuildingsBuffer>(q.Item2);
 
-                var st = new StringBuilder();
-                Debug.Log("/ / / / /");
                 for (int i = 0; i < b.Length; i++)
                 {
                     var item = b.ElementAt(i).Name;
 
+                    Debug.LogWarning(item);
                     if (a.Length > 0)
                     {
                         for (int j = 0; j < a.Length; j++)
                         {
-                            st.Append(a.ElementAt(j)._requiredItem + " ");
+                            Debug.LogWarning("req = " + a.ElementAt(j)._requiredItem);
                         }
                     }
 
@@ -33,11 +33,10 @@ namespace Jrd.Goods
                     {
                         for (int k = 0; k < c.Length; k++)
                         {
-                            st.Append(c.ElementAt(k)._manufacturedItem + " ");
+                            Debug.LogWarning("man = " + c.ElementAt(k)._manufacturedItem);
                         }
                     }
                 }
-                Debug.Log("/ / / / /");
             }
         }
     }

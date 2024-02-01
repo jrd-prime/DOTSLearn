@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Collections;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Jrd.PlayState
@@ -73,7 +74,7 @@ namespace Jrd.PlayState
             StatLoadIntLabel = PanelVisualElement.Q<Label>(StatLoadIntLabelIdName);
             StatStorageLabel = PanelVisualElement.Q<Label>(StatStorageLabelIdName);
             StatStorageIntLabel = PanelVisualElement.Q<Label>(StatStorageIntLabelIdName);
-            
+
             ButtonUpgrade.RegisterCallback<ClickEvent>(Callback);
             ButtonBuff.RegisterCallback<ClickEvent>(Callback);
             ButtonMove.RegisterCallback<ClickEvent>(Callback);
@@ -92,9 +93,29 @@ namespace Jrd.PlayState
             base.HidePanel();
             IsVisible = false;
 
-            // PanelCloseButton.clicked += OnCloseButton;
+            PanelCloseButton.clicked += OnCloseButton;
         }
 
+        public void SetLevel(int level)
+        {
+            LevelLabel.text = level.ToString();
+            Debug.Log($"lvl = {level}");
+        }
+
+        public void SetSpeed(float buildingDataSpeed)
+        {
+            StatConvLabel.text = buildingDataSpeed.ToString();
+        }
+
+        public void SetLoadCapacity(int buildingDataLoadCapacity)
+        {
+            StatLoadLabel.text = buildingDataLoadCapacity.ToString();
+        }
+
+        public void SetMaxStorage(int buildingDataMaxStorage)
+        {
+            StatStorageLabel.text = buildingDataMaxStorage.ToString();
+        }
 
         private void Callback(ClickEvent evt)
         {
@@ -107,7 +128,7 @@ namespace Jrd.PlayState
 
         private void OnDisable()
         {
-            // PanelCloseButton.clicked -= OnCloseButton;
+            PanelCloseButton.clicked -= OnCloseButton;
             ButtonUpgrade.UnregisterCallback<ClickEvent>(Callback);
         }
 

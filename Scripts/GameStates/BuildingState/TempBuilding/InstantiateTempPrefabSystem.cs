@@ -39,6 +39,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                     {
                         TempPrefabEntity = query.ValueRO.Prefab,
                         TempPrefabName = query.ValueRO.Name,
+                        BuildingNameId = query.ValueRO.NameId,
                         BsEcb = ecb,
                         BuildingStateEntity = entity,
                         Position = position,
@@ -55,6 +56,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             public EntityCommandBuffer BsEcb;
             public Entity TempPrefabEntity;
             public FixedString64Bytes TempPrefabName;
+            public BuildingNameId BuildingNameId;
             public Entity BuildingStateEntity;
             public float3 Position;
             public quaternion Rotation;
@@ -63,10 +65,8 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             [BurstCompile]
             public void Execute()
             {
-                // instantiate selected building prefab
                 Entity instantiate = BsEcb.Instantiate(TempPrefabEntity);
 
-                // set position // TODO
                 BsEcb.SetComponent(instantiate, new LocalTransform
                 {
                     Position = Position,
@@ -74,20 +74,19 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                     Scale = Scale
                 });
 
-                // name
                 BsEcb.SetName(instantiate, "___ # Temp Building Entity");
 
-                // add tag to instantiated prefab
+                // add tags
                 BsEcb.AddComponent<TempBuildingTag>(instantiate); // mark as temp
                 BsEcb.AddComponent<SelectableTag>(instantiate); // mark as selectable
                 BsEcb.AddComponent<MoveDirectionData>(instantiate);
                 BsEcb.AddComponent(instantiate, new BuildingData
                 {
                     Prefab = TempPrefabEntity,
-                    Name = TempPrefabName
+                    Name = TempPrefabName,
+                    NameId = BuildingNameId
                 });
 
-                // remove tag fo instantiate from building mode entity
                 BsEcb.RemoveComponent<InstantiateTempPrefabComponent>(BuildingStateEntity);
             }
         }
