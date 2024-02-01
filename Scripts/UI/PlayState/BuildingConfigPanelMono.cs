@@ -1,5 +1,4 @@
-﻿using Unity.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Jrd.PlayState
@@ -96,6 +95,13 @@ namespace Jrd.PlayState
             PanelCloseButton.clicked += OnCloseButton;
         }
 
+        public void SetStatNames(string manufacturedItemName)
+        {
+            StatConvLabel.text = $"{manufacturedItemName} / hour";
+            StatLoadLabel.text = $"{manufacturedItemName} / load";
+            StatStorageLabel.text = $"Max {manufacturedItemName} in storage";
+        }
+
         public void SetLevel(int level)
         {
             LevelLabel.text = level.ToString();
@@ -104,17 +110,17 @@ namespace Jrd.PlayState
 
         public void SetSpeed(float buildingDataSpeed)
         {
-            StatConvLabel.text = buildingDataSpeed.ToString();
+            StatConvIntLabel.text = buildingDataSpeed.ToString();
         }
 
         public void SetLoadCapacity(int buildingDataLoadCapacity)
         {
-            StatLoadLabel.text = buildingDataLoadCapacity.ToString();
+            StatLoadIntLabel.text = buildingDataLoadCapacity.ToString();
         }
 
         public void SetMaxStorage(int buildingDataMaxStorage)
         {
-            StatStorageLabel.text = buildingDataMaxStorage.ToString();
+            StatStorageIntLabel.text = buildingDataMaxStorage.ToString();
         }
 
         private void Callback(ClickEvent evt)
