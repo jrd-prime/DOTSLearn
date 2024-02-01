@@ -1,12 +1,10 @@
-﻿using Unity.Collections;
+﻿using Jrd.GameplayBuildings;
 using Unity.Entities;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
     public struct InstantiateTempPrefabComponent : IComponentData
     {
-        public Entity Prefab;
-        public FixedString64Bytes Name;
-        public BuildingNameId NameId;
+        public BuildingData BuildingData;
     }
 }

@@ -15,7 +15,7 @@ namespace Jrd.GameStates.PlayState
                          .WithEntityAccess())
             {
                 a.SetLevel(buildingData.Level);
-                a.SetSpeed(buildingData.Speed);
+                a.SetSpeed(buildingData.ItemsPerHour);
                 a.SetLoadCapacity(buildingData.LoadCapacity);
                 a.SetMaxStorage(buildingData.MaxStorage);
             }

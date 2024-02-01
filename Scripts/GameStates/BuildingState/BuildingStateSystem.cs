@@ -1,4 +1,5 @@
 ﻿using System;
+using Jrd.GameplayBuildings;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -60,7 +61,7 @@ namespace Jrd.GameStates.BuildingState
         private void ClosePanelAndRemoveSelectedTag()
         {
             BuildingConfigPanelMono.Instance.SetElementVisible(false);
-            
+
             var e = SystemAPI.GetSingletonEntity<SelectedBuildingTag>();
             _bsEcb.RemoveComponent<SelectedBuildingTag>(e);
         }
@@ -115,12 +116,25 @@ namespace Jrd.GameStates.BuildingState
                 throw new NullReferenceException("Buffer empty!");
             }
 
+            BuildingsBuffer buildingBuffer = _buildingsPrefabsBuffer[index];
+
+            FixedString64Bytes giud = Utils.Utils.GetGuid();
+
             _bsEcb.AddComponent(_buildingStateEntity,
                 new InstantiateTempPrefabComponent
                 {
-                    Prefab = _buildingsPrefabsBuffer[index].Self,
-                    Name = _buildingsPrefabsBuffer[index].Name,
-                    NameId = _buildingsPrefabsBuffer[index].NameId
+                    BuildingData = new BuildingData
+                    {
+                        Guid = giud,
+                        Name = buildingBuffer.Name,
+                        Prefab = buildingBuffer.Self,
+
+                        NameId = buildingBuffer.NameId,
+                        Level = buildingBuffer.Level,
+                        ItemsPerHour = buildingBuffer.ItemsPerHour,
+                        LoadCapacity = buildingBuffer.LoadCapacity,
+                        MaxStorage = buildingBuffer.StorageCapacity
+                    }
                 });
 
             Debug.Log($"Build ID: {index} / Prefab: {_buildingsPrefabsBuffer[index].Name}");

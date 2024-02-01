@@ -15,7 +15,7 @@ namespace Jrd.GameplayBuildings
         
         // TODO remove, buff
         public int Level;
-        public float Speed;
+        public float ItemsPerHour;
         public int LoadCapacity;
         public int MaxStorage;
     }

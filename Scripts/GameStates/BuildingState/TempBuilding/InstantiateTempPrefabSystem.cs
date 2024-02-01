@@ -2,12 +2,10 @@
 using Jrd.Screen;
 using Jrd.UserInput;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
@@ -36,17 +34,14 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .WithEntityAccess())
             {
                 state.Dependency = new InstantiateTempPrefabJob
-                    {
-                        TempPrefabEntity = query.ValueRO.Prefab,
-                        TempPrefabName = query.ValueRO.Name,
-                        BuildingNameId = query.ValueRO.NameId,
-                        BsEcb = ecb,
-                        BuildingStateEntity = entity,
-                        Position = position,
-                        Rotation = quaternion.identity,
-                        Scale = 1
-                    }
-                    .Schedule(state.Dependency);
+                {
+                    BuildingData = query.ValueRO.BuildingData,
+                    BsEcb = ecb,
+                    BuildingStateEntity = entity,
+                    Position = position,
+                    Rotation = quaternion.identity,
+                    Scale = 1
+                }.Schedule(state.Dependency);
             }
         }
 
@@ -54,18 +49,19 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
         private struct InstantiateTempPrefabJob : IJob
         {
             public EntityCommandBuffer BsEcb;
-            public Entity TempPrefabEntity;
-            public FixedString64Bytes TempPrefabName;
             public BuildingNameId BuildingNameId;
             public Entity BuildingStateEntity;
             public float3 Position;
             public quaternion Rotation;
             public float Scale;
+            public BuildingData BuildingData;
 
             [BurstCompile]
             public void Execute()
             {
-                Entity instantiate = BsEcb.Instantiate(TempPrefabEntity);
+                Entity instantiate = BsEcb.Instantiate(BuildingData.Prefab);
+                BuildingData.Self = instantiate;
+                BsEcb.SetName(instantiate, "___ # Temp Building Entity");
 
                 BsEcb.SetComponent(instantiate, new LocalTransform
                 {
@@ -74,18 +70,10 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                     Scale = Scale
                 });
 
-                BsEcb.SetName(instantiate, "___ # Temp Building Entity");
-
-                // add tags
                 BsEcb.AddComponent<TempBuildingTag>(instantiate); // mark as temp
                 BsEcb.AddComponent<SelectableTag>(instantiate); // mark as selectable
                 BsEcb.AddComponent<MoveDirectionData>(instantiate);
-                BsEcb.AddComponent(instantiate, new BuildingData
-                {
-                    Prefab = TempPrefabEntity,
-                    Name = TempPrefabName,
-                    NameId = BuildingNameId
-                });
+                BsEcb.AddComponent(instantiate, BuildingData);
 
                 BsEcb.RemoveComponent<InstantiateTempPrefabComponent>(BuildingStateEntity);
             }

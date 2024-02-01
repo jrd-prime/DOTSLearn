@@ -38,10 +38,18 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                 buildingBuffer.Add(new BuildingsBuffer
                 {
                     Self = GetEntity(buildingData.Prefab, TransformUsageFlags.Dynamic),
+
+                    // Building
+                    CategoryId = buildingData.CategoryId,
+                    NameId = buildingData.NameId,
                     Name = buildingData.Name,
                     Size = buildingData.Size,
-                    CategoryId = buildingData.CategoryId,
-                    NameId = buildingData.NameId
+
+                    // Stats
+                    Level = buildingData.Level,
+                    ItemsPerHour = buildingData.ItemsPerHour,
+                    LoadCapacity = buildingData.LoadCapacity,
+                    StorageCapacity = buildingData.StorageCapacity
                 });
             }
 
@@ -60,7 +68,6 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         }
     }
 
-
     public struct JBuildingsPrefabsTag : IComponentData
     {
     }
@@ -68,10 +75,18 @@ namespace Jrd.GameStates.BuildingState.Prefabs
     public struct BuildingsBuffer : IBufferElementData
     {
         public Entity Self;
-        public FixedString64Bytes Name;
-        public float2 Size;
+
+        // Building
         public BuildingCategoryId CategoryId;
         public BuildingNameId NameId;
+        public FixedString64Bytes Name;
+        public float2 Size;
+
+        // Stats
+        public int Level;
+        public float ItemsPerHour;
+        public int LoadCapacity;
+        public int StorageCapacity;
     }
 
     [Serializable]
