@@ -33,11 +33,11 @@ namespace Jrd
             PanelTitleIdName = "head-text";
             
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
-            PanelVisualElement = PanelRoot.Q<VisualElement>(PanelIdName);
-            PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
+            BuildingPanel = PanelRoot.Q<VisualElement>(PanelIdName);
+            PanelTitleLabel = BuildingPanel.Q<Label>(PanelTitleIdName);
             _cardsContainer = PanelRoot.Q<GroupBox>(CardsContainerName);
 
-            if (PanelVisualElement == null) return;
+            if (BuildingPanel == null) return;
             base.HidePanel();
             IsVisible = false;
         }

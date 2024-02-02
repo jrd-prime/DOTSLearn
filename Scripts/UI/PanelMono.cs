@@ -9,7 +9,7 @@ namespace Jrd
         protected int PanelTitleMaxLength = 30;
         protected bool IsVisible;
         protected VisualElement PanelRoot;
-        protected VisualElement PanelVisualElement;
+        protected VisualElement BuildingPanel;
         protected Label PanelTitleLabel;
 
         public Button PanelCloseButton;
@@ -18,7 +18,6 @@ namespace Jrd
         protected string PanelTitleIdName;
         protected string PanelCloseButtonIdName;
 
-        protected const string GoodsIconsPath = "UI/Images/icon-";
 
         public bool IsPanelVisible
         {
@@ -45,12 +44,12 @@ namespace Jrd
 
         public virtual void ShowPanel()
         {
-            PanelVisualElement.style.display = DisplayStyle.Flex;
+            BuildingPanel.style.display = DisplayStyle.Flex;
         }
 
         public virtual void HidePanel()
         {
-            PanelVisualElement.style.display = DisplayStyle.None;
+            BuildingPanel.style.display = DisplayStyle.None;
         }
 
         public virtual void SetPanelTitle(string panelTitle)

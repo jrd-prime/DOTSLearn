@@ -34,12 +34,12 @@ namespace Jrd.UI.BuildingState
             PanelTitleIdName = "text";
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
-            PanelVisualElement = PanelRoot.Q<VisualElement>(PanelIdName);
-            PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
+            BuildingPanel = PanelRoot.Q<VisualElement>(PanelIdName);
+            PanelTitleLabel = BuildingPanel.Q<Label>(PanelTitleIdName);
             CancelButton = PanelRoot.Q<Button>("cancel-button");
             ApplyButton = PanelRoot.Q<Button>("apply-button");
 
-            if (PanelVisualElement != null)
+            if (BuildingPanel != null)
             {
                 base.HidePanel();
                 IsVisible = false;
@@ -62,7 +62,7 @@ namespace Jrd.UI.BuildingState
         public override void ShowPanel()
         {
             base.ShowPanel();
-            PanelVisualElement.experimental.animation
+            BuildingPanel.experimental.animation
                 .Start(
                     new StyleValues { bottom = PanelHeight * -1 },
                     new StyleValues { bottom = BottomMargin },
@@ -73,7 +73,7 @@ namespace Jrd.UI.BuildingState
 
         public override void HidePanel()
         {
-            PanelVisualElement.experimental.animation
+            BuildingPanel.experimental.animation
                 .Start(
                     new StyleValues { bottom = BottomMargin },
                     new StyleValues { bottom = PanelHeight * -1 },

@@ -22,7 +22,7 @@ namespace Jrd.GameStates.PlayState
             ecb = sys.CreateCommandBuffer(state.WorldUnmanaged);
 
 
-            var a = BuildingConfigPanelMono.Instance;
+            var a = BuildingInfoPanelUIController.Instance;
             foreach (var (buildingData, entity) in SystemAPI
                          .Query<BuildingData>()
                          .WithAll<InitializeTag, SelectedBuildingTag>()
@@ -33,14 +33,16 @@ namespace Jrd.GameStates.PlayState
                 var manufacturedItemsBuffer = SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
 
                 a.SetLevel(buildingData.Level);
-                a.SetSpeed(buildingData.ItemsPerHour);
+                a.SetProductivity(buildingData.ItemsPerHour);
                 a.SetLoadCapacity(buildingData.LoadCapacity);
-                a.SetMaxStorage(buildingData.MaxStorage);
+                a.SetStorageCapacity(buildingData.MaxStorage);
 
                 // TODO think
-                a.SetStatNames(manufacturedItemsBuffer.ElementAt(0)._item.ToString());
+                a.SetSpecName(Spec.Productivity, manufacturedItemsBuffer.ElementAt(0)._item.ToString());
+                a.SetSpecName(Spec.LoadCapacity, requiredItemsBuffer.ElementAt(0)._item.ToString());
+                a.SetSpecName(Spec.StorageCapacity, manufacturedItemsBuffer.ElementAt(0)._item.ToString());
 
-                a.SetProductionLineInfo(requiredItemsBuffer, manufacturedItemsBuffer);
+                a.SetLineInfo(requiredItemsBuffer, manufacturedItemsBuffer);
 
                 ecb.RemoveComponent<InitializeTag>(entity);
             }

@@ -53,14 +53,14 @@ namespace Jrd.GameStates.BuildingState
             BuildingPanelMono.OnBuildSelected += BuildSelected;
             ConfirmationPanelMono.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelMono.OnTempBuildApply += ConfirmBuilding;
-            BuildingConfigPanelMono.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
+            BuildingInfoPanelUIController.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
 
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
         }
 
         private void ClosePanelAndRemoveSelectedTag()
         {
-            BuildingConfigPanelMono.Instance.SetElementVisible(false);
+            BuildingInfoPanelUIController.Instance.SetElementVisible(false);
 
             var e = SystemAPI.GetSingletonEntity<SelectedBuildingTag>();
             _bsEcb.RemoveComponent<SelectedBuildingTag>(e);

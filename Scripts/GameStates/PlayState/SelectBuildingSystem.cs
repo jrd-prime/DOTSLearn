@@ -74,7 +74,7 @@ namespace Jrd.GameStates.PlayState
                     {
                         _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
-                        BuildingConfigPanelMono.Instance.SetElementVisible(true);
+                        BuildingInfoPanelUIController.Instance.SetElementVisible(true);
                     }
 
                     _tempFingerId = -1;

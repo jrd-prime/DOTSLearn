@@ -18,13 +18,11 @@ MonoBehaviour:
   _name: Windmill
   _size: {x: 5, y: 5}
   _requiredItems:
-  - _requiredItem: 0
+  - _item: 0
     _count: 5
-  - _requiredItem: 1
-    _count: 3
   _manufacturedItems:
-  - _manufacturedItem: 1
-    _count: 33
+  - _item: 1
+    _count: 1
   _level: 1
   _itemsPerHour: 5
   _loadCapacity: 20
