@@ -1,4 +1,5 @@
-﻿using Jrd.GameStates.BuildingState.Prefabs;
+﻿using System;
+using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -83,12 +84,18 @@ namespace Jrd.PlayState
 
             #endregion
 
-            _productionLineUI = new BuildingProductionLineUIController(BuildingPanel, _itemTemplate, _arrowTemplate);
-            _specsUI = new BuildingSpecsUIController(BuildingPanel);
 
             if (BuildingPanel == null) return;
             base.HidePanel();
             IsVisible = false;
+
+            if (_itemTemplate == null || _arrowTemplate == null)
+            {
+                throw new NullReferenceException("Add templates to " + this);
+            }
+
+            _productionLineUI = new BuildingProductionLineUIController(BuildingPanel, _itemTemplate, _arrowTemplate);
+            _specsUI = new BuildingSpecsUIController(BuildingPanel);
 
             PanelCloseButton.clicked += OnCloseButton;
         }
