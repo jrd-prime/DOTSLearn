@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd
+namespace Jrd.UI
 {
     public abstract class PanelMono : MonoBehaviour
     {

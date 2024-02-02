@@ -4,7 +4,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.PlayState
+namespace Jrd.UI.BuildingInfoPanel
 {
     public class BuildingInfoPanelUIController : PanelMono, IBuildingProductionLine, IBuildingSpecs
     {

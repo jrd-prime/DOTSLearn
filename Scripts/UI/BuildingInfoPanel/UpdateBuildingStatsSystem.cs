@@ -1,7 +1,8 @@
 ﻿using Jrd.GameplayBuildings;
+using Jrd.GameStates.PlayState;
 using Unity.Entities;
 
-namespace Jrd.GameStates.PlayState
+namespace Jrd.UI.BuildingInfoPanel
 {
     /// <summary>
     /// Update building stats on update tag exist

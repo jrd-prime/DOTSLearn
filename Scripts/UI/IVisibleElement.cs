@@ -1,4 +1,4 @@
-﻿namespace Jrd
+﻿namespace Jrd.UI
 {
     public interface IVisibleElement
     {

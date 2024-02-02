@@ -4,7 +4,7 @@ using Jrd.GameStates.BuildingState.BuildingPanel;
 using Unity.Collections;
 using UnityEngine.UIElements;
 
-namespace Jrd
+namespace Jrd.UI.BuildingState
 {
     public class BuildingPanelMono : PanelMono
     {

@@ -5,7 +5,7 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.PlayState
+namespace Jrd.UI.BuildingInfoPanel
 {
     //TODO cache?
     public class BuildingProductionLineUIController : IBuildingProductionLine

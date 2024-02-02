@@ -1,9 +1,10 @@
 ﻿using Jrd.GameplayBuildings;
+using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.PlayState;
+using Jrd.GameStates.PlayState;
 using Unity.Entities;
 
-namespace Jrd.GameStates.PlayState
+namespace Jrd.UI.BuildingInfoPanel
 {
     public partial struct BuildingConfigSystem : ISystem
     {

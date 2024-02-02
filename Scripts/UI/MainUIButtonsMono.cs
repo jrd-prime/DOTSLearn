@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd
+namespace Jrd.UI
 {
     public class MainUIButtonsMono : MonoBehaviour, IVisibleElement
     {

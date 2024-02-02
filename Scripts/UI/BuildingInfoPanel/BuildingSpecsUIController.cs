@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.UIElements;
 
-namespace Jrd.PlayState
+namespace Jrd.UI.BuildingInfoPanel
 {
     public class BuildingSpecsUIController : IBuildingSpecs
     {

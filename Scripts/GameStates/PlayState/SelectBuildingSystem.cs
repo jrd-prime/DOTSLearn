@@ -2,7 +2,7 @@
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.CameraControl;
-using Jrd.PlayState;
+using Jrd.UI.BuildingInfoPanel;
 using Jrd.UI.BuildingState;
 using Unity.Entities;
 using Unity.Physics;

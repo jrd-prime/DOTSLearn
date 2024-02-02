@@ -3,7 +3,7 @@ using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd
+namespace Jrd.UI
 {
     /// <summary>
     /// List UI Components to create entities for them
