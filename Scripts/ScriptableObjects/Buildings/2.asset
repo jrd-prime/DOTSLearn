@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
   m_Name: 2
   m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 7688369451615698592, guid: 6c33616d76f3fe14fbc68aeea8e7329a,
-    type: 3}
-  _buildingName: Cube 01
-  _buildingSize: {x: 1, y: 1}
-  _buildingCategory: 0
+  _prefab: {fileID: 4580157719952510684, guid: 8be633c79ce9c0d43a85195a3f60c36b, type: 3}
+  _categoryId: 1
+  _nameId: 3
+  _name: col
+  _size: {x: 1, y: 1}
+  _requiredItems: []
+  _manufacturedItems: []
+  _level: 1
+  _itemsPerHour: 5
+  _loadCapacity: 5
+  _storageCapacity: 20

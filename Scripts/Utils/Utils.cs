@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using Jrd.PlayState;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 namespace Jrd.Utils
 {
@@ -36,6 +39,14 @@ namespace Jrd.Utils
         }
 
 
+        public static T LoadFromResources<T>(string itemPath, object who) where T : notnull, Object
+        {
+            var item = Resources.Load<T>(itemPath);
+
+            if (item != null) return item;
+
+            throw new FileLoadException($"Unable to load [{itemPath}] Who: " + who);
+        }
     }
 }
 

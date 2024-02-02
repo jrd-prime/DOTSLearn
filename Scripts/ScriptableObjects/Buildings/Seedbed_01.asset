@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
   m_Name: Seedbed_01
   m_EditorClassIdentifier: 
-  _buildingPrefab: {fileID: 3613048971494491005, guid: 6082214d97aa7f641a41d27ffbaa7048,
-    type: 3}
-  _buildingName: Seedbed 01
-  _buildingSize: {x: 3, y: 5}
-  _buildingCategory: 0
+  _prefab: {fileID: 3613048971494491005, guid: 6082214d97aa7f641a41d27ffbaa7048, type: 3}
+  _categoryId: 2
+  _nameId: 4
+  _name: Seedbed
+  _size: {x: 3, y: 6}
+  _requiredItems: []
+  _manufacturedItems: []
+  _level: 1
+  _itemsPerHour: 5
+  _loadCapacity: 5
+  _storageCapacity: 20

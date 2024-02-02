@@ -1,21 +1,22 @@
 ﻿using Jrd.GameplayBuildings;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding
 {
     /// <summary>
     /// Place temp building prefab
     /// </summary>
-    // [BurstCompile]
+    [BurstCompile]
     public partial struct PlaceTempBuildingSystem : ISystem
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _bsEcb;
 
-        // [BurstCompile]
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PlaceTempBuildingTag>();
@@ -23,7 +24,7 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
             state.RequireForUpdate<GameBuildingsData>();
         }
 
-        // [BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -37,30 +38,25 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                          .WithAll<PlaceTempBuildingTag, TempBuildingTag>()
                          .WithEntityAccess())
             {
-                string guid = Utils.Utils.GetGuid();
-                buildingData.ValueRW.Self = entity;
-                buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
-                buildingData.ValueRW.Guid = guid;
+                float3 position = transform.ValueRO.Position;
+                FixedString64Bytes guid = buildingData.ValueRO.Guid;
+                BuildingData building = buildingData.ValueRO;
 
-                _bsEcb.SetName(entity, $"{buildingData.ValueRO.Name}_{guid}");
+                buildingData.ValueRW.WorldPosition = position;
+
+                _bsEcb.SetName(entity, $"{building.NameId}_{guid}");
                 _bsEcb.AddComponent<BuildingTag>(entity);
                 _bsEcb.AddComponent<AddBuildingToDBTag>(entity);
-
-                Debug.Log("New building added");
 
                 _bsEcb.RemoveComponent<PlaceTempBuildingTag>(entity);
                 _bsEcb.RemoveComponent<TempBuildingTag>(entity);
 
-                //TODO to new system, add tag for add to game buildings map or db
-                var data = buildingData.ValueRO;
-                gameBuildingsMap.Add(data.Guid, new BuildingData
-                {
-                    Guid = data.Guid,
-                    Self = entity,
-                    Name = data.Name,
-                    Prefab = data.Prefab,
-                    WorldPosition = data.WorldPosition
-                });
+                // add to buildings list for save mb
+                gameBuildingsMap.Add(guid, building);
+
+                //TODO add here tag for add building to db
+
+                // Debug.Log("New building added");
             }
         }
     }

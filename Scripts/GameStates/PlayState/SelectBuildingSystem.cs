@@ -72,7 +72,9 @@ namespace Jrd.GameStates.PlayState
 
                     if (_tempFirstTargetEntity != Entity.Null && _tempFirstTargetEntity == secondEntity)
                     {
-                        BuildingConfigPanelMono.Instance.SetElementVisible(true);
+                        _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
+                        _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
+                        BuildingInfoPanelUIController.Instance.SetElementVisible(true);
                     }
 
                     _tempFingerId = -1;

@@ -1,9 +1,12 @@
 ﻿using System;
+using Jrd.GameplayBuildings;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
+using Jrd.GameStates.PlayState;
+using Jrd.PlayState;
 using Jrd.UI.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
@@ -50,8 +53,17 @@ namespace Jrd.GameStates.BuildingState
             BuildingPanelMono.OnBuildSelected += BuildSelected;
             ConfirmationPanelMono.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelMono.OnTempBuildApply += ConfirmBuilding;
+            BuildingInfoPanelUIController.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
 
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
+        }
+
+        private void ClosePanelAndRemoveSelectedTag()
+        {
+            BuildingInfoPanelUIController.Instance.SetElementVisible(false);
+
+            var e = SystemAPI.GetSingletonEntity<SelectedBuildingTag>();
+            _bsEcb.RemoveComponent<SelectedBuildingTag>(e);
         }
 
         protected override void OnUpdate()
@@ -104,11 +116,25 @@ namespace Jrd.GameStates.BuildingState
                 throw new NullReferenceException("Buffer empty!");
             }
 
+            BuildingsBuffer buildingBuffer = _buildingsPrefabsBuffer[index];
+
+            FixedString64Bytes giud = Utils.Utils.GetGuid();
+
             _bsEcb.AddComponent(_buildingStateEntity,
                 new InstantiateTempPrefabComponent
                 {
-                    Prefab = _buildingsPrefabsBuffer[index].Self,
-                    Name = _buildingsPrefabsBuffer[index].Name
+                    BuildingData = new BuildingData
+                    {
+                        Guid = giud,
+                        Name = buildingBuffer.Name,
+                        Prefab = buildingBuffer.Self,
+
+                        NameId = buildingBuffer.NameId,
+                        Level = buildingBuffer.Level,
+                        ItemsPerHour = buildingBuffer.ItemsPerHour,
+                        LoadCapacity = buildingBuffer.LoadCapacity,
+                        MaxStorage = buildingBuffer.StorageCapacity
+                    }
                 });
 
             Debug.Log($"Build ID: {index} / Prefab: {_buildingsPrefabsBuffer[index].Name}");
