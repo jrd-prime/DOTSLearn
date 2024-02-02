@@ -38,7 +38,7 @@ namespace Jrd.GameStates.PlayState
                 a.SetMaxStorage(buildingData.MaxStorage);
 
                 // TODO think
-                a.SetStatNames(manufacturedItemsBuffer.ElementAt(0)._manufacturedItem.ToString());
+                a.SetStatNames(manufacturedItemsBuffer.ElementAt(0)._item.ToString());
 
                 a.SetProductionLineInfo(requiredItemsBuffer, manufacturedItemsBuffer);
 

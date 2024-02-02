@@ -18,6 +18,8 @@ namespace Jrd
         protected string PanelTitleIdName;
         protected string PanelCloseButtonIdName;
 
+        protected const string GoodsIconsPath = "UI/Images/icon-";
+
         public bool IsPanelVisible
         {
             get => IsVisible;

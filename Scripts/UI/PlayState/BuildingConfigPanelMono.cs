@@ -1,4 +1,6 @@
-﻿using Jrd.GameStates.BuildingState.Prefabs;
+﻿using System;
+using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.Goods;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -38,10 +40,6 @@ namespace Jrd.PlayState
         [SerializeField] private VisualTreeAsset _prodLineItemContainerTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
 
-        protected VisualElement ProdLineItemIconCont;
-        protected string ProdLineItemIconContIdName = "prod-line-item-icon-cont";
-        protected Label ProdLineItemCountLabel;
-        protected string ProdLineItemCountIdName = "prod-line-item-count";
 
         // Stat Labels
         protected Label StatConvIntLabel;
@@ -119,58 +117,50 @@ namespace Jrd.PlayState
             PanelCloseButton.clicked += OnCloseButton;
         }
 
-        public void SetProductionLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> buildingRequiredItemsBuffers,
-            DynamicBuffer<BuildingManufacturedItemsBuffer> buildingManufacturedItemsBuffers)
+
+        public void SetProductionLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffers,
+            DynamicBuffer<BuildingManufacturedItemsBuffer> manufacturedItemsBuffers)
         {
+            // TODO all method / refact
+
             ProdLineContainer.Clear();
 
-
-            Debug.LogWarning(buildingRequiredItemsBuffers.Length);
-            Debug.LogWarning(buildingManufacturedItemsBuffers.Length);
-            for (int i = 0; i < buildingRequiredItemsBuffers.Length; i++)
+            foreach (var reqBuffer in requiredItemsBuffers)
             {
-                var a = _prodLineItemContainerTemplate.Instantiate();
-
-                var ico = a.Q<VisualElement>("prod-line-item-cont");
-                ProdLineItemCountLabel = a.Q<Label>(ProdLineItemCountIdName);
-
-                // Set icon\
-                var imgPath = "UI/Images/icon-" +
-                              buildingRequiredItemsBuffers[i]._requiredItem.ToString().ToLower();
-
-                var img = Resources.Load<Sprite>(imgPath);
-
-
-                ico.style.backgroundImage = new StyleBackground(img);
-
-                ProdLineItemCountLabel.text = buildingRequiredItemsBuffers[i]._count.ToString();
-
-
-                ProdLineContainer.Add(a);
+                ProdLineContainer.Add(GetFilledItemVisualElementForProductionLine(reqBuffer._item, reqBuffer._count));
             }
 
             ProdLineContainer.Add(_prodLineArrowTemplate.Instantiate());
-            for (int i = 0; i < buildingManufacturedItemsBuffers.Length; i++)
+
+            foreach (var manBuffer in manufacturedItemsBuffers)
             {
-                var a = _prodLineItemContainerTemplate.Instantiate();
-
-                var ico = a.Q<VisualElement>("prod-line-item-cont");
-                ProdLineItemCountLabel = a.Q<Label>(ProdLineItemCountIdName);
-
-                // Set icon\
-                var imgPath = "UI/Images/icon-" +
-                              buildingManufacturedItemsBuffers[i]._manufacturedItem.ToString().ToLower();
-
-                var img = Resources.Load<Sprite>(imgPath);
-
-
-                ico.style.backgroundImage = new StyleBackground(img);
-
-                ProdLineItemCountLabel.text = buildingManufacturedItemsBuffers[i]._count.ToString();
-
-
-                ProdLineContainer.Add(a);
+                ProdLineContainer.Add(GetFilledItemVisualElementForProductionLine(manBuffer._item, manBuffer._count));
             }
+        }
+
+        private VisualElement GetFilledItemVisualElementForProductionLine(GoodsEnum item, int itemCount)
+        {
+            // TODO all method / refact
+
+            VisualElement template = _prodLineItemContainerTemplate.Instantiate();
+
+            var prodLineItemContainer = template.Q<VisualElement>("prod-line-item-cont");
+            var prodLineItemCountLabel = template.Q<Label>("prod-line-item-count");
+
+            // Icon //TODO getpath, enum to string?lol?
+            var iconPath = GoodsIconsPath + item.ToString().ToLower();
+            var iconSprite = Resources.Load<Sprite>(iconPath);
+            Debug.LogWarning(iconSprite);
+
+            if (iconSprite == null)
+            {
+                throw new NullReferenceException($"Unable to load the icon sprite. {iconPath} \n" + this);
+            }
+
+            prodLineItemContainer.style.backgroundImage = new StyleBackground(iconSprite);
+            prodLineItemCountLabel.text = itemCount.ToString();
+
+            return template;
         }
 
         public void SetStatNames(string manufacturedItemName)
@@ -183,7 +173,6 @@ namespace Jrd.PlayState
         public void SetLevel(int level)
         {
             LevelLabel.text = level.ToString();
-            Debug.Log($"lvl = {level}");
         }
 
         public void SetSpeed(float buildingDataSpeed)

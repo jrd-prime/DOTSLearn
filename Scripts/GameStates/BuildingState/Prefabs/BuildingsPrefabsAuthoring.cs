@@ -5,6 +5,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Jrd.GameStates.BuildingState.Prefabs
 {
@@ -63,7 +64,6 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                 for (var i = 0; i < count; i++)
                 {
                     dynamicBuffer.Add(list[i]);
-                    
                 }
             }
         }
@@ -93,14 +93,14 @@ namespace Jrd.GameStates.BuildingState.Prefabs
     [Serializable]
     public struct BuildingRequiredItemsBuffer : IBufferElementData
     {
-        public GoodsEnum _requiredItem;
+        public GoodsEnum _item;
         public int _count;
     }
 
     [Serializable]
     public struct BuildingManufacturedItemsBuffer : IBufferElementData
     {
-        public GoodsEnum _manufacturedItem;
+        public GoodsEnum _item;
         public int _count;
     }
 }
