@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: 5
   m_EditorClassIdentifier: 
   _prefab: {fileID: 7688369451615698592, guid: 6c33616d76f3fe14fbc68aeea8e7329a, type: 3}
-  _name: cube1
-  _nameId: 3
-  _size: {x: 1, y: 1}
   _categoryId: 1
+  _nameId: 3
+  _name: cube1
+  _size: {x: 1, y: 1}
   _requiredItems: []
   _manufacturedItems: []
+  _level: 1
+  _itemsPerHour: 5
+  _loadCapacity: 5
+  _storageCapacity: 20

@@ -63,6 +63,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                 for (var i = 0; i < count; i++)
                 {
                     dynamicBuffer.Add(list[i]);
+                    
                 }
             }
         }

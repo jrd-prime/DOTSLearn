@@ -31,12 +31,10 @@ namespace Jrd
             switch (IsVisible)
             {
                 case false when value:
-                    Debug.Log("set visible");
                     ShowPanel();
                     IsVisible = true;
                     break;
                 case true when !value:
-                    Debug.Log("set in visible");
                     HidePanel();
                     IsVisible = false;
                     break;

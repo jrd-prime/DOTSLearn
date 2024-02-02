@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: 2
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4580157719952510684, guid: 8be633c79ce9c0d43a85195a3f60c36b, type: 3}
-  _name: col
-  _nameId: 3
-  _size: {x: 1, y: 1}
   _categoryId: 1
+  _nameId: 3
+  _name: col
+  _size: {x: 1, y: 1}
   _requiredItems: []
   _manufacturedItems: []
+  _level: 1
+  _itemsPerHour: 5
+  _loadCapacity: 5
+  _storageCapacity: 20

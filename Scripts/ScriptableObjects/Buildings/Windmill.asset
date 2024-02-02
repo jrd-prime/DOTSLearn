@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: Windmill
   m_EditorClassIdentifier: 
   _prefab: {fileID: 4642370683855486937, guid: f60ab54d50729014a86956a88d5b5682, type: 3}
-  _name: Windmill
-  _nameId: 1
-  _size: {x: 5, y: 5}
   _categoryId: 1
+  _nameId: 1
+  _name: Windmill
+  _size: {x: 5, y: 5}
   _requiredItems:
   - _requiredItem: 0
     _count: 5
+  - _requiredItem: 1
+    _count: 3
   _manufacturedItems:
   - _manufacturedItem: 1
-    _count: 1
+    _count: 33
+  _level: 1
+  _itemsPerHour: 5
+  _loadCapacity: 20
+  _storageCapacity: 20

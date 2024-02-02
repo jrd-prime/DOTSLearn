@@ -1,31 +1,47 @@
-﻿using UnityEngine;
+﻿using Jrd.GameStates.BuildingState.Prefabs;
+using Unity.Entities;
+using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Jrd.PlayState
 {
     public class BuildingConfigPanelMono : PanelMono
     {
-        // Buttons
-        protected Button ButtonTake;
-        protected Button ButtonLoad;
-        protected Button ButtonMove;
-        protected Button ButtonBuff;
-        protected Button ButtonUpgrade;
-        protected string ButtonUpgradeIdName = "btn-upgrade";
-        protected string ButtonBuffIdName = "btn-buff";
-        protected string ButtonMoveIdName = "btn-move";
-        protected string ButtonLoadIdName = "btn-load";
-        protected string ButtonTakeIdName = "btn-take";
+        #region VisualElementsVars
 
-        // Labels
+        // Buttons
+        protected Button TakeButton;
+        protected Button LoadButton;
+        protected Button MoveButton;
+        protected Button BuffButton;
+        protected Button UpgradeButton;
+        protected string ButtonUpgradeId = "btn-upgrade";
+        protected string ButtonBuffId = "btn-buff";
+        protected string ButtonMoveId = "btn-move";
+        protected string ButtonLoadId = "btn-load";
+        protected string ButtonTakeId = "btn-take";
+
+        // Common Labels
         protected Label LevelLabel;
+        protected string LevelLabelId = "lvl-label";
         protected Label BuildingStorageNameLabel;
+        protected string BuildingStorageNameLabelId = "building-storage-name-label";
         protected Label MainStorageNameLabel;
+        protected string MainStorageNameLabelId = "main-storage-name-label";
         protected Label StatConvLabel;
-        protected string LevelLabelIdName = "lvl-label";
-        protected string BuildingStorageNameLabelIdName = "building-storage-name-label";
-        protected string MainStorageNameLabelIdName = "main-storage-name-label";
-        protected string StatConvLabelIdName = "stat-conv-label";
+        protected string StatConvLabelId = "stat-conv-label";
+
+        // Production Line
+        protected VisualElement ProdLineContainer;
+        protected string ProdLineContainerId = "production-line-cont";
+        [SerializeField] private VisualTreeAsset _prodLineItemContainerTemplate;
+        [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
+
+        protected VisualElement ProdLineItemIconCont;
+        protected string ProdLineItemIconContIdName = "prod-line-item-icon-cont";
+        protected Label ProdLineItemCountLabel;
+        protected string ProdLineItemCountIdName = "prod-line-item-count";
 
         // Stat Labels
         protected Label StatConvIntLabel;
@@ -39,6 +55,8 @@ namespace Jrd.PlayState
         protected string StatStorageLabelIdName = "stat-storage-label";
         protected string StatStorageIntLabelIdName = "stat-storage-int-label";
 
+        #endregion
+
         public static BuildingConfigPanelMono Instance { private set; get; }
 
         protected void Awake()
@@ -48,6 +66,8 @@ namespace Jrd.PlayState
 
         protected void OnEnable()
         {
+            #region InitVisualElements
+
             PanelIdName = "building-config-panel";
             PanelTitleIdName = "panel-title";
             PanelCloseButtonIdName = "close-button";
@@ -57,28 +77,30 @@ namespace Jrd.PlayState
             PanelTitleLabel = PanelVisualElement.Q<Label>(PanelTitleIdName);
             PanelCloseButton = PanelVisualElement.Q<Button>(PanelCloseButtonIdName);
             // Buttons
-            ButtonUpgrade = PanelVisualElement.Q<Button>(ButtonUpgradeIdName);
-            ButtonBuff = PanelVisualElement.Q<Button>(ButtonBuffIdName);
-            ButtonMove = PanelVisualElement.Q<Button>(ButtonMoveIdName);
-            ButtonLoad = PanelVisualElement.Q<Button>(ButtonLoadIdName);
-            ButtonTake = PanelVisualElement.Q<Button>(ButtonTakeIdName);
+            UpgradeButton = PanelVisualElement.Q<Button>(ButtonUpgradeId);
+            BuffButton = PanelVisualElement.Q<Button>(ButtonBuffId);
+            MoveButton = PanelVisualElement.Q<Button>(ButtonMoveId);
+            LoadButton = PanelVisualElement.Q<Button>(ButtonLoadId);
+            TakeButton = PanelVisualElement.Q<Button>(ButtonTakeId);
+            // Production Line
+            ProdLineContainer = PanelVisualElement.Q<VisualElement>(ProdLineContainerId);
             // Labels
-            LevelLabel = PanelVisualElement.Q<Label>(LevelLabelIdName);
-            BuildingStorageNameLabel = PanelVisualElement.Q<Label>(BuildingStorageNameLabelIdName);
-            MainStorageNameLabel = PanelVisualElement.Q<Label>(MainStorageNameLabelIdName);
+            LevelLabel = PanelVisualElement.Q<Label>(LevelLabelId);
+            BuildingStorageNameLabel = PanelVisualElement.Q<Label>(BuildingStorageNameLabelId);
+            MainStorageNameLabel = PanelVisualElement.Q<Label>(MainStorageNameLabelId);
             // Stat Labels
-            StatConvLabel = PanelVisualElement.Q<Label>(StatConvLabelIdName);
+            StatConvLabel = PanelVisualElement.Q<Label>(StatConvLabelId);
             StatConvIntLabel = PanelVisualElement.Q<Label>(StatConvIntLabelIdName);
             StatLoadLabel = PanelVisualElement.Q<Label>(StatLoadLabelIdName);
             StatLoadIntLabel = PanelVisualElement.Q<Label>(StatLoadIntLabelIdName);
             StatStorageLabel = PanelVisualElement.Q<Label>(StatStorageLabelIdName);
             StatStorageIntLabel = PanelVisualElement.Q<Label>(StatStorageIntLabelIdName);
 
-            ButtonUpgrade.RegisterCallback<ClickEvent>(Callback);
-            ButtonBuff.RegisterCallback<ClickEvent>(Callback);
-            ButtonMove.RegisterCallback<ClickEvent>(Callback);
-            ButtonLoad.RegisterCallback<ClickEvent>(Callback);
-            ButtonTake.RegisterCallback<ClickEvent>(Callback);
+            UpgradeButton.RegisterCallback<ClickEvent>(Callback);
+            BuffButton.RegisterCallback<ClickEvent>(Callback);
+            MoveButton.RegisterCallback<ClickEvent>(Callback);
+            LoadButton.RegisterCallback<ClickEvent>(Callback);
+            TakeButton.RegisterCallback<ClickEvent>(Callback);
 
             var ToogleCheck = PanelVisualElement.Q<VisualElement>("toggle-check");
 
@@ -88,11 +110,67 @@ namespace Jrd.PlayState
                 ToogleCheck.style.backgroundColor = new StyleColor(new Color(74, 91, 63, 1));
             });
 
+            #endregion
+
             if (PanelVisualElement == null) return;
             base.HidePanel();
             IsVisible = false;
 
             PanelCloseButton.clicked += OnCloseButton;
+        }
+
+        public void SetProductionLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> buildingRequiredItemsBuffers,
+            DynamicBuffer<BuildingManufacturedItemsBuffer> buildingManufacturedItemsBuffers)
+        {
+            ProdLineContainer.Clear();
+
+
+            Debug.LogWarning(buildingRequiredItemsBuffers.Length);
+            Debug.LogWarning(buildingManufacturedItemsBuffers.Length);
+            for (int i = 0; i < buildingRequiredItemsBuffers.Length; i++)
+            {
+                var a = _prodLineItemContainerTemplate.Instantiate();
+
+                var ico = a.Q<VisualElement>("prod-line-item-cont");
+                ProdLineItemCountLabel = a.Q<Label>(ProdLineItemCountIdName);
+
+                // Set icon\
+                var imgPath = "UI/Images/icon-" +
+                              buildingRequiredItemsBuffers[i]._requiredItem.ToString().ToLower();
+
+                var img = Resources.Load<Sprite>(imgPath);
+
+
+                ico.style.backgroundImage = new StyleBackground(img);
+
+                ProdLineItemCountLabel.text = buildingRequiredItemsBuffers[i]._count.ToString();
+
+
+                ProdLineContainer.Add(a);
+            }
+
+            ProdLineContainer.Add(_prodLineArrowTemplate.Instantiate());
+            for (int i = 0; i < buildingManufacturedItemsBuffers.Length; i++)
+            {
+                var a = _prodLineItemContainerTemplate.Instantiate();
+
+                var ico = a.Q<VisualElement>("prod-line-item-cont");
+                ProdLineItemCountLabel = a.Q<Label>(ProdLineItemCountIdName);
+
+                // Set icon\
+                var imgPath = "UI/Images/icon-" +
+                              buildingManufacturedItemsBuffers[i]._manufacturedItem.ToString().ToLower();
+
+                var img = Resources.Load<Sprite>(imgPath);
+
+
+                ico.style.backgroundImage = new StyleBackground(img);
+
+                ProdLineItemCountLabel.text = buildingManufacturedItemsBuffers[i]._count.ToString();
+
+
+                ProdLineContainer.Add(a);
+            }
         }
 
         public void SetStatNames(string manufacturedItemName)
@@ -135,7 +213,7 @@ namespace Jrd.PlayState
         private void OnDisable()
         {
             PanelCloseButton.clicked -= OnCloseButton;
-            ButtonUpgrade.UnregisterCallback<ClickEvent>(Callback);
+            UpgradeButton.UnregisterCallback<ClickEvent>(Callback);
         }
 
         protected override void OnCloseButton() => HidePanel();

@@ -1,4 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="production-line-item-container" src="project://database/Assets/UI/UXML/Templates/production-line-item-container.uxml?fileID=9197481963319205126&amp;guid=7ce7b3d2d42a7144b8a24877d6133d2c&amp;type=3#production-line-item-container" />
+    <ui:Template name="production-line-separator" src="project://database/Assets/UI/UXML/Templates/production-line-separator.uxml?fileID=9197481963319205126&amp;guid=64cc1aa55452c2a4d9a415df962b515d&amp;type=3#production-line-separator" />
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
@@ -14,18 +16,12 @@
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="bcp-stats" class="bcp-stats" style="background-color: rgba(0, 0, 0, 0);">
-                <ui:VisualElement class="stat-line" style="top: 10px; height: 32px; background-color: rgba(113, 113, 113, 0);">
-                    <ui:VisualElement name="conv-cont" class="conv-cont">
-                        <ui:VisualElement name="conv-count-cont" class="conv-count-cont green-color3">
-                            <ui:Label tabindex="-1" text="#5" parse-escape-sequences="true" display-tooltip-when-elided="true" name="conv-count-text" style="position: absolute; right: 0; top: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 16px; height: 16px; font-size: 8px; -unity-font-style: bold;" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                    <ui:VisualElement class="conv-cont" style="background-image: url(&apos;project://database/Assets/UI/Images/straight-right-arrow.png?fileID=21300000&amp;guid=2d71fbb257efcdd42a72757fe5f8d143&amp;type=3#straight-right-arrow&apos;); background-color: rgba(168, 72, 72, 0); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 10px; margin-right: 5px; margin-bottom: 10px; margin-left: 5px; width: 10px; height: 10px;" />
-                    <ui:VisualElement class="conv-cont" style="background-image: url(&apos;project://database/Assets/UI/Images/icon-flour.png?fileID=21300000&amp;guid=f5ad3d90a6a92834f978b36201adea20&amp;type=3#icon-flour&apos;);">
-                        <ui:VisualElement name="conv-count-cont" class="conv-count-cont green-color3">
-                            <ui:Label tabindex="-1" text="#1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="conv-count-text" style="position: absolute; right: 0; top: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 16px; height: 16px; font-size: 8px; -unity-font-style: bold;" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
+                <ui:VisualElement name="production-line-cont" class="stat-line" style="top: 10px; height: 32px; background-color: rgba(113, 113, 113, 0);">
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-separator" name="production-line-separator" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
                 </ui:VisualElement>
                 <ui:VisualElement class="stat-line" style="top: 45px;">
                     <ui:Label tabindex="-1" text="Flour / hour" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-conv-label" class="stat-left-text" />

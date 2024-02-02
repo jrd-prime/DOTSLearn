@@ -733,6 +733,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44207e7dd01c45e29078cfc4db180904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _prodLineItemContainerTemplate: {fileID: 9197481963319205126, guid: 7ce7b3d2d42a7144b8a24877d6133d2c,
+    type: 3}
+  _prodLineArrowTemplate: {fileID: 9197481963319205126, guid: 64cc1aa55452c2a4d9a415df962b515d,
+    type: 3}
 --- !u!1 &1251201940
 GameObject:
   m_ObjectHideFlags: 0
