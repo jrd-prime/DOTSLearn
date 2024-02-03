@@ -11,7 +11,6 @@ namespace Jrd.UI.BuildingState
     public partial struct BuildingPanelSystem : ISystem
     {
         private EntityManager _entityManager;
-        private Entity _buildingPanelEntity;
         private BuildingStateData _buildingStateData;
         private BuildingPanelData _buildingPanelData;
         private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffers;
@@ -20,15 +19,17 @@ namespace Jrd.UI.BuildingState
         public void OnCreate(ref SystemState state)
         {
             _entityManager = state.EntityManager;
-            _buildingPanelEntity = SystemAPI.GetSingletonEntity<BuildingPanelData>();
 
-            state.RequireForUpdate<BuildingPanelData>();
+
+            // state.RequireForUpdate<BuildingPanelData>();
             // state.RequireForUpdate<BuildPrefabsComponent>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            _buildingPanelData = SystemAPI.GetComponentRO<BuildingPanelData>(_buildingPanelEntity).ValueRO;
+            // if (!SystemAPI.TryGetSingletonEntity<BuildingPanelData>(out var buildingPanelEntity)) return;
+
+            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>().ValueRO;
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>().ValueRO;
             _buildingsCount = _buildingStateData.BuildingPrefabsCount;
 

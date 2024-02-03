@@ -1,7 +1,9 @@
-﻿using Jrd.GameStates.BuildingState.BuildingPanel;
+﻿using Jrd.GameStates.BuildingState;
+using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.UI
 {
@@ -27,6 +29,7 @@ namespace Jrd.UI
             {
                 var elementEntity = entityManager.CreateEntity(pair.Value, typeof(UIElementTag));
                 entityManager.SetName(elementEntity, pair.Key);
+                Debug.Log(pair.Key);
             }
 
             componentsMap.Dispose();

@@ -10,6 +10,7 @@ namespace Jrd.UI.BuildingInfoPanel
     {
         private BuildingProductionLineUIController _productionLineUI;
         private BuildingSpecsUIController _specsUI;
+        private BuildingInternalStorageUIController _internalStorageUI;
 
         [SerializeField] private VisualTreeAsset _itemTemplate;
         [SerializeField] private VisualTreeAsset _arrowTemplate;
@@ -96,7 +97,7 @@ namespace Jrd.UI.BuildingInfoPanel
 
             _productionLineUI = new BuildingProductionLineUIController(BuildingPanel, _itemTemplate, _arrowTemplate);
             _specsUI = new BuildingSpecsUIController(BuildingPanel);
-
+            _internalStorageUI = new BuildingInternalStorageUIController(BuildingPanel);
             PanelCloseButton.clicked += OnCloseButton;
         }
 
