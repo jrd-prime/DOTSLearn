@@ -1,5 +1,5 @@
 ﻿using System;
-using Jrd.GameplayBuildings;
+using Jrd.Gameplay.Building;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -7,8 +7,9 @@ using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.GameStates.PlayState;
 using Jrd.UI;
-using Jrd.UI.BuildingInfoPanel;
-using Jrd.UI.BuildingState;
+using Jrd.UI.BlueprintsShopPanel;
+using Jrd.UI.BuildingControlPanel;
+using Jrd.UI.PopUpPanels;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Jrd.GameStates.BuildingState
     [UpdateAfter(typeof(GameStatesSystem))]
     public partial class BuildingStateSystem : SystemBase
     {
-        private RefRW<BuildingPanelData> _a;
+        private RefRW<BlueprintsShopPanelData> _a;
         private EntityManager _entityManager;
         private NativeList<Entity> _stateVisualComponents;
         private BeginSimulationEntityCommandBufferSystem.Singleton _bsEcbSystem;
@@ -32,11 +33,11 @@ namespace Jrd.GameStates.BuildingState
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
         private int _prefabsCount;
-        private DynamicBuffer<BuildingsBuffer> _buildingsPrefabsBuffer;
+        private DynamicBuffer<BlueprintsBuffer> _buildingsPrefabsBuffer;
 
         private Entity _buildingStateEntity;
         private RefRW<BuildingStateData> _buildingStateData;
-        private RefRW<BuildingPanelData> _buildingPanelData;
+        private RefRW<BlueprintsShopPanelData> _buildingPanelData;
 
         protected override void OnCreate()
         {
@@ -51,17 +52,17 @@ namespace Jrd.GameStates.BuildingState
             _tempSelectedBuildID = -1;
 
             MainUIButtonsMono.BuildingStateButton.clicked += BuildingStateSelected;
-            BuildingPanelMono.OnBuildSelected += BuildSelected;
-            ConfirmationPanelMono.OnTempBuildCancelled += CancelBuilding;
-            ConfirmationPanelMono.OnTempBuildApply += ConfirmBuilding;
-            BuildingInfoPanelUIController.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
+            BlueprintsShopPanelUI.OnBuildSelected += BuildSelected;
+            ConfirmationPanelUI.OnTempBuildCancelled += CancelBuilding;
+            ConfirmationPanelUI.OnTempBuildApply += ConfirmBuilding;
+            BuildingControlPanelUI.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
 
             // ConfirmationPanelUI.ApplyPanelApplyButton.clicked += ConfirmBuilding;
         }
 
         private void ClosePanelAndRemoveSelectedTag()
         {
-            BuildingInfoPanelUIController.Instance.SetElementVisible(false);
+            BuildingControlPanelUI.Instance.SetElementVisible(false);
 
             var e = SystemAPI.GetSingletonEntity<SelectedBuildingTag>();
             _bsEcb.RemoveComponent<SelectedBuildingTag>(e);
@@ -70,7 +71,7 @@ namespace Jrd.GameStates.BuildingState
         protected override void OnUpdate()
         {
             // LOOK wait load
-            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BuildingsBuffer> buffer))
+            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buffer))
             {
                 Debug.LogError("Buffer error. Return.. " + this);
                 return;
@@ -87,7 +88,7 @@ namespace Jrd.GameStates.BuildingState
 
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
-            _buildingPanelData = SystemAPI.GetSingletonRW<BuildingPanelData>();
+            _buildingPanelData = SystemAPI.GetSingletonRW<BlueprintsShopPanelData>();
             _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>();
 
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
@@ -117,7 +118,7 @@ namespace Jrd.GameStates.BuildingState
                 throw new NullReferenceException("Buffer empty!");
             }
 
-            BuildingsBuffer buildingBuffer = _buildingsPrefabsBuffer[index];
+            BlueprintsBuffer blueprintBuffer = _buildingsPrefabsBuffer[index];
 
             FixedString64Bytes giud = Utils.Utils.GetGuid();
 
@@ -127,14 +128,14 @@ namespace Jrd.GameStates.BuildingState
                     BuildingData = new BuildingData
                     {
                         Guid = giud,
-                        Name = buildingBuffer.Name,
-                        Prefab = buildingBuffer.Self,
+                        Name = blueprintBuffer.Name,
+                        Prefab = blueprintBuffer.Self,
 
-                        NameId = buildingBuffer.NameId,
-                        Level = buildingBuffer.Level,
-                        ItemsPerHour = buildingBuffer.ItemsPerHour,
-                        LoadCapacity = buildingBuffer.LoadCapacity,
-                        MaxStorage = buildingBuffer.StorageCapacity
+                        NameId = blueprintBuffer.NameId,
+                        Level = blueprintBuffer.Level,
+                        ItemsPerHour = blueprintBuffer.ItemsPerHour,
+                        LoadCapacity = blueprintBuffer.LoadCapacity,
+                        MaxStorage = blueprintBuffer.StorageCapacity
                     }
                 });
 
@@ -201,9 +202,9 @@ namespace Jrd.GameStates.BuildingState
         protected override void OnStopRunning()
         {
             MainUIButtonsMono.BuildingStateButton.clicked -= BuildingStateSelected;
-            BuildingPanelMono.OnBuildSelected -= BuildSelected;
-            ConfirmationPanelMono.OnTempBuildCancelled -= CancelBuilding;
-            ConfirmationPanelMono.OnTempBuildApply -= ConfirmBuilding;
+            BlueprintsShopPanelUI.OnBuildSelected -= BuildSelected;
+            ConfirmationPanelUI.OnTempBuildCancelled -= CancelBuilding;
+            ConfirmationPanelUI.OnTempBuildApply -= ConfirmBuilding;
         }
 
         private void Initialize()

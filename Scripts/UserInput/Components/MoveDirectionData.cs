@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.UserInput
+namespace Jrd.UserInput.Components
 {
     /// <summary>
     /// Component with direction from user input

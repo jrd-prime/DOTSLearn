@@ -1,5 +1,6 @@
 ﻿using Jrd.CameraControl;
 using Jrd.UserInput;
+using Jrd.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;

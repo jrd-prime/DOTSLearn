@@ -1,4 +1,4 @@
-﻿using Jrd.GameStates.BuildingState;
+﻿using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
@@ -14,13 +14,15 @@ namespace Jrd.UI
     {
         private static readonly FixedString64Bytes BuildingPanel = "___ Building Panel";
         private static readonly FixedString64Bytes ConfirmationPanel = "___ Confirmation Panel";
+        private static readonly FixedString64Bytes MainStoragePanel = "___ Main Storage Panel";
 
         public void OnCreate(ref SystemState state)
         {
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(1, Allocator.Temp)
             {
-                { BuildingPanel, typeof(BuildingPanelData) },
-                { ConfirmationPanel, typeof(ConfirmationPanelData) }
+                { BuildingPanel, typeof(BlueprintsShopPanelData) },
+                { ConfirmationPanel, typeof(ConfirmationPanelData) },
+                { MainStoragePanel, typeof(MainStorageData) }
             };
 
             var entityManager = state.EntityManager;
@@ -29,7 +31,7 @@ namespace Jrd.UI
             {
                 var elementEntity = entityManager.CreateEntity(pair.Value, typeof(UIElementTag));
                 entityManager.SetName(elementEntity, pair.Key);
-                Debug.Log(pair.Key);
+                Debug.Log($"Init: {pair.Key}");
             }
 
             componentsMap.Dispose();

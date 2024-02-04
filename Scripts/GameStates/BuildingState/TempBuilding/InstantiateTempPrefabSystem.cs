@@ -1,6 +1,6 @@
-﻿using Jrd.GameplayBuildings;
+﻿using Jrd.Gameplay.Building;
 using Jrd.Screen;
-using Jrd.UserInput;
+using Jrd.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;

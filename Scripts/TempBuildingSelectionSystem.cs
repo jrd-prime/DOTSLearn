@@ -3,6 +3,7 @@ using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.CameraControl;
 using Jrd.UserInput;
+using Jrd.UserInput.Components;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
@@ -11,10 +12,8 @@ using Ray = UnityEngine.Ray;
 namespace Jrd
 {
     /// <summary>
-    /// v0.0.1
     /// Add the SelectedTag to the clicked temp building
     /// </summary>
-    // make common?
     public partial struct TempBuildingSelectionSystem : ISystem // TODO +job
     {
         private const float RayDistance = 200f;
@@ -52,7 +51,7 @@ namespace Jrd
                     Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
                     bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity targetEntity);
-                    
+
                     if (!isHit) break;
 
                     // if (SystemAPI.HasComponent<TempBuildingTag>(targetEntity)) Debug.Log("it's temp building!"); 
@@ -96,10 +95,4 @@ namespace Jrd
             }
         }
     }
-
-    // [MaterialProperty("_jrd")]
-    // public struct MyOwnColor : IComponentData
-    // {
-    //     public float4 Value;
-    // }
 }

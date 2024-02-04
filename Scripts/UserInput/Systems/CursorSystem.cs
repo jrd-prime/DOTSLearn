@@ -1,12 +1,12 @@
 ﻿using Jrd.CameraControl;
+using Jrd.UserInput.Components;
 using Jrd.Utils.Const;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.UserInput
+namespace Jrd.UserInput.Systems
 {
     /// <summary>
     /// Устанавливаем позицию курсора в мире

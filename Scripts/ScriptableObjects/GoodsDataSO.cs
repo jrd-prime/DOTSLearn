@@ -1,7 +1,7 @@
 ﻿using Jrd.Goods;
 using UnityEngine;
 
-namespace Jrd.GameStates.BuildingState.Prefabs.Goods
+namespace Jrd.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "New Goods", menuName = "Goods Data", order = 52)]
     public class GoodsDataSO : ScriptableObject

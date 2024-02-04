@@ -1,4 +1,5 @@
-﻿using Jrd.GameplayBuildings;
+﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Storage.Warehouse;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -46,6 +47,10 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
 
                 _bsEcb.SetName(entity, $"{building.NameId}_{guid}");
                 _bsEcb.AddComponent<BuildingTag>(entity);
+
+                _bsEcb.AddComponent<WarehouseProductsData>(entity);
+                _bsEcb.AddComponent<InitBuildingWarehouseProductsDataTag>(entity);
+
                 _bsEcb.AddComponent<AddBuildingToDBTag>(entity);
 
                 _bsEcb.RemoveComponent<PlaceTempBuildingTag>(entity);

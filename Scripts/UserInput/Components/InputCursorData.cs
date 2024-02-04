@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.UserInput
+namespace Jrd.UserInput.Components
 {
     public struct InputCursorData : IComponentData
     {

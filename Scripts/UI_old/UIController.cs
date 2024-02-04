@@ -1,6 +1,4 @@
-﻿using System;
-using Jrd.UI.BuildingState;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Jrd.UI_old
 {

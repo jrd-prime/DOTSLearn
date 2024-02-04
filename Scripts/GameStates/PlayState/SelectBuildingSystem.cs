@@ -1,9 +1,8 @@
-﻿using Jrd.GameplayBuildings;
-using Jrd.GameStates.BuildingState.TempBuilding;
+﻿using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.CameraControl;
-using Jrd.UI.BuildingInfoPanel;
-using Jrd.UI.BuildingState;
+using Jrd.Gameplay.Building;
+using Jrd.UI.BuildingControlPanel;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
@@ -74,7 +73,7 @@ namespace Jrd.GameStates.PlayState
                     {
                         _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
-                        BuildingInfoPanelUIController.Instance.SetElementVisible(true);
+                        BuildingControlPanelUI.Instance.SetElementVisible(true);
                     }
 
                     _tempFingerId = -1;

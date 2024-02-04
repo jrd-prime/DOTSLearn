@@ -1,5 +1,5 @@
 ﻿using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.UI.BuildingState;
+using Jrd.UI.PopUpPanels;
 using Unity.Entities;
 
 namespace Jrd.GameStates.BuildingState.ConfirmationPanel
@@ -18,7 +18,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
         {
             _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>().ValueRO;
 
-            var instance = ConfirmationPanelMono.Instance;
+            var instance = ConfirmationPanelUI.Instance;
 
             switch (instance.IsPanelVisible)
             {

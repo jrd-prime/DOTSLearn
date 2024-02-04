@@ -1,0 +1,94 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="production-line-item-container" src="project://database/Assets/UI/UXML/Templates/production-line-item-container.uxml?fileID=9197481963319205126&amp;guid=7ce7b3d2d42a7144b8a24877d6133d2c&amp;type=3#production-line-item-container" />
+    <ui:Template name="production-line-separator" src="project://database/Assets/UI/UXML/Templates/production-line-arrow.uxml?fileID=9197481963319205126&amp;guid=64cc1aa55452c2a4d9a415df962b515d&amp;type=3#production-line-arrow" />
+    <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
+    <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
+    <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
+    <ui:VisualElement name="main-storage-panel" focusable="false" picking-mode="Ignore" class="building-panel" style="background-image: none;">
+        <ui:VisualElement name="bcp-stats-container-140x280" class="bcp-stats-container" style="background-color: rgb(250, 193, 114); border-left-color: rgba(255, 131, 87, 0); border-right-color: rgba(255, 131, 87, 0); border-top-color: rgba(255, 131, 87, 0); border-bottom-color: rgba(255, 131, 87, 0); height: 320px;">
+            <ui:VisualElement name="bcp-icon" class="bcp-icon" style="flex-grow: 1; -unity-text-align: upper-center; border-top-width: 3px; border-right-width: 0; border-bottom-width: 0; border-left-width: 3px; background-color: rgba(0, 0, 0, 0.2); border-left-color: rgba(0, 0, 0, 0.5); border-right-color: rgba(0, 0, 0, 0.5); border-top-color: rgba(0, 0, 0, 0.5); border-bottom-color: rgba(0, 0, 0, 0.5);">
+                <ui:VisualElement name="icon-holder" style="flex-grow: 1; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 10px; background-image: url(&apos;project://database/Assets/Resources/UI/Images/img1.png?fileID=21300000&amp;guid=64a62883e3720ca41b9bfc22c7d9e58f&amp;type=3#img1&apos;);" />
+                <ui:VisualElement style="flex-grow: 1; position: absolute; top: 0; height: auto; margin-top: 10px; min-height: 20px; min-width: auto; background-color: rgba(0, 0, 0, 0.53); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; margin-left: 0; margin-right: 0; width: auto; align-items: center; justify-content: center; align-self: center; padding-right: 10px; padding-left: 10px; max-height: 30px;">
+                    <ui:Label tabindex="-1" text="FARM MILL" parse-escape-sequences="true" display-tooltip-when-elided="true" name="name-label" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font-style: normal; font-size: 10px; min-width: auto; min-height: 20px; height: auto; -unity-text-align: middle-center; color: rgb(255, 255, 255); max-height: 30px;" />
+                </ui:VisualElement>
+                <ui:VisualElement class="green-color3" style="flex-grow: 1; width: 24px; height: 25px; position: absolute; bottom: 10px; right: 10px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; -unity-text-align: middle-center; flex-direction: row; align-items: center; justify-content: center; align-self: center; font-size: 10px; -unity-font-style: bold; color: rgb(33, 53, 2); border-bottom-width: 1px; border-left-color: rgb(33, 53, 2); border-right-color: rgb(33, 53, 2); border-top-color: rgb(33, 53, 2); border-bottom-color: rgb(33, 53, 2);">
+                    <ui:Label tabindex="-1" text="#16" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lvl-label" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-font: url(&apos;project://database/Assets/TextMesh%20Pro/Examples%20&amp;%20Extras/Fonts/Anton.ttf?fileID=12800000&amp;guid=997a43b767814dd0a7642ec9b78cba41&amp;type=3#Anton&apos;); width: 24px; height: 24px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="bcp-stats" class="bcp-stats" style="background-color: rgba(0, 0, 0, 0);">
+                <ui:VisualElement name="production-line-cont" class="stat-line" style="top: 10px; height: 32px; background-color: rgba(113, 113, 113, 0);">
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-separator" name="production-line-separator" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                    <ui:Instance template="production-line-item-container" name="production-line-item-container" />
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-line" style="top: 45px;">
+                    <ui:Label tabindex="-1" text="Flour / hour" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-conv-label" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="5" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-conv-int-label" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-line" style="top: 65px;">
+                    <ui:Label tabindex="-1" text="Wheat / load" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-load-label" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="25" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-load-int-label" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement name="VisualElement" class="stat-line" style="position: absolute; top: 85px;">
+                    <ui:Label tabindex="-1" text="Max flour in mill storage" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-storage-label" class="stat-left-text" />
+                    <ui:Label tabindex="-1" text="5" parse-escape-sequences="true" display-tooltip-when-elided="true" name="stat-storage-int-label" class="stat-right-text" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(52, 192, 173, 0); width: 130px; height: 32px; position: absolute; bottom: 0; align-items: center; justify-content: center; align-self: center; font-size: 10px;">
+                    <ui:Button text="#upgrade" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-upgrade" class="green-color green-color3" style="position: absolute; left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 88px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101);" />
+                    <ui:Button text="#add&#10;buff" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-buff" style="position: absolute; right: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 32px; width: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(120, 120, 120); border-right-color: rgb(120, 120, 120); border-top-color: rgb(120, 120, 120); border-bottom-color: rgb(120, 120, 120); background-color: rgb(8, 151, 157);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" class="bcp-content-container" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: rgb(255, 221, 148);">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: 390px; height: 140px; position: absolute; padding-top: 0; top: 0; bottom: auto; border-top-right-radius: 30px; left: 0; border-bottom-width: 2px; border-left-color: rgba(250, 193, 114, 0); border-right-color: rgba(250, 193, 114, 0); border-top-color: rgba(250, 193, 114, 0); border-bottom-color: rgba(250, 193, 114, 0); flex-direction: row; margin-left: 20px; margin-top: 20px; margin-right: 20px;">
+                <ui:VisualElement name="items-cont" class="grid-storage-cont">
+                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lab" style="flex-grow: 1;" />
+                    <ui:VisualElement class="grid" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 390px; height: 140px; position: absolute; padding-top: 0; top: auto; bottom: 20px;">
+                <ui:VisualElement name="internal-storage-cont" class="grid-cont">
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; top: -25px; width: 120px; height: 20px; background-color: rgba(0, 0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; overflow: hidden; align-items: center; justify-content: center; align-self: center; -unity-text-align: middle-left; left: -2px;">
+                        <ui:Label tabindex="-1" text="#Mill Storage" parse-escape-sequences="true" display-tooltip-when-elided="true" name="internal-storage-name-label" style="flex-direction: row; align-items: center; justify-content: center; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 10px; height: 20px; -unity-text-align: middle-center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; left: 120px; height: 118px; width: 150px; margin-top: 22px;">
+                    <ui:VisualElement style="flex-grow: 1; width: 130px; height: 30px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 0; margin-top: 10px; font-size: 10px; flex-direction: column; margin-left: 10px; margin-right: 10px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgba(0, 0, 0, 0.1); border-right-color: rgba(0, 0, 0, 0.1); border-top-color: rgba(0, 0, 0, 0.1); border-bottom-color: rgba(0, 0, 0, 0.1); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px;">
+                        <ui:VisualElement name="toogle-text" style="flex-grow: 1; width: 100px; height: 30px; right: 0; position: absolute;">
+                            <ui:Label tabindex="-1" text="Auto Production (Pro)" parse-escape-sequences="true" display-tooltip-when-elided="true" style="height: 28px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-left; font-size: 7px; color: rgba(27, 27, 27, 0.6);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="toogle-img" style="flex-grow: 1; position: absolute; left: 0; width: 22px; height: 22px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(229, 198, 133); border-right-color: rgb(229, 198, 133); border-top-color: rgb(229, 198, 133); border-bottom-color: rgb(229, 198, 133); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px;">
+                            <ui:VisualElement name="toggle-check" style="flex-grow: 1; background-color: rgba(126, 160, 14, 0); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 3px; margin-right: 3px; margin-bottom: 3px; margin-left: 3px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; width: 150px; height: 32px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 42px; margin-top: 10px;">
+                        <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-move" class="green-color green-color2 green-color3" style="position: absolute; left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 130px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); font-size: 10px;">
+                            <ui:VisualElement style="flex-grow: 1; min-width: auto; min-height: auto; width: 34px; height: 32px; position: absolute; right: auto; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-width: 0; border-left-color: rgba(0, 0, 0, 0.34); border-right-color: rgba(0, 0, 0, 0.34); border-top-color: rgba(0, 0, 0, 0.34); border-bottom-color: rgba(0, 0, 0, 0.34); left: 0; border-right-width: 2px; border-top-left-radius: 3px; border-bottom-left-radius: 3px;">
+                                <ui:VisualElement style="flex-grow: 0; width: 16px; height: 16px; align-items: center; justify-content: center; align-self: center; margin-top: 8px; margin-right: 8px; margin-bottom: 8px; margin-left: 8px; background-image: url(&apos;project://database/Assets/Resources/UI/Images/straight-left.png?fileID=21300000&amp;guid=ca524a0ad29eeea4094e1954e3c7f1ef&amp;type=3#straight-left&apos;);" />
+                            </ui:VisualElement>
+                            <ui:Label tabindex="-1" text="#Move wheat&#10;to mill" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" style="position: absolute; left: 34px; height: 32px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 90px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 5px; -unity-text-align: middle-left;" />
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="VisualElement" class="grid-cont" style="right: 0; left: auto;">
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement class="grid" />
+                    <ui:VisualElement style="flex-grow: 1; position: absolute; top: -25px; width: 100%; height: 20px; background-color: rgba(0, 0, 0, 0); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; overflow: hidden; left: -2px;">
+                        <ui:Label tabindex="-1" text="#Farm Storage" parse-escape-sequences="true" display-tooltip-when-elided="true" name="main-storage-name-label" style="flex-direction: row; align-items: center; justify-content: center; align-self: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 10px; height: 20px; -unity-text-align: middle-center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="close-button-cont" style="flex-grow: 1; position: absolute; right: 10px; top: 10px; width: auto; height: auto; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;">
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="close-button" style="position: relative; right: auto; top: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 24px; height: 24px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-left-color: rgba(190, 96, 96, 0); border-right-color: rgba(190, 96, 96, 0); border-top-color: rgba(190, 96, 96, 0); border-bottom-color: rgba(190, 96, 96, 0); background-color: rgb(207, 60, 60); color: rgb(255, 255, 255); -unity-font-style: bold; font-size: 12px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

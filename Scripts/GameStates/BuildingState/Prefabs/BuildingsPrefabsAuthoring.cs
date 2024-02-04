@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Jrd.Goods;
+using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -19,7 +20,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
             {
                 Entity entity = GetEntity(authoring.gameObject, TransformUsageFlags.None);
 
-                var buildingBuffer = AddBuffer<BuildingsBuffer>(entity);
+                var buildingBuffer = AddBuffer<BlueprintsBuffer>(entity);
                 var buildingRequiredItemsBuffer = AddBuffer<BuildingRequiredItemsBuffer>(entity);
                 var buildingManufacturedItemsBuffer = AddBuffer<BuildingManufacturedItemsBuffer>(entity);
 
@@ -34,9 +35,9 @@ namespace Jrd.GameStates.BuildingState.Prefabs
             }
 
             private void FillBuildingsBuffer(BuildingDataSo buildingData,
-                DynamicBuffer<BuildingsBuffer> buildingBuffer)
+                DynamicBuffer<BlueprintsBuffer> buildingBuffer)
             {
-                buildingBuffer.Add(new BuildingsBuffer
+                buildingBuffer.Add(new BlueprintsBuffer
                 {
                     Self = GetEntity(buildingData.Prefab, TransformUsageFlags.Dynamic),
 
@@ -73,7 +74,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
     {
     }
 
-    public struct BuildingsBuffer : IBufferElementData
+    public struct BlueprintsBuffer : IBufferElementData
     {
         public Entity Self;
 

@@ -1,4 +1,4 @@
-﻿using Jrd.GameplayBuildings;
+﻿using Jrd.Gameplay.Building;
 using Unity.Entities;
 
 namespace Jrd.GameStates.BuildingState.TempBuilding

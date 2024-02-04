@@ -1,4 +1,5 @@
 ﻿using Jrd.UserInput;
+using Jrd.UserInput.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 

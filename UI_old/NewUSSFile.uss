@@ -473,3 +473,22 @@ VisualElement {
     padding-left: 0;
     color: rgb(33, 53, 2);
 }
+
+.grid-storage-cont {
+    flex-grow: 1;
+    position: absolute;
+    height: 120px;
+    width: 390px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0.2);
+    border-right-color: rgba(0, 0, 0, 0.2);
+    border-top-color: rgba(0, 0, 0, 0.2);
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}

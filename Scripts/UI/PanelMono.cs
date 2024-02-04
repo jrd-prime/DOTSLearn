@@ -8,7 +8,7 @@ namespace Jrd.UI
         protected int PanelTitleMaxLength = 30;
         protected bool IsVisible;
         protected VisualElement PanelRoot;
-        protected VisualElement BuildingPanel;
+        protected VisualElement Panel;
         protected Label PanelTitleLabel;
 
         public Button PanelCloseButton;
@@ -43,12 +43,12 @@ namespace Jrd.UI
 
         public virtual void ShowPanel()
         {
-            BuildingPanel.style.display = DisplayStyle.Flex;
+            Panel.style.display = DisplayStyle.Flex;
         }
 
         public virtual void HidePanel()
         {
-            BuildingPanel.style.display = DisplayStyle.None;
+            Panel.style.display = DisplayStyle.None;
         }
 
         public virtual void SetPanelTitle(string panelTitle)

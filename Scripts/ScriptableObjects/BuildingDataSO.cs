@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Jrd.GameStates.BuildingState.Prefabs;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Jrd.GameStates.BuildingState.Prefabs
+namespace Jrd.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "New Building", menuName = "Building Data", order = 51)]
     public class BuildingDataSo : ScriptableObject

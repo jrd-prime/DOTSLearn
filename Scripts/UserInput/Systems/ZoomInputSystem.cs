@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using Jrd.UserInput.Components;
+using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.UserInput
+namespace Jrd.UserInput.Systems
 {
     public partial struct ZoomInputSystem : ISystem
     {

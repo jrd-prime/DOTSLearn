@@ -1,8 +1,9 @@
-﻿using Unity.Entities;
+﻿using Jrd.UserInput.Components;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.UserInput
+namespace Jrd.UserInput.Systems
 {
     /// <summary>
     /// Устанавливает вектор движения simple
