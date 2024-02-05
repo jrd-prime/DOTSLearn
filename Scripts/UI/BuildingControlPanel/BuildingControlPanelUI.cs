@@ -24,19 +24,13 @@ namespace Jrd.UI.BuildingControlPanel
         protected Button MoveButton;
         protected Button BuffButton;
         protected Button UpgradeButton;
-        protected string ButtonUpgradeId = "btn-upgrade";
-        protected string ButtonBuffId = "btn-buff";
-        protected string ButtonMoveId = "btn-move";
-        protected string ButtonLoadId = "btn-load";
-        protected string ButtonTakeId = "btn-take";
 
         // Common Labels
         protected Label LevelLabel;
-        protected string LevelLabelId = "lvl-label";
-        protected Label BuildingStorageNameLabel;
-        protected string BuildingStorageNameLabelId = "building-storage-name-label";
-        protected Label MainStorageNameLabel;
-        protected string MainStorageNameLabelId = "main-storage-name-label";
+        // protected Label BuildingStorageNameLabel;
+        // protected string BuildingStorageNameLabelId = "building-storage-name-label";
+        // protected Label MainStorageNameLabel;
+        // protected string MainStorageNameLabelId = "main-storage-name-label";
 
         #endregion
 
@@ -51,24 +45,24 @@ namespace Jrd.UI.BuildingControlPanel
         {
             #region InitVisualElements
 
-            PanelIdName = "building-config-panel";
-            PanelTitleIdName = "panel-title";
-            PanelCloseButtonIdName = "close-button";
+            PanelIdName = BCPNamesID.PanelId;
+            PanelTitleIdName = BCPNamesID.PanelTitleId;
+            CloseButtonId = BCPNamesID.CloseButtonId;
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
             PanelTitleLabel = Panel.Q<Label>(PanelTitleIdName);
-            PanelCloseButton = Panel.Q<Button>(PanelCloseButtonIdName);
+            PanelCloseButton = Panel.Q<Button>(CloseButtonId);
             // Buttons
-            UpgradeButton = Panel.Q<Button>(ButtonUpgradeId);
-            BuffButton = Panel.Q<Button>(ButtonBuffId);
-            MoveButton = Panel.Q<Button>(ButtonMoveId);
-            LoadButton = Panel.Q<Button>(ButtonLoadId);
-            TakeButton = Panel.Q<Button>(ButtonTakeId);
+            UpgradeButton = Panel.Q<Button>(BCPNamesID.UpgradeButtonId);
+            BuffButton = Panel.Q<Button>(BCPNamesID.BuffButtonId);
+            MoveButton = Panel.Q<Button>(BCPNamesID.MoveButtonId);
+            LoadButton = Panel.Q<Button>(BCPNamesID.LoadButtonId);
+            TakeButton = Panel.Q<Button>(BCPNamesID.TakeButtonId);
             // Labels
-            LevelLabel = Panel.Q<Label>(LevelLabelId);
-            BuildingStorageNameLabel = Panel.Q<Label>(BuildingStorageNameLabelId);
-            MainStorageNameLabel = Panel.Q<Label>(MainStorageNameLabelId);
+            LevelLabel = Panel.Q<Label>(BCPNamesID.LevelLabelId);
+            // BuildingStorageNameLabel = Panel.Q<Label>(BuildingStorageNameLabelId);
+            // MainStorageNameLabel = Panel.Q<Label>(MainStorageNameLabelId);
 
             UpgradeButton.RegisterCallback<ClickEvent>(Callback);
             BuffButton.RegisterCallback<ClickEvent>(Callback);
@@ -80,7 +74,7 @@ namespace Jrd.UI.BuildingControlPanel
 
             ToogleCheck.RegisterCallback<ClickEvent>(evt =>
             {
-                Debug.Log("togg click");
+                Debug.Log("toggle click");
                 ToogleCheck.style.backgroundColor = new StyleColor(new Color(74, 91, 63, 1));
             });
 

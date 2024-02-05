@@ -20,7 +20,7 @@ namespace Jrd.GameStates.BuildingState
     [UpdateAfter(typeof(GameStatesSystem))]
     public partial class BuildingStateSystem : SystemBase
     {
-        private RefRW<BlueprintsShopPanelData> _a;
+        private RefRW<BlueprintsShopData> _a;
         private EntityManager _entityManager;
         private NativeList<Entity> _stateVisualComponents;
         private BeginSimulationEntityCommandBufferSystem.Singleton _bsEcbSystem;
@@ -37,7 +37,7 @@ namespace Jrd.GameStates.BuildingState
 
         private Entity _buildingStateEntity;
         private RefRW<BuildingStateData> _buildingStateData;
-        private RefRW<BlueprintsShopPanelData> _buildingPanelData;
+        private RefRW<BlueprintsShopData> _buildingPanelData;
 
         protected override void OnCreate()
         {
@@ -88,7 +88,7 @@ namespace Jrd.GameStates.BuildingState
 
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
-            _buildingPanelData = SystemAPI.GetSingletonRW<BlueprintsShopPanelData>();
+            _buildingPanelData = SystemAPI.GetSingletonRW<BlueprintsShopData>();
             _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>();
 
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();

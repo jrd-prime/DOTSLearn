@@ -4,26 +4,38 @@ using Unity.Entities;
 namespace Jrd.Gameplay.Storage.MainStorage
 {
     /// <summary>
-    /// Set data to UI
+    /// Get data from component and Set data to UI 
     /// More?
     /// </summary>
     public partial struct MainStoragePanelSystem : ISystem
     {
-        private MainStoragePanelUI _mainStoragePanelUI;
+        private EntityCommandBuffer _ecb;
 
         public void OnCreate(ref SystemState state)
         {
-            throw new System.NotImplementedException();
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            throw new System.NotImplementedException();
+            MainStoragePanelUI mainStoragePanelUI = MainStoragePanelUI.Instance;
+
+            _ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+
+            foreach (var (data, entity) in SystemAPI
+                         .Query<MainStorageData>()
+                         .WithAll<UpdateRequestTag>()
+                         .WithEntityAccess())
+            {
+                mainStoragePanelUI.SetTestItems(data);
+                _ecb.RemoveComponent<UpdateRequestTag>(entity);
+            }
         }
 
         public void OnDestroy(ref SystemState state)
         {
-            throw new System.NotImplementedException();
+            // throw new System.NotImplementedException();
         }
     }
 }

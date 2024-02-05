@@ -41,7 +41,7 @@ namespace Jrd.Gameplay.Building
                 // TODO think
                 a.SetSpecName(Spec.Productivity, manufacturedItemsBuffer.ElementAt(0)._item.ToString());
                 a.SetSpecName(Spec.LoadCapacity, requiredItemsBuffer.ElementAt(0)._item.ToString());
-                a.SetSpecName(Spec.StorageCapacity, manufacturedItemsBuffer.ElementAt(0)._item.ToString());
+                a.SetSpecName(Spec.WarehouseCapacity, manufacturedItemsBuffer.ElementAt(0)._item.ToString());
 
                 a.SetLineInfo(requiredItemsBuffer, manufacturedItemsBuffer);
 

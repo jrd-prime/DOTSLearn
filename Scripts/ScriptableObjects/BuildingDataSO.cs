@@ -4,23 +4,28 @@ using UnityEngine;
 
 namespace Jrd.ScriptableObjects
 {
+    //LOOK try [SerializeReference]
+
     [CreateAssetMenu(fileName = "New Building", menuName = "Building Data", order = 51)]
     public class BuildingDataSo : ScriptableObject
     {
-        [Header("Building Prefab Info")]
-        [SerializeField] private GameObject _prefab;
+        [Header("Building Prefab Info")] [SerializeField]
+        private GameObject _prefab;
+
         [SerializeField] private BuildingCategoryId _categoryId;
         [SerializeField] private BuildingNameId _nameId;
         [SerializeField] private string _name;
         [SerializeField] private Vector2 _size;
 
-        [Header("Building Items")]
-        [SerializeField] private List<BuildingRequiredItemsBuffer> _requiredItems;
+        [Header("Building Items")] [SerializeField]
+        private List<BuildingRequiredItemsBuffer> _requiredItems;
+
         [SerializeField] private List<BuildingManufacturedItemsBuffer> _manufacturedItems;
 
 
-        [Header("Building Stats")]
-        [SerializeField] private int _level = 1;
+        [Header("Building Stats")] [SerializeField]
+        private int _level = 1;
+
         [SerializeField] private float _itemsPerHour;
         [SerializeField] private int _loadCapacity;
         [SerializeField] private int _storageCapacity = 20;

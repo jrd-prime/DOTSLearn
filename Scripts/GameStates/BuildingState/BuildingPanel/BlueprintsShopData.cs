@@ -2,7 +2,7 @@
 
 namespace Jrd.GameStates.BuildingState.BuildingPanel
 {
-    public struct BlueprintsShopPanelData : IComponentData
+    public struct BlueprintsShopData : IComponentData
     {
         public bool SetVisible;
         public int BuildingPrefabsCount;

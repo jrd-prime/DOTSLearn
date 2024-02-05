@@ -14,7 +14,7 @@ namespace Jrd.Gameplay.Shop.BlueprintsShop
     {
         private EntityManager _entityManager;
         private BuildingStateData _buildingStateData;
-        private BlueprintsShopPanelData _blueprintsShopPanelData;
+        private BlueprintsShopData _blueprintsShopData;
         private DynamicBuffer<BlueprintsBuffer> _blueprintsBuffers;
         private int _buildingsCount;
 
@@ -31,7 +31,7 @@ namespace Jrd.Gameplay.Shop.BlueprintsShop
         {
             // if (!SystemAPI.TryGetSingletonEntity<BuildingPanelData>(out var buildingPanelEntity)) return;
 
-            _blueprintsShopPanelData = SystemAPI.GetSingletonRW<BlueprintsShopPanelData>().ValueRO;
+            _blueprintsShopData = SystemAPI.GetSingletonRW<BlueprintsShopData>().ValueRO;
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>().ValueRO;
             _buildingsCount = _buildingStateData.BuildingPrefabsCount;
 
@@ -47,12 +47,12 @@ namespace Jrd.Gameplay.Shop.BlueprintsShop
                 var instance = BlueprintsShopPanelUI.Instance;
                 switch (instance.IsPanelVisible)
                 {
-                    case false when _blueprintsShopPanelData.SetVisible:
+                    case false when _blueprintsShopData.SetVisible:
                         instance.InstantiateBuildingsCards(_buildingsCount, GetNamesList());
                         instance.SetElementVisible(true);
                         instance.SetPanelTitle("Panel Title");
                         break;
-                    case true when !_blueprintsShopPanelData.SetVisible:
+                    case true when !_blueprintsShopData.SetVisible:
                         instance.SetElementVisible(false);
                         instance.ClearBuildingsCards();
                         break;

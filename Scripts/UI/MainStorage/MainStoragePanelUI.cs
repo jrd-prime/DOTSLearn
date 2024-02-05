@@ -1,10 +1,13 @@
-﻿using UnityEngine.UIElements;
+﻿using Jrd.Gameplay.Storage.MainStorage;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Jrd.UI.MainStorage
 {
     public class MainStoragePanelUI : PanelMono
     {
         protected VisualElement ItemsCont;
+        protected Label lab;
         public static MainStoragePanelUI Instance { private set; get; }
 
         protected void Awake()
@@ -16,13 +19,14 @@ namespace Jrd.UI.MainStorage
         {
             PanelIdName = "main-storage-panel";
             // PanelTitleIdName = "panel-title";
-            PanelCloseButtonIdName = "close-button";
+            CloseButtonId = "close-button";
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
             // PanelTitleLabel = BuildingPanel.Q<Label>(PanelTitleIdName);
-            PanelCloseButton = Panel.Q<Button>(PanelCloseButtonIdName);
-            ItemsCont = Panel.Q<VisualElement>("item-cont");
+            PanelCloseButton = Panel.Q<Button>(CloseButtonId);
+            ItemsCont = Panel.Q<VisualElement>("items-cont");
+            lab = Panel.Q<Label>("text-label");
 
             // if (Panel == null) return;
             // base.HidePanel();
@@ -31,12 +35,18 @@ namespace Jrd.UI.MainStorage
             PanelCloseButton.clicked += OnCloseButton;
         }
 
-        public void SetTestItems(object itemsList)
+        public void SetTestItems(MainStorageData itemsList)
         {
-            ItemsCont.Clear();
-            var lab = ItemsCont.Q<Label>("lab");
+            // ItemsCont.Clear();
 
-            lab.text = "test";
+
+            lab.text = "";
+            foreach (var keyValue in itemsList.Values)
+            {
+                if (keyValue.Value == -1) continue;
+                lab.text += "\n" + keyValue.Key + " / " + keyValue.Value;
+                Debug.LogWarning(keyValue.Key + " / " + keyValue.Value);
+            }
         }
 
         protected override void OnCloseButton() => HidePanel();

@@ -14,5 +14,12 @@ namespace Jrd.ScriptableObjects
         public Sprite PrefabOrImageMb => _productPrefabOrImageMb;
         public string Name => _productName;
         public int Size => _productPackSize;
+
+        // public string Guid { get; private set; }
+        //
+        // private void OnValidate()
+        // {
+        //     Guid = Utils.Utils.GetGuid();
+        // }
     }
 }

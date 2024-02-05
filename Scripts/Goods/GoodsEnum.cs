@@ -5,6 +5,7 @@
         Wheat,
         Flour,
         Wood,
-        Egg
+        WoodenPlank,
+        Brick
     }
 }

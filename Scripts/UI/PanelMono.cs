@@ -15,7 +15,7 @@ namespace Jrd.UI
 
         protected string PanelIdName;
         protected string PanelTitleIdName;
-        protected string PanelCloseButtonIdName;
+        protected string CloseButtonId;
 
 
         public bool IsPanelVisible

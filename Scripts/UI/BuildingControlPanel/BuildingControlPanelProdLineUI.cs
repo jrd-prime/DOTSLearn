@@ -11,16 +11,13 @@ namespace Jrd.UI.BuildingControlPanel
     public class BuildingControlPanelProdLineUI : IBuildingProductionLine
     {
         private readonly VisualElement _container;
-        private const string ContainerId = "production-line-cont";
-        private const string ItemContainerId = "prod-line-item-cont";
-        public const string ItemCountLabelId = "prod-line-item-count";
         private readonly VisualTreeAsset _itemContainerTemplate;
         private readonly VisualTreeAsset _arrowTemplate;
 
         public BuildingControlPanelProdLineUI(VisualElement panel, VisualTreeAsset itemContainerTemplate,
             VisualTreeAsset arrowTemplate)
         {
-            _container = panel.Q<VisualElement>(ContainerId);
+            _container = panel.Q<VisualElement>(BCPNamesID.ProdLineContainerId);
             _itemContainerTemplate = itemContainerTemplate;
             _arrowTemplate = arrowTemplate;
         }
@@ -51,8 +48,8 @@ namespace Jrd.UI.BuildingControlPanel
 
             VisualElement template = _itemContainerTemplate.Instantiate();
 
-            var itemContainer = template.Q<VisualElement>(ItemContainerId);
-            var itemCountLabel = template.Q<Label>(ItemCountLabelId);
+            var itemContainer = template.Q<VisualElement>(BCPNamesID.ProdLineItemContainerId);
+            var itemCountLabel = template.Q<Label>(BCPNamesID.ProdLineItemCountLabelId);
 
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();

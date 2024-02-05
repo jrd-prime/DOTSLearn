@@ -44,7 +44,7 @@
         <ui:VisualElement name="VisualElement" class="bcp-content-container" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; background-color: rgb(255, 221, 148);">
             <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: 390px; height: 140px; position: absolute; padding-top: 0; top: 0; bottom: auto; border-top-right-radius: 30px; left: 0; border-bottom-width: 2px; border-left-color: rgba(250, 193, 114, 0); border-right-color: rgba(250, 193, 114, 0); border-top-color: rgba(250, 193, 114, 0); border-bottom-color: rgba(250, 193, 114, 0); flex-direction: row; margin-left: 20px; margin-top: 20px; margin-right: 20px;">
                 <ui:VisualElement name="items-cont" class="grid-storage-cont">
-                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="lab" style="flex-grow: 1;" />
+                    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="text-label" style="flex-grow: 1;" />
                     <ui:VisualElement class="grid" />
                 </ui:VisualElement>
             </ui:VisualElement>
