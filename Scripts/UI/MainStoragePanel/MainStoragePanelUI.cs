@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.UI.MainStorage
+namespace Jrd.UI.MainStoragePanel
 {
     public class MainStoragePanelUI : PanelMono
     {
@@ -17,20 +17,19 @@ namespace Jrd.UI.MainStorage
 
         protected void OnEnable()
         {
-            PanelIdName = "main-storage-panel";
-            // PanelTitleIdName = "panel-title";
-            CloseButtonId = "close-button";
+            PanelIdName = MSPNamesID.PanelId;
+            PanelTitleIdName = MSPNamesID.PanelTitleId;
+            CloseButtonId = MSPNamesID.CloseButtonId;
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
-            // PanelTitleLabel = BuildingPanel.Q<Label>(PanelTitleIdName);
             PanelCloseButton = Panel.Q<Button>(CloseButtonId);
-            ItemsCont = Panel.Q<VisualElement>("items-cont");
-            lab = Panel.Q<Label>("text-label");
+            ItemsCont = Panel.Q<VisualElement>(MSPNamesID.ItemsContainerId);
+            lab = Panel.Q<Label>(MSPNamesID.TestTextLabelId);
 
-            // if (Panel == null) return;
-            // base.HidePanel();
-            // IsVisible = false;
+            if (Panel == null) return;
+            base.HidePanel();
+            IsVisible = false;
 
             PanelCloseButton.clicked += OnCloseButton;
         }
@@ -38,8 +37,7 @@ namespace Jrd.UI.MainStorage
         public void SetTestItems(MainStorageData itemsList)
         {
             // ItemsCont.Clear();
-
-
+            
             lab.text = "";
             foreach (var keyValue in itemsList.Values)
             {
@@ -49,7 +47,7 @@ namespace Jrd.UI.MainStorage
             }
         }
 
-        protected override void OnCloseButton() => HidePanel();
+        protected override void OnCloseButton() => SetElementVisible(false);
 
         private void OnDisable()
         {

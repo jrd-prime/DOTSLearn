@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Storage.Warehouse;
 using Unity.Burst;
 using Unity.Collections;

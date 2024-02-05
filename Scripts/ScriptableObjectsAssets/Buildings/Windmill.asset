@@ -18,6 +18,10 @@ MonoBehaviour:
   _name: Windmill
   _size: {x: 5, y: 5}
   _requiredItems:
+  - _item: 2
+    _count: 5
+  - _item: 3
+    _count: 5
   - _item: 0
     _count: 5
   _manufacturedItems:

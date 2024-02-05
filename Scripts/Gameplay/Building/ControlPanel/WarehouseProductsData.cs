@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Jrd.Goods;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace Jrd.Gameplay.Storage.Warehouse
@@ -8,6 +9,6 @@ namespace Jrd.Gameplay.Storage.Warehouse
     /// </summary>
     public struct WarehouseProductsData : IComponentData
     {
-        public NativeList<ProductData> Value;
+        public NativeParallelHashMap<FixedString32Bytes, int> Values;
     }
 }

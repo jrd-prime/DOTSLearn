@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 830426816}
   - component: {fileID: 830426817}
   m_Layer: 0
-  m_Name: MainStorage
+  m_Name: MainStoragePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 3e82a152e1739c84db02057a9f36f48e,
     type: 3}
-  m_SortingOrder: 111
+  m_SortingOrder: 33
 --- !u!114 &830426817
 MonoBehaviour:
   m_ObjectHideFlags: 0

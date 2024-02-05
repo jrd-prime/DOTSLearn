@@ -13,8 +13,10 @@ namespace Jrd.UI
         private const float BottomMargin = 10f;
 
         // Right bottom
-        private VisualElement _buildingStateButtonContainer;
-        public static Button BuildingStateButton;
+        private VisualElement _blueprintsShopButtonContainer;
+        private VisualElement _mainStorageButtonContainer;
+        public static Button BlueprintsShopButton;
+        public static Button MainStorageButton;
 
         public static MainUIButtonsMono Instance { private set; get; }
 
@@ -27,9 +29,12 @@ namespace Jrd.UI
         {
             _root = GetComponent<UIDocument>().rootVisualElement;
 
-            _buildingStateButtonContainer = _root.Q<VisualElement>("building-state-button-container");
-            BuildingStateButton = _root.Q<Button>("building-state-button");
-            
+            _blueprintsShopButtonContainer = _root.Q<VisualElement>("building-state-button-container");
+            BlueprintsShopButton = _root.Q<Button>("building-state-button");
+
+            _mainStorageButtonContainer = _root.Q<VisualElement>("main-storage-button-container");
+            MainStorageButton = _root.Q<Button>("main-storage-button");
+
             if (_confirmationPanel != null) _confirmationPanel.style.display = DisplayStyle.None;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -51,7 +52,7 @@ namespace Jrd.GameStates.BuildingState
             _entityManager = EntityManager;
             _tempSelectedBuildID = -1;
 
-            MainUIButtonsMono.BuildingStateButton.clicked += BuildingStateSelected;
+            MainUIButtonsMono.BlueprintsShopButton.clicked += BlueprintsShopSelected;
             BlueprintsShopPanelUI.OnBuildSelected += BuildSelected;
             ConfirmationPanelUI.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply += ConfirmBuilding;
@@ -94,18 +95,18 @@ namespace Jrd.GameStates.BuildingState
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
 
-        private void BuildingStateSelected()
+        private void BlueprintsShopSelected()
         {
-            SetBuildingPanelVisible(true);
+            SetBlueprintsShopPanelVisible(true);
         }
 
-        private void SetBuildingPanelVisible(bool value) => _buildingPanelData.ValueRW.SetVisible = value;
+        private void SetBlueprintsShopPanelVisible(bool value) => _buildingPanelData.ValueRW.SetVisible = value;
         private void SetConfirmationPanelVisible(bool value) => _confirmationPanelData.ValueRW.SetVisible = value;
 
 
         private void BuildSelected(Button button, int index)
         {
-            SetBuildingPanelVisible(false);
+            SetBlueprintsShopPanelVisible(false);
             SetConfirmationPanelVisible(true);
             SetTempSelectedBuildingId(index);
             InstantiateTempPrefab(index);
@@ -201,7 +202,7 @@ namespace Jrd.GameStates.BuildingState
 
         protected override void OnStopRunning()
         {
-            MainUIButtonsMono.BuildingStateButton.clicked -= BuildingStateSelected;
+            MainUIButtonsMono.BlueprintsShopButton.clicked -= BlueprintsShopSelected;
             BlueprintsShopPanelUI.OnBuildSelected -= BuildSelected;
             ConfirmationPanelUI.OnTempBuildCancelled -= CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply -= ConfirmBuilding;

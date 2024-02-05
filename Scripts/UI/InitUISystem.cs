@@ -39,13 +39,13 @@ namespace Jrd.UI
                 entityManager.AddComponent<MainStorageData>(elementEntity);
                 entityManager.SetComponentData(elementEntity, new MainStorageData
                 {
-                    Values = new NativeParallelHashMap<FixedString32Bytes, int>(1, Allocator.Persistent)
+                    Values = new NativeParallelHashMap<GoodsEnum, int>(1, Allocator.Persistent)
                     {
-                        { nameof(GoodsEnum.Wheat), 0 },
-                        { nameof(GoodsEnum.Flour), 0 },
-                        { nameof(GoodsEnum.Wood), 0 },
-                        { nameof(GoodsEnum.WoodenPlank), -1 },
-                        { nameof(GoodsEnum.Brick), 0 },
+                        { GoodsEnum.Wheat, 0 },
+                        { GoodsEnum.Flour, 0 },
+                        { GoodsEnum.Wood, 0 },
+                        { GoodsEnum.WoodenPlank, 0 },
+                        { GoodsEnum.Brick, 0 },
                     }
                 });
             }

@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Gameplay.Building
+namespace Jrd.Gameplay.Building.ControlPanel
 {
     public struct BuildingData : IComponentData
     {

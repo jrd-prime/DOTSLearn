@@ -1,4 +1,5 @@
-﻿using Jrd.UI.MainStorage;
+﻿using Jrd.UI;
+using Jrd.UI.MainStoragePanel;
 using Unity.Entities;
 
 namespace Jrd.Gameplay.Storage.MainStorage
@@ -7,35 +8,45 @@ namespace Jrd.Gameplay.Storage.MainStorage
     /// Get data from component and Set data to UI 
     /// More?
     /// </summary>
-    public partial struct MainStoragePanelSystem : ISystem
+    public partial class MainStoragePanelSystem : SystemBase
     {
         private EntityCommandBuffer _ecb;
+        private Entity _mainStorageEntity;
+        private MainStoragePanelUI _mainStoragePanelUI;
+        private MainStorageData _mainStorageData;
 
-        public void OnCreate(ref SystemState state)
+        protected override void OnCreate()
         {
-            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
         }
 
-        public void OnUpdate(ref SystemState state)
+        protected override void OnStartRunning()
         {
-            MainStoragePanelUI mainStoragePanelUI = MainStoragePanelUI.Instance;
+            _mainStoragePanelUI = MainStoragePanelUI.Instance;
+            
+            MainUIButtonsMono.MainStorageButton.clicked += MainStorageSelected;
+        }
+
+        protected override void OnUpdate()
+        {
+            if (!SystemAPI.TryGetSingletonEntity<MainStorageData>(out Entity entity)) return;
+            _mainStorageEntity = entity;
+
+            _mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
 
             _ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
-
-            foreach (var (data, entity) in SystemAPI
-                         .Query<MainStorageData>()
-                         .WithAll<UpdateRequestTag>()
-                         .WithEntityAccess())
-            {
-                mainStoragePanelUI.SetTestItems(data);
-                _ecb.RemoveComponent<UpdateRequestTag>(entity);
-            }
+                .CreateCommandBuffer(World.Unmanaged);
         }
 
-        public void OnDestroy(ref SystemState state)
+        private void MainStorageSelected()
         {
-            // throw new System.NotImplementedException();
+            _mainStoragePanelUI.SetTestItems(_mainStorageData);
+            _mainStoragePanelUI.SetElementVisible(true);
+        }
+
+        protected override void OnDestroy()
+        {
+            MainUIButtonsMono.MainStorageButton.clicked -= MainStorageSelected;
         }
     }
 }

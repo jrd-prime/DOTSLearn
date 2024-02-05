@@ -1,5 +1,7 @@
 ﻿using System;
+using Jrd.Gameplay.Storage;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,7 +12,8 @@ namespace Jrd.UI.BuildingControlPanel
     {
         private BuildingControlPanelProdLineUI _controlPanelProdLineUI;
         private BuildingControlPanelSpecsUI _controlPanelSpecsUI;
-        private BuildingControlPanelWarehouseUI _controlPanelWarehouseUI;
+        private IBuildingControlPanelStorage _controlPanelWarehouseUI;
+        private IBuildingControlPanelStorage _controlPanelStorage;
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
@@ -94,6 +97,7 @@ namespace Jrd.UI.BuildingControlPanel
                 new BuildingControlPanelProdLineUI(Panel, _prodLineItemTemplate, _prodLineArrowTemplate);
             _controlPanelSpecsUI = new BuildingControlPanelSpecsUI(Panel);
             _controlPanelWarehouseUI = new BuildingControlPanelWarehouseUI(Panel, _internalStorageItemTemplate);
+            _controlPanelStorage = new BuildingControlPanelMainStorageUI(Panel, _internalStorageItemTemplate);
             PanelCloseButton.clicked += OnCloseButton;
         }
 
@@ -129,5 +133,12 @@ namespace Jrd.UI.BuildingControlPanel
         public void SetProductivity(float value) => _controlPanelSpecsUI.SetProductivity(value);
         public void SetLoadCapacity(int value) => _controlPanelSpecsUI.SetLoadCapacity(value);
         public void SetStorageCapacity(int value) => _controlPanelSpecsUI.SetStorageCapacity(value);
+
+        // Storage methods
+        public void SetStorageItems(NativeList<ProductData> list) => _controlPanelStorage.SetItems(list);
+        public void SetWarehouseItems(NativeList<ProductData> list) => _controlPanelWarehouseUI.SetItems(list);
+
+        public void UpdateItemQuantity(object item, int value) =>
+            _controlPanelStorage.UpdateItemQuantity(item, value);
     }
 }
