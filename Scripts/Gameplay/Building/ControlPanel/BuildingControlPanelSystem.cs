@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Product;
+﻿using System;
+using Jrd.Gameplay.Product;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -68,12 +69,21 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 SetProductionLineInfo();
                 SetItemsToStorages();
             }
+
+            if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_entity))
+            {
+                _ecb.RemoveComponent<UpdateStoragesDataTag>(_entity);
+                Debug.Log("Update storages UI");
+                SetItemsToStorages();
+            }
         }
+
         public void MoveButton()
         {
             Debug.LogWarning("move");
 
-            _ecb.AddComponent(_entity, new MoveRequestComponent { Value = _entity });
+            _ecb.AddComponent<MoveRequestTag>(_entity);
+            _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
         }
 
         public void LoadButton()
@@ -95,6 +105,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             Debug.LogWarning("buff");
         }
+
         private void SetMainInfo()
         {
             _controlPanelUI.SetLevel(_buildingData.Level);

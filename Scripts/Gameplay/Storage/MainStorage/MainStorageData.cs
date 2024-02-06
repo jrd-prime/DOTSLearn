@@ -9,7 +9,8 @@ namespace Jrd.Gameplay.Storage.MainStorage
     {
         public NativeParallelHashMap<int, int> Values;
 
-        public int GetProductCount(Product.Product product) => Values.ContainsKey((int)product) ? Values[(int)product] : -1;
+        public int GetProductCount(Product.Product product) =>
+            Values.ContainsKey((int)product) ? Values[(int)product] : -1;
 
         public NativeList<ProductData> GetMatchingProducts(
             DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffer)
@@ -31,6 +32,14 @@ namespace Jrd.Gameplay.Storage.MainStorage
             }
 
             return productDataList;
+        }
+
+        public void UpdateProductsByKey(NativeList<ProductData> productDatas)
+        {
+            foreach (var productData in productDatas)
+            {
+                Values[(int)productData.Name] -= productData.Quantity;
+            }
         }
     }
 }

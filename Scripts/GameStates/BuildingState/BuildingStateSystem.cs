@@ -164,7 +164,6 @@ namespace Jrd.GameStates.BuildingState
 
         private void CancelBuilding()
         {
-            Debug.Log("cancel build");
             SetConfirmationPanelVisible(false);
             DestroyTempPrefab();
 
@@ -174,14 +173,10 @@ namespace Jrd.GameStates.BuildingState
 
         private void ConfirmBuilding()
         {
-            Debug.Log("confirm  build");
-
             SetConfirmationPanelVisible(false);
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
-
-                // UI_old.BuildingPanelUI.SetButtonEnabled(_tempSelectedBuildID, true);
                 _tempSelectedBuildID = -1;
             }
             else

@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Product;
 using Jrd.Gameplay.Storage;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Building.ControlPanel
 {
@@ -20,13 +18,12 @@ namespace Jrd.Gameplay.Building.ControlPanel
             throw new System.NotImplementedException();
         }
 
+
         public NativeList<ProductData> GetProductsList(DynamicBuffer<BuildingRequiredItemsBuffer> buildingData)
         {
             var a = new NativeList<ProductData>(0, Allocator.Temp);
-
             foreach (var value in Values)
             {
-                Debug.LogWarning($"add prod: {(Product.Product)value.Key} + {value.Value}");
                 a.Add(new ProductData
                 {
                     Name = (Product.Product)value.Key,
@@ -37,15 +34,21 @@ namespace Jrd.Gameplay.Building.ControlPanel
             return a;
         }
 
-        public Task UpdateProductsCount(NativeList<ProductData> productDatas)
+        // TODO warehouse capacity, stack capacity
+        public NativeList<ProductData> UpdateProductsCount(NativeList<ProductData> productsData)
         {
-            foreach (var productData in productDatas)
+            var movedProductsList = new NativeList<ProductData>(0, Allocator.Temp);
+            foreach (var productData in productsData)
             {
                 Values[(int)productData.Name] += productData.Quantity;
+                movedProductsList.Add(new ProductData
+                {
+                    Name = productData.Name,
+                    Quantity = productData.Quantity
+                });
             }
 
-
-            return Task.CompletedTask;
+            return movedProductsList;
         }
     }
 }

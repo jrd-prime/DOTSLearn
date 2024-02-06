@@ -20,10 +20,12 @@ MonoBehaviour:
   _requiredItems:
   - _item: 0
     _count: 5
+  - _item: 3
+    _count: 5
   _manufacturedItems:
   - _item: 1
     _count: 1
-  - _item: 2
+  - _item: 3
     _count: 5
   _level: 1
   _itemsPerHour: 5

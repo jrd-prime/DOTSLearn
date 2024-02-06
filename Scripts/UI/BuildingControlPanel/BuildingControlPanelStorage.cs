@@ -20,23 +20,18 @@ namespace Jrd.UI.BuildingControlPanel
         {
             if (list.IsEmpty)
             {
+                Debug.Log("Empty storage list");
                 SetEmptyStorage();
             }
 
             Container.Clear();
-            Debug.LogWarning(list.Length);
+
             for (int i = 0; i < list.Length; i++)
             {
                 var item = GetFilledItem(list[i].Name, list[i].Quantity);
 
                 Container.Add(item);
             }
-
-            // GoodsEnum b;
-            // var a = new Label();
-            // a.text = list.ToString();
-            //
-            // Container.Add(a);
         }
 
         public void SetEmptyStorage()

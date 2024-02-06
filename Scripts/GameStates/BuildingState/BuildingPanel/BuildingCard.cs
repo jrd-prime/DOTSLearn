@@ -49,7 +49,7 @@ namespace Jrd.GameStates.BuildingState.BuildingPanel
             // Head
             Title.text = Name;
             // Icon
-            Image.style.backgroundColor = new StyleColor(Color.green);
+            // Image.style.backgroundColor = new StyleColor(Color.green);
             // Button
             Button.text = Name;
             Button.name = CardButtonNamePrefix + Id;
