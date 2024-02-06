@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.Gameplay.Product;
 using Jrd.Gameplay.Storage.Warehouse;
 using Unity.Burst;
 using Unity.Collections;
@@ -50,6 +51,17 @@ namespace Jrd.GameStates.BuildingState.TempBuilding
                 _bsEcb.AddComponent<BuildingTag>(entity);
 
                 _bsEcb.AddComponent<WarehouseProductsData>(entity);
+
+                //LOOK TEST DAATA FOR MILL
+                _bsEcb.SetComponent(entity, new WarehouseProductsData
+                {
+                    Values = new NativeParallelHashMap<int, int>(2, Allocator.Persistent)
+                    {
+                        { (int)Product.Wood, 0 },
+                        { (int)Product.WoodenPlank, 0 }
+                    }
+                });
+
                 _bsEcb.AddComponent<InitBuildingWarehouseProductsDataTag>(entity);
 
                 _bsEcb.AddComponent<AddBuildingToDBTag>(entity);

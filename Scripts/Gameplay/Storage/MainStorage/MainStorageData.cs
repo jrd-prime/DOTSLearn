@@ -1,54 +1,36 @@
-﻿using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.Goods;
+﻿using Jrd.Gameplay.Product;
+using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.MainStorage
 {
-    public struct MainStorageData : IComponentData, IDB
+    public struct MainStorageData : IComponentData, IMainStorage
     {
-        public NativeParallelHashMap<GoodsEnum, int> Values;
+        public NativeParallelHashMap<int, int> Values;
 
-        public int GetProductCount(GoodsEnum product)
+        public int GetProductCount(Product.Product product) => Values.ContainsKey((int)product) ? Values[(int)product] : -1;
+
+        public NativeList<ProductData> GetMatchingProducts(
+            DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffer)
         {
-            FixedString32Bytes key = nameof(product);
-
-            return Values.ContainsKey(key) ? Values[key] : -1;
-        }
-
-        public bool GetMatchingProducts(DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffer,
-            out NativeList<ProductData> productDataList)
-        {
-            foreach (var q in requiredItemsBuffer)
-            {
-                Debug.LogWarning(q._item);
-            }
-            
-            productDataList = new NativeList<ProductData>(0, Allocator.Temp);
+            var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
 
             for (var i = 0; i < requiredItemsBuffer.Length; i++)
             {
-                GoodsEnum product = requiredItemsBuffer[i]._item;
-                string productName = product.ToString();
+                Product.Product product = requiredItemsBuffer[i]._item;
+                var key = (int)product;
 
-                if (!Values.ContainsKey(productName)) continue;
-                if (Values[productName] != -1)
+                if (!Values.ContainsKey(key) && Values[key] < 0) continue;
+
+                productDataList.Add(new ProductData
                 {
-                    productDataList.Add(new ProductData
-                    {
-                        Name = product,
-                        Quantity = Values[productName]
-                    });
-                }
+                    Name = product,
+                    Quantity = Values[key]
+                });
             }
 
-            return !productDataList.IsEmpty && productDataList.Length != 0;
+            return productDataList;
         }
-    }
-
-    public interface IDB
-    {
-        public int GetProductCount(GoodsEnum product);
     }
 }

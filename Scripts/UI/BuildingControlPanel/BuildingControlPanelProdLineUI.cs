@@ -1,5 +1,5 @@
-﻿using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.Goods;
+﻿using Jrd.Gameplay.Product;
+using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.Utils.Const;
 using Unity.Entities;
 using UnityEngine;
@@ -42,7 +42,7 @@ namespace Jrd.UI.BuildingControlPanel
             }
         }
 
-        private VisualElement GetFilledItem(GoodsEnum item, int itemCount)
+        private VisualElement GetFilledItem(Product item, int itemCount)
         {
             // TODO all method / refact
 

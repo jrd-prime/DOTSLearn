@@ -1,4 +1,4 @@
-﻿using Jrd.Goods;
+﻿using Jrd.Gameplay.Product;
 using UnityEngine;
 
 namespace Jrd.ScriptableObjects
@@ -9,7 +9,7 @@ namespace Jrd.ScriptableObjects
         [SerializeField] private Sprite _productPrefabOrImageMb;
         [SerializeField] private string _productName;
         [SerializeField] private int _productPackSize;
-        [SerializeField] private GoodsEnum _goodsCategory;
+        [SerializeField] private Product _goodsCategory;
 
         public Sprite PrefabOrImageMb => _productPrefabOrImageMb;
         public string Name => _productName;

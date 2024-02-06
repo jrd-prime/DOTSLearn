@@ -1,9 +1,10 @@
-﻿namespace Jrd.Goods
+﻿namespace Jrd.Gameplay.Product
 {
-    public enum GoodsEnum
+    public enum Product
     {
         Wheat,
         Flour,
+        Hay,
         Wood,
         WoodenPlank,
         Brick

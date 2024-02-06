@@ -1,5 +1,5 @@
-﻿using Jrd.Gameplay.Storage;
-using Jrd.Goods;
+﻿using Jrd.Gameplay.Product;
+using Jrd.Gameplay.Storage;
 using Jrd.Utils.Const;
 using Unity.Collections;
 using UnityEngine;
@@ -18,6 +18,11 @@ namespace Jrd.UI.BuildingControlPanel
 
         public void SetItems(NativeList<ProductData> list)
         {
+            if (list.IsEmpty)
+            {
+                SetEmptyStorage();
+            }
+
             Container.Clear();
             Debug.LogWarning(list.Length);
             for (int i = 0; i < list.Length; i++)
@@ -34,12 +39,18 @@ namespace Jrd.UI.BuildingControlPanel
             // Container.Add(a);
         }
 
+        public void SetEmptyStorage()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void UpdateItemQuantity(object item, int value)
         {
             throw new System.NotImplementedException();
         }
+
         //TODO repeated
-        private VisualElement GetFilledItem(GoodsEnum item, int itemCount)
+        private VisualElement GetFilledItem(Product item, int itemCount)
         {
             // TODO all method / refact
 

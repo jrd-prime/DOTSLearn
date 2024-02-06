@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Storage;
+﻿using Jrd.Gameplay.Product;
+using Jrd.Gameplay.Storage;
 using Unity.Collections;
 
 namespace Jrd.UI.BuildingControlPanel
@@ -9,6 +10,11 @@ namespace Jrd.UI.BuildingControlPanel
         /// Set items when building info panel opened
         /// </summary>
         public void SetItems(NativeList<ProductData> list);
+
+        /// <summary>
+        /// Set empty UI for storage if items list empty
+        /// </summary>
+        public void SetEmptyStorage();
 
         /// <summary>
         /// Update item quantity if panel opened and quantity changed

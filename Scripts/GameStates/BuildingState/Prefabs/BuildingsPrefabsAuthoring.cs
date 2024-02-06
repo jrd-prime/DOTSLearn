@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jrd.Goods;
+using Jrd.Gameplay.Product;
 using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
@@ -94,14 +94,14 @@ namespace Jrd.GameStates.BuildingState.Prefabs
     [Serializable]
     public struct BuildingRequiredItemsBuffer : IBufferElementData
     {
-        public GoodsEnum _item;
+        public Product _item;
         public int _count;
     }
 
     [Serializable]
     public struct BuildingManufacturedItemsBuffer : IBufferElementData
     {
-        public GoodsEnum _item;
+        public Product _item;
         public int _count;
     }
 }

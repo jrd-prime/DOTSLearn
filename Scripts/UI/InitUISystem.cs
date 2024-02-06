@@ -1,7 +1,7 @@
-﻿using Jrd.Gameplay.Storage.MainStorage;
+﻿using Jrd.Gameplay.Product;
+using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
-using Jrd.Goods;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -39,13 +39,13 @@ namespace Jrd.UI
                 entityManager.AddComponent<MainStorageData>(elementEntity);
                 entityManager.SetComponentData(elementEntity, new MainStorageData
                 {
-                    Values = new NativeParallelHashMap<GoodsEnum, int>(1, Allocator.Persistent)
+                    Values = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
                     {
-                        { GoodsEnum.Wheat, 0 },
-                        { GoodsEnum.Flour, 0 },
-                        { GoodsEnum.Wood, 0 },
-                        { GoodsEnum.WoodenPlank, 0 },
-                        { GoodsEnum.Brick, 0 },
+                        { (int)Product.Wheat, 0 },
+                        { (int)Product.Flour, 0 },
+                        { (int)Product.Wood, 0 },
+                        { (int)Product.WoodenPlank, 0 },
+                        { (int)Product.Brick, 0 },
                     }
                 });
             }

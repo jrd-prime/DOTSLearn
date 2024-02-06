@@ -1,5 +1,5 @@
 ﻿using System;
-using Jrd.Gameplay.Storage;
+using Jrd.Gameplay.Product;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,10 +10,10 @@ namespace Jrd.UI.BuildingControlPanel
 {
     public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBuildingSpecs
     {
-        private BuildingControlPanelProdLineUI _controlPanelProdLineUI;
-        private BuildingControlPanelSpecsUI _controlPanelSpecsUI;
-        private IBuildingControlPanelStorage _controlPanelWarehouseUI;
-        private IBuildingControlPanelStorage _controlPanelStorage;
+        private BuildingControlPanelProdLineUI _productionLineUI;
+        private BuildingControlPanelSpecsUI _specsUI;
+        private IBuildingControlPanelStorage _warehouseUI;
+        private IBuildingControlPanelStorage _storage;
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
@@ -22,18 +22,14 @@ namespace Jrd.UI.BuildingControlPanel
         #region VisualElementsVars
 
         // Buttons
-        protected Button TakeButton;
-        protected Button LoadButton;
-        protected Button MoveButton;
-        protected Button BuffButton;
-        protected Button UpgradeButton;
+        public Button TakeButton;
+        public Button LoadButton;
+        public Button MoveButton;
+        public Button BuffButton;
+        public Button UpgradeButton;
 
         // Common Labels
         protected Label LevelLabel;
-        // protected Label BuildingStorageNameLabel;
-        // protected string BuildingStorageNameLabelId = "building-storage-name-label";
-        // protected Label MainStorageNameLabel;
-        // protected string MainStorageNameLabelId = "main-storage-name-label";
 
         #endregion
 
@@ -93,11 +89,11 @@ namespace Jrd.UI.BuildingControlPanel
                 throw new NullReferenceException("Add templates to " + this);
             }
 
-            _controlPanelProdLineUI =
+            _productionLineUI =
                 new BuildingControlPanelProdLineUI(Panel, _prodLineItemTemplate, _prodLineArrowTemplate);
-            _controlPanelSpecsUI = new BuildingControlPanelSpecsUI(Panel);
-            _controlPanelWarehouseUI = new BuildingControlPanelWarehouseUI(Panel, _internalStorageItemTemplate);
-            _controlPanelStorage = new BuildingControlPanelMainStorageUI(Panel, _internalStorageItemTemplate);
+            _specsUI = new BuildingControlPanelSpecsUI(Panel);
+            _warehouseUI = new BuildingControlPanelWarehouseUI(Panel, _internalStorageItemTemplate);
+            _storage = new BuildingControlPanelMainStorageUI(Panel, _internalStorageItemTemplate);
             PanelCloseButton.clicked += OnCloseButton;
         }
 
@@ -126,19 +122,19 @@ namespace Jrd.UI.BuildingControlPanel
         // ProductionLine methods
         public void SetLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> required,
             DynamicBuffer<BuildingManufacturedItemsBuffer> manufactured) =>
-            _controlPanelProdLineUI.SetLineInfo(required, manufactured);
+            _productionLineUI.SetLineInfo(required, manufactured);
 
         // Specs methods
-        public void SetSpecName(Spec specName, string value) => _controlPanelSpecsUI.SetSpecName(specName, value);
-        public void SetProductivity(float value) => _controlPanelSpecsUI.SetProductivity(value);
-        public void SetLoadCapacity(int value) => _controlPanelSpecsUI.SetLoadCapacity(value);
-        public void SetStorageCapacity(int value) => _controlPanelSpecsUI.SetStorageCapacity(value);
+        public void SetSpecName(Spec specName, string value) => _specsUI.SetSpecName(specName, value);
+        public void SetProductivity(float value) => _specsUI.SetProductivity(value);
+        public void SetLoadCapacity(int value) => _specsUI.SetLoadCapacity(value);
+        public void SetStorageCapacity(int value) => _specsUI.SetStorageCapacity(value);
 
         // Storage methods
-        public void SetStorageItems(NativeList<ProductData> list) => _controlPanelStorage.SetItems(list);
-        public void SetWarehouseItems(NativeList<ProductData> list) => _controlPanelWarehouseUI.SetItems(list);
+        public void SetStorageItems(NativeList<ProductData> list) => _storage.SetItems(list);
+        public void SetWarehouseItems(NativeList<ProductData> list) => _warehouseUI.SetItems(list);
 
         public void UpdateItemQuantity(object item, int value) =>
-            _controlPanelStorage.UpdateItemQuantity(item, value);
+            _storage.UpdateItemQuantity(item, value);
     }
 }
