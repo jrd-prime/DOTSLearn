@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Product;
+﻿using System.Threading.Tasks;
+using Jrd.Gameplay.Product;
 using Jrd.Gameplay.Storage;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
@@ -34,6 +35,17 @@ namespace Jrd.Gameplay.Building.ControlPanel
             }
 
             return a;
+        }
+
+        public Task UpdateProductsCount(NativeList<ProductData> productDatas)
+        {
+            foreach (var productData in productDatas)
+            {
+                Values[(int)productData.Name] += productData.Quantity;
+            }
+
+
+            return Task.CompletedTask;
         }
     }
 }

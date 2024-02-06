@@ -1,4 +1,6 @@
-﻿using Unity.Collections;
+﻿using System.Threading.Tasks;
+using Jrd.Gameplay.Product;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
@@ -18,5 +20,6 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public float ItemsPerHour;
         public int LoadCapacity;
         public int MaxStorage;
+  
     }
 }
