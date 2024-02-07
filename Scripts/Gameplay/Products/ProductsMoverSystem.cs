@@ -1,8 +1,10 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Timers;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Products
 {
@@ -48,6 +50,13 @@ namespace Jrd.Gameplay.Products
                 NativeList<ProductData> movedProductsList = productsData.UpdateProductsCount(matchingProductsList);
                 // update quantity moved products in main storage
                 _mainStorageData.UpdateProductsByKey(movedProductsList);
+
+                Debug.Log("Timer set");
+                _ecb.AddComponent(entity, new ProductsMoveTimerData
+                {
+                    StarValue = 10,
+                    CurrentValue = 10
+                });
             }
         }
 

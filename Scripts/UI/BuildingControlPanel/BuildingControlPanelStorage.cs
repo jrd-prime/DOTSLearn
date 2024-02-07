@@ -29,7 +29,12 @@ namespace Jrd.UI.BuildingControlPanel
             {
                 var item = GetFilledItem(list[i].Name, list[i].Quantity);
 
+
                 Container.Add(item);
+
+                var an = item?.experimental.animation.Scale(1.1f, 100);
+                if (an != null)
+                    an.onAnimationCompleted = () =>  item.experimental.animation.Scale(1f, 100);
             }
         }
 

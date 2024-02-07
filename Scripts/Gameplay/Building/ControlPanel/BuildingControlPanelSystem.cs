@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.PlayState;
@@ -72,13 +73,36 @@ namespace Jrd.Gameplay.Building.ControlPanel
             if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_entity))
             {
                 _ecb.RemoveComponent<UpdateStoragesDataTag>(_entity);
-                Debug.Log("Update storages UI");
-                SetItemsToStorages();
+            }
+
+            foreach (var moveTimer in SystemAPI.Query<RefRO<ProductsMoveTimerData>>())
+            {
+                float timer = moveTimer.ValueRO.CurrentValue;
+                float max = moveTimer.ValueRO.StarValue;
+                
+                switch (timer)
+                {
+                    case > 0:
+                        Debug.Log("Update timer UI");
+                        SetStorageTimer(max, timer);
+                        break;
+                    case <= 0.5f:
+                        // show timer finished
+
+                        Debug.Log("TIMER FINISHED");
+                        Debug.Log("Update storages UI");
+                        SetItemsToStorages();
+                        _ecb.RemoveComponent<ProductsMoveTimerData>(_entity);
+                        break;
+                }
             }
         }
 
+        private void SetStorageTimer(float max, float value) => _controlPanelUI.SetTimerText(max, value);
+
         public void MoveButton()
         {
+            //TODO disable button if in storage 0 req products
             Debug.LogWarning("move");
 
             _ecb.AddComponent<MoveRequestTag>(_entity);

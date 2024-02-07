@@ -132,8 +132,8 @@ namespace Jrd.UI.BuildingControlPanel
         public void SetLoadCapacity(int value) => _specsUI.SetLoadCapacity(value);
         public void SetStorageCapacity(int value) => _specsUI.SetStorageCapacity(value);
 
-        // Timer
-        public void SetTimerText(float value) => _timer.SetTimerText(value);
+        // Timer // TODO refact
+        public void SetTimerText(float max, float value) => _timer.SetTimerText(max, value);
 
         // Storage methods
         public void SetStorageItems(NativeList<ProductData> list) => _storage.SetItems(list);
