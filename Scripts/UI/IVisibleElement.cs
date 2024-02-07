@@ -6,7 +6,6 @@
         {
             Show();
         }
-
         void Show();
         void Hide();
     }

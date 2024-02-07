@@ -14,6 +14,7 @@ namespace Jrd.UserInput.Systems
     // [BurstCompile]
     public partial struct CursorSystem : ISystem
     {
+        public static readonly string InputCursorDataEntityName = "___ Input Cursor Data Entity";
         // TODO mobile logic
         private bool _lookingOnGroundPosition;
         private Entity _entity;
@@ -27,7 +28,7 @@ namespace Jrd.UserInput.Systems
             var ecb = new EntityCommandBuffer(Allocator.Temp); //TODO ecb refact
             _entity = ecb.CreateEntity();
             ecb.AddComponent<InputCursorData>(_entity);
-            ecb.SetName(_entity, ENames.InputCursorDataEntityName);
+            ecb.SetName(_entity, InputCursorDataEntityName);
             ecb.Playback(_em);
             ecb.Dispose();
         }

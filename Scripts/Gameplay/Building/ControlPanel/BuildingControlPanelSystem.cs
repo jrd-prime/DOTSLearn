@@ -43,7 +43,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
             _controlPanelUI.TakeButton.clicked += TakeButton;
             _controlPanelUI.UpgradeButton.clicked += UpgradeButton;
             _controlPanelUI.BuffButton.clicked += BuffButton;
+            _controlPanelUI.InstantDeliveryButton.clicked += InstantDeliveryButton;
         }
+
 
         protected override void OnUpdate()
         {
@@ -79,10 +81,11 @@ namespace Jrd.Gameplay.Building.ControlPanel
             {
                 float timer = moveTimer.ValueRO.CurrentValue;
                 float max = moveTimer.ValueRO.StarValue;
-                
+
                 switch (timer)
                 {
                     case > 0:
+                        // TODO refact
                         Debug.Log("Update timer UI");
                         SetStorageTimer(max, timer);
                         break;
@@ -91,6 +94,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
                         Debug.Log("TIMER FINISHED");
                         Debug.Log("Update storages UI");
+                        SetStorageTimer(max, timer);
                         SetItemsToStorages();
                         _ecb.RemoveComponent<ProductsMoveTimerData>(_entity);
                         break;
@@ -103,7 +107,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public void MoveButton()
         {
             //TODO disable button if in storage 0 req products
-            Debug.LogWarning("move");
+            //TODO add move time to button
 
             _ecb.AddComponent<MoveRequestTag>(_entity);
             _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
@@ -128,6 +132,8 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             Debug.LogWarning("buff");
         }
+
+        private void InstantDeliveryButton() => _ecb.AddComponent<InstantBuffTag>(_entity);
 
         private void SetMainInfo()
         {

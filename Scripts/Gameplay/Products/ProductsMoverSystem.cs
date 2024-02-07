@@ -4,6 +4,7 @@ using Jrd.Gameplay.Timers;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Jrd.Gameplay.Products
@@ -32,12 +33,11 @@ namespace Jrd.Gameplay.Products
             // cache mb somewhere
             DynamicBuffer<BuildingRequiredItemsBuffer> requiredItems =
                 SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
-            DynamicBuffer<BuildingManufacturedItemsBuffer> manufacturedItems =
-                SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
 
             // To building
-            foreach (var (buildingData, warehouseProductsData, entity) in SystemAPI
-                         .Query<BuildingData, RefRW<WarehouseProductsData>>().WithAll<MoveRequestTag>()
+            foreach (var (warehouseProductsData, entity) in SystemAPI
+                         .Query<RefRW<WarehouseProductsData>>()
+                         .WithAll<MoveRequestTag, BuildingData>()
                          .WithEntityAccess())
             {
                 _ecb.RemoveComponent<MoveRequestTag>(entity);
@@ -51,11 +51,20 @@ namespace Jrd.Gameplay.Products
                 // update quantity moved products in main storage
                 _mainStorageData.UpdateProductsByKey(movedProductsList);
 
-                Debug.Log("Timer set");
+                var count = 0;
+
+                foreach (var q in movedProductsList)
+                {
+                    //TODO get multiplier
+                    // count += (int)math.round(q.Quantity * q.MoveTimeMultiplier);
+                    count += q.Quantity;
+                }
+
+                Debug.Log("Timer set. Move time: " + count);
                 _ecb.AddComponent(entity, new ProductsMoveTimerData
                 {
-                    StarValue = 10,
-                    CurrentValue = 10
+                    StarValue = count,
+                    CurrentValue = count,
                 });
             }
         }

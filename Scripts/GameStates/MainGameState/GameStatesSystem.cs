@@ -14,7 +14,7 @@ namespace Jrd.GameStates.MainGameState
         private RefRW<GameStateData> _gameStateData;
         private BeginInitializationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _biEcb;
-
+        public static readonly FixedString32Bytes Prefix = "___";
         private Entity _buildingStateEntity;
 
         public void OnCreate(ref SystemState state)
@@ -64,7 +64,7 @@ namespace Jrd.GameStates.MainGameState
             var entity = _em.CreateEntity(); // create entity // TODO
             _biEcb.AddComponent<InitializeTag>(entity);
             _biEcb.AddComponent(entity, typeSet); // add components
-            _biEcb.SetName(entity, $"{BSConst.Prefix} {name}");
+            _biEcb.SetName(entity, $"{Prefix} {name}");
             return entity;
         }
 

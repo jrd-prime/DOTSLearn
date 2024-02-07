@@ -28,6 +28,7 @@ namespace Jrd.UI.BuildingControlPanel
         public Button MoveButton;
         public Button BuffButton;
         public Button UpgradeButton;
+        public Button InstantDeliveryButton;
 
         // Common Labels
         protected Label LevelLabel;
@@ -59,6 +60,7 @@ namespace Jrd.UI.BuildingControlPanel
             MoveButton = Panel.Q<Button>(BCPNamesID.MoveButtonId);
             LoadButton = Panel.Q<Button>(BCPNamesID.LoadButtonId);
             TakeButton = Panel.Q<Button>(BCPNamesID.TakeButtonId);
+            InstantDeliveryButton = Panel.Q<Button>("instant-delivery-button");
             // Labels
             LevelLabel = Panel.Q<Label>(BCPNamesID.LevelLabelId);
             // BuildingStorageNameLabel = Panel.Q<Label>(BuildingStorageNameLabelId);

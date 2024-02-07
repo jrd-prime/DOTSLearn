@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Jrd.CameraControl
 {
     public partial struct CameraControlSystem : ISystem
-    {
+    {public static readonly string CameraEntityName = "___ Main Camera Entity";
         //TODO переделать
         private const float CameraSpeed = 30f;
         private const float MinFOV = 30f;
@@ -35,7 +35,7 @@ namespace Jrd.CameraControl
             );
 
             Entity entity = biEcb.CreateEntity(cameraArchetype);
-            biEcb.SetName(entity, ENames.CameraEntityName);
+            biEcb.SetName(entity, CameraEntityName);
             biEcb.SetComponent(entity, new MovableComponent { speed = CameraSpeed });
             biEcb.SetComponent(entity,
                 new CameraData

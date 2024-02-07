@@ -542,3 +542,6 @@ VisualElement {
     right: -3px;
     -unity-text-align: middle-center;
 }
+
+.unity-progress-bar {
+}

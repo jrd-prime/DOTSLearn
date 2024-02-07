@@ -32,9 +32,19 @@ namespace Jrd.UI.BuildingControlPanel
 
                 Container.Add(item);
 
-                var an = item?.experimental.animation.Scale(1.1f, 100);
+                var an = item
+                    .Q<VisualElement>("prod-line-item-icon-cont")?
+                    .experimental
+                    .animation
+                    .Scale(1.2f, 100);
                 if (an != null)
-                    an.onAnimationCompleted = () =>  item.experimental.animation.Scale(1f, 100);
+                {
+                    an.onAnimationCompleted = () => item
+                        .Q<VisualElement>("prod-line-item-icon-cont")
+                        .experimental
+                        .animation
+                        .Scale(1f, 100);
+                }
             }
         }
 
@@ -56,8 +66,8 @@ namespace Jrd.UI.BuildingControlPanel
             VisualElement template = ItemContainerTemplate.Instantiate();
 
             var itemContainer = template.Q<VisualElement>(BCPNamesID.ProdLineItemContainerId);
-            itemContainer.style.height = 52;
-            itemContainer.style.width = 52;
+            itemContainer.style.height = 50;
+            itemContainer.style.width = 50;
             var itemCountLabel = template.Q<Label>(BCPNamesID.ProdLineItemCountLabelId);
 
             // Icon //TODO getpath, enum to string?lol?

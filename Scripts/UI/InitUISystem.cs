@@ -34,13 +34,13 @@ namespace Jrd.UI
 
                 // add test data to main storage
                 if (pair.Key != MainStorageDataName) continue;
-                entityManager.AddComponent<UpdateRequestTag>(elementEntity);
+                // entityManager.AddComponent<UpdateRequestTag>(elementEntity);
                 entityManager.AddComponent<MainStorageData>(elementEntity);
                 entityManager.SetComponentData(elementEntity, new MainStorageData
                 {
                     Values = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
                     {
-                        { (int)Product.Wheat, 10 },
+                        { (int)Product.Wheat, 10},
                         { (int)Product.Flour, 20 },
                         { (int)Product.Wood, 30 },
                         { (int)Product.WoodenPlank, 40 },

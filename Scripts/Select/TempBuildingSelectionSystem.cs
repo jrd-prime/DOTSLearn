@@ -26,7 +26,6 @@ namespace Jrd
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<TempBuildingTag>();
-
             state.RequireForUpdate<CameraData>();
             state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
