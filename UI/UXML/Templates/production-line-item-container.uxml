@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="prod-line-item-cont" class="prod-line-item" style="background-color: rgba(0, 0, 0, 0);">
+    <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
+    <ui:VisualElement name="prod-line-item-cont" class="prod-line-item">
         <ui:VisualElement name="prod-line-item-icon-cont" class="prod-line-item-count green-color3">
             <ui:Label tabindex="-1" text="33" parse-escape-sequences="true" display-tooltip-when-elided="true" picking-mode="Ignore" name="prod-line-item-count" class="color-text-green-dark" style="align-items: center; align-self: center; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 8px; -unity-font-style: bold;" />
         </ui:VisualElement>

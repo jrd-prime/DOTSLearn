@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Jrd.Gameplay.Product;
+using Jrd.Gameplay.Products;
 using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Jrd.GameStates.BuildingState.Prefabs
 {

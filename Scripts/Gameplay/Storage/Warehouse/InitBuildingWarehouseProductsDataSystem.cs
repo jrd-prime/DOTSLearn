@@ -2,7 +2,6 @@
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.Warehouse
 {
@@ -32,17 +31,14 @@ namespace Jrd.Gameplay.Storage.Warehouse
             foreach (var (q, entity) in SystemAPI.Query<InitBuildingWarehouseProductsDataTag>().WithEntityAccess())
             {
                 _bsEcb.RemoveComponent<InitBuildingWarehouseProductsDataTag>(entity);
-                var a = new NativeParallelHashMap<int, int>(requiredItems.Length, Allocator.Persistent);
+                var requiredItemsMap = new NativeParallelHashMap<int, int>(requiredItems.Length, Allocator.Persistent);
 
                 foreach (var qq in requiredItems)
                 {
-                    a.Add((int)qq._item, 3);
+                    requiredItemsMap.Add((int)qq._item, 3);
                 }
 
-                _bsEcb.SetComponent(entity, new WarehouseProductsData
-                {
-                    Values = a
-                });
+                _bsEcb.SetComponent(entity, new WarehouseProductsData { Values = requiredItemsMap });
             }
         }
     }

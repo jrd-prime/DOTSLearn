@@ -1,3 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <ui:VisualElement name="prod-line-arrow" class="prod-line-arrow" />
 </ui:UXML>

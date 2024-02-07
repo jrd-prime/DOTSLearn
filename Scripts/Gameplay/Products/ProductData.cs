@@ -1,4 +1,4 @@
-﻿namespace Jrd.Gameplay.Product
+﻿namespace Jrd.Gameplay.Products
 {
     public struct ProductData
     {

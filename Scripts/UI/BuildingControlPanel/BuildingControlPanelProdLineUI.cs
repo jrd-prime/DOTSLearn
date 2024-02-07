@@ -1,4 +1,4 @@
-﻿using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.Utils.Const;
 using Unity.Entities;

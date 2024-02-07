@@ -1,4 +1,4 @@
-﻿using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
@@ -13,11 +13,10 @@ namespace Jrd.Gameplay.Building.ControlPanel
     {
         public NativeParallelHashMap<int, int> Values;
 
-        public int GetProductCount(Product.Product product)
+        public int GetProductCount(Product product)
         {
             throw new System.NotImplementedException();
         }
-
 
         public NativeList<ProductData> GetProductsList(DynamicBuffer<BuildingRequiredItemsBuffer> buildingData)
         {
@@ -26,7 +25,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             {
                 a.Add(new ProductData
                 {
-                    Name = (Product.Product)value.Key,
+                    Name = (Product)value.Key,
                     Quantity = value.Value
                 });
             }
@@ -38,17 +37,25 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public NativeList<ProductData> UpdateProductsCount(NativeList<ProductData> productsData)
         {
             var movedProductsList = new NativeList<ProductData>(0, Allocator.Temp);
-            foreach (var productData in productsData)
+            foreach (var product in productsData)
             {
-                Values[(int)productData.Name] += productData.Quantity;
+                Values[(int)product.Name] += product.Quantity;
                 movedProductsList.Add(new ProductData
                 {
-                    Name = productData.Name,
-                    Quantity = productData.Quantity
+                    Name = product.Name,
+                    Quantity = product.Quantity
                 });
             }
 
             return movedProductsList;
+        }
+
+        public void SetValues(NativeParallelHashMap<int, int> valuesHashMap)
+        {
+            foreach (var product in valuesHashMap)
+            {
+                Values[product.Key] = product.Value;
+            }
         }
     }
 }

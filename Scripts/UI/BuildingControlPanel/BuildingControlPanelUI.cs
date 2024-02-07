@@ -1,5 +1,5 @@
 ﻿using System;
-using Jrd.Gameplay.Product;
+using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
@@ -8,12 +8,13 @@ using UnityEngine.UIElements;
 
 namespace Jrd.UI.BuildingControlPanel
 {
-    public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBuildingSpecs
+    public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBuildingSpecs, IBuildingTimer
     {
         private BuildingControlPanelProdLineUI _productionLineUI;
         private BuildingControlPanelSpecsUI _specsUI;
         private IBuildingControlPanelStorage _warehouseUI;
         private IBuildingControlPanelStorage _storage;
+        private BuildingControlPanelTimerUI _timer;
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
@@ -94,6 +95,7 @@ namespace Jrd.UI.BuildingControlPanel
             _specsUI = new BuildingControlPanelSpecsUI(Panel);
             _warehouseUI = new BuildingControlPanelWarehouseUI(Panel, _internalStorageItemTemplate);
             _storage = new BuildingControlPanelMainStorageUI(Panel, _internalStorageItemTemplate);
+            _timer = new BuildingControlPanelTimerUI(Panel);
             PanelCloseButton.clicked += OnCloseButton;
         }
 
@@ -129,6 +131,9 @@ namespace Jrd.UI.BuildingControlPanel
         public void SetProductivity(float value) => _specsUI.SetProductivity(value);
         public void SetLoadCapacity(int value) => _specsUI.SetLoadCapacity(value);
         public void SetStorageCapacity(int value) => _specsUI.SetStorageCapacity(value);
+
+        // Timer
+        public void SetTimerText(float value) => _timer.SetTimerText(value);
 
         // Storage methods
         public void SetStorageItems(NativeList<ProductData> list) => _storage.SetItems(list);

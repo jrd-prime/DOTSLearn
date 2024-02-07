@@ -1,10 +1,9 @@
-﻿using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.UI
 {

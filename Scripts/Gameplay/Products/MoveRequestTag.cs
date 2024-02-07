@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Gameplay.Product
+namespace Jrd.Gameplay.Products
 {
     /// <summary>
     /// Move products to/from main storage

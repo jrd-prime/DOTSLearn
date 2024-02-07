@@ -4,7 +4,7 @@ using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Product
+namespace Jrd.Gameplay.Products
 {
     public partial struct ProductsMoverSystem : ISystem
     {

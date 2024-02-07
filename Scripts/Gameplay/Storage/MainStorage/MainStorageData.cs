@@ -1,4 +1,4 @@
-﻿using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,7 +9,7 @@ namespace Jrd.Gameplay.Storage.MainStorage
     {
         public NativeParallelHashMap<int, int> Values;
 
-        public int GetProductCount(Product.Product product) =>
+        public int GetProductCount(Products.Product product) =>
             Values.ContainsKey((int)product) ? Values[(int)product] : -1;
 
         public NativeList<ProductData> GetMatchingProducts(
@@ -19,7 +19,7 @@ namespace Jrd.Gameplay.Storage.MainStorage
 
             for (var i = 0; i < requiredItemsBuffer.Length; i++)
             {
-                Product.Product product = requiredItemsBuffer[i]._item;
+                Products.Product product = requiredItemsBuffer[i]._item;
                 var key = (int)product;
 
                 if (!Values.ContainsKey(key) && Values[key] < 0) continue;

@@ -1,5 +1,4 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
@@ -13,7 +12,7 @@ namespace Jrd.Gameplay.Storage
         /// </summary>
         /// <param name="product"></param>
         /// <returns>Product quantity OR -1 if no product</returns>
-        public int GetProductCount(Product.Product product);
+        public int GetProductCount(Products.Product product);
     }
 
     public interface IMainStorage : IStorage

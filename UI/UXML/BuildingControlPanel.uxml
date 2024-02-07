@@ -104,6 +104,9 @@
                             <ui:Label tabindex="-1" text="#Move wheat&#10;to mill" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="true" style="position: absolute; left: 34px; height: 32px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 90px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 5px; -unity-text-align: middle-left;" />
                         </ui:Button>
                     </ui:VisualElement>
+                    <ui:VisualElement name="timer-cont" style="flex-grow: 0; width: 120px; height: 20px; background-color: rgba(101, 86, 142, 0.16); align-items: center; justify-content: center; align-self: center;">
+                        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="timer-label" style="font-size: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="main-storage-cont" class="grid-cont" style="right: 0; left: auto;">
                     <ui:VisualElement class="grid" />

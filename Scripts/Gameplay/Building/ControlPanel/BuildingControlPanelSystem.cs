@@ -1,5 +1,4 @@
-﻿using System;
-using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;

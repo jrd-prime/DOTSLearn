@@ -1,4 +1,4 @@
-﻿using Jrd.Gameplay.Product;
+﻿using Jrd.Gameplay.Products;
 using UnityEngine;
 
 namespace Jrd.ScriptableObjects

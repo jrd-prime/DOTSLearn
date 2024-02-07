@@ -1,5 +1,4 @@
-﻿using Jrd.Gameplay.Product;
-using Jrd.Gameplay.Storage;
+﻿using Jrd.Gameplay.Products;
 using Jrd.Utils.Const;
 using Unity.Collections;
 using UnityEngine;
