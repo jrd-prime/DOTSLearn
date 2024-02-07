@@ -1,5 +1,5 @@
 ﻿using Jrd.CameraControl;
-using Jrd.UserInput;
+using Jrd.Select;
 using Jrd.UserInput.Components;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,7 +10,7 @@ using UnityEngine;
 using Ray = UnityEngine.Ray;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     public partial struct MoveTempPrefabSystem : ISystem
     {

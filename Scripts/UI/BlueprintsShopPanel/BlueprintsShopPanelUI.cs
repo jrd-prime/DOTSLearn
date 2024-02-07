@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Jrd.GameStates.BuildingState.BuildingPanel;
+using Jrd.Gameplay.Shop.BlueprintsShop;
 using Unity.Collections;
 using UnityEngine.UIElements;
 

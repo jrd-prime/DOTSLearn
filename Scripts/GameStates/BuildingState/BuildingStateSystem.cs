@@ -1,10 +1,9 @@
 ﻿using System;
-using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.GameStates.BuildingState.BuildingPanel;
+using Jrd.Gameplay.Building.TempBuilding;
+using Jrd.Gameplay.Shop.BlueprintsShop;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.GameStates.BuildingState.TempBuilding;
 using Jrd.GameStates.MainGameState;
 using Jrd.GameStates.PlayState;
 using Jrd.UI;

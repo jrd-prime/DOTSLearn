@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Utils.DebSet
+namespace Jrd.ForDebug.DebSet
 {
     public struct DebSetComponent : IComponentData
     {

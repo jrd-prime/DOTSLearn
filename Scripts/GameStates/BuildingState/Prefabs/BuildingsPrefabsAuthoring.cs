@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products;
 using Jrd.ScriptableObjects;
 using Unity.Collections;

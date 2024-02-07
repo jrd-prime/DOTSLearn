@@ -16,3 +16,4 @@ MonoBehaviour:
   _productName: Wood
   _productPackSize: 10
   _goodsCategory: 2
+  _moveTimeMultiplier: 2

@@ -1,6 +1,7 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.GameStates.BuildingState;
 using Jrd.Screen;
+using Jrd.Select;
 using Jrd.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
@@ -8,7 +9,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     [BurstCompile]
     public partial struct InstantiateTempPrefabSystem : ISystem

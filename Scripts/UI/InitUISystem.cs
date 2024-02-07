@@ -1,6 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Shop.BlueprintsShop;
 using Jrd.Gameplay.Storage.MainStorage;
-using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
 using Unity.Entities;

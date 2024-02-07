@@ -1,15 +1,14 @@
 ﻿using System;
-using Jrd.GameStates.BuildingState.TempBuilding;
-using Jrd.GameStates.MainGameState;
 using Jrd.CameraControl;
-using Jrd.UserInput;
+using Jrd.Gameplay.Building.TempBuilding;
+using Jrd.GameStates.MainGameState;
 using Jrd.UserInput.Components;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
 using Ray = UnityEngine.Ray;
 
-namespace Jrd
+namespace Jrd.Select
 {
     /// <summary>
     /// Add the SelectedTag to the clicked temp building

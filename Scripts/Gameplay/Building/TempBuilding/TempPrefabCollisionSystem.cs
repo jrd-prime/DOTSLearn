@@ -1,10 +1,9 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics;
-using Unity.Physics.Systems;
 using UnityEngine;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     // [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     // [UpdateAfter(typeof(PhysicsSystemGroup))]

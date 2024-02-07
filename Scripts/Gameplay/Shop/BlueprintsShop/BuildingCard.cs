@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.GameStates.BuildingState.BuildingPanel
+namespace Jrd.Gameplay.Shop.BlueprintsShop
 {
     public struct BuildingCard
     {

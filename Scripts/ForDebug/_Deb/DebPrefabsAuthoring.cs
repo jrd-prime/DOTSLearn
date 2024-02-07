@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Utils._Deb
+namespace Jrd.ForDebug._Deb
 {
     public class DebPrefabsAuthoring : MonoBehaviour
     {

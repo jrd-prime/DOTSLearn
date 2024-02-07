@@ -1,9 +1,9 @@
-﻿using Unity.Entities;
+﻿using Jrd.ForDebug.DebSet;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using Jrd.UserInput.Components;
-using Jrd.Utils.DebSet;
 
 namespace Jrd.Grid.Points
 {

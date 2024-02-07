@@ -1,7 +1,7 @@
-﻿using Jrd.GameStates.BuildingState.TempBuilding;
-using Jrd.GameStates.MainGameState;
+﻿using Jrd.GameStates.MainGameState;
 using Jrd.CameraControl;
 using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.TempBuilding;
 using Jrd.UI.BuildingControlPanel;
 using Unity.Entities;
 using Unity.Physics;
@@ -44,7 +44,7 @@ namespace Jrd.GameStates.PlayState
             {
                 case TouchPhase.Began:
                 {
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity firstEntity);
+                    bool isHit = Select.RaycastSystem.Raycast(ray, TargetLayer, out Entity firstEntity);
 
                     if (!isHit)
                     {
@@ -63,7 +63,7 @@ namespace Jrd.GameStates.PlayState
                 {
                     if (Time.time - _timeStart > .3f) return;
 
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity secondEntity);
+                    bool isHit = Select.RaycastSystem.Raycast(ray, TargetLayer, out Entity secondEntity);
 
                     if (!isHit) return;
 

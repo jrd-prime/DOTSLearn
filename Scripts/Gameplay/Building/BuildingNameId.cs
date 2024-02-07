@@ -1,4 +1,4 @@
-﻿namespace Jrd
+﻿namespace Jrd.Gameplay.Building
 {
     public enum BuildingNameId
     {

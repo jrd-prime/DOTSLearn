@@ -1,5 +1,4 @@
 ﻿using Jrd.GameStates.BuildingState;
-using Jrd.GameStates.BuildingState.BuildingPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.UI;
 using Jrd.UI.BlueprintsShopPanel;

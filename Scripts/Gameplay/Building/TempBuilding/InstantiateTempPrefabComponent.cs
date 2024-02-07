@@ -1,8 +1,7 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building.ControlPanel;
 using Unity.Entities;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     public struct InstantiateTempPrefabComponent : IComponentData
     {

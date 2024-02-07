@@ -16,3 +16,4 @@ MonoBehaviour:
   _productName: Brick
   _productPackSize: 20
   _goodsCategory: 4
+  _moveTimeMultiplier: 1.7

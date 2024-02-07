@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Utils._Deb
+namespace Jrd.ForDebug._Deb
 {
     public struct DebPrefabsComponent : IComponentData
     {

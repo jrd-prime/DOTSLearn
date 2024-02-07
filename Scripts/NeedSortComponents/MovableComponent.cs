@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd
+namespace Jrd.NeedSortComponents
 {
     public struct MovableComponent : IComponentData
     {

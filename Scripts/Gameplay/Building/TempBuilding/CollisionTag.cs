@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     public struct CollisionTag : IComponentData
     {

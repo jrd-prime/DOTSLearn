@@ -1,4 +1,4 @@
-﻿using Jrd.Utils.DebSet;
+﻿using Jrd.ForDebug.DebSet;
 
 namespace Jrd.Utils
 {

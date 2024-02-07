@@ -3,7 +3,7 @@ using Unity.Burst;
 using Unity.Entities;
 using GameStatesSystem = Jrd.GameStates.MainGameState.GameStatesSystem;
 
-namespace Jrd.Utils.DebSet
+namespace Jrd.ForDebug.DebSet
 {
     [UpdateBefore(typeof(GameStatesSystem))]
     [BurstCompile]

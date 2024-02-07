@@ -1,5 +1,4 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Storage.Warehouse;
 using Unity.Burst;
 using Unity.Collections;
@@ -7,7 +6,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     /// <summary>
     /// Place temp building prefab

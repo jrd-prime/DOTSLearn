@@ -2,7 +2,7 @@ using Jrd.UI.PopUpPanels;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.Utils.DebSet
+namespace Jrd.ForDebug.DebSet
 {
     public class DebSetUI : MonoBehaviour
     {

@@ -1,11 +1,11 @@
 ﻿using Jrd.CameraControl;
-using Jrd.UserInput;
+using Jrd.NeedSortComponents;
 using Jrd.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
 
-namespace Jrd.GameStates.BuildingState.TempBuilding
+namespace Jrd.Gameplay.Building.TempBuilding
 {
     [BurstCompile]
     public partial struct DestroyTempPrefabSystem : ISystem
