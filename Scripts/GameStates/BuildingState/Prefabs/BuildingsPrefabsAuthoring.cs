@@ -27,11 +27,11 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                 foreach (BuildingDataSo buildingData in authoring._buildings)
                 {
                     FillBuildingsBuffer(buildingData, buildingBuffer);
-                    FillBuildingsItemsBuffer(buildingData.RequiredItems, buildingRequiredItemsBuffer);
+                    // FillBuildingsItemsBuffer(buildingData.RequiredItems, buildingRequiredItemsBuffer);
                     FillBuildingsItemsBuffer(buildingData.ManufacturedItems, buildingManufacturedItemsBuffer);
                 }
 
-                AddComponent<JBuildingsPrefabsTag>(entity);
+                AddComponent<BuildingsPrefabsBufferTag>(entity);
             }
 
             private void FillBuildingsBuffer(BuildingDataSo buildingData,
@@ -70,7 +70,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         }
     }
 
-    public struct JBuildingsPrefabsTag : IComponentData
+    public struct BuildingsPrefabsBufferTag : IComponentData
     {
     }
 
@@ -97,6 +97,7 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         public Product _item;
         public int _count;
     }
+
 
     [Serializable]
     public struct BuildingManufacturedItemsBuffer : IBufferElementData

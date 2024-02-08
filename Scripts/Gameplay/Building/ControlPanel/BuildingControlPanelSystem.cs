@@ -28,7 +28,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             RequireForUpdate<MainStorageData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            RequireForUpdate<JBuildingsPrefabsTag>();
+            RequireForUpdate<BuildingsPrefabsBufferTag>();
         }
 
         protected override void OnStartRunning()
@@ -51,7 +51,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
 
-            var bufferEntity = SystemAPI.GetSingletonEntity<JBuildingsPrefabsTag>();
+            var bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
             // cache mb somewhere
             _requiredItems = SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
             _manufacturedItems = SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);

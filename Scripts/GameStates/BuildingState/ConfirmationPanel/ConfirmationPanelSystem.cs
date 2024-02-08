@@ -11,7 +11,7 @@ namespace Jrd.GameStates.BuildingState.ConfirmationPanel
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<JBuildingsPrefabsTag>();
+            state.RequireForUpdate<BuildingsPrefabsBufferTag>();
         }
 
         public void OnUpdate(ref SystemState state)

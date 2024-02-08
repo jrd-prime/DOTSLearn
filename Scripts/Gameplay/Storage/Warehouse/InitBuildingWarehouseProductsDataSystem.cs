@@ -12,7 +12,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<JBuildingsPrefabsTag>();
+            state.RequireForUpdate<BuildingsPrefabsBufferTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -23,7 +23,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
         {
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
-            var bufferEntity = SystemAPI.GetSingletonEntity<JBuildingsPrefabsTag>();
+            var bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
             // cache mb somewhere
             var requiredItems = SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
             var _manufacturedItems = SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);

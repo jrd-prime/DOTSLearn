@@ -34,7 +34,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         }
 
         // TODO warehouse capacity, stack capacity
-        public NativeList<ProductData> UpdateProductsCount(NativeList<ProductData> productsData)
+        public NativeList<ProductData> UpdateProductsQuantity(NativeList<ProductData> productsData)
         {
             var movedProductsList = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var product in productsData)

@@ -41,5 +41,16 @@ namespace Jrd.Gameplay.Storage.MainStorage
                 Values[(int)productData.Name] -= productData.Quantity;
             }
         }
+
+        public int GetProductsQuantity(NativeList<ProductData> productDataList)
+        {
+            var quantity = 0;
+            foreach (ProductData product in productDataList)
+            {
+                quantity += product.Quantity;
+            }
+
+            return quantity;
+        }
     }
 }
