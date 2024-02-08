@@ -6,13 +6,17 @@ using Unity.Entities;
 namespace Jrd.Gameplay.Building.ControlPanel
 {
     /// <summary>
-    /// Building warehouse products list component
+    /// Contains a hash map of products stored in the building's warehouse
+    /// <para>HashMap of (int <see cref="Product"/> id, int quantity of product)</para>
     /// </summary>
     public struct WarehouseProductsData : IComponentData, IWarehouse
     {
+        /// <summary>
+        /// Hash map (int <see cref="Product"/> id, int quantity of product)
+        /// </summary>
         public NativeParallelHashMap<int, int> Values;
 
-        public int GetProductCount(Product product)
+        public int GetProductQuantity(Product product)
         {
             throw new System.NotImplementedException();
         }

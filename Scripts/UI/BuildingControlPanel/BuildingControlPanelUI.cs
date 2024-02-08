@@ -1,14 +1,19 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
-using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.ScriptableObjects;
 using Unity.Collections;
-using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Jrd.UI.BuildingControlPanel
 {
+    /// <summary>
+    /// <para><b>Is responsible for all communication with parts of the building control panel UI</b></para>
+    /// <para><see cref="BuildingControlPanelProdLineUI"/> Production line</para>
+    /// <para><see cref="BuildingControlPanelSpecsUI"/> Specifications</para>
+    /// <para><see cref="BuildingControlPanelWarehouseUI"/> Building warehouse</para>
+    /// <para><see cref="BuildingControlPanelMainStorageUI"/> Main storage UI in building control panel with matching products for this type of building</para>
+    /// <para><see cref="BuildingControlPanelTimerUI"/> Timers and any progress bars</para>
+    /// </summary>
     public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBuildingSpecs, IBuildingTimer
     {
         private BuildingControlPanelProdLineUI _productionLineUI;

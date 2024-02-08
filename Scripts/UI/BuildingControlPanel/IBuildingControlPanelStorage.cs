@@ -6,7 +6,7 @@ namespace Jrd.UI.BuildingControlPanel
     public interface IBuildingControlPanelStorage
     {
         /// <summary>
-        /// Set items when building info panel opened
+        /// Set items in UI building control panel
         /// </summary>
         public void SetItems(NativeList<ProductData> list);
 

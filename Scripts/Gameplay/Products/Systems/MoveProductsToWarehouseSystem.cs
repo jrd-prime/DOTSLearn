@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Jrd.Gameplay.Products
 {
     /// <summary>
-    /// The system responsible for moving products to building warehouse
+    /// Moving products from main storage to building warehouse
     /// </summary>
     public partial struct MoveProductsToWarehouseSystem : ISystem
     {
@@ -31,13 +31,13 @@ namespace Jrd.Gameplay.Products
                          .WithAll<MoveRequestTag, BuildingData>()
                          .WithEntityAccess())
             {
-                // matching
+                
                 NativeList<ProductData> matchingProducts = mainStorageData.GetMatchingProducts(requiredProductsData.Required);
                 // move and return moved count
                 NativeList<ProductData> movedProducts =
                     warehouseProducts.ValueRW.UpdateProductsQuantity(matchingProducts);
                 // update quantity moved products in main storage
-                mainStorageData.UpdateProductsByKey(movedProducts);
+                mainStorageData.ReduceProductsQuantityByKey(movedProducts);
 
                 var movedProductsQuantity = mainStorageData.GetProductsQuantity(movedProducts);
 

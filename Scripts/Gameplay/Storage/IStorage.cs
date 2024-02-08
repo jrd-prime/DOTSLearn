@@ -13,12 +13,12 @@ namespace Jrd.Gameplay.Storage
         /// </summary>
         /// <param name="product"></param>
         /// <returns>Product quantity OR -1 if no product</returns>
-        public int GetProductCount(Products.Product product);
+        public int GetProductQuantity(Products.Product product);
     }
 
     public interface IMainStorage : IStorage
     {
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsBuffer);
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsList);
     }
 
     public interface IWarehouse : IStorage
