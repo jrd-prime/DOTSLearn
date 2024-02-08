@@ -1,6 +1,6 @@
 ﻿using Jrd.ForDebug.DebSet;
 
-namespace Jrd.Utils
+namespace Jrd.MyUtils
 {
     public static class H
     {

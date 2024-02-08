@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
-using Jrd.Utils.Const;
+using Jrd.MyUtils;
+using Jrd.MyUtils.Const;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -72,7 +73,7 @@ namespace Jrd.UI.BuildingControlPanel
 
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
-            var iconSprite = Utils.Utils.LoadFromResources<Sprite>(iconPath, this);
+            var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
 
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);
             itemCountLabel.text = itemCount.ToString();

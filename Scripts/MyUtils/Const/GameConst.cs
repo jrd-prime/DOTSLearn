@@ -1,4 +1,4 @@
-﻿namespace Jrd.Utils.Const
+﻿namespace Jrd.MyUtils.Const
 {
     public class GameConst
     {

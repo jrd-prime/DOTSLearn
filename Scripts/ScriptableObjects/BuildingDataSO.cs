@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Jrd.ScriptableObjects
 {
@@ -24,7 +22,7 @@ namespace Jrd.ScriptableObjects
         [Header("Building Items")] [SerializeField]
         private List<ProductionProductData> _requiredItems;
 
-        [SerializeField] private List<BuildingManufacturedItemsBuffer> _manufacturedItems;
+        [SerializeField] private List<ProductionProductData> _manufacturedItems;
 
 
         [Header("Building Stats")] [SerializeField]
@@ -41,8 +39,8 @@ namespace Jrd.ScriptableObjects
 
         public BuildingCategoryId CategoryId => _categoryId;
 
-        // public List<BuildingRequiredItemsBuffer> RequiredItems => _requiredItems;
-        public List<BuildingManufacturedItemsBuffer> ManufacturedItems => _manufacturedItems;
+        public List<ProductionProductData> RequiredItems => _requiredItems;
+        public List<ProductionProductData> ManufacturedItems => _manufacturedItems;
         public int Level => _level;
         public float ItemsPerHour => _itemsPerHour;
         public int LoadCapacity => _loadCapacity;
@@ -62,12 +60,5 @@ namespace Jrd.ScriptableObjects
                 Debug.LogError("Fill all fields! In scriptable object ->" + this);
             }
         }
-    }
-
-    [Serializable]
-    public struct ProductionProductData
-    {
-        public Product _requiredProduct;
-        public int _requiredQuantity;
     }
 }

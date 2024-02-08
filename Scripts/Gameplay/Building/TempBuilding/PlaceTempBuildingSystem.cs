@@ -1,23 +1,25 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Storage.Warehouse;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.MyUtils;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Jrd.Gameplay.Building.TempBuilding
 {
     /// <summary>
-    /// Place temp building prefab
+    /// Place temp building prefab and init building info
     /// </summary>
     [BurstCompile]
     public partial struct PlaceTempBuildingSystem : ISystem
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _bsEcb;
+        private Entity _entity;
+        private FixedString64Bytes _guid;
+        private BuildingData _building;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -25,86 +27,113 @@ namespace Jrd.Gameplay.Building.TempBuilding
             state.RequireForUpdate<BuildingsPrefabsBufferTag>();
             state.RequireForUpdate<PlaceTempBuildingTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<GameBuildingsData>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             _ecbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
-
-            NativeHashMap<FixedString64Bytes, BuildingData> gameBuildingsMap = SystemAPI
-                .GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;
 
 
-            var bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
-
-            DynamicBuffer<BuildingRequiredItemsBuffer> requiredItems =
-                SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
-            DynamicBuffer<BuildingManufacturedItemsBuffer> manufacturedItems =
-                SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
-            
-            
-            
-            var req = new NativeList<ProductData>(0, Allocator.Temp);
-
-            foreach (var product in requiredItems)
-            {
-                req.Add(new ProductData
-                {
-                    Name = product._item,
-                    Quantity = product._count
-                });
-            }
-            var man = new NativeList<ProductData>(0, Allocator.Temp);
-
-            foreach (var product in manufacturedItems)
-            {
-                man.Add(new ProductData
-                {
-                    Name = product._item,
-                    Quantity = product._count
-                });
-            }
             foreach (var (buildingData, transform, entity) in SystemAPI
                          .Query<RefRW<BuildingData>, RefRO<LocalTransform>>()
                          .WithAll<PlaceTempBuildingTag, TempBuildingTag>()
                          .WithEntityAccess())
             {
-                float3 position = transform.ValueRO.Position;
-                FixedString64Bytes guid = buildingData.ValueRO.Guid;
-                BuildingData building = buildingData.ValueRO;
+                _entity = entity;
+                _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
+                buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
 
-                buildingData.ValueRW.WorldPosition = position;
+                _guid = buildingData.ValueRO.Guid;
+                _building = buildingData.ValueRO;
 
-                _bsEcb.SetName(entity, $"{building.NameId}_{guid}");
-                _bsEcb.AddComponent<BuildingTag>(entity);
+                Entity bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
 
-                _bsEcb.AddComponent(entity, new RequiredProductsData
-                {
-                    Value = req
-                });
-                _bsEcb.AddComponent(entity, new ManufacturedProductsData
-                {
-                    Value = man
-                });
+                var requiredItems = SystemAPI
+                    .GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
+                var manufacturedItems = SystemAPI
+                    .GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
 
-                _bsEcb.AddComponent<WarehouseProductsData>(entity);
-                _bsEcb.AddComponent<InitBuildingWarehouseProductsDataTag>(entity);
+                NativeList<ProductionProductData> required = GetProductionProductsList(requiredItems);
+                NativeList<ProductionProductData> manufactured = GetProductionProductsList(manufacturedItems);
 
-                _bsEcb.AddComponent<AddBuildingToDBTag>(entity);
-
-                _bsEcb.RemoveComponent<PlaceTempBuildingTag>(entity);
-                _bsEcb.RemoveComponent<TempBuildingTag>(entity);
-
-                // add to buildings list for save mb
-                gameBuildingsMap.Add(guid, building);
+                AddMainComponents();
+                AddBuildingTags();
+                InitProductionData(ref state, required, manufactured);
+                InitWarehouseData(required);
+                AddBuildingToGameBuildingsList(ref state);
+                RemoveTempTags();
 
                 //TODO add here tag for add building to db
-
-                // Debug.Log("New building added");
             }
+        }
+
+        private void AddBuildingToGameBuildingsList(ref SystemState _)
+        {
+            // add to buildings list for save mb
+            NativeHashMap<FixedString64Bytes, BuildingData> gameBuildingsMap = SystemAPI
+                .GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;
+
+            gameBuildingsMap.Add(_guid, _building);
+        }
+
+        private void InitProductionData(ref SystemState _,
+            NativeList<ProductionProductData> required,
+            NativeList<ProductionProductData> manufactured)
+        {
+            _bsEcb.AddComponent(_entity, new RequiredProductsData
+            {
+                Required = required
+            });
+            _bsEcb.AddComponent(_entity, new ManufacturedProductsData
+            {
+                Manufactured = manufactured
+            });
+        }
+
+        private void AddMainComponents()
+        {
+            _bsEcb.SetName(_entity, $"{_building.NameId}_{_guid}");
+            _bsEcb.AddComponent<BuildingTag>(_entity);
+        }
+
+        /// <summary>
+        /// Set warehouse products init data (required products with 0 quantity
+        /// </summary>
+        private void InitWarehouseData(NativeList<ProductionProductData> required)
+        {
+            NativeParallelHashMap<int, int> requiredProducts = Utils.NativeListToHashMap(required);
+
+            _bsEcb.AddComponent(_entity, new WarehouseProductsData
+            {
+                Values = requiredProducts
+            });
+        }
+
+        private void AddBuildingTags()
+        {
+            _bsEcb.AddComponent<AddBuildingToDBTag>(_entity);
+        }
+
+        private void RemoveTempTags()
+        {
+            _bsEcb.RemoveComponent<PlaceTempBuildingTag>(_entity);
+            _bsEcb.RemoveComponent<TempBuildingTag>(_entity);
+        }
+
+        private NativeList<ProductionProductData> GetProductionProductsList<T>(
+            DynamicBuffer<T> buffer) where T : unmanaged, IBufferElementData
+        {
+            DynamicBuffer<BuildingProductionItemsBuffer> productsBuffer =
+                buffer.Reinterpret<BuildingProductionItemsBuffer>();
+            NativeList<ProductionProductData> productsList = new(productsBuffer.Length, Allocator.Persistent);
+
+            foreach (var product in productsBuffer)
+            {
+                productsList.Add(product.Value);
+            }
+
+            return productsList;
         }
     }
 }

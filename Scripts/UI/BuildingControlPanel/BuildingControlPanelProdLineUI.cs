@@ -1,6 +1,9 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.Utils.Const;
+using Jrd.MyUtils;
+using Jrd.MyUtils.Const;
+using Jrd.ScriptableObjects;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,23 +25,28 @@ namespace Jrd.UI.BuildingControlPanel
             _arrowTemplate = arrowTemplate;
         }
 
-        public void SetLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> required,
-            DynamicBuffer<BuildingManufacturedItemsBuffer> manufactured)
+        public void SetLineInfo(NativeList<ProductionProductData> required,
+            NativeList<ProductionProductData> manufactured)
         {
             // TODO all method / refact
 
             _container.Clear();
 
+            foreach (var req in required)
+            {
+                Debug.LogWarning(req._productName);
+            }
+
             foreach (var reqBuffer in required)
             {
-                _container.Add(GetFilledItem(reqBuffer._item, reqBuffer._count));
+                _container.Add(GetFilledItem(reqBuffer._productName, reqBuffer._quantity));
             }
 
             _container.Add(_arrowTemplate.Instantiate());
 
             foreach (var manBuffer in manufactured)
             {
-                _container.Add(GetFilledItem(manBuffer._item, manBuffer._count));
+                _container.Add(GetFilledItem(manBuffer._productName, manBuffer._quantity));
             }
         }
 
@@ -46,6 +54,7 @@ namespace Jrd.UI.BuildingControlPanel
         {
             // TODO all method / refact
 
+            Debug.LogWarning(item + " = " + itemCount);
             VisualElement template = _itemContainerTemplate.Instantiate();
 
             var itemContainer = template.Q<VisualElement>(BCPNamesID.ProdLineItemContainerId);
@@ -53,7 +62,7 @@ namespace Jrd.UI.BuildingControlPanel
 
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
-            var iconSprite = Utils.Utils.LoadFromResources<Sprite>(iconPath, this);
+            var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
 
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);
             itemCountLabel.text = itemCount.ToString();
@@ -64,7 +73,7 @@ namespace Jrd.UI.BuildingControlPanel
 
     public interface IBuildingProductionLine
     {
-        public void SetLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> required,
-            DynamicBuffer<BuildingManufacturedItemsBuffer> manufactured);
+        public void SetLineInfo(NativeList<ProductionProductData> required,
+            NativeList<ProductionProductData> manufactured);
     }
 }

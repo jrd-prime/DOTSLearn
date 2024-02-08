@@ -1,7 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Shop.BlueprintsShop;
 using Jrd.Gameplay.Storage.MainStorage;
-using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -13,7 +12,6 @@ namespace Jrd.UI
     public partial struct InitUISystem : ISystem
     {
         private static readonly FixedString64Bytes BlueprintsShopDataName = "___ Data: Blueprints Shop";
-        private static readonly FixedString64Bytes ConfirmationPanel = "___ Confirmation Panel";
         private static readonly FixedString64Bytes MainStorageDataName = "___ Data: Main Storage";
 
         public void OnCreate(ref SystemState state)
@@ -21,7 +19,6 @@ namespace Jrd.UI
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(1, Allocator.Temp)
             {
                 { BlueprintsShopDataName, typeof(BlueprintsShopData) }, //LOOK not UI
-                { ConfirmationPanel, typeof(ConfirmationPanelData) }, // need data?
                 { MainStorageDataName, typeof(MainStorageData) } //LOOK not UI
             };
 

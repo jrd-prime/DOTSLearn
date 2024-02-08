@@ -1,6 +1,5 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage;
-using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -18,7 +17,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             throw new System.NotImplementedException();
         }
 
-        public NativeList<ProductData> GetProductsList(DynamicBuffer<BuildingRequiredItemsBuffer> buildingData)
+        public NativeList<ProductData> GetProductsList(NativeList<ProductionProductData> buildingData)
         {
             var a = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var value in Values)

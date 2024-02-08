@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -12,14 +13,13 @@ namespace Jrd.Gameplay.Storage.MainStorage
         public int GetProductCount(Products.Product product) =>
             Values.ContainsKey((int)product) ? Values[(int)product] : -1;
 
-        public NativeList<ProductData> GetMatchingProducts(
-            DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffer)
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsBuffer)
         {
             var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
 
             for (var i = 0; i < requiredItemsBuffer.Length; i++)
             {
-                Products.Product product = requiredItemsBuffer[i]._item;
+                Product product = requiredItemsBuffer[i]._productName;
                 var key = (int)product;
 
                 if (!Values.ContainsKey(key) && Values[key] < 0) continue;

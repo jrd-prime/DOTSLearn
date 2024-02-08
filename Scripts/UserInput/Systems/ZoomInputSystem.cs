@@ -1,4 +1,5 @@
-﻿using Jrd.UserInput.Components;
+﻿using Jrd.MyUtils;
+using Jrd.UserInput.Components;
 using Unity.Entities;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ namespace Jrd.UserInput.Systems
 #if UNITY_ANDROID
             if (Input.touchCount == 2)
             {
-                if (!Utils.Utils.IsPointerOverUIObject())
+                if (!Utils.IsPointerOverUIObject())
                 {
                     Touch touch1 = Input.GetTouch(0);
                     Touch touch2 = Input.GetTouch(1);

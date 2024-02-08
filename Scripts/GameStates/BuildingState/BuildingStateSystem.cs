@@ -2,10 +2,10 @@
 using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Building.TempBuilding;
 using Jrd.Gameplay.Shop.BlueprintsShop;
-using Jrd.GameStates.BuildingState.ConfirmationPanel;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.MainGameState;
 using Jrd.GameStates.PlayState;
+using Jrd.MyUtils;
 using Jrd.UI;
 using Jrd.UI.BlueprintsShopPanel;
 using Jrd.UI.BuildingControlPanel;
@@ -28,7 +28,6 @@ namespace Jrd.GameStates.BuildingState
         private EntityCommandBuffer _bsEcb;
         private EntityCommandBuffer _biEcb;
 
-        private RefRW<ConfirmationPanelData> _confirmationPanelData;
         private Entity _gameStateEntity;
         private RefRW<GameStateData> _gameStateData;
         private int _tempSelectedBuildID;
@@ -89,7 +88,6 @@ namespace Jrd.GameStates.BuildingState
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
             _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>();
             _buildingPanelData = SystemAPI.GetSingletonRW<BlueprintsShopData>();
-            _confirmationPanelData = SystemAPI.GetSingletonRW<ConfirmationPanelData>();
 
             if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
@@ -100,7 +98,9 @@ namespace Jrd.GameStates.BuildingState
         }
 
         private void SetBlueprintsShopPanelVisible(bool value) => _buildingPanelData.ValueRW.SetVisible = value;
-        private void SetConfirmationPanelVisible(bool value) => _confirmationPanelData.ValueRW.SetVisible = value;
+
+        // private void SetConfirmationPanelVisible(bool value) => _confirmationPanelData.ValueRW.SetVisible = value;
+        private void SetConfirmationPanelVisible(bool value) => ConfirmationPanelUI.Instance.SetElementVisible(value);
 
 
         private void BuildSelected(Button button, int index)
@@ -120,7 +120,7 @@ namespace Jrd.GameStates.BuildingState
 
             BlueprintsBuffer blueprintBuffer = _buildingsPrefabsBuffer[index];
 
-            FixedString64Bytes giud = Utils.Utils.GetGuid();
+            FixedString64Bytes giud = Utils.GetGuid();
 
             _bsEcb.AddComponent(_buildingStateEntity,
                 new InstantiateTempPrefabComponent
@@ -172,9 +172,11 @@ namespace Jrd.GameStates.BuildingState
 
         private void ConfirmBuilding()
         {
+            Debug.LogWarning("confirm building");
             SetConfirmationPanelVisible(false);
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
+                Debug.LogWarning("temp building tag here");
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
                 _tempSelectedBuildID = -1;
             }

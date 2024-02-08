@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Jrd.Gameplay.Products;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
-namespace Jrd.Utils
+namespace Jrd.MyUtils
 {
     public static class Utils
     {
@@ -45,6 +47,18 @@ namespace Jrd.Utils
             if (item != null) return item;
 
             throw new FileLoadException($"Unable to load [{itemPath}] Who: " + who);
+        }
+
+        public static NativeParallelHashMap<int, int> NativeListToHashMap(NativeList<ProductionProductData> nativeList)
+        {
+            NativeParallelHashMap<int, int> nativeParallelHashMap = new(nativeList.Length, Allocator.Persistent);
+
+            foreach (var product in nativeList)
+            {
+                nativeParallelHashMap.Add((int)product._productName, 0);
+            }
+
+            return nativeParallelHashMap;
         }
     }
 }

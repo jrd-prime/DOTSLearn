@@ -1,7 +1,6 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers;
-using Jrd.GameStates.BuildingState.Prefabs;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -15,7 +14,6 @@ namespace Jrd.Gameplay.Products
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BuildingsPrefabsBufferTag>();
             state.RequireForUpdate<MainStorageData>();
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<MoveRequestTag>();
@@ -27,19 +25,14 @@ namespace Jrd.Gameplay.Products
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             MainStorageData mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
-            
-            var bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
 
-            DynamicBuffer<BuildingRequiredItemsBuffer> requiredItems =
-                SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
-
-            foreach (var (warehouseProducts, entity) in SystemAPI
-                         .Query<RefRW<WarehouseProductsData>>()
+            foreach (var (warehouseProducts, requiredProductsData, entity) in SystemAPI
+                         .Query<RefRW<WarehouseProductsData>, RequiredProductsData>()
                          .WithAll<MoveRequestTag, BuildingData>()
                          .WithEntityAccess())
             {
                 // matching
-                NativeList<ProductData> matchingProducts = mainStorageData.GetMatchingProducts(requiredItems);
+                NativeList<ProductData> matchingProducts = mainStorageData.GetMatchingProducts(requiredProductsData.Required);
                 // move and return moved count
                 NativeList<ProductData> movedProducts =
                     warehouseProducts.ValueRW.UpdateProductsQuantity(matchingProducts);

@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -17,11 +18,11 @@ namespace Jrd.Gameplay.Storage
 
     public interface IMainStorage : IStorage
     {
-        public NativeList<ProductData> GetMatchingProducts(DynamicBuffer<BuildingRequiredItemsBuffer> requiredItemsBuffer);
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsBuffer);
     }
 
     public interface IWarehouse : IStorage
     {
-        public NativeList<ProductData> GetProductsList(DynamicBuffer<BuildingRequiredItemsBuffer> buildingData);
+        public NativeList<ProductData> GetProductsList(NativeList<ProductionProductData> buildingData);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Jrd.CameraControl;
 using Jrd.UserInput.Components;
-using Jrd.Utils.Const;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

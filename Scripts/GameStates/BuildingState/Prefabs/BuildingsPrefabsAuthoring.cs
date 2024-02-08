@@ -19,19 +19,37 @@ namespace Jrd.GameStates.BuildingState.Prefabs
             public override void Bake(BuildingsPrefabsAuthoring authoring)
             {
                 Entity entity = GetEntity(authoring.gameObject, TransformUsageFlags.None);
+                AddComponent<BuildingsPrefabsBufferTag>(entity);
 
                 var buildingBuffer = AddBuffer<BlueprintsBuffer>(entity);
                 var buildingRequiredItemsBuffer = AddBuffer<BuildingRequiredItemsBuffer>(entity);
                 var buildingManufacturedItemsBuffer = AddBuffer<BuildingManufacturedItemsBuffer>(entity);
 
+
                 foreach (BuildingDataSo buildingData in authoring._buildings)
                 {
                     FillBuildingsBuffer(buildingData, buildingBuffer);
-                    // FillBuildingsItemsBuffer(buildingData.RequiredItems, buildingRequiredItemsBuffer);
-                    FillBuildingsItemsBuffer(buildingData.ManufacturedItems, buildingManufacturedItemsBuffer);
-                }
 
-                AddComponent<BuildingsPrefabsBufferTag>(entity);
+                    int count = buildingData.RequiredItems.Count;
+
+                    if (count == 0) return;
+
+                    for (var i = 0; i < count; i++)
+                    {
+                        buildingRequiredItemsBuffer.Add(new BuildingRequiredItemsBuffer
+                            { Value = buildingData.RequiredItems[i] });
+                    }
+
+                    count = buildingData.RequiredItems.Count;
+
+                    if (count == 0) return;
+
+                    for (var i = 0; i < count; i++)
+                    {
+                        buildingManufacturedItemsBuffer.Add(new BuildingManufacturedItemsBuffer()
+                            { Value = buildingData.ManufacturedItems[i] });
+                    }
+                }
             }
 
             private void FillBuildingsBuffer(BuildingDataSo buildingData,
@@ -53,19 +71,6 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                     LoadCapacity = buildingData.LoadCapacity,
                     StorageCapacity = buildingData.StorageCapacity
                 });
-            }
-
-            private static void FillBuildingsItemsBuffer<T>(IReadOnlyList<T> list, DynamicBuffer<T> dynamicBuffer)
-                where T : unmanaged, IBufferElementData
-            {
-                int count = list.Count;
-
-                if (count == 0) return;
-
-                for (var i = 0; i < count; i++)
-                {
-                    dynamicBuffer.Add(list[i]);
-                }
             }
         }
     }
@@ -91,18 +96,18 @@ namespace Jrd.GameStates.BuildingState.Prefabs
         public int StorageCapacity;
     }
 
-    [Serializable]
     public struct BuildingRequiredItemsBuffer : IBufferElementData
     {
-        public Product _item;
-        public int _count;
+        public ProductionProductData Value;
     }
 
-
-    [Serializable]
     public struct BuildingManufacturedItemsBuffer : IBufferElementData
     {
-        public Product _item;
-        public int _count;
+        public ProductionProductData Value;
+    }
+
+    public struct BuildingProductionItemsBuffer
+    {
+        public ProductionProductData Value;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
 using Jrd.GameStates.BuildingState.Prefabs;
+using Jrd.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -124,8 +125,8 @@ namespace Jrd.UI.BuildingControlPanel
         protected override void OnCloseButton() => HidePanel();
 
         // ProductionLine methods
-        public void SetLineInfo(DynamicBuffer<BuildingRequiredItemsBuffer> required,
-            DynamicBuffer<BuildingManufacturedItemsBuffer> manufactured) =>
+        public void SetLineInfo(NativeList<ProductionProductData> required,
+            NativeList<ProductionProductData> manufactured) =>
             _productionLineUI.SetLineInfo(required, manufactured);
 
         // Specs methods
