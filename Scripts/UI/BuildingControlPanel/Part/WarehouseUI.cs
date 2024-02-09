@@ -1,10 +1,10 @@
 ﻿using UnityEngine.UIElements;
 
-namespace Jrd.UI.BuildingControlPanel
+namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class BuildingControlPanelWarehouseUI : BuildingControlPanelStorage
+    public class WarehouseUI : Storage
     {
-        public BuildingControlPanelWarehouseUI(VisualElement panel, VisualTreeAsset warehouseItemTemplate)
+        public WarehouseUI(VisualElement panel, VisualTreeAsset warehouseItemTemplate)
         {
             Container = panel.Q<VisualElement>(BCPNamesID.WarehouseContainerId);
             NameLabel = Container.Q<Label>(BCPNamesID.WarehouseNameLabelId);

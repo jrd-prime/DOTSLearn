@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine.UIElements;
 
-namespace Jrd.UI.BuildingControlPanel
+namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class BuildingControlPanelSpecsUI : IBuildingSpecs
+    public class SpecsUI : IBcpSpecs
     {
         private readonly Label _productivityLabel;
         private readonly Label _productivityIntLabel;
@@ -12,7 +12,7 @@ namespace Jrd.UI.BuildingControlPanel
         private readonly Label _warehouseCapacityLabel;
         private readonly Label _warehouseCapacityIntLabel;
 
-        public BuildingControlPanelSpecsUI(VisualElement panel)
+        public SpecsUI(VisualElement panel)
         {
             _productivityLabel = panel.Q<Label>(BCPNamesID.SpecProductivityNameLabelId);
             _productivityIntLabel = panel.Q<Label>(BCPNamesID.SpecProductivityIntNameLabelId);
@@ -45,7 +45,7 @@ namespace Jrd.UI.BuildingControlPanel
         public void SetStorageCapacity(int value) => _warehouseCapacityIntLabel.text = value.ToString();
     }
 
-    public interface IBuildingSpecs
+    public interface IBcpSpecs
     {
         public void SetSpecName(Spec specName, string value);
         public void SetProductivity(float value);

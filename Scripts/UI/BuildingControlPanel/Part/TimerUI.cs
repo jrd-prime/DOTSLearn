@@ -2,15 +2,15 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.UI.BuildingControlPanel
+namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class BuildingControlPanelTimerUI : IBuildingTimer
+    public class TimerUI : IBcpTimer
     {
         private readonly VisualElement _timerProgress;
         private readonly Label _timerLabel;
         private readonly int _width = 130;
 
-        public BuildingControlPanelTimerUI(VisualElement panel)
+        public TimerUI(VisualElement panel)
         {
             _timerProgress = panel.Q<VisualElement>("pb-bar");
             _timerLabel = panel.Q<Label>("text-label");
@@ -35,7 +35,7 @@ namespace Jrd.UI.BuildingControlPanel
         }
     }
 
-    public interface IBuildingTimer
+    public interface IBcpTimer
     {
         public void SetTimerText(float max, float value);
     }

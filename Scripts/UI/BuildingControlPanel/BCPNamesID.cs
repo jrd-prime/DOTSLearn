@@ -35,10 +35,18 @@
 
         // Warehouse
         public static string WarehouseContainerId => "warehouse-cont";
-        public static string WarehouseNameLabelId => "warehouse-name-label";
+        public static string WarehouseNameLabelId => "warehouse-label";
 
         // Main Storage
         public static string MainStorageContainerId => "main-storage-cont";
-        public static string MainStorageNameLabelId => "main-storage-name-label";
+        public static string MainStorageNameLabelId => "storage-label";
+        
+        // Required box
+        public static string RequiredBoxContainerId => "req-box-items-cont";
+        public static string RequiredBoxNameLabelId  => "req-box-label";
+        
+        // Manufactured box
+        public static string ManufacturedBoxContainerId => "man-box-items-cont";
+        public static string ManufacturedBoxNameLabelId => "man-box-label";
     }
 }

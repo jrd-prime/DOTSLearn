@@ -5,9 +5,9 @@ using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.UI.BuildingControlPanel
+namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public abstract class BuildingControlPanelStorage : IBuildingControlPanelStorage
+    public abstract class Storage : IBcpStorage
     {
         protected VisualElement Container;
         protected Label NameLabel;
@@ -80,5 +80,23 @@ namespace Jrd.UI.BuildingControlPanel
 
             return template;
         }
+    }
+    
+    public interface IBcpStorage
+    {
+        /// <summary>
+        /// Set items in UI building control panel
+        /// </summary>
+        public void SetItems(NativeList<ProductData> list);
+
+        /// <summary>
+        /// Set empty UI for storage if items list empty
+        /// </summary>
+        public void SetEmptyStorage();
+
+        /// <summary>
+        /// Update item quantity if panel opened and quantity changed
+        /// </summary>
+        public void UpdateItemQuantity(object item, int value);
     }
 }

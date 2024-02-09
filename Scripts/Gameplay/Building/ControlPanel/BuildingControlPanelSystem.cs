@@ -4,8 +4,8 @@ using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.PlayState;
-using Jrd.ScriptableObjects;
 using Jrd.UI.BuildingControlPanel;
+using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -20,8 +20,6 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private MainStorageData _mainStorageData;
         private WarehouseProductsData _warehouseData;
         private BuildingData _buildingData;
-        private DynamicBuffer<BuildingRequiredItemsBuffer> _requiredItems;
-        private DynamicBuffer<BuildingManufacturedItemsBuffer> _manufacturedItems;
 
 
         private NativeList<ProductionProductData> req;
@@ -55,11 +53,6 @@ namespace Jrd.Gameplay.Building.ControlPanel
         protected override void OnUpdate()
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
-
-            var bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
-            // cache mb somewhere
-            _requiredItems = SystemAPI.GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
-            _manufacturedItems = SystemAPI.GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
 
             foreach (var (buildingData, warehouseProductsData, reqdata, mandata, entity) in SystemAPI
                          .Query<BuildingData, WarehouseProductsData, RequiredProductsData, ManufacturedProductsData>()

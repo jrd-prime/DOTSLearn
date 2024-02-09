@@ -10,7 +10,7 @@ namespace Jrd.Gameplay.Products
     /// <summary>
     /// Moving products from main storage to building warehouse
     /// </summary>
-    public partial struct MoveProductsToWarehouseSystem : ISystem
+    public partial struct MoveToWarehouseSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {

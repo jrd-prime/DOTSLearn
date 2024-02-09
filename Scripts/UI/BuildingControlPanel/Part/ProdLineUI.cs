@@ -1,23 +1,20 @@
 ﻿using Jrd.Gameplay.Products;
-using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.MyUtils;
 using Jrd.MyUtils.Const;
-using Jrd.ScriptableObjects;
 using Unity.Collections;
-using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Jrd.UI.BuildingControlPanel
+namespace Jrd.UI.BuildingControlPanel.Part
 {
     //TODO cache?
-    public class BuildingControlPanelProdLineUI : IBuildingProductionLine
+    public class ProdLineUI : IBuildingProductionLine
     {
         private readonly VisualElement _container;
         private readonly VisualTreeAsset _itemContainerTemplate;
         private readonly VisualTreeAsset _arrowTemplate;
 
-        public BuildingControlPanelProdLineUI(VisualElement panel, VisualTreeAsset itemContainerTemplate,
+        public ProdLineUI(VisualElement panel, VisualTreeAsset itemContainerTemplate,
             VisualTreeAsset arrowTemplate)
         {
             _container = panel.Q<VisualElement>(BCPNamesID.ProdLineContainerId);
