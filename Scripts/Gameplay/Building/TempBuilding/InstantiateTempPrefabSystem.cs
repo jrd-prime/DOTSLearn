@@ -81,4 +81,9 @@ namespace Jrd.Gameplay.Building.TempBuilding
             }
         }
     }
+
+    public struct InstantiateTempPrefabComponent : IComponentData
+    {
+        public BuildingData BuildingData;
+    }
 }

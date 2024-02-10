@@ -25,4 +25,9 @@ namespace Jrd.Gameplay.Storage
     {
         public NativeList<ProductData> GetProductsList(NativeList<ProductData> buildingData);
     }
+
+    public interface IBuildingProductsData : IStorage
+    {
+        public void SetProductsList(NativeParallelHashMap<int, int> nativeParallelHashMap);
+    }
 }

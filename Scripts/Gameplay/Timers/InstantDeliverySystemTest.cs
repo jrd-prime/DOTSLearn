@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Unity.Entities;
 using UnityEngine;
 
@@ -19,8 +20,8 @@ namespace Jrd.Gameplay.Timers
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
 
-            foreach (var (buildingData, timer, entity) in SystemAPI
-                         .Query<BuildingData, RefRW<ProductsMoveTimerData>>()
+            foreach (var (aspect, timer, entity) in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>()
                          .WithAll<InstantBuffTag>()
                          .WithEntityAccess())
             {

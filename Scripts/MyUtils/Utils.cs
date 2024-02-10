@@ -49,13 +49,44 @@ namespace Jrd.MyUtils
             throw new FileLoadException($"Unable to load [{itemPath}] Who: " + who);
         }
 
-        public static NativeParallelHashMap<int, int> NativeListToHashMap(NativeList<ProductData> nativeList)
+        public static NativeParallelHashMap<int, int> ConvertProductsDataToHashMap(
+            NativeList<ProductData> nativeList, ProductValues values)
         {
             NativeParallelHashMap<int, int> nativeParallelHashMap = new(nativeList.Length, Allocator.Persistent);
 
             foreach (var product in nativeList)
             {
-                nativeParallelHashMap.Add((int)product.Name, 0);
+                int quantity = values switch
+                {
+                    ProductValues.Keep => product.Quantity,
+                    ProductValues.ToDefault => 0,
+                    _ => throw new ArgumentOutOfRangeException(nameof(values), values, null)
+                };
+
+                nativeParallelHashMap.Add((int)product.Name, quantity);
+            }
+
+            return nativeParallelHashMap;
+        }
+
+        public enum ProductValues
+        {
+            Keep,
+            ToDefault
+        }
+
+        public static NativeList<ProductData> ConvertProductsHashMapToList(
+            NativeParallelHashMap<int, int> nativeList)
+        {
+            NativeList<ProductData> nativeParallelHashMap = new(nativeList.Count(), Allocator.Persistent);
+
+            foreach (var product in nativeList)
+            {
+                nativeParallelHashMap.Add(new ProductData
+                {
+                    Name = (Product)product.Key,
+                    Quantity = product.Value
+                });
             }
 
             return nativeParallelHashMap;

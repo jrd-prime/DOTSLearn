@@ -28,11 +28,11 @@ namespace Jrd.Gameplay.Building
             _gameBuildingsHashMap = SystemAPI.GetSingletonRW<GameBuildingsData>().ValueRW.GameBuildings;
 
             foreach (var (buildingData, entity) in SystemAPI
-                         .Query<RefRO<BuildingData>>()
+                         .Query<BuildingDataAspect>()
                          .WithAll<AddBuildingToDBTag>()
                          .WithEntityAccess())
             {
-                AddToHashMap(buildingData.ValueRO);
+                AddToHashMap(buildingData.BuildingData);
 
                 _bsEcb.RemoveComponent<AddBuildingToDBTag>(entity);
                 _bsEcb.AddComponent<SaveBuildingToDBTag>(entity);

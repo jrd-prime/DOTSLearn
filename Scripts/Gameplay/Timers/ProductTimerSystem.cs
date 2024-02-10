@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -24,8 +25,8 @@ namespace Jrd.Gameplay.Timers
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
 
-            foreach (var (buildingData, timer, entity) in SystemAPI
-                         .Query<BuildingData, RefRW<ProductsMoveTimerData>>()
+            foreach (var (aspect, timer, entity) in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>()
                          .WithEntityAccess())
             {
                 if (timer.ValueRO.CurrentValue > 0)

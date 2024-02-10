@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
+﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers;
 using Unity.Collections;
@@ -26,8 +27,8 @@ namespace Jrd.Gameplay.Products
 
             MainStorageData mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
 
-            foreach (var (warehouseProducts, requiredProductsData, entity) in SystemAPI
-                         .Query<RefRW<WarehouseProductsData>, RequiredProductsData>()
+            foreach (var (aspect, requiredProductsData, entity) in SystemAPI
+                         .Query<BuildingDataAspect, RequiredProductsData>()
                          .WithAll<MoveRequestTag, BuildingData>()
                          .WithEntityAccess())
             {
@@ -35,7 +36,7 @@ namespace Jrd.Gameplay.Products
                 NativeList<ProductData> matchingProducts = mainStorageData.GetMatchingProducts(requiredProductsData.Required);
                 // move and return moved count
                 NativeList<ProductData> movedProducts =
-                    warehouseProducts.ValueRW.UpdateProductsQuantity(matchingProducts);
+                    aspect.BuildingProductsData.WarehouseProductsData.UpdateProductsQuantity(matchingProducts);
                 // update quantity moved products in main storage
                 mainStorageData.ReduceProductsQuantityByKey(movedProducts);
 

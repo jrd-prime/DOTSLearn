@@ -1,13 +1,13 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Building.Production;
+using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Storage;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.MyUtils;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Building.TempBuilding
 {
@@ -15,7 +15,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
     /// Place temp building prefab and init building info
     /// </summary>
     [BurstCompile]
-    public partial struct PlaceTempBuildingSystem : ISystem
+    public partial struct SetUpBuildingSystem : ISystem
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _bsEcb;
@@ -52,6 +52,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
             }
         }
 
+        [BurstCompile]
         private void InitSettingsForNewBuilding(ref SystemState state)
         {
             Entity bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
@@ -64,38 +65,51 @@ namespace Jrd.Gameplay.Building.TempBuilding
             NativeList<ProductData> required = GetProductionProductsList(requiredItems);
             NativeList<ProductData> manufactured = GetProductionProductsList(manufacturedItems);
 
+            // Main
             SetPosition();
             SetEntityName();
-            AddBuildingTags();
+            BuildingTags();
 
+            // Init products
+            InitBuildingProductsData(required, manufactured);
             SetRequiredProductsData(required);
             SetManufacturedProductsData(manufactured);
 
-            InitWarehouseData(required);
-            InitProductionData(required, manufactured);
-
+            // Save?
             AddBuildingToGameBuildingsList(ref state);
-            RemoveTempTags();
+        }
+
+        private void BuildingTags()
+        {
+            _bsEcb.AddComponent<BuildingTag>(_entity);
+            _bsEcb.AddComponent<AddBuildingToDBTag>(_entity);
+
+            _bsEcb.RemoveComponent<PlaceTempBuildingTag>(_entity);
+            _bsEcb.RemoveComponent<TempBuildingTag>(_entity);
+        }
+
+        /// <summary>
+        /// Set warehouse products quantity to 0 and production boxes data to 0 (in production/manufactured)
+        /// </summary>
+        private void InitBuildingProductsData(NativeList<ProductData> required, NativeList<ProductData> manufactured)
+        {
+            _bsEcb.AddComponent(_entity, new BuildingProductsData
+            {
+                WarehouseProductsData = SetDefaultData<WarehouseProducts>(required),
+                InProductionData = SetDefaultData<InProductionProducts>(required),
+                ManufacturedData = SetDefaultData<ManufacturedProducts>(manufactured)
+            });
         }
 
         private void SetPosition() => _building.WorldPosition = _transform.Position;
         private void SetEntityName() => _bsEcb.SetName(_entity, $"{_building.NameId}_{_guid}");
-
-        private void AddBuildingTags()
-        {
-            _bsEcb.AddComponent<BuildingTag>(_entity);
-            _bsEcb.AddComponent<AddBuildingToDBTag>(_entity);
-        }
 
         /// <summary>
         /// Set component with required products list + required quantity
         /// </summary>
         private void SetRequiredProductsData(NativeList<ProductData> required)
         {
-            _bsEcb.AddComponent(_entity, new RequiredProductsData
-            {
-                Required = required
-            });
+            _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = required });
         }
 
         /// <summary>
@@ -103,39 +117,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
         /// </summary>
         private void SetManufacturedProductsData(NativeList<ProductData> manufactured)
         {
-            _bsEcb.AddComponent(_entity, new ManufacturedProductsData
-            {
-                Manufactured = manufactured
-            });
-        }
-
-        /// <summary>
-        /// Set warehouse products quantity to 0
-        /// </summary>
-        private void InitWarehouseData(NativeList<ProductData> required)
-        {
-            NativeParallelHashMap<int, int> requiredProducts = Utils.NativeListToHashMap(required);
-
-            _bsEcb.AddComponent(_entity, new WarehouseProductsData
-            {
-                Values = requiredProducts
-            });
-        }
-
-        /// <summary>
-        /// Set production boxes data to 0 (in production/manufactured)
-        /// </summary>
-        private void InitProductionData(NativeList<ProductData> required, NativeList<ProductData> manufactured)
-        {
-            _bsEcb.AddComponent(_entity, new InProductionData
-            {
-                Value = Utils.NativeListToHashMap(required)
-            });
-
-            _bsEcb.AddComponent(_entity, new ManufacturedData
-            {
-                Value = Utils.NativeListToHashMap(manufactured)
-            });
+            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = manufactured });
         }
 
         private void AddBuildingToGameBuildingsList(ref SystemState _)
@@ -147,26 +129,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
             gameBuildingsMap.Add(_guid, _building);
         }
 
-        private void InitRequiredAndManufacturedData(ref SystemState _,
-            NativeList<ProductData> required,
-            NativeList<ProductData> manufactured)
-        {
-            _bsEcb.AddComponent(_entity, new RequiredProductsData
-            {
-                Required = required
-            });
-            _bsEcb.AddComponent(_entity, new ManufacturedProductsData
-            {
-                Manufactured = manufactured
-            });
-        }
-
-
-        private void RemoveTempTags()
-        {
-            _bsEcb.RemoveComponent<PlaceTempBuildingTag>(_entity);
-            _bsEcb.RemoveComponent<TempBuildingTag>(_entity);
-        }
+        #region Local Utils
 
         /// <summary>
         /// Contains list of <see cref="ProductData"/> with product and quantity from building required/manufactured buffer
@@ -185,5 +148,21 @@ namespace Jrd.Gameplay.Building.TempBuilding
 
             return productsList;
         }
+
+        /// <summary>
+        /// Convert list <see cref="ProductData"/> to hashmap, set <see cref="IBuildingProductsData"/> data quantity to 0
+        /// </summary>
+        private T SetDefaultData<T>(NativeList<ProductData> list) where T : IBuildingProductsData, new()
+        {
+            NativeParallelHashMap<int, int> productsMap =
+                Utils.ConvertProductsDataToHashMap(list, Utils.ProductValues.ToDefault);
+
+            T productsData = new();
+            productsData.SetProductsList(productsMap);
+
+            return productsData;
+        }
+
+        #endregion
     }
 }

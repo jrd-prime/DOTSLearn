@@ -1,30 +1,31 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage;
 using Unity.Collections;
-using Unity.Entities;
 
-namespace Jrd.Gameplay.Building.ControlPanel
+namespace Jrd.Gameplay.Building.ControlPanel.ProductsData
 {
     /// <summary>
     /// Contains a hash map of products stored in the building's warehouse
     /// <para>HashMap of (int <see cref="Product"/> id, int quantity of product)</para>
     /// </summary>
-    public struct WarehouseProductsData : IComponentData, IWarehouse
+    public struct WarehouseProducts : IBuildingProductsData
     {
         /// <summary>
         /// Hash map (int <see cref="Product"/> id, int quantity of product)
         /// </summary>
-        public NativeParallelHashMap<int, int> Values;
+        public NativeParallelHashMap<int, int> Value;
 
         public int GetProductQuantity(Product product)
         {
             throw new System.NotImplementedException();
         }
 
+        public void SetProductsList(NativeParallelHashMap<int, int> productsMap) => Value = productsMap;
+
         public NativeList<ProductData> GetProductsList(NativeList<ProductData> buildingData)
         {
             var a = new NativeList<ProductData>(0, Allocator.Temp);
-            foreach (var value in Values)
+            foreach (var value in Value)
             {
                 a.Add(new ProductData
                 {
@@ -42,7 +43,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             var movedProductsList = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var product in productsData)
             {
-                Values[(int)product.Name] += product.Quantity;
+                Value[(int)product.Name] += product.Quantity;
                 movedProductsList.Add(new ProductData
                 {
                     Name = product.Name,
@@ -57,7 +58,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             foreach (var product in valuesHashMap)
             {
-                Values[product.Key] = product.Value;
+                Value[product.Key] = product.Value;
             }
         }
     }

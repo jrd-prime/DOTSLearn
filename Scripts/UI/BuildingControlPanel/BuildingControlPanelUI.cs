@@ -125,10 +125,7 @@ namespace Jrd.UI.BuildingControlPanel
             PanelCloseButton.clicked += OnCloseButton;
         }
 
-        public void SetLevel(int level)
-        {
-            LevelLabel.text = level.ToString();
-        }
+        public void SetLevel(int level) => LevelLabel.text = level.ToString();
 
         private void Callback(ClickEvent evt)
         {

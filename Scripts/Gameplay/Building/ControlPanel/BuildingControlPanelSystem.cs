@@ -1,4 +1,4 @@
-﻿using Jrd.Gameplay.Building.Production;
+﻿using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers;
@@ -10,6 +10,8 @@ using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.Diagnostics;
+using Utils = Jrd.MyUtils.Utils;
 
 namespace Jrd.Gameplay.Building.ControlPanel
 {
@@ -19,15 +21,18 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private EntityCommandBuffer _ecb;
         private Entity _entity;
         private MainStorageData _mainStorageData;
-        private WarehouseProductsData _warehouseData;
-        private ProductionData _productionData;
+
+        private WarehouseProducts _warehouseData;
+
+        // private ProductionData _productionData;
         private BuildingData _buildingData;
 
 
-        private NativeList<ProductData> req;
-        private NativeList<ProductData> man;
+        private NativeList<ProductData> _required;
+        private NativeList<ProductData> _manufactured;
 
         private BuildingControlPanelUI _buildingUI;
+        private BuildingDataAspect _aspect;
 
         protected override void OnCreate()
         {
@@ -56,18 +61,16 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
 
-            foreach (var (buildingData, warehouseProductsData, reqdata, mandata, inProductionData, manufacturedData,
-                         entity) in SystemAPI
-                         .Query<BuildingData, WarehouseProductsData, RequiredProductsData, ManufacturedProductsData,
-                             InProductionData, ManufacturedData>()
+            foreach (var (aspect, entity) in SystemAPI
+                         .Query<BuildingDataAspect>()
                          .WithAll<InitializeTag, SelectedBuildingTag>()
                          .WithEntityAccess())
             {
-                req = reqdata.Required;
-                man = mandata.Manufactured;
-
-                _warehouseData = warehouseProductsData;
-                _buildingData = buildingData;
+                _aspect = aspect;
+                _required = aspect.RequiredProductsData.Required;
+                _manufactured = aspect.ManufacturedProductsData.Manufactured;
+                _warehouseData = aspect.BuildingProductsData.WarehouseProductsData;
+                _buildingData = aspect.BuildingData;
                 _entity = entity;
                 _ecb.RemoveComponent<InitializeTag>(entity);
 
@@ -75,6 +78,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 SetSpecsInfo();
                 SetProductionLineInfo();
                 SetItemsToStorages();
+                SetItemsToProduction();
             }
 
             if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_entity))
@@ -148,20 +152,16 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private void SetSpecsInfo()
         {
             // TODO refact
-            _buildingUI.SetSpecName(Spec.Productivity,
-                req.ElementAt(0).Name.ToString());
-            _buildingUI.SetSpecName(Spec.LoadCapacity,
-                req.ElementAt(0).Name.ToString());
-            _buildingUI.SetSpecName(Spec.WarehouseCapacity,
-                man.ElementAt(0).Name.ToString());
+            _buildingUI.SetSpecName(Spec.Productivity, _required.ElementAt(0).Name.ToString());
+            _buildingUI.SetSpecName(Spec.LoadCapacity, _required.ElementAt(0).Name.ToString());
+            _buildingUI.SetSpecName(Spec.WarehouseCapacity, _manufactured.ElementAt(0).Name.ToString());
 
             _buildingUI.SetProductivity(_buildingData.ItemsPerHour);
             _buildingUI.SetLoadCapacity(_buildingData.LoadCapacity);
             _buildingUI.SetStorageCapacity(_buildingData.MaxStorage);
         }
 
-
-        private void SetProductionLineInfo() => _buildingUI.SetLineInfo(req, man);
+        private void SetProductionLineInfo() => _buildingUI.SetLineInfo(_required, _manufactured);
 
         private void SetItemsToStorages()
         {
@@ -171,7 +171,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToWarehouse()
         {
-            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsList(req);
+            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsList(_required);
 
             _buildingUI.SetItems(_buildingUI.WarehouseUI, warehouseProductsList);
 
@@ -180,7 +180,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToMainStorage()
         {
-            NativeList<ProductData> mainStorageProductsList = _mainStorageData.GetMatchingProducts(req);
+            NativeList<ProductData> mainStorageProductsList = _mainStorageData.GetMatchingProducts(_required);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 
@@ -189,8 +189,13 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         public void SetItemsToProduction()
         {
-            _buildingUI.SetItems(_buildingUI.InProductionBoxUI, _productionData.ProductsIn);
-            _buildingUI.SetItems(_buildingUI.ManufacturedBoxUI, _productionData.ProductsOut);
+            var inProductionBox =
+                Utils.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionData.Value);
+            var manufacturedBox = Utils.ConvertProductsHashMapToList(
+                _aspect.BuildingProductsData.ManufacturedData.Value);
+
+            _buildingUI.SetItems(_buildingUI.InProductionBoxUI, inProductionBox);
+            _buildingUI.SetItems(_buildingUI.ManufacturedBoxUI, manufacturedBox);
         }
     }
 }
