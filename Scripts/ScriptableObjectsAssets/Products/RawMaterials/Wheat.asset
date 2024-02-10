@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89432a90999d4e7d9a0d2d53f3512cd3, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
-  productPrefabOrImageMB: {fileID: 0}
+  _productPrefabOrImageMb: {fileID: 0}
   _productName: Wheat
   _productPackSize: 20
-  _goodsCategory: 1
+  _goodsCategory: 0
+  _moveTimeMultiplier: 0

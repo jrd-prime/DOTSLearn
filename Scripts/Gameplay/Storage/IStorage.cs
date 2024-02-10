@@ -18,11 +18,11 @@ namespace Jrd.Gameplay.Storage
 
     public interface IMainStorage : IStorage
     {
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsList);
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList);
     }
 
     public interface IWarehouse : IStorage
     {
-        public NativeList<ProductData> GetProductsList(NativeList<ProductionProductData> buildingData);
+        public NativeList<ProductData> GetProductsList(NativeList<ProductData> buildingData);
     }
 }

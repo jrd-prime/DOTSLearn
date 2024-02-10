@@ -18,15 +18,15 @@ MonoBehaviour:
   _name: Windmill
   _size: {x: 5, y: 5}
   _requiredItems:
-  - _productName: 3
+  - _productDataSo: {fileID: 11400000, guid: c8ae1e23f1095994abc0a2980299f8de, type: 2}
+    _quantity: 1
+  - _productDataSo: {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
     _quantity: 5
-  - _productName: 4
-    _quantity: 4
   _manufacturedItems:
-  - _productName: 1
-    _quantity: 3
-  - _productName: 2
-    _quantity: 8
+  - _productDataSo: {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}
+    _quantity: 1
+  - _productDataSo: {fileID: 11400000, guid: a0ee9d66797760945985dcb3b5f498a4, type: 2}
+    _quantity: 10
   _level: 1
   _itemsPerHour: 5
   _loadCapacity: 20

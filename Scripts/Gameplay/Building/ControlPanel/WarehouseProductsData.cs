@@ -21,7 +21,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             throw new System.NotImplementedException();
         }
 
-        public NativeList<ProductData> GetProductsList(NativeList<ProductionProductData> buildingData)
+        public NativeList<ProductData> GetProductsList(NativeList<ProductData> buildingData)
         {
             var a = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var value in Values)

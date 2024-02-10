@@ -2,7 +2,7 @@
 
 namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class MainStorageUI : Storage
+    public class MainStorageUI : StorageUI
     {
         public MainStorageUI(VisualElement panel, VisualTreeAsset mainStorageItemTemplate)
         {

@@ -49,13 +49,13 @@ namespace Jrd.MyUtils
             throw new FileLoadException($"Unable to load [{itemPath}] Who: " + who);
         }
 
-        public static NativeParallelHashMap<int, int> NativeListToHashMap(NativeList<ProductionProductData> nativeList)
+        public static NativeParallelHashMap<int, int> NativeListToHashMap(NativeList<ProductData> nativeList)
         {
             NativeParallelHashMap<int, int> nativeParallelHashMap = new(nativeList.Length, Allocator.Persistent);
 
             foreach (var product in nativeList)
             {
-                nativeParallelHashMap.Add((int)product._productName, 0);
+                nativeParallelHashMap.Add((int)product.Name, 0);
             }
 
             return nativeParallelHashMap;

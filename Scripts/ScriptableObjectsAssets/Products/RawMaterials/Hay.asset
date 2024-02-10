@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89432a90999d4e7d9a0d2d53f3512cd3, type: 3}
-  m_Name: Brick
+  m_Name: Hay
   m_EditorClassIdentifier: 
   _productPrefabOrImageMb: {fileID: 0}
-  _productName: Brick
+  _productName: Hay
   _productPackSize: 20
-  _goodsCategory: 5
-  _moveTimeMultiplier: 1.7
+  _goodsCategory: 2
+  _moveTimeMultiplier: 0

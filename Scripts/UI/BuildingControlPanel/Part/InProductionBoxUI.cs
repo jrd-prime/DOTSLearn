@@ -2,12 +2,12 @@
 
 namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class RequiredBoxUI : ProductionBox
+    public class InProductionBoxUI : ProductionBox
     {
-        public RequiredBoxUI(VisualElement panel, VisualTreeAsset boxItemTemplate)
+        public InProductionBoxUI(VisualElement panel, VisualTreeAsset boxItemTemplate)
         {
             Container = panel.Q<VisualElement>(BCPNamesID.RequiredBoxContainerId);
-            NameLabel = Container.Q<Label>(BCPNamesID.RequiredBoxNameLabelId);
+            NameLabel = panel.Q<Label>(BCPNamesID.RequiredBoxNameLabelId);
             ItemContainerTemplate = boxItemTemplate;
         }
     }

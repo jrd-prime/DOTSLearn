@@ -802,6 +802,8 @@ MonoBehaviour:
     type: 3}
   _internalStorageItemTemplate: {fileID: 9197481963319205126, guid: c010b8852b470fb45905736a1ec386ed,
     type: 3}
+  _boxItemTemplate: {fileID: 9197481963319205126, guid: 36b99cdb1a5901840810b147058263b0,
+    type: 3}
 --- !u!1 &1251201940
 GameObject:
   m_ObjectHideFlags: 0

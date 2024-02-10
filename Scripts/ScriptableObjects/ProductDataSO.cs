@@ -1,8 +1,10 @@
-﻿using Jrd.Gameplay.Products;
+﻿using System;
+using Jrd.Gameplay.Products;
 using UnityEngine;
 
 namespace Jrd.ScriptableObjects
 {
+    [Serializable]
     [CreateAssetMenu(fileName = "New Goods", menuName = "Goods Data", order = 52)]
     public class ProductDataSO : ScriptableObject
     {
@@ -10,10 +12,11 @@ namespace Jrd.ScriptableObjects
         [SerializeField] private string _productName;
         [SerializeField] private int _productPackSize;
         [SerializeField] private Product _goodsCategory;
-        [SerializeField][Range(0.5f, 2f)] private float _moveTimeMultiplier;
+        [SerializeField] [Range(0.5f, 2f)] private float _moveTimeMultiplier;
 
         public Sprite PrefabOrImageMb => _productPrefabOrImageMb;
         public string Name => _productName;
+        public Product Product => _goodsCategory;
         public int Size => _productPackSize;
         public float MoveTimeMultiplier => _moveTimeMultiplier;
 

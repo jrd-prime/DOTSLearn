@@ -22,8 +22,8 @@ namespace Jrd.UI.BuildingControlPanel.Part
             _arrowTemplate = arrowTemplate;
         }
 
-        public void SetLineInfo(NativeList<ProductionProductData> required,
-            NativeList<ProductionProductData> manufactured)
+        public void SetLineInfo(NativeList<ProductData> required,
+            NativeList<ProductData> manufactured)
         {
             // TODO all method / refact
 
@@ -31,19 +31,19 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
             foreach (var req in required)
             {
-                Debug.LogWarning(req._productName);
+                Debug.LogWarning(req.Name);
             }
 
             foreach (var reqBuffer in required)
             {
-                _container.Add(GetFilledItem(reqBuffer._productName, reqBuffer._quantity));
+                _container.Add(GetFilledItem(reqBuffer.Name, reqBuffer.Quantity));
             }
 
             _container.Add(_arrowTemplate.Instantiate());
 
             foreach (var manBuffer in manufactured)
             {
-                _container.Add(GetFilledItem(manBuffer._productName, manBuffer._quantity));
+                _container.Add(GetFilledItem(manBuffer.Name, manBuffer.Quantity));
             }
         }
 
@@ -70,7 +70,7 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
     public interface IBuildingProductionLine
     {
-        public void SetLineInfo(NativeList<ProductionProductData> required,
-            NativeList<ProductionProductData> manufactured);
+        public void SetLineInfo(NativeList<ProductData> required,
+            NativeList<ProductData> manufactured);
     }
 }

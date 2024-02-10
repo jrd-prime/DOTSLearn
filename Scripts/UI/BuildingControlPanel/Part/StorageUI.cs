@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public abstract class Storage : IBcpStorage
+    public abstract class StorageUI : IProductsItemsContainer
     {
         protected VisualElement Container;
         protected Label NameLabel;
@@ -21,7 +21,7 @@ namespace Jrd.UI.BuildingControlPanel.Part
             if (list.IsEmpty)
             {
                 Debug.Log("Empty storage list");
-                SetEmptyStorage();
+                SetEmptyContainerItems();
             }
 
             Container.Clear();
@@ -49,7 +49,7 @@ namespace Jrd.UI.BuildingControlPanel.Part
             }
         }
 
-        public void SetEmptyStorage()
+        public void SetEmptyContainerItems()
         {
             throw new System.NotImplementedException();
         }
@@ -80,23 +80,5 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
             return template;
         }
-    }
-    
-    public interface IBcpStorage
-    {
-        /// <summary>
-        /// Set items in UI building control panel
-        /// </summary>
-        public void SetItems(NativeList<ProductData> list);
-
-        /// <summary>
-        /// Set empty UI for storage if items list empty
-        /// </summary>
-        public void SetEmptyStorage();
-
-        /// <summary>
-        /// Update item quantity if panel opened and quantity changed
-        /// </summary>
-        public void UpdateItemQuantity(object item, int value);
     }
 }

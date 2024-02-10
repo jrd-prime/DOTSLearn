@@ -15,5 +15,5 @@ MonoBehaviour:
   _productPrefabOrImageMb: {fileID: 0}
   _productName: Wooden Plank
   _productPackSize: 20
-  _goodsCategory: 3
+  _goodsCategory: 4
   _moveTimeMultiplier: 1.3

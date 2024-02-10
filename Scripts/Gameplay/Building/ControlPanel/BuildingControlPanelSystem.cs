@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Products;
+﻿using Jrd.Gameplay.Building.Production;
+using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
@@ -19,13 +20,14 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private Entity _entity;
         private MainStorageData _mainStorageData;
         private WarehouseProductsData _warehouseData;
+        private ProductionData _productionData;
         private BuildingData _buildingData;
 
 
-        private NativeList<ProductionProductData> req;
-        private NativeList<ProductionProductData> man;
+        private NativeList<ProductData> req;
+        private NativeList<ProductData> man;
 
-        private BuildingControlPanelUI _controlPanelUI;
+        private BuildingControlPanelUI _buildingUI;
 
         protected override void OnCreate()
         {
@@ -39,14 +41,14 @@ namespace Jrd.Gameplay.Building.ControlPanel
             _sys = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
 
-            _controlPanelUI = BuildingControlPanelUI.Instance;
+            _buildingUI = BuildingControlPanelUI.Instance;
 
-            _controlPanelUI.MoveButton.clicked += MoveButton;
-            _controlPanelUI.LoadButton.clicked += LoadButton;
-            _controlPanelUI.TakeButton.clicked += TakeButton;
-            _controlPanelUI.UpgradeButton.clicked += UpgradeButton;
-            _controlPanelUI.BuffButton.clicked += BuffButton;
-            _controlPanelUI.InstantDeliveryButton.clicked += InstantDeliveryButton;
+            _buildingUI.MoveButton.clicked += MoveButton;
+            _buildingUI.LoadButton.clicked += LoadButton;
+            _buildingUI.TakeButton.clicked += TakeButton;
+            _buildingUI.UpgradeButton.clicked += UpgradeButton;
+            _buildingUI.BuffButton.clicked += BuffButton;
+            _buildingUI.InstantDeliveryButton.clicked += InstantDeliveryButton;
         }
 
 
@@ -54,8 +56,10 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
 
-            foreach (var (buildingData, warehouseProductsData, reqdata, mandata, entity) in SystemAPI
-                         .Query<BuildingData, WarehouseProductsData, RequiredProductsData, ManufacturedProductsData>()
+            foreach (var (buildingData, warehouseProductsData, reqdata, mandata, inProductionData, manufacturedData,
+                         entity) in SystemAPI
+                         .Query<BuildingData, WarehouseProductsData, RequiredProductsData, ManufacturedProductsData,
+                             InProductionData, ManufacturedData>()
                          .WithAll<InitializeTag, SelectedBuildingTag>()
                          .WithEntityAccess())
             {
@@ -103,7 +107,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             }
         }
 
-        private void SetStorageTimer(float max, float value) => _controlPanelUI.SetTimerText(max, value);
+        private void SetStorageTimer(float max, float value) => _buildingUI.SetTimerText(max, value);
 
         public void MoveButton()
         {
@@ -138,26 +142,26 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetMainInfo()
         {
-            _controlPanelUI.SetLevel(_buildingData.Level);
+            _buildingUI.SetLevel(_buildingData.Level);
         }
 
         private void SetSpecsInfo()
         {
             // TODO refact
-            _controlPanelUI.SetSpecName(Spec.Productivity,
-                req.ElementAt(0)._productName.ToString());
-            _controlPanelUI.SetSpecName(Spec.LoadCapacity,
-                req.ElementAt(0)._productName.ToString());
-            _controlPanelUI.SetSpecName(Spec.WarehouseCapacity,
-                man.ElementAt(0)._productName.ToString());
+            _buildingUI.SetSpecName(Spec.Productivity,
+                req.ElementAt(0).Name.ToString());
+            _buildingUI.SetSpecName(Spec.LoadCapacity,
+                req.ElementAt(0).Name.ToString());
+            _buildingUI.SetSpecName(Spec.WarehouseCapacity,
+                man.ElementAt(0).Name.ToString());
 
-            _controlPanelUI.SetProductivity(_buildingData.ItemsPerHour);
-            _controlPanelUI.SetLoadCapacity(_buildingData.LoadCapacity);
-            _controlPanelUI.SetStorageCapacity(_buildingData.MaxStorage);
+            _buildingUI.SetProductivity(_buildingData.ItemsPerHour);
+            _buildingUI.SetLoadCapacity(_buildingData.LoadCapacity);
+            _buildingUI.SetStorageCapacity(_buildingData.MaxStorage);
         }
 
 
-        private void SetProductionLineInfo() => _controlPanelUI.SetLineInfo(req, man);
+        private void SetProductionLineInfo() => _buildingUI.SetLineInfo(req, man);
 
         private void SetItemsToStorages()
         {
@@ -167,20 +171,26 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToWarehouse()
         {
-            NativeList<ProductData> warehouseProductsList =
-                _warehouseData.GetProductsList(req);
+            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsList(req);
 
-            _controlPanelUI.SetWarehouseItems(warehouseProductsList);
+            _buildingUI.SetItems(_buildingUI.WarehouseUI, warehouseProductsList);
+
             warehouseProductsList.Dispose();
         }
 
         private void SetItemsToMainStorage()
         {
-            NativeList<ProductData> mainStorageProductsList =
-                _mainStorageData.GetMatchingProducts(req);
+            NativeList<ProductData> mainStorageProductsList = _mainStorageData.GetMatchingProducts(req);
 
-            _controlPanelUI.SetStorageItems(mainStorageProductsList);
+            _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
+
             mainStorageProductsList.Dispose();
+        }
+
+        public void SetItemsToProduction()
+        {
+            _buildingUI.SetItems(_buildingUI.InProductionBoxUI, _productionData.ProductsIn);
+            _buildingUI.SetItems(_buildingUI.ManufacturedBoxUI, _productionData.ProductsOut);
         }
     }
 }

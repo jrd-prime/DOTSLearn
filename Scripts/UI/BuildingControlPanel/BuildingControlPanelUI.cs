@@ -7,33 +7,51 @@ using UnityEngine.UIElements;
 
 namespace Jrd.UI.BuildingControlPanel
 {
-    
-    
-    
+    /// <summary>
+    /// Contains methods for UI with container for list products items
+    /// </summary>
+    public interface IProductsItemsContainer
+    {
+        /// <summary>
+        /// Set items in UI building control panel
+        /// </summary>
+        public void SetItems(NativeList<ProductData> productsData);
+
+        /// <summary>
+        /// Set empty UI for storage if items list empty
+        /// </summary>
+        public void SetEmptyContainerItems();
+
+        /// <summary>
+        /// Update item quantity if panel opened and quantity changed
+        /// </summary>
+        public void UpdateItemQuantity(object item, int value);
+    }
+
     /// <summary>
     /// <para><b>Is responsible for all communication with parts of the building control panel UI</b></para>
-    /// <para><see cref="ProdLineUI"/> Production line</para>
-    /// <para><see cref="SpecsUI"/> Specifications</para>
-    /// <para><see cref="WarehouseUI"/> Building warehouse</para>
-    /// <para><see cref="MainStorageUI"/> Main storage UI in building control panel with matching products for this type of building</para>
-    /// <para><see cref="TimerUI"/> Timers and any progress bars</para>
+    /// <para><see cref="ProdLineUI"/> - Production line.
+    /// <see cref="SpecsUI"/> - Specifications.
+    /// <see cref="WarehouseUI"/> - Building warehouse.
+    /// <see cref="MainStorageUI"/> - Main storage UI in building control panel with matching products for this type of building.
+    /// <see cref="TimerUI"/> - Timers and any progress bars.
+    /// <see cref="InProductionBoxUI"/> - Production required items UI.
+    /// <see cref="ManufacturedBoxUI"/> - Production manufactured items UI</para>
     /// </summary>
     public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBcpSpecs, IBcpTimer
     {
-        private ProdLineUI _prodLineUI;
-        private IBcpSpecs _specsUI;
-        private IBcpStorage _warehouseUI;
-        private IBcpStorage _storage;
-        private TimerUI _timer;
-        private IBcpProductionBox _requiredUI;
-        private IBcpProductionBox _manufacturedUI;
+        public ProdLineUI ProdLineUI { get; private set; }
+        public IBcpSpecs SpecsUI { get; private set; }
+        public IProductsItemsContainer WarehouseUI { get; private set; }
+        public IProductsItemsContainer StorageUI { get; private set; }
+        public TimerUI TimerUI { get; private set; }
+        public IProductsItemsContainer InProductionBoxUI { get; private set; }
+        public IProductsItemsContainer ManufacturedBoxUI { get; private set; }
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
         [SerializeField] private VisualTreeAsset _internalStorageItemTemplate;
         [SerializeField] private VisualTreeAsset _boxItemTemplate;
-
-        #region VisualElementsVars
 
         // Buttons
         public Button TakeButton;
@@ -46,8 +64,6 @@ namespace Jrd.UI.BuildingControlPanel
         // Common Labels
         protected Label LevelLabel;
 
-        #endregion
-
         public static BuildingControlPanelUI Instance { private set; get; }
 
         protected void Awake()
@@ -57,8 +73,6 @@ namespace Jrd.UI.BuildingControlPanel
 
         protected void OnEnable()
         {
-            #region InitVisualElements
-
             PanelIdName = BCPNamesID.PanelId;
             PanelTitleIdName = BCPNamesID.PanelTitleId;
             CloseButtonId = BCPNamesID.CloseButtonId;
@@ -76,8 +90,6 @@ namespace Jrd.UI.BuildingControlPanel
             InstantDeliveryButton = Panel.Q<Button>("instant-delivery-button");
             // Labels
             LevelLabel = Panel.Q<Label>(BCPNamesID.LevelLabelId);
-            // BuildingStorageNameLabel = Panel.Q<Label>(BuildingStorageNameLabelId);
-            // MainStorageNameLabel = Panel.Q<Label>(MainStorageNameLabelId);
 
             UpgradeButton.RegisterCallback<ClickEvent>(Callback);
             BuffButton.RegisterCallback<ClickEvent>(Callback);
@@ -85,14 +97,13 @@ namespace Jrd.UI.BuildingControlPanel
             LoadButton.RegisterCallback<ClickEvent>(Callback);
             TakeButton.RegisterCallback<ClickEvent>(Callback);
 
-            var ToogleCheck = Panel.Q<VisualElement>("toggle-check");
-            ToogleCheck.RegisterCallback<ClickEvent>(evt =>
+            var toggleCheck = Panel.Q<VisualElement>("toggle-check");
+            toggleCheck.RegisterCallback<ClickEvent>(evt =>
             {
                 Debug.Log("toggle click");
-                ToogleCheck.style.backgroundColor = new StyleColor(new Color(74, 91, 63, 1));
+                toggleCheck.style.backgroundColor = new StyleColor(new Color(74, 91, 63, 1));
             });
 
-            #endregion
 
             if (Panel == null) return;
             base.HidePanel();
@@ -103,13 +114,13 @@ namespace Jrd.UI.BuildingControlPanel
                 throw new NullReferenceException("Add templates to " + this);
             }
 
-            _prodLineUI = new ProdLineUI(Panel, _prodLineItemTemplate, _prodLineArrowTemplate);
-            _specsUI = new SpecsUI(Panel);
-            _warehouseUI = new WarehouseUI(Panel, _internalStorageItemTemplate);
-            _storage = new MainStorageUI(Panel, _internalStorageItemTemplate);
-            _timer = new TimerUI(Panel);
-            _requiredUI = new RequiredBoxUI(Panel, _boxItemTemplate);
-            _manufacturedUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
+            ProdLineUI = new ProdLineUI(Panel, _prodLineItemTemplate, _prodLineArrowTemplate);
+            SpecsUI = new SpecsUI(Panel);
+            WarehouseUI = new WarehouseUI(Panel, _internalStorageItemTemplate);
+            StorageUI = new MainStorageUI(Panel, _internalStorageItemTemplate);
+            TimerUI = new TimerUI(Panel);
+            InProductionBoxUI = new InProductionBoxUI(Panel, _boxItemTemplate);
+            ManufacturedBoxUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
 
             PanelCloseButton.clicked += OnCloseButton;
         }
@@ -137,28 +148,23 @@ namespace Jrd.UI.BuildingControlPanel
         protected override void OnCloseButton() => HidePanel();
 
         // Production line methods
-        public void SetLineInfo(NativeList<ProductionProductData> required,
-            NativeList<ProductionProductData> manufactured) =>
-            _prodLineUI.SetLineInfo(required, manufactured);
+        public void SetLineInfo(NativeList<ProductData> required,
+            NativeList<ProductData> manufactured) =>
+            ProdLineUI.SetLineInfo(required, manufactured);
 
         // Specs methods
-        public void SetSpecName(Spec specName, string value) => _specsUI.SetSpecName(specName, value);
-        public void SetProductivity(float value) => _specsUI.SetProductivity(value);
-        public void SetLoadCapacity(int value) => _specsUI.SetLoadCapacity(value);
-        public void SetStorageCapacity(int value) => _specsUI.SetStorageCapacity(value);
+        public void SetSpecName(Spec specName, string value) => SpecsUI.SetSpecName(specName, value);
+        public void SetProductivity(float value) => SpecsUI.SetProductivity(value);
+        public void SetLoadCapacity(int value) => SpecsUI.SetLoadCapacity(value);
+        public void SetStorageCapacity(int value) => SpecsUI.SetStorageCapacity(value);
 
         // Timer // TODO refact
-        public void SetTimerText(float max, float value) => _timer.SetTimerText(max, value);
+        public void SetTimerText(float max, float value) => TimerUI.SetTimerText(max, value);
 
-        // Storage methods
-        public void SetStorageItems(NativeList<ProductData> list) => _storage.SetItems(list);
-        public void SetWarehouseItems(NativeList<ProductData> list) => _warehouseUI.SetItems(list);
-
-        // Production methods
-        public void SetRequiredItems(NativeList<ProductData> list) => _requiredUI.SetItems(list);
-        public void SetManufacturedItems(NativeList<ProductData> list) => _manufacturedUI.SetItems(list);
+        public void SetItems(IProductsItemsContainer ui, NativeList<ProductData> productsData) =>
+            ui.SetItems(productsData);
 
         public void UpdateItemQuantity(object item, int value) =>
-            _storage.UpdateItemQuantity(item, value);
+            StorageUI.UpdateItemQuantity(item, value);
     }
 }

@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="production-line-item-container" src="project://database/Assets/UI/UXML/Templates/production-line-item-container.uxml?fileID=9197481963319205126&amp;guid=7ce7b3d2d42a7144b8a24877d6133d2c&amp;type=3#production-line-item-container" />
     <ui:Template name="production-line-separator" src="project://database/Assets/UI/UXML/Templates/production-line-arrow.uxml?fileID=9197481963319205126&amp;guid=64cc1aa55452c2a4d9a415df962b515d&amp;type=3#production-line-arrow" />
+    <ui:Template name="box-item-container" src="project://database/Assets/UI/UXML/Templates/box-item-container.uxml?fileID=9197481963319205126&amp;guid=36b99cdb1a5901840810b147058263b0&amp;type=3#box-item-container" />
     <Style src="project://database/Assets/UI_old/NewUSSFile.uss?fileID=7433441132597879392&amp;guid=ed7843854ad3185459de6a26a0417082&amp;type=3#NewUSSFile" />
     <Style src="project://database/Assets/UI_old/menu.uss?fileID=7433441132597879392&amp;guid=2b92cf12e22167942aa75b049d1760c2&amp;type=3#menu" />
     <Style src="project://database/Assets/UI/USS/Colors.uss?fileID=7433441132597879392&amp;guid=6aeba13d73f67964f8cfa554afd4cfcd&amp;type=3#Colors" />
@@ -53,8 +54,8 @@
                         <ui:Label tabindex="-1" text="#Required" parse-escape-sequences="true" display-tooltip-when-elided="true" name="req-box-label" style="font-size: 10px;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="req-box-items-cont" style="flex-grow: 0; position: absolute; width: 120px; background-color: rgba(105, 166, 98, 0); height: 48px; flex-direction: row; -unity-text-align: middle-center; align-items: center; justify-content: center; align-self: center; top: 34px;">
-                        <ui:VisualElement name="ico1" class="box-item-cont" style="width: 44px; height: 44px; -unity-text-align: middle-center; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
-                        <ui:VisualElement name="ico1" class="box-item-cont" style="width: 44px; height: 44px; -unity-text-align: middle-center; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
+                        <ui:Instance template="box-item-container" name="box-item-container" />
+                        <ui:Instance template="box-item-container" name="box-item-container" />
                     </ui:VisualElement>
                     <ui:VisualElement name="req-box-btn-cont" style="flex-grow: 1; width: 120px; height: 32px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 10px; margin-top: 10px; align-items: center; justify-content: center;">
                         <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-load" class="green-color green-color3" style="position: absolute; left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 100px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); font-size: 10px;">
@@ -81,8 +82,8 @@
                         <ui:Label tabindex="-1" text="#Manufactured" parse-escape-sequences="true" display-tooltip-when-elided="true" name="man-box-label" style="font-size: 10px;" />
                     </ui:VisualElement>
                     <ui:VisualElement name="man-box-items-cont" style="flex-grow: 0; position: absolute; width: 120px; background-color: rgba(105, 166, 98, 0); height: 48px; flex-direction: row; -unity-text-align: middle-center; align-items: center; justify-content: center; align-self: center; top: 34px;">
-                        <ui:VisualElement name="ico1" class="box-item-cont" style="width: 44px; height: 44px; -unity-text-align: middle-center; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
-                        <ui:VisualElement name="ico1" class="box-item-cont" style="width: 44px; height: 44px; -unity-text-align: middle-center; margin-top: 2px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px;" />
+                        <ui:Instance template="box-item-container" name="box-item-container" />
+                        <ui:Instance template="box-item-container" name="box-item-container" />
                     </ui:VisualElement>
                     <ui:VisualElement name="man-box-btn-cont" style="flex-grow: 1; width: 120px; height: 32px; background-color: rgba(166, 81, 81, 0); position: absolute; bottom: 10px; margin-top: 10px; align-items: center; justify-content: center;">
                         <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-take" class="green-color green-color3" style="position: absolute; left: 0; margin-top: 0; margin-right: 10px; margin-bottom: 0; margin-left: 10px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; width: 100px; height: 32px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; border-top-width: 0; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 0; border-left-color: rgb(101, 101, 101); border-right-color: rgb(101, 101, 101); border-top-color: rgb(101, 101, 101); border-bottom-color: rgb(101, 101, 101); font-size: 10px;">

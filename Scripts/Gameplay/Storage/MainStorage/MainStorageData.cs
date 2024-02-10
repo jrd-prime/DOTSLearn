@@ -20,16 +20,16 @@ namespace Jrd.Gameplay.Storage.MainStorage
 
         /// <summary>
         /// Matching products in <see cref="MainStorageData"/> for building WarehouseProductsData
-        /// <param name="requiredItemsList">list of <see cref="ProductionProductData"/></param>
+        /// <param name="requiredItemsList">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductionProductData> requiredItemsList)
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList)
         {
             var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
 
             for (var i = 0; i < requiredItemsList.Length; i++)
             {
-                Product product = requiredItemsList[i]._productName;
+                Product product = requiredItemsList[i].Name;
                 var key = (int)product;
 
                 if (!Values.ContainsKey(key) && Values[key] < 0) continue;

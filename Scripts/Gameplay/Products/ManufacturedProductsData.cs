@@ -6,6 +6,6 @@ namespace Jrd.Gameplay.Products
 {
     public struct ManufacturedProductsData : IComponentData
     {
-        public NativeList<ProductionProductData> Manufactured;
+        public NativeList<ProductData> Manufactured;
     }
 }

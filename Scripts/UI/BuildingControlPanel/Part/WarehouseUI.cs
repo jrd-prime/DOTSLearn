@@ -2,7 +2,7 @@
 
 namespace Jrd.UI.BuildingControlPanel.Part
 {
-    public class WarehouseUI : Storage
+    public class WarehouseUI : StorageUI
     {
         public WarehouseUI(VisualElement panel, VisualTreeAsset warehouseItemTemplate)
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products;
 using Jrd.ScriptableObjects;
@@ -37,17 +36,29 @@ namespace Jrd.GameStates.BuildingState.Prefabs
                     for (var i = 0; i < count; i++)
                     {
                         buildingRequiredItemsBuffer.Add(new BuildingRequiredItemsBuffer
-                            { Value = buildingData.RequiredItems[i] });
+                        {
+                            Value = new ProductData
+                            {
+                                Name = buildingData.RequiredItems[i]._productDataSo.Product,
+                                Quantity = buildingData.RequiredItems[i]._quantity
+                            }
+                        });
                     }
 
-                    count = buildingData.RequiredItems.Count;
+                    int count1 = buildingData.ManufacturedItems.Count;
 
-                    if (count == 0) return;
+                    if (count1 == 0) return;
 
-                    for (var i = 0; i < count; i++)
+                    for (var i = 0; i < count1; i++)
                     {
                         buildingManufacturedItemsBuffer.Add(new BuildingManufacturedItemsBuffer()
-                            { Value = buildingData.ManufacturedItems[i] });
+                        {
+                            Value = new ProductData()
+                            {
+                                Name = buildingData.ManufacturedItems[i]._productDataSo.Product,
+                                Quantity = buildingData.ManufacturedItems[i]._quantity
+                            }
+                        });
                     }
                 }
             }
@@ -98,16 +109,16 @@ namespace Jrd.GameStates.BuildingState.Prefabs
 
     public struct BuildingRequiredItemsBuffer : IBufferElementData
     {
-        public ProductionProductData Value;
+        public ProductData Value;
     }
 
     public struct BuildingManufacturedItemsBuffer : IBufferElementData
     {
-        public ProductionProductData Value;
+        public ProductData Value;
     }
 
     public struct BuildingProductionItemsBuffer
     {
-        public ProductionProductData Value;
+        public ProductData Value;
     }
 }

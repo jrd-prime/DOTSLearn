@@ -7,7 +7,7 @@ namespace Jrd.UI.BuildingControlPanel.Part
         public ManufacturedBoxUI(VisualElement panel, VisualTreeAsset boxItemTemplate)
         {
             Container = panel.Q<VisualElement>(BCPNamesID.ManufacturedBoxContainerId);
-            NameLabel = Container.Q<Label>(BCPNamesID.ManufacturedBoxNameLabelId);
+            NameLabel = panel.Q<Label>(BCPNamesID.ManufacturedBoxNameLabelId);
             ItemContainerTemplate = boxItemTemplate;
 
         }
