@@ -5,12 +5,12 @@ using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.PlayState;
+using Jrd.UI;
 using Jrd.UI.BuildingControlPanel;
 using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 using Utils = Jrd.MyUtils.Utils;
 
 namespace Jrd.Gameplay.Building.ControlPanel
@@ -22,17 +22,14 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private Entity _entity;
         private MainStorageData _mainStorageData;
 
+        private BuildingDataAspect _aspect;
         private WarehouseProducts _warehouseData;
-
-        // private ProductionData _productionData;
         private BuildingData _buildingData;
-
-
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
 
         private BuildingControlPanelUI _buildingUI;
-        private BuildingDataAspect _aspect;
+        private TextPopUpMono _textPopUpUI;
 
         protected override void OnCreate()
         {
@@ -47,6 +44,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             _mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
 
             _buildingUI = BuildingControlPanelUI.Instance;
+            _textPopUpUI = TextPopUpMono.Instance;
 
             _buildingUI.MoveButton.clicked += MoveButton;
             _buildingUI.LoadButton.clicked += LoadButton;
@@ -61,18 +59,18 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
 
-            foreach (var (aspect, entity) in SystemAPI
+            foreach (var aspect in SystemAPI
                          .Query<BuildingDataAspect>()
-                         .WithAll<InitializeTag, SelectedBuildingTag>()
-                         .WithEntityAccess())
+                         .WithAll<InitializeTag, SelectedBuildingTag>())
             {
                 _aspect = aspect;
                 _required = aspect.RequiredProductsData.Required;
                 _manufactured = aspect.ManufacturedProductsData.Manufactured;
                 _warehouseData = aspect.BuildingProductsData.WarehouseProductsData;
                 _buildingData = aspect.BuildingData;
-                _entity = entity;
-                _ecb.RemoveComponent<InitializeTag>(entity);
+                _entity = aspect.BuildingData.Self;
+
+                _ecb.RemoveComponent<InitializeTag>(_entity);
 
                 SetMainInfo();
                 SetSpecsInfo();
@@ -83,6 +81,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
             if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_entity))
             {
+                Debug.LogWarning("Update Storages Data Tag>");
                 _ecb.RemoveComponent<UpdateStoragesDataTag>(_entity);
             }
 
@@ -115,16 +114,20 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         public void MoveButton()
         {
+            _textPopUpUI.ShowPopUp("move btn");
             //TODO disable button if in storage 0 req products
             //TODO add move time to button
 
-            _ecb.AddComponent<MoveRequestTag>(_entity);
+            _ecb.AddComponent<ProductsToWarehouseRequestTag>(_entity);
             _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
         }
 
         public void LoadButton()
         {
-            Debug.LogWarning("load");
+            _textPopUpUI.ShowPopUp("load btn");
+            
+            _ecb.AddComponent<ProductsToProductionBoxRequestTag>(_entity);
+            _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
         }
 
         public void TakeButton()
@@ -171,7 +174,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToWarehouse()
         {
-            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsList(_required);
+            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsDataList();
 
             _buildingUI.SetItems(_buildingUI.WarehouseUI, warehouseProductsList);
 

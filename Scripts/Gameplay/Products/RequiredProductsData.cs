@@ -1,7 +1,6 @@
 ﻿using System;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
 
 namespace Jrd.Gameplay.Products
 {

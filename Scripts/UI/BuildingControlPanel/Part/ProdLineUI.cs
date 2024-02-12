@@ -51,7 +51,6 @@ namespace Jrd.UI.BuildingControlPanel.Part
         {
             // TODO all method / refact
 
-            Debug.LogWarning(item + " = " + itemCount);
             VisualElement template = _itemContainerTemplate.Instantiate();
 
             var itemContainer = template.Q<VisualElement>(BCPNamesID.ProdLineItemContainerId);

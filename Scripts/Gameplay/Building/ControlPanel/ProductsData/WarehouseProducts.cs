@@ -1,6 +1,8 @@
-﻿using Jrd.Gameplay.Products;
+﻿using System.Threading.Tasks;
+using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage;
 using Unity.Collections;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Building.ControlPanel.ProductsData
 {
@@ -22,7 +24,7 @@ namespace Jrd.Gameplay.Building.ControlPanel.ProductsData
 
         public void SetProductsList(NativeParallelHashMap<int, int> productsMap) => Value = productsMap;
 
-        public NativeList<ProductData> GetProductsList(NativeList<ProductData> buildingData)
+        public NativeList<ProductData> GetProductsDataList()
         {
             var a = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var value in Value)
@@ -38,20 +40,12 @@ namespace Jrd.Gameplay.Building.ControlPanel.ProductsData
         }
 
         // TODO warehouse capacity, stack capacity
-        public NativeList<ProductData> UpdateProductsQuantity(NativeList<ProductData> productsData)
+        public void UpdateProductsQuantity(NativeList<ProductData> productsData)
         {
-            var movedProductsList = new NativeList<ProductData>(0, Allocator.Temp);
             foreach (var product in productsData)
             {
                 Value[(int)product.Name] += product.Quantity;
-                movedProductsList.Add(new ProductData
-                {
-                    Name = product.Name,
-                    Quantity = product.Quantity
-                });
             }
-
-            return movedProductsList;
         }
 
         public void SetValues(NativeParallelHashMap<int, int> valuesHashMap)

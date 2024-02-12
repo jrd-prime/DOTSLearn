@@ -5,7 +5,7 @@ namespace Jrd.Gameplay.Products
     /// <summary>
     /// Move products to/from main storage
     /// </summary>
-    public struct MoveRequestTag : IComponentData
+    public struct ProductsToWarehouseRequestTag : IComponentData
     {
     }
 }

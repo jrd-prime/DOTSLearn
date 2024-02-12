@@ -43,6 +43,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
                          .WithEntityAccess())
             {
                 _entity = entity;
+                buildingData.ValueRW.Self = entity;
                 _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
                 _guid = buildingData.ValueRO.Guid;
                 _building = buildingData.ValueRW;
