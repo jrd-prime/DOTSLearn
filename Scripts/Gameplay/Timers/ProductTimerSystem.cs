@@ -1,9 +1,5 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
-using Jrd.GameStates.BuildingState.Prefabs;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -25,9 +21,8 @@ namespace Jrd.Gameplay.Timers
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
 
-            foreach (var (aspect, timer, entity) in SystemAPI
-                         .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>()
-                         .WithEntityAccess())
+            foreach (var (aspect, timer) in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>())
             {
                 if (timer.ValueRO.CurrentValue > 0)
                 {
@@ -40,6 +35,7 @@ namespace Jrd.Gameplay.Timers
                 if (timer.ValueRO.CurrentValue <= 0)
                 {
                     Debug.LogWarning("timer <= 0");
+                    _ecb.RemoveComponent<ProductsMoveTimerData>(aspect.Self);
                 }
             }
         }

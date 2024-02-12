@@ -1,6 +1,8 @@
-﻿using Jrd.Gameplay.Building.ControlPanel.ProductsData;
+﻿using System;
+using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Storage.MainStorage.Systems;
 using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -19,7 +21,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _sys;
         private EntityCommandBuffer _ecb;
-        private Entity _entity;
+        private Entity _buildingEntity;
         private MainStorageData _mainStorageData;
 
         private BuildingDataAspect _aspect;
@@ -30,6 +32,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private BuildingControlPanelUI _buildingUI;
         private TextPopUpMono _textPopUpUI;
+
 
         protected override void OnCreate()
         {
@@ -68,9 +71,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _manufactured = aspect.ManufacturedProductsData.Manufactured;
                 _warehouseData = aspect.BuildingProductsData.WarehouseProductsData;
                 _buildingData = aspect.BuildingData;
-                _entity = aspect.BuildingData.Self;
+                _buildingEntity = aspect.BuildingData.Self;
 
-                _ecb.RemoveComponent<InitializeTag>(_entity);
+                _ecb.RemoveComponent<InitializeTag>(_buildingEntity);
 
                 SetMainInfo();
                 SetSpecsInfo();
@@ -79,10 +82,17 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 SetItemsToProduction();
             }
 
-            if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_entity))
+            if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_buildingEntity))
             {
-                Debug.LogWarning("Update Storages Data Tag>");
-                _ecb.RemoveComponent<UpdateStoragesDataTag>(_entity);
+                Debug.LogWarning("Update Storages Data Tag");
+                _ecb.RemoveComponent<UpdateStoragesDataTag>(_buildingEntity);
+            }
+
+            if (SystemAPI.HasComponent<MainStorageDataUpdatedEvent>(_buildingEntity))
+            {
+                Debug.LogWarning("Main Storage Data Updated Event");
+                SetItemsToMainStorage();
+                _ecb.RemoveComponent<MainStorageDataUpdatedEvent>(_buildingEntity);
             }
 
             foreach (var moveTimer in SystemAPI.Query<RefRO<ProductsMoveTimerData>>())
@@ -92,19 +102,14 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
                 switch (timer)
                 {
-                    case > 0:
-                        // TODO refact
+                    case > 0f:
                         Debug.Log("Update timer UI");
                         SetStorageTimer(max, timer);
                         break;
-                    case <= 0.5f:
-                        // show timer finished
-
+                    case <= 0f:
                         Debug.Log("TIMER FINISHED");
-                        Debug.Log("Update storages UI");
                         SetStorageTimer(max, timer);
-                        SetItemsToStorages();
-                        _ecb.RemoveComponent<ProductsMoveTimerData>(_entity);
+                        SetItemsToWarehouse();
                         break;
                 }
             }
@@ -118,16 +123,16 @@ namespace Jrd.Gameplay.Building.ControlPanel
             //TODO disable button if in storage 0 req products
             //TODO add move time to button
 
-            _ecb.AddComponent<ProductsToWarehouseRequestTag>(_entity);
-            _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
+            _ecb.AddComponent<ProductsToWarehouseRequestTag>(_buildingEntity);
+            _ecb.AddComponent<UpdateStoragesDataTag>(_buildingEntity);
         }
 
         public void LoadButton()
         {
             _textPopUpUI.ShowPopUp("load btn");
-            
-            _ecb.AddComponent<ProductsToProductionBoxRequestTag>(_entity);
-            _ecb.AddComponent<UpdateStoragesDataTag>(_entity);
+
+            _ecb.AddComponent<ProductsToProductionBoxRequestTag>(_buildingEntity);
+            _ecb.AddComponent<UpdateStoragesDataTag>(_buildingEntity);
         }
 
         public void TakeButton()
@@ -145,7 +150,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             Debug.LogWarning("buff");
         }
 
-        private void InstantDeliveryButton() => _ecb.AddComponent<InstantBuffTag>(_entity);
+        private void InstantDeliveryButton() => _ecb.AddComponent<InstantBuffTag>(_buildingEntity);
 
         private void SetMainInfo()
         {
@@ -183,7 +188,8 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToMainStorage()
         {
-            NativeList<ProductData> mainStorageProductsList = _mainStorageData.GetMatchingProducts(_required);
+            NativeList<ProductData> mainStorageProductsList =
+                _mainStorageData.GetMatchingProducts(_required, Allocator.Temp);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 

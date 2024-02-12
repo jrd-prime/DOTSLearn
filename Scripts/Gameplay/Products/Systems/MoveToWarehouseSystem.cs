@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Jrd.Gameplay.Building;
+﻿using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -11,9 +11,11 @@ namespace Jrd.Gameplay.Products
     /// <summary>
     /// Moving products from main storage to building warehouse
     /// </summary>
+    [BurstCompile]
     public partial struct MoveToWarehouseSystem : ISystem
     {
         private BuildingDataAspect _aspect;
+        private EntityCommandBuffer _ecb;
 
         public void OnCreate(ref SystemState state)
         {
@@ -22,66 +24,65 @@ namespace Jrd.Gameplay.Products
             state.RequireForUpdate<ProductsToWarehouseRequestTag>();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+            _ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            MainStorageData mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
-
-            foreach (var (aspect, requiredProductsData, entity) in SystemAPI
-                         .Query<BuildingDataAspect, RequiredProductsData>()
-                         .WithAll<ProductsToWarehouseRequestTag>()
-                         .WithEntityAccess())
+            foreach (var aspect in SystemAPI
+                         .Query<BuildingDataAspect>()
+                         .WithAll<ProductsToWarehouseRequestTag>())
             {
                 _aspect = aspect;
-                // 1 match
+
+                MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
+
                 NativeList<ProductData> matchingProducts =
-                    mainStorageData.GetMatchingProducts(requiredProductsData.Required);
+                    mainStorage.GetMatchingProducts(aspect.RequiredProductsData.Required, Allocator.Persistent);
 
-                // 2 timer
-                var movedProductsQuantity = GetMatchingProductsQuantity(matchingProducts) /2;
-                Debug.LogWarning($"matching products quantity = {GetMatchingProductsQuantity(matchingProducts)}");
+                SetProductsToDelivery(matchingProducts);
+                SetDeliveryTimer(matchingProducts);
+                ReduceProductsInMainStorage();
 
-                ecb.RemoveComponent<ProductsToWarehouseRequestTag>(entity);
-                ecb.AddComponent(entity, new ProductsMoveTimerData
-                {
-                    StarValue = movedProductsQuantity,
-                    CurrentValue = movedProductsQuantity,
-                });
-
-                // 3 reduce main
-                // update quantity moved products in main storage
-                mainStorageData.ReduceProductsQuantityByKey(matchingProducts);
-
-                // 4 timer end - increase warehouse
-                IncreaseProductsQuantityInWarehose(matchingProducts, movedProductsQuantity);
-
-                Debug.Log("Timer set. Move time: " + movedProductsQuantity);
+                _ecb.RemoveComponent<ProductsToWarehouseRequestTag>(aspect.Self);
             }
         }
 
-        private async void IncreaseProductsQuantityInWarehose(NativeList<ProductData> matchingProducts,
-            int delay)
+        private void SetProductsToDelivery(NativeList<ProductData> productsList)
         {
-            Debug.LogWarning("IN UPDATE1");
-            await Task.Delay(delay);
-
-            Debug.LogWarning("UPDATe START");
-            _aspect.BuildingProductsData.WarehouseProductsData.UpdateProductsQuantity(matchingProducts);
+            _ecb.AddComponent(_aspect.Self, new ProductsToDeliveryData { Value = productsList });
         }
 
-
-        private int GetMatchingProductsQuantity(NativeList<ProductData> matchingProducts)
+        private void SetDeliveryTimer(NativeList<ProductData> productsList)
         {
-            var a = 0;
+            var movedProductsQuantity = GetProductsQuantity(productsList) / 4;
 
-            foreach (var q in matchingProducts)
+            _ecb.AddComponent(_aspect.Self, new ProductsMoveTimerData
             {
-                a += q.Quantity;
+                StarValue = movedProductsQuantity,
+                CurrentValue = movedProductsQuantity
+            });
+
+            Debug.Log("Timer set. Move time: " + movedProductsQuantity + " sec.");
+        }
+
+        private void ReduceProductsInMainStorage()
+        {
+            _ecb.AddComponent<ReduceMainStorageProductsTag>(_aspect.Self);
+        }
+
+        [BurstCompile]
+        private int GetProductsQuantity(NativeList<ProductData> productData)
+        {
+            int quantity = 0;
+
+            foreach (var product in productData)
+            {
+                quantity += product.Quantity;
             }
 
-            return a;
+            return quantity;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Jrd.Gameplay.Storage
 
     public interface IMainStorage : IStorage
     {
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList);
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList, Allocator allocator);
     }
 
     public interface IWarehouse : IStorage

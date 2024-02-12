@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,20 +19,23 @@ namespace Jrd.UI.BuildingControlPanel.Part
             _timerProgress.style.width = 0;
         }
 
-        public void SetTimerText(float max, float value)
+        public async void SetTimerText(float max, float value)
         {
             var round = Math.Round(value);
 
-            Debug.LogWarning("set timer progress to " + round);
+            Debug.LogWarning("set timer progress to ");
             var t = _width / max;
 
             _timerProgress.style.width = 130 - (float)((_width * round) / max);
 
-            _timerLabel.text = round.ToString() + "s";
+            _timerLabel.text = "In delivery: " + round + "s";
             if (round <= 0.3)
             {
                 _timerLabel.text = "Delivered!";
             }
+
+            await Task.Delay(1000);
+            _timerLabel.text = "";
         }
     }
 

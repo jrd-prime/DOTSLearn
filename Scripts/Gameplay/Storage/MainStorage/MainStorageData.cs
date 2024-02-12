@@ -23,9 +23,10 @@ namespace Jrd.Gameplay.Storage.MainStorage
         /// <param name="requiredItemsList">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList)
+        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList,
+            Allocator allocator)
         {
-            var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
+            var productDataList = new NativeList<ProductData>(0, allocator);
 
             for (var i = 0; i < requiredItemsList.Length; i++)
             {

@@ -1,4 +1,5 @@
-﻿using Jrd.Gameplay.Building;
+﻿using System;
+using Jrd.Gameplay.Building;
 using Jrd.UI;
 using Unity.Collections;
 using Unity.Entities;
@@ -11,6 +12,7 @@ namespace Jrd.Gameplay.Products
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<ProductsToProductionBoxRequestTag>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -27,6 +29,7 @@ namespace Jrd.Gameplay.Products
 
                 NativeParallelHashMap<int, int> warehouseProducts =
                     aspect.BuildingProductsData.WarehouseProductsData.Value;
+
                 NativeList<ProductData> requiredQuantity = aspect.RequiredProductsData.Required;
 
 
@@ -43,27 +46,34 @@ namespace Jrd.Gameplay.Products
             }
         }
 
-        private bool IsWarehouseHasRequiredQuantityProducts(NativeParallelHashMap<int, int> warehouseCurrentProducts,
-            NativeList<ProductData> requiredQuantity)
+        private bool IsWarehouseHasRequiredQuantityProducts(NativeParallelHashMap<int, int> warehouseProducts,
+            NativeList<ProductData> requirements)
         {
-            var a = false;
-
-            foreach (var q in requiredQuantity)
+            // Delete
+            foreach (var q in requirements)
             {
-                if (warehouseCurrentProducts[(int)q.Name] >= q.Quantity)
+                if (warehouseProducts[(int)q.Name] >= q.Quantity)
                 {
                     Debug.LogWarning(
-                        $"product {q.Name} in warehouse {warehouseCurrentProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
+                        $"product {q.Name} in warehouse {warehouseProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
                 }
                 else
                 {
                     Debug.LogWarning(
-                        $"product {q.Name} in warehouse {warehouseCurrentProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
+                        $"product {q.Name} in warehouse {warehouseProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
                 }
             }
 
+            bool first = warehouseProducts[(int)requirements[0].Name] >= requirements[0].Quantity;
 
-            return a;
+            //TODO LOOK Refactor this 
+            return requirements.Length switch
+            {
+                0 => throw new Exception("Building without requirements!!! OMG!!!"),
+                1 => first,
+                2 => first && warehouseProducts[(int)requirements[1].Name] >= requirements[1].Quantity,
+                _ => false
+            };
         }
     }
 }
