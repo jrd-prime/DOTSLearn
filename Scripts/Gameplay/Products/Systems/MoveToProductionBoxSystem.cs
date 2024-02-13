@@ -1,5 +1,5 @@
-﻿using System;
-using Jrd.Gameplay.Building;
+﻿using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.UI;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,8 +7,15 @@ using UnityEngine;
 
 namespace Jrd.Gameplay.Products
 {
+    /// <summary>
+    /// Move products from the building warehouse to production box<br/>
+    /// <see cref="ProductsToProductionBoxRequestTag"/>
+    /// </summary>
     public partial struct MoveToProductionBoxSystem : ISystem
     {
+        private WarehouseProducts _warehouseProducts;
+        private NativeList<ProductData> _requiredQuantity;
+
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
@@ -27,15 +34,36 @@ namespace Jrd.Gameplay.Products
             {
                 Debug.LogWarning("to production box request");
 
-                NativeParallelHashMap<int, int> warehouseProducts =
-                    aspect.BuildingProductsData.WarehouseProductsData.Value;
+                _warehouseProducts = aspect.BuildingProductsData.WarehouseProductsData;
+                _requiredQuantity = aspect.RequiredProductsData.Required;
 
-                NativeList<ProductData> requiredQuantity = aspect.RequiredProductsData.Required;
+                bool isEnoughProducts = _warehouseProducts.IsEnoughRequiredProductsInStorage(_requiredQuantity);
 
-
-                if (IsWarehouseHasRequiredQuantityProducts(warehouseProducts, requiredQuantity))
+                if (isEnoughProducts)
                 {
                     TextPopUpMono.Instance.ShowPopUp("quantity ok");
+
+
+                    // 1 prepare prods
+                    NativeList<ProductData> preparedProducts =
+                        _warehouseProducts.GetPreparedProductsForProduction(_requiredQuantity,
+                            aspect.BuildingData.LoadCapacity);
+
+                    foreach (var q in preparedProducts)
+                    {
+                        Debug.LogWarning($"prepared: {q.Name} / {q.Quantity}");
+                    }
+
+                    // 2 reduce in warehouse
+
+
+                    // 3 increase in productin box
+
+
+                    // 4 start production
+
+
+                    // 5 production settings to building SO
                 }
                 else
                 {
@@ -44,36 +72,6 @@ namespace Jrd.Gameplay.Products
 
                 ecb.RemoveComponent<ProductsToProductionBoxRequestTag>(aspect.BuildingData.Self);
             }
-        }
-
-        private bool IsWarehouseHasRequiredQuantityProducts(NativeParallelHashMap<int, int> warehouseProducts,
-            NativeList<ProductData> requirements)
-        {
-            // Delete
-            foreach (var q in requirements)
-            {
-                if (warehouseProducts[(int)q.Name] >= q.Quantity)
-                {
-                    Debug.LogWarning(
-                        $"product {q.Name} in warehouse {warehouseProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
-                }
-                else
-                {
-                    Debug.LogWarning(
-                        $"product {q.Name} in warehouse {warehouseProducts[(int)q.Name]} and reqQuantity = {q.Quantity}");
-                }
-            }
-
-            bool first = warehouseProducts[(int)requirements[0].Name] >= requirements[0].Quantity;
-
-            //TODO LOOK Refactor this 
-            return requirements.Length switch
-            {
-                0 => throw new Exception("Building without requirements!!! OMG!!!"),
-                1 => first,
-                2 => first && warehouseProducts[(int)requirements[1].Name] >= requirements[1].Quantity,
-                _ => false
-            };
         }
     }
 }

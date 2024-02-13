@@ -9,7 +9,8 @@ using UnityEngine;
 namespace Jrd.Gameplay.Products
 {
     /// <summary>
-    /// Moving products from main storage to building warehouse
+    /// Moving products from main storage to building warehouse<br/>
+    /// <see cref="ProductsToWarehouseRequestTag"/>
     /// </summary>
     [BurstCompile]
     public partial struct MoveToWarehouseSystem : ISystem

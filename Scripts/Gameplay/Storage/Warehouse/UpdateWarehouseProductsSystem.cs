@@ -26,7 +26,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
             {
                 if (!(timer.CurrentValue <= 0)) continue;
                 Debug.Log("UPDATE PRODS");
-                aspect.BuildingProductsData.WarehouseProductsData.UpdateProductsQuantity(products.Value);
+                aspect.BuildingProductsData.WarehouseProductsData.IncreaseProductsQuantity(products.Value);
                 ecb.RemoveComponent<ProductsToDeliveryData>(aspect.Self);
             }
         }

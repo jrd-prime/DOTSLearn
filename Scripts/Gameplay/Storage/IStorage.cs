@@ -1,8 +1,5 @@
 ﻿using Jrd.Gameplay.Products;
-using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.ScriptableObjects;
 using Unity.Collections;
-using Unity.Entities;
 
 namespace Jrd.Gameplay.Storage
 {
