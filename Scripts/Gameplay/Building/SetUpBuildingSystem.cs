@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel.Component;
+using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage._2_Warehouse.Component;
@@ -72,6 +73,7 @@ namespace Jrd.Gameplay.Building
             // Main
             SetPosition();
             SetEntityName();
+            SetProductionState();
             BuildingTags();
 
             // Init products
@@ -82,6 +84,9 @@ namespace Jrd.Gameplay.Building
             // Save?
             AddBuildingToGameBuildingsList(ref state);
         }
+
+        private void SetProductionState() => _building.ProductionState = ProductionState.Init;
+
 
         private void BuildingTags()
         {

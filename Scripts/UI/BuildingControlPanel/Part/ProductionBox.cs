@@ -33,19 +33,19 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
                 Container.Add(item);
 
-                var an = item
-                    .Q<VisualElement>("prod-line-item-icon-cont")?
-                    .experimental
-                    .animation
-                    .Scale(1.2f, 100);
-                if (an != null)
-                {
-                    an.onAnimationCompleted = () => item
-                        .Q<VisualElement>("prod-line-item-icon-cont")
-                        .experimental
-                        .animation
-                        .Scale(1f, 100);
-                }
+                // var an = item
+                //     .Q<VisualElement>("prod-line-item-icon-cont")?
+                //     .experimental
+                //     .animation
+                //     .Scale(1.2f, 100);
+                // if (an != null)
+                // {
+                //     an.onAnimationCompleted = () => item
+                //         .Q<VisualElement>("prod-line-item-icon-cont")
+                //         .experimental
+                //         .animation
+                //         .Scale(1f, 100);
+                // }
             }
         }
 
@@ -59,6 +59,8 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
+            
+            Debug.Log(iconPath);
             var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
 
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);

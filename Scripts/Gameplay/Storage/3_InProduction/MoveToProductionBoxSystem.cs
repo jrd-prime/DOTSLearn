@@ -1,7 +1,6 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._2_Warehouse;
 using Jrd.Gameplay.Storage._2_Warehouse.Component;
 using Jrd.Gameplay.Storage._3_InProduction.Component;
 using Jrd.Gameplay.Storage.Service;
@@ -74,7 +73,7 @@ namespace Jrd.Gameplay.Storage._3_InProduction
                     ecb.AddComponent<InProductionDataUpdatedEvent>(aspect.BuildingData.Self);
 
                     // 4 start production
-
+                    aspect.SetProductionState(ProductionState.EnoughProducts);
 
                     // 5 production settings to building SO
                 }
