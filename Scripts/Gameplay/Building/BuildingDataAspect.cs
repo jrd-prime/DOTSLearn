@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Storage._4_Manufactured;
 using Unity.Entities;
 
 namespace Jrd.Gameplay.Building

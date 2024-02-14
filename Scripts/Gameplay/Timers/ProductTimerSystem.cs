@@ -1,5 +1,5 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Storage._1_MainStorage;
 using Unity.Entities;
 using UnityEngine;
 

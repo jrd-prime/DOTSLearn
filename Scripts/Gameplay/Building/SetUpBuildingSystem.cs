@@ -1,7 +1,8 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Storage;
+using Jrd.Gameplay.Storage._2_Warehouse;
+using Jrd.Gameplay.Storage._3_InProduction;
+using Jrd.Gameplay.Storage._4_Manufactured;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.MyUtils;
 using Unity.Burst;
@@ -96,9 +97,12 @@ namespace Jrd.Gameplay.Building.TempBuilding
         {
             _bsEcb.AddComponent(_entity, new BuildingProductsData
             {
-                WarehouseProductsData = SetDefaultData<WarehouseProducts>(required),
-                InProductionData = SetDefaultData<InProductionProducts>(required),
-                ManufacturedData = SetDefaultData<ManufacturedProducts>(manufactured)
+                WarehouseProductsData = new WarehouseProductsData
+                    { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
+                InProductionData = new InProductionProductsData
+                    { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
+                ManufacturedData = new ManufacturedProducts
+                    { Value = Utils.ConvertProductsDataToHashMap(manufactured, Utils.ProductValues.ToDefault) }
             });
         }
 
@@ -148,20 +152,6 @@ namespace Jrd.Gameplay.Building.TempBuilding
             }
 
             return productsList;
-        }
-
-        /// <summary>
-        /// Convert list <see cref="ProductData"/> to hashmap, set <see cref="IBuildingProductsData"/> data quantity to 0
-        /// </summary>
-        private T SetDefaultData<T>(NativeList<ProductData> list) where T : IBuildingProductsData, new()
-        {
-            NativeParallelHashMap<int, int> productsMap =
-                Utils.ConvertProductsDataToHashMap(list, Utils.ProductValues.ToDefault);
-
-            T productsData = new();
-            productsData.SetProductsList(productsMap);
-
-            return productsData;
         }
 
         #endregion

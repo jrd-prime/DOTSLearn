@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.Warehouse
+namespace Jrd.Gameplay.Storage._2_Warehouse
 {
     /// <summary>
     /// 

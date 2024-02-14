@@ -1,5 +1,8 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel.ProductsData;
+using Jrd.Gameplay.Storage;
+using Jrd.Gameplay.Storage._2_Warehouse;
+using Jrd.Gameplay.Storage._3_InProduction;
+using Jrd.Gameplay.Storage.Service;
 using Jrd.UI;
 using Unity.Collections;
 using Unity.Entities;
@@ -13,7 +16,8 @@ namespace Jrd.Gameplay.Products
     /// </summary>
     public partial struct MoveToProductionBoxSystem : ISystem
     {
-        private WarehouseProducts _warehouseProducts;
+        private WarehouseProductsData _warehouseData;
+        private InProductionProductsData _productionData;
         private NativeList<ProductData> _requiredQuantity;
 
         public void OnCreate(ref SystemState state)
@@ -34,10 +38,14 @@ namespace Jrd.Gameplay.Products
             {
                 Debug.LogWarning("to production box request");
 
-                _warehouseProducts = aspect.BuildingProductsData.WarehouseProductsData;
+                _warehouseData = aspect.BuildingProductsData.WarehouseProductsData;
+                _productionData = aspect.BuildingProductsData.InProductionData;
                 _requiredQuantity = aspect.RequiredProductsData.Required;
 
-                bool isEnoughProducts = _warehouseProducts.IsEnoughRequiredProductsInStorage(_requiredQuantity);
+                WarehouseService warehouseService = WarehouseService.Instance;
+
+                bool isEnoughProducts =
+                    warehouseService.IsEnoughRequiredProducts(_warehouseData, _requiredQuantity);
 
                 if (isEnoughProducts)
                 {
@@ -45,9 +53,9 @@ namespace Jrd.Gameplay.Products
 
 
                     // 1 prepare prods
-                    NativeList<ProductData> preparedProducts =
-                        _warehouseProducts.GetPreparedProductsForProduction(_requiredQuantity,
-                            aspect.BuildingData.LoadCapacity);
+                    NativeList<ProductData> preparedProducts = warehouseService
+                        .GetProductsForProduction(_warehouseData, _requiredQuantity, aspect.BuildingData.LoadCapacity);
+
 
                     foreach (var q in preparedProducts)
                     {
@@ -55,11 +63,14 @@ namespace Jrd.Gameplay.Products
                     }
 
                     // 2 reduce in warehouse
-
+                    StorageService.ChangeProductsQuantity(_warehouseData, Operation.Reduce, preparedProducts);
 
                     // 3 increase in productin box
+                    StorageService.ChangeProductsQuantity(_productionData, Operation.Increase, preparedProducts);
 
-
+                    // 3.1 update ui
+                    
+                    
                     // 4 start production
 
 

@@ -1,10 +1,11 @@
 ﻿using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.Warehouse
+namespace Jrd.Gameplay.Storage._2_Warehouse
 {
     public partial struct UpdateWarehouseProductsSystem : ISystem
     {
@@ -21,12 +22,18 @@ namespace Jrd.Gameplay.Storage.Warehouse
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (aspect, products, timer) in SystemAPI
+            foreach (var (aspect, productsToDeliveryData, timer) in SystemAPI
                          .Query<BuildingDataAspect, ProductsToDeliveryData, ProductsMoveTimerData>())
             {
                 if (!(timer.CurrentValue <= 0)) continue;
+
                 Debug.Log("UPDATE PRODS");
-                aspect.BuildingProductsData.WarehouseProductsData.IncreaseProductsQuantity(products.Value);
+
+                StorageService.ChangeProductsQuantity(
+                    aspect.BuildingProductsData.WarehouseProductsData,
+                    Operation.Increase,
+                    productsToDeliveryData.Value);
+
                 ecb.RemoveComponent<ProductsToDeliveryData>(aspect.Self);
             }
         }

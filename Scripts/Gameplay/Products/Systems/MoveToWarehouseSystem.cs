@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Storage._1_MainStorage;
+using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
 using Unity.Burst;
 using Unity.Collections;
@@ -39,8 +40,10 @@ namespace Jrd.Gameplay.Products
 
                 MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
-                NativeList<ProductData> matchingProducts =
-                    mainStorage.GetMatchingProducts(aspect.RequiredProductsData.Required, Allocator.Persistent);
+                NativeList<ProductData> matchingProducts = StorageService.GetMatchingProducts(
+                    aspect.RequiredProductsData.Required,
+                    mainStorage.Values,
+                    Allocator.Persistent);
 
                 SetProductsToDelivery(matchingProducts);
                 SetDeliveryTimer(matchingProducts);

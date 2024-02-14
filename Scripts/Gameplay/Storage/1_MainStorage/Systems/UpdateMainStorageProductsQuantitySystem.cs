@@ -1,11 +1,12 @@
 ﻿using System;
 using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Storage.Service;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.MainStorage.Systems
+namespace Jrd.Gameplay.Storage._1_MainStorage.Systems
 {
     /// <summary>
     /// Increase or reduce the quantity of products in the main storage<br />
@@ -37,24 +38,26 @@ namespace Jrd.Gameplay.Storage.MainStorage.Systems
 
             MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
-            foreach (var (aspect, products) in SystemAPI
+            foreach (var (aspect, productsToDeliveryData) in SystemAPI
                          .Query<BuildingDataAspect, ProductsToDeliveryData>()
                          .WithAll<IncreaseMainStorageProductsTag>())
             {
                 Debug.Log("Increase main storage prods");
-                mainStorage.IncreaseProductsQuantityByKey(products.Value);
+
+                StorageService.ChangeProductsQuantity(mainStorage, Operation.Increase, productsToDeliveryData.Value);
 
                 ecb.AddComponent<MainStorageDataUpdatedEvent>(aspect.Self);
 
                 ecb.RemoveComponent<IncreaseMainStorageProductsTag>(aspect.Self);
             }
 
-            foreach (var (aspect, products) in SystemAPI
+            foreach (var (aspect, productsToDeliveryData) in SystemAPI
                          .Query<BuildingDataAspect, ProductsToDeliveryData>()
                          .WithAll<ReduceMainStorageProductsTag>())
             {
                 Debug.Log("Reduce main storage prods");
-                mainStorage.ReduceProductsQuantityByKey(products.Value);
+
+                StorageService.ChangeProductsQuantity(mainStorage, Operation.Reduce, productsToDeliveryData.Value);
 
                 ecb.AddComponent<MainStorageDataUpdatedEvent>(aspect.Self);
 

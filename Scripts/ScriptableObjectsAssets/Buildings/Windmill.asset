@@ -19,9 +19,9 @@ MonoBehaviour:
   _size: {x: 5, y: 5}
   _requiredItems:
   - _productDataSo: {fileID: 11400000, guid: c8ae1e23f1095994abc0a2980299f8de, type: 2}
-    _quantity: 1
+    _quantity: 2
   - _productDataSo: {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
-    _quantity: 5
+    _quantity: 2
   _manufacturedItems:
   - _productDataSo: {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}
     _quantity: 1

@@ -1,29 +1,52 @@
-﻿using Jrd.Gameplay.Products;
+﻿using System;
+using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Storage._2_Warehouse;
 using Unity.Collections;
-using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage
+namespace Jrd.Gameplay.Storage.Service
 {
-    public struct MainStorageData : IComponentData, IMainStorage
+    public abstract class StorageService
     {
-        /// <summary>
-        /// Hash map (int <see cref="Product"/> id, int quantity of product)
-        /// </summary>
-        public NativeParallelHashMap<int, int> Values;
-
         /// <summary>
         /// Get <see cref="Product"/> quantity
         /// </summary>
         /// <param name="product"><see cref="Product"/></param>
+        /// <param name="value"> NativeParallelHashMap(int, int)</param>
         /// <returns>Quantity of product <b>OR</b> <b>-1</b> if product not yet available (because there are no buildings required for this product)</returns>
-        public int GetProductQuantity(Product product) => Values.ContainsKey((int)product) ? Values[(int)product] : -1;
+        public static int GetProductQuantity(NativeParallelHashMap<int, int> value, Product product) =>
+            value.ContainsKey((int)product) ? value[(int)product] : -1;
+
+
+        public static void ChangeProductsQuantity(IStorage inProductionProducts, Operation operation,
+            NativeList<ProductData> productsData)
+        {
+            switch (operation)
+            {
+                case Operation.Increase: break;
+                case Operation.Reduce: break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(operation), operation, null);
+            }
+        }
+
+        public static NativeList<ProductData> GetProductsDataList(NativeParallelHashMap<int, int> warehouseProductsData)
+        {
+            var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
+            foreach (var product in warehouseProductsData)
+            {
+                productDataList.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
+            }
+
+            return productDataList;
+        }
 
         /// <summary>
         /// Matching products in <see cref="MainStorageData"/> for building WarehouseProductsData
         /// <param name="requiredItemsList">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList,
+        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList,
+            NativeParallelHashMap<int, int> value,
             Allocator allocator)
         {
             var productDataList = new NativeList<ProductData>(0, allocator);
@@ -33,12 +56,12 @@ namespace Jrd.Gameplay.Storage.MainStorage
                 Product product = requiredItemsList[i].Name;
                 var key = (int)product;
 
-                if (!Values.ContainsKey(key) && Values[key] < 0) continue;
+                if (!value.ContainsKey(key) && value[key] < 0) continue;
 
                 productDataList.Add(new ProductData
                 {
                     Name = product,
-                    Quantity = Values[key]
+                    Quantity = value[key]
                 });
             }
 
@@ -49,11 +72,12 @@ namespace Jrd.Gameplay.Storage.MainStorage
         /// Reduce products quantity in <see cref="MainStorageData"/> by key-value from list of <see cref="ProductData"/>
         /// <param name="productsData">list of <see cref="ProductData"/></param>
         /// </summary>
-        public void ReduceProductsQuantityByKey(NativeList<ProductData> productsData)
+        public static void ReduceProductsQuantityByKey(NativeParallelHashMap<int, int> value,
+            NativeList<ProductData> productsData)
         {
             foreach (var productData in productsData)
             {
-                Values[(int)productData.Name] -= productData.Quantity;
+                value[(int)productData.Name] -= productData.Quantity;
             }
         }
 
@@ -61,11 +85,12 @@ namespace Jrd.Gameplay.Storage.MainStorage
         /// Increase products quantity in <see cref="MainStorageData"/> by key-value from list of <see cref="ProductData"/>
         /// <param name="productsData">list of <see cref="ProductData"/></param>
         /// </summary>
-        public void IncreaseProductsQuantityByKey(NativeList<ProductData> productsData)
+        public static void IncreaseProductsQuantityByKey(NativeParallelHashMap<int, int> value,
+            NativeList<ProductData> productsData)
         {
             foreach (var productData in productsData)
             {
-                Values[(int)productData.Name] += productData.Quantity;
+                value[(int)productData.Name] += productData.Quantity;
             }
         }
 
@@ -74,7 +99,7 @@ namespace Jrd.Gameplay.Storage.MainStorage
         /// <param name="productsData">list of <see cref="ProductData"/></param>
         /// <returns>Sum of products quantity</returns>
         /// </summary>
-        public int GetProductsQuantity(NativeList<ProductData> productsData)
+        public static int GetProductsQuantity(NativeList<ProductData> productsData)
         {
             var quantity = 0;
             foreach (ProductData product in productsData)
@@ -84,5 +109,11 @@ namespace Jrd.Gameplay.Storage.MainStorage
 
             return quantity;
         }
+    }
+
+    public enum Operation
+    {
+        Increase,
+        Reduce
     }
 }

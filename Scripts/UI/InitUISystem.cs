@@ -1,6 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Shop.BlueprintsShop;
-using Jrd.Gameplay.Storage.MainStorage;
+using Jrd.Gameplay.Storage._1_MainStorage;
 using Unity.Collections;
 using Unity.Entities;
 

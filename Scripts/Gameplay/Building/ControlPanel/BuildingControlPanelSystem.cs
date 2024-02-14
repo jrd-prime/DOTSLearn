@@ -1,8 +1,9 @@
 ﻿using System;
-using Jrd.Gameplay.Building.ControlPanel.ProductsData;
 using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Storage.MainStorage;
-using Jrd.Gameplay.Storage.MainStorage.Systems;
+using Jrd.Gameplay.Storage;
+using Jrd.Gameplay.Storage._1_MainStorage;
+using Jrd.Gameplay.Storage._2_Warehouse;
+using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
@@ -25,7 +26,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private MainStorageData _mainStorageData;
 
         private BuildingDataAspect _aspect;
-        private WarehouseProducts _warehouseData;
+        private WarehouseProductsData _warehouseData;
         private BuildingData _buildingData;
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
@@ -82,6 +83,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 SetItemsToProduction();
             }
 
+            // TODO LOOK REFACT THIS SH
             if (SystemAPI.HasComponent<UpdateStoragesDataTag>(_buildingEntity))
             {
                 Debug.LogWarning("Update Storages Data Tag");
@@ -93,6 +95,27 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 Debug.LogWarning("Main Storage Data Updated Event");
                 SetItemsToMainStorage();
                 _ecb.RemoveComponent<MainStorageDataUpdatedEvent>(_buildingEntity);
+            }
+
+            if (SystemAPI.HasComponent<WarehouseDataUpdatedEvent>(_buildingEntity))
+            {
+                Debug.LogWarning("Warehouse Data Updated Event");
+                SetItemsToWarehouse();
+                _ecb.RemoveComponent<WarehouseDataUpdatedEvent>(_buildingEntity);
+            }
+
+            if (SystemAPI.HasComponent<InProductionDataUpdatedEvent>(_buildingEntity))
+            {
+                Debug.LogWarning("In Production Data Updated Event");
+                SetItemsToInProduction();
+                _ecb.RemoveComponent<InProductionDataUpdatedEvent>(_buildingEntity);
+            }
+
+            if (SystemAPI.HasComponent<ManufacturedDataUpdatedEvent>(_buildingEntity))
+            {
+                Debug.LogWarning("Manufactured Data Updated Event");
+                SetItemsToInProduction();
+                _ecb.RemoveComponent<ManufacturedDataUpdatedEvent>(_buildingEntity);
             }
 
             foreach (var moveTimer in SystemAPI.Query<RefRO<ProductsMoveTimerData>>())
@@ -179,17 +202,22 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToWarehouse()
         {
-            NativeList<ProductData> warehouseProductsList = _warehouseData.GetProductsDataList();
+            NativeList<ProductData> warehouseProductsList = StorageService.GetProductsDataList(_warehouseData.Value);
 
             _buildingUI.SetItems(_buildingUI.WarehouseUI, warehouseProductsList);
 
             warehouseProductsList.Dispose();
         }
 
+        private void SetItemsToInProduction()
+        {
+            throw new NotImplementedException();
+        }
+
         private void SetItemsToMainStorage()
         {
             NativeList<ProductData> mainStorageProductsList =
-                _mainStorageData.GetMatchingProducts(_required, Allocator.Temp);
+                StorageService.GetMatchingProducts(_required, _mainStorageData.Values, Allocator.Temp);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 

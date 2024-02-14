@@ -49,6 +49,9 @@ namespace Jrd.MyUtils
             throw new FileLoadException($"Unable to load [{itemPath}] Who: " + who);
         }
 
+        /// <summary>
+        /// Convert list <see cref="ProductData"/> to hashmap, set data quantity to 0
+        /// </summary>
         public static NativeParallelHashMap<int, int> ConvertProductsDataToHashMap(
             NativeList<ProductData> nativeList, ProductValues values)
         {

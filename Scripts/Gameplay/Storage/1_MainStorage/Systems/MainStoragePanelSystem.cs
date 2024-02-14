@@ -2,7 +2,7 @@
 using Jrd.UI.MainStoragePanel;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage.Systems
+namespace Jrd.Gameplay.Storage._1_MainStorage.Systems
 {
     /// <summary>
     /// Get data from component and Set data to UI 
