@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.MyUtils;
 using Jrd.MyUtils.Const;
 using Unity.Collections;

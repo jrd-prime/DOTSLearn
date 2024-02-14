@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.MyUtils;
 using Jrd.MyUtils.Const;
 using Unity.Collections;
@@ -28,11 +29,6 @@ namespace Jrd.UI.BuildingControlPanel.Part
             // TODO all method / refact
 
             _container.Clear();
-
-            foreach (var req in required)
-            {
-                Debug.LogWarning(req.Name);
-            }
 
             foreach (var reqBuffer in required)
             {

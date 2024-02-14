@@ -1,8 +1,10 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Storage._2_Warehouse;
-using Jrd.Gameplay.Storage._3_InProduction;
+﻿using Jrd.Gameplay.Building.ControlPanel.Component;
+using Jrd.Gameplay.Building.TempBuilding.Component;
+using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage._2_Warehouse.Component;
+using Jrd.Gameplay.Storage._3_InProduction.Component;
 using Jrd.Gameplay.Storage._4_Manufactured;
+using Jrd.Gameplay.Storage._4_Manufactured.Component;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.MyUtils;
 using Unity.Burst;
@@ -10,7 +12,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace Jrd.Gameplay.Building.TempBuilding
+namespace Jrd.Gameplay.Building
 {
     /// <summary>
     /// Place temp building prefab and init building info
@@ -97,11 +99,11 @@ namespace Jrd.Gameplay.Building.TempBuilding
         {
             _bsEcb.AddComponent(_entity, new BuildingProductsData
             {
-                WarehouseProductsData = new WarehouseProductsData
+                WarehouseData = new WarehouseData
                     { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
-                InProductionData = new InProductionProductsData
+                InProductionData = new InProductionData
                     { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
-                ManufacturedData = new ManufacturedProducts
+                ManufacturedData = new ManufacturedData
                     { Value = Utils.ConvertProductsDataToHashMap(manufactured, Utils.ProductValues.ToDefault) }
             });
         }
@@ -112,18 +114,14 @@ namespace Jrd.Gameplay.Building.TempBuilding
         /// <summary>
         /// Set component with required products list + required quantity
         /// </summary>
-        private void SetRequiredProductsData(NativeList<ProductData> required)
-        {
+        private void SetRequiredProductsData(NativeList<ProductData> required) =>
             _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = required });
-        }
 
         /// <summary>
         /// Set component with manufactured products list + required quantity
         /// </summary>
-        private void SetManufacturedProductsData(NativeList<ProductData> manufactured)
-        {
+        private void SetManufacturedProductsData(NativeList<ProductData> manufactured) =>
             _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = manufactured });
-        }
 
         private void AddBuildingToGameBuildingsList(ref SystemState _)
         {
@@ -142,8 +140,9 @@ namespace Jrd.Gameplay.Building.TempBuilding
         private NativeList<ProductData> GetProductionProductsList<T>(
             DynamicBuffer<T> buffer) where T : unmanaged, IBufferElementData
         {
-            DynamicBuffer<BuildingProductionItemsBuffer> productsBuffer =
-                buffer.Reinterpret<BuildingProductionItemsBuffer>();
+            DynamicBuffer<BuildingProductionItemsBuffer> productsBuffer = buffer
+                .Reinterpret<BuildingProductionItemsBuffer>();
+
             NativeList<ProductData> productsList = new(productsBuffer.Length, Allocator.Persistent);
 
             foreach (var product in productsBuffer)

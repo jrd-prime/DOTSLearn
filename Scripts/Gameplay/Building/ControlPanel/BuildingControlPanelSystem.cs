@@ -1,20 +1,23 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Building.ControlPanel.Component;
+using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage;
-using Jrd.Gameplay.Storage._1_MainStorage;
-using Jrd.Gameplay.Storage._2_Warehouse;
+using Jrd.Gameplay.Storage._1_MainStorage.Component;
+using Jrd.Gameplay.Storage._2_Warehouse.Component;
+using Jrd.Gameplay.Storage._3_InProduction.Component;
+using Jrd.Gameplay.Storage._4_Manufactured;
 using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.PlayState;
+using Jrd.MyUtils;
 using Jrd.UI;
 using Jrd.UI.BuildingControlPanel;
 using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
-using Utils = Jrd.MyUtils.Utils;
 
 namespace Jrd.Gameplay.Building.ControlPanel
 {
@@ -23,17 +26,17 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private BeginSimulationEntityCommandBufferSystem.Singleton _sys;
         private EntityCommandBuffer _ecb;
         private Entity _buildingEntity;
-        private MainStorageData _mainStorageData;
-
         private BuildingDataAspect _aspect;
-        private WarehouseProductsData _warehouseData;
+        private MainStorageData _mainStorageData;
+        private WarehouseData _warehouseData;
+        private InProductionData _inProductionData;
+        private ManufacturedData _manufacturedData;
         private BuildingData _buildingData;
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
 
         private BuildingControlPanelUI _buildingUI;
         private TextPopUpMono _textPopUpUI;
-
 
         protected override void OnCreate()
         {
@@ -58,7 +61,6 @@ namespace Jrd.Gameplay.Building.ControlPanel
             _buildingUI.InstantDeliveryButton.clicked += InstantDeliveryButton;
         }
 
-
         protected override void OnUpdate()
         {
             _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
@@ -70,7 +72,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _aspect = aspect;
                 _required = aspect.RequiredProductsData.Required;
                 _manufactured = aspect.ManufacturedProductsData.Manufactured;
-                _warehouseData = aspect.BuildingProductsData.WarehouseProductsData;
+                _warehouseData = aspect.BuildingProductsData.WarehouseData;
+                _inProductionData = aspect.BuildingProductsData.InProductionData;
+                _manufacturedData = aspect.BuildingProductsData.ManufacturedData;
                 _buildingData = aspect.BuildingData;
                 _buildingEntity = aspect.BuildingData.Self;
 
@@ -175,10 +179,8 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void InstantDeliveryButton() => _ecb.AddComponent<InstantBuffTag>(_buildingEntity);
 
-        private void SetMainInfo()
-        {
-            _buildingUI.SetLevel(_buildingData.Level);
-        }
+        private void SetMainInfo() => _buildingUI.SetLevel(_buildingData.Level);
+
 
         private void SetSpecsInfo()
         {
@@ -211,7 +213,11 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToInProduction()
         {
-            throw new NotImplementedException();
+            NativeList<ProductData> inProductionData = StorageService.GetProductsDataList(_inProductionData.Value);
+
+            _buildingUI.SetItems(_buildingUI.InProductionUI, inProductionData);
+
+            inProductionData.Dispose();
         }
 
         private void SetItemsToMainStorage()
@@ -231,8 +237,8 @@ namespace Jrd.Gameplay.Building.ControlPanel
             var manufacturedBox = Utils.ConvertProductsHashMapToList(
                 _aspect.BuildingProductsData.ManufacturedData.Value);
 
-            _buildingUI.SetItems(_buildingUI.InProductionBoxUI, inProductionBox);
-            _buildingUI.SetItems(_buildingUI.ManufacturedBoxUI, manufacturedBox);
+            _buildingUI.SetItems(_buildingUI.InProductionUI, inProductionBox);
+            _buildingUI.SetItems(_buildingUI.ManufacturedUI, manufacturedBox);
         }
     }
 }

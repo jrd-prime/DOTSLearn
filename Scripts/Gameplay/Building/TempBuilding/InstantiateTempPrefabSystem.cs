@@ -1,4 +1,6 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.Gameplay.Building.ControlPanel.Component;
+using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.GameStates.BuildingState;
 using Jrd.Screen;
 using Jrd.Select;

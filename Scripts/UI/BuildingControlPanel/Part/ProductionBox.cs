@@ -1,5 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.MyUtils;
 using Jrd.MyUtils.Const;
 using Unity.Collections;
@@ -20,7 +21,7 @@ namespace Jrd.UI.BuildingControlPanel.Part
         public void SetItems(NativeList<ProductData> productsData)
         {
             Container.Clear();
-            
+
             if (productsData.IsEmpty || productsData.Length == 0)
             {
                 SetEmptyContainerItems();
@@ -52,15 +53,20 @@ namespace Jrd.UI.BuildingControlPanel.Part
         {
             // TODO all method / refact
             VisualElement template = ItemContainerTemplate.Instantiate();
-            
+
             var itemContainer = template.Q<VisualElement>("ico1");
+            var iteml = template.Q<Label>("item-count-label");
 
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
             var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
-            
+
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);
-            NameLabel.text = itemCount.ToString();
+            // NameLabel.text = itemCount.ToString();
+
+
+            iteml.text = itemCount.ToString();
+
 
             return template;
         }

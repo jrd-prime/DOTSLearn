@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;

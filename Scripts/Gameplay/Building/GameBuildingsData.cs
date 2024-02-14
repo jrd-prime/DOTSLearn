@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.Gameplay.Building.ControlPanel.Component;
 using Unity.Collections;
 using Unity.Entities;
 

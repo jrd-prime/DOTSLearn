@@ -1,4 +1,5 @@
 ﻿using Jrd.CameraControl;
+using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.NeedSortComponents;
 using Jrd.UserInput.Components;
 using Unity.Burst;

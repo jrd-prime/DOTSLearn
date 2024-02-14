@@ -1,5 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage._2_Warehouse;
 using Unity.Collections;
 
@@ -17,13 +18,26 @@ namespace Jrd.Gameplay.Storage.Service
             value.ContainsKey((int)product) ? value[(int)product] : -1;
 
 
-        public static void ChangeProductsQuantity(IStorage inProductionProducts, Operation operation,
+        public static void ChangeProductsQuantity(NativeParallelHashMap<int, int> inProductionProducts,
+            Operation operation,
             NativeList<ProductData> productsData)
         {
             switch (operation)
             {
-                case Operation.Increase: break;
-                case Operation.Reduce: break;
+                case Operation.Increase:
+                    foreach (var q in productsData)
+                    {
+                        inProductionProducts[(int)q.Name] += q.Quantity;
+                    }
+
+                    break;
+                case Operation.Reduce:
+                    foreach (var q in productsData)
+                    {
+                        inProductionProducts[(int)q.Name] -= q.Quantity;
+                    }
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(operation), operation, null);
             }
@@ -102,7 +116,8 @@ namespace Jrd.Gameplay.Storage.Service
         public static int GetProductsQuantity(NativeList<ProductData> productsData)
         {
             var quantity = 0;
-            foreach (ProductData product in productsData)
+
+            foreach (var product in productsData)
             {
                 quantity += product.Quantity;
             }

@@ -1,6 +1,8 @@
 ﻿using System;
 using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Building.TempBuilding;
+using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.Gameplay.Shop.BlueprintsShop;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.MainGameState;
@@ -172,11 +174,9 @@ namespace Jrd.GameStates.BuildingState
 
         private void ConfirmBuilding()
         {
-            Debug.LogWarning("confirm building");
             SetConfirmationPanelVisible(false);
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
-                Debug.LogWarning("temp building tag here");
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
                 _tempSelectedBuildID = -1;
             }

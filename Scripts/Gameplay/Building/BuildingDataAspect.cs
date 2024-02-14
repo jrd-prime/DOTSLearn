@@ -1,6 +1,6 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Storage._4_Manufactured;
+﻿using Jrd.Gameplay.Building.ControlPanel.Component;
+using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage._4_Manufactured.Component;
 using Unity.Entities;
 
 namespace Jrd.Gameplay.Building

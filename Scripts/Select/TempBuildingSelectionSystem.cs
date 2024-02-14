@@ -1,6 +1,7 @@
 ﻿using System;
 using Jrd.CameraControl;
 using Jrd.Gameplay.Building.TempBuilding;
+using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.GameStates.MainGameState;
 using Jrd.UserInput.Components;
 using Unity.Entities;

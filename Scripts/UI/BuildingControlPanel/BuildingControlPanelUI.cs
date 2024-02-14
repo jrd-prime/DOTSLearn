@@ -1,5 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using UnityEngine;
@@ -35,8 +36,8 @@ namespace Jrd.UI.BuildingControlPanel
     /// <see cref="WarehouseUI"/> - Building warehouse.
     /// <see cref="MainStorageUI"/> - Main storage UI in building control panel with matching products for this type of building.
     /// <see cref="TimerUI"/> - Timers and any progress bars.
-    /// <see cref="InProductionBoxUI"/> - Production required items UI.
-    /// <see cref="ManufacturedBoxUI"/> - Production manufactured items UI</para>
+    /// <see cref="InProductionUI"/> - Production required items UI.
+    /// <see cref="ManufacturedUI"/> - Production manufactured items UI</para>
     /// </summary>
     public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBcpSpecs, IBcpTimer
     {
@@ -45,8 +46,8 @@ namespace Jrd.UI.BuildingControlPanel
         public IProductsItemsContainer WarehouseUI { get; private set; }
         public IProductsItemsContainer StorageUI { get; private set; }
         public TimerUI TimerUI { get; private set; }
-        public IProductsItemsContainer InProductionBoxUI { get; private set; }
-        public IProductsItemsContainer ManufacturedBoxUI { get; private set; }
+        public IProductsItemsContainer InProductionUI { get; private set; }
+        public IProductsItemsContainer ManufacturedUI { get; private set; }
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
@@ -119,8 +120,8 @@ namespace Jrd.UI.BuildingControlPanel
             WarehouseUI = new WarehouseUI(Panel, _internalStorageItemTemplate);
             StorageUI = new MainStorageUI(Panel, _internalStorageItemTemplate);
             TimerUI = new TimerUI(Panel);
-            InProductionBoxUI = new InProductionBoxUI(Panel, _boxItemTemplate);
-            ManufacturedBoxUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
+            InProductionUI = new InProductionBoxUI(Panel, _boxItemTemplate);
+            ManufacturedUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
 
             PanelCloseButton.clicked += OnCloseButton;
         }
@@ -145,8 +146,7 @@ namespace Jrd.UI.BuildingControlPanel
         protected override void OnCloseButton() => HidePanel();
 
         // Production line methods
-        public void SetLineInfo(NativeList<ProductData> required,
-            NativeList<ProductData> manufactured) =>
+        public void SetLineInfo(NativeList<ProductData> required, NativeList<ProductData> manufactured) =>
             ProdLineUI.SetLineInfo(required, manufactured);
 
         // Specs methods
@@ -161,7 +161,6 @@ namespace Jrd.UI.BuildingControlPanel
         public void SetItems(IProductsItemsContainer ui, NativeList<ProductData> productsData) =>
             ui.SetItems(productsData);
 
-        public void UpdateItemQuantity(object item, int value) =>
-            StorageUI.UpdateItemQuantity(item, value);
+        public void UpdateItemQuantity(object item, int value) => StorageUI.UpdateItemQuantity(item, value);
     }
 }

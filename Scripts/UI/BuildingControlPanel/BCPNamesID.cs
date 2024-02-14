@@ -43,7 +43,7 @@
         
         // Required box
         public static string RequiredBoxContainerId => "req-box-items-cont";
-        public static string RequiredBoxNameLabelId  => "req-box-label";
+        public static string RequiredBoxNameLabelId  => "item-count-label";
         
         // Manufactured box
         public static string ManufacturedBoxContainerId => "man-box-items-cont";

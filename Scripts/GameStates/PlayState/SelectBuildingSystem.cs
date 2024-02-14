@@ -2,6 +2,7 @@
 using Jrd.CameraControl;
 using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Building.TempBuilding;
+using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.UI.BuildingControlPanel;
 using Unity.Entities;
 using Unity.Physics;

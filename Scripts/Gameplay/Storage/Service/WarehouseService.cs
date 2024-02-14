@@ -1,6 +1,8 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
+using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage._2_Warehouse;
+using Jrd.Gameplay.Storage._2_Warehouse.Component;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -16,11 +18,11 @@ namespace Jrd.Gameplay.Storage.Service
             Instance ??= this;
         }
 
-        public bool IsEnoughRequiredProducts(WarehouseProductsData warehouseData,
+        public static bool IsEnoughRequiredProducts(WarehouseData warehouseData,
             NativeList<ProductData> requiredData)
         {
             bool first = warehouseData.Value[(int)requiredData[0].Name] >= requiredData[0].Quantity;
-
+            Debug.LogWarning("in ");
             //TODO LOOK Refactor this 
             return requiredData.Length switch
             {
@@ -31,8 +33,8 @@ namespace Jrd.Gameplay.Storage.Service
             };
         }
 
-        public NativeList<ProductData> GetProductsForProduction(
-            WarehouseProductsData warehouseData, NativeList<ProductData> requiredQuantity,
+        public static NativeList<ProductData> GetProductsForProduction(
+            WarehouseData warehouseData, NativeList<ProductData> requiredQuantity,
             int loadCapacity)
         {
             var preparedProducts = new NativeList<ProductData>(0, Allocator.Temp);
@@ -47,8 +49,7 @@ namespace Jrd.Gameplay.Storage.Service
 
             int tempLoadsCount = (int)math.floor(loadCapacity / a);
 
-            int maxLoads =
-                GetMaxLoads(warehouseData.Value, tempLoadsCount, requiredQuantity);
+            int maxLoads = GetMaxLoads(warehouseData.Value, tempLoadsCount, requiredQuantity);
 
             Debug.LogWarning("max load times = " + maxLoads);
 
@@ -67,14 +68,14 @@ namespace Jrd.Gameplay.Storage.Service
         /// <summary>
         /// Return max possible loads based on available products in warehouse
         /// </summary>
-        private int GetMaxLoads(
+        private static int GetMaxLoads(
             NativeParallelHashMap<int, int> warehouseData, int maxLoads,
             NativeList<ProductData> requiredQuantity)
         {
             var tempMaxLoads = maxLoads;
 
-            bool isFirstProductHasSufficientQuantity = warehouseData[(int)requiredQuantity[0].Name] <
-                                                       requiredQuantity[0].Quantity * maxLoads;
+            bool isFirstProductHasSufficientQuantity =
+                warehouseData[(int)requiredQuantity[0].Name] < requiredQuantity[0].Quantity * maxLoads;
 
             switch (warehouseData.Count())
             {
@@ -84,8 +85,8 @@ namespace Jrd.Gameplay.Storage.Service
                     tempMaxLoads = GetMaxLoads(warehouseData, maxLoads - 1, requiredQuantity);
                     break;
                 case 2:
-                    bool isSecondProductHasSufficientQuantity = warehouseData[(int)requiredQuantity[1].Name] <
-                                                                requiredQuantity[1].Quantity * maxLoads;
+                    bool isSecondProductHasSufficientQuantity =
+                        warehouseData[(int)requiredQuantity[1].Name] < requiredQuantity[1].Quantity * maxLoads;
 
                     if (!isFirstProductHasSufficientQuantity || !isSecondProductHasSufficientQuantity) break;
 
