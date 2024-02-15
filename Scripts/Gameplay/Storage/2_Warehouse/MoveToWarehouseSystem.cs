@@ -53,7 +53,7 @@ namespace Jrd.Gameplay.Storage._2_Warehouse
 
                 _matchingProducts = StorageService.GetMatchingProducts(
                     aspect.RequiredProductsData.Required,
-                    _mainStorage.Values,
+                    _mainStorage.Value,
                     Allocator.Persistent);
 
                 SetProductsToDelivery();
@@ -86,6 +86,6 @@ namespace Jrd.Gameplay.Storage._2_Warehouse
         }
 
         private void ReduceProductsInMainStorage() =>
-            StorageService.ChangeProductsQuantity(_mainStorage.Values, Operation.Reduce, _matchingProducts);
+            StorageService.ChangeProductsQuantity(_mainStorage.Value, Operation.Reduce, _matchingProducts);
     }
 }

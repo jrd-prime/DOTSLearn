@@ -46,7 +46,7 @@ namespace Jrd.Gameplay.Storage._1_MainStorage
             {
                 Debug.Log("Increase main storage prods");
 
-                StorageService.ChangeProductsQuantity(mainStorage.Values, Operation.Increase, productsToDeliveryData.Value);
+                StorageService.ChangeProductsQuantity(mainStorage.Value, Operation.Increase, productsToDeliveryData.Value);
 
                 ecb.AddComponent<MainStorageDataUpdatedEvent>(aspect.Self);
 
@@ -59,7 +59,7 @@ namespace Jrd.Gameplay.Storage._1_MainStorage
             {
                 Debug.Log("Reduce main storage prods");
 
-                StorageService.ChangeProductsQuantity(mainStorage.Values, Operation.Reduce, productsToDeliveryData.Value);
+                StorageService.ChangeProductsQuantity(mainStorage.Value, Operation.Reduce, productsToDeliveryData.Value);
 
                 ecb.AddComponent<MainStorageDataUpdatedEvent>(aspect.Self);
 

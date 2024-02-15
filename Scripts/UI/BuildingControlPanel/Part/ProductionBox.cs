@@ -60,7 +60,6 @@ namespace Jrd.UI.BuildingControlPanel.Part
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
             
-            Debug.Log(iconPath);
             var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
 
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);

@@ -51,11 +51,14 @@ namespace Jrd.Gameplay.Storage._3_InProduction
                     TextPopUpMono.Instance.ShowPopUp("quantity ok");
 
                     // 1 prepare prods
-                    NativeList<ProductData> preparedProducts = WarehouseService.GetProductsForProduction(
-                        _warehouseData,
-                        _requiredQuantity,
-                        aspect.BuildingData.LoadCapacity);
+                    var (preparedProducts, maxLoads) =
+                        WarehouseService.GetProductsForProductionAndMaxLoads(
+                            _warehouseData,
+                            _requiredQuantity,
+                            aspect.BuildingData.LoadCapacity);
 
+                    aspect.SetPreparedProductsToProduction(preparedProducts);
+                    aspect.SetMaxLoads(maxLoads);
 
                     foreach (var q in preparedProducts)
                     {

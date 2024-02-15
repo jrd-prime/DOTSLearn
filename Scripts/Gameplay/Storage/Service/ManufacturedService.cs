@@ -8,5 +8,10 @@
         {
             Instance ??= this;
         }
+
+        public static bool IsEnoughSpaceInManufacturedBox()
+        {
+            return false;
+        }
     }
 }

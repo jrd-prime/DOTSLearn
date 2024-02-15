@@ -36,7 +36,7 @@ namespace Jrd.UI
                 entityManager.AddComponent<MainStorageData>(elementEntity);
                 entityManager.SetComponentData(elementEntity, new MainStorageData
                 {
-                    Values = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
+                    Value = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
                     {
                         { (int)Product.Wheat, 10},
                         { (int)Product.Flour, 20 },

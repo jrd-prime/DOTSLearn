@@ -40,7 +40,7 @@ namespace Jrd.UI.MainStoragePanel
             // ItemsCont.Clear();
             
             lab.text = "";
-            foreach (var keyValue in itemsList.Values)
+            foreach (var keyValue in itemsList.Value)
             {
                 if (keyValue.Value == -1) continue;
                 lab.text += "\n" + keyValue.Key + " / " + keyValue.Value;

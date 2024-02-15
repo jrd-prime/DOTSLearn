@@ -33,7 +33,7 @@ namespace Jrd.Gameplay.Storage.Service
             };
         }
 
-        public static NativeList<ProductData> GetProductsForProduction(
+        public static (NativeList<ProductData>, int) GetProductsForProductionAndMaxLoads(
             WarehouseData warehouseData, NativeList<ProductData> requiredQuantity,
             int loadCapacity)
         {
@@ -62,7 +62,7 @@ namespace Jrd.Gameplay.Storage.Service
                 });
             }
 
-            return preparedProducts;
+            return (preparedProducts, maxLoads);
         }
 
         /// <summary>

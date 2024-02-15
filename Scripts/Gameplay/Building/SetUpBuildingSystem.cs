@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Building.Production;
+using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage._2_Warehouse.Component;
@@ -81,11 +82,11 @@ namespace Jrd.Gameplay.Building
             SetRequiredProductsData(required);
             SetManufacturedProductsData(manufactured);
 
+            SetProductionProcessDataComponent();
+
             // Save?
             AddBuildingToGameBuildingsList(ref state);
         }
-
-        private void SetProductionState() => _building.ProductionState = ProductionState.Init;
 
 
         private void BuildingTags()
@@ -115,6 +116,8 @@ namespace Jrd.Gameplay.Building
 
         private void SetPosition() => _building.WorldPosition = _transform.Position;
         private void SetEntityName() => _bsEcb.SetName(_entity, $"{_building.NameId}_{_guid}");
+        private void SetProductionState() => _building.ProductionState = ProductionState.Init;
+        private void SetProductionProcessDataComponent() => _bsEcb.AddComponent<ProductionProcessData>(_entity);
 
         /// <summary>
         /// Set component with required products list + required quantity

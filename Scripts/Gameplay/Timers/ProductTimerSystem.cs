@@ -1,5 +1,4 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Storage._1_MainStorage;
 using Jrd.Gameplay.Storage._1_MainStorage.Component;
 using Unity.Entities;
 using UnityEngine;
@@ -25,18 +24,53 @@ namespace Jrd.Gameplay.Timers
             foreach (var (aspect, timer) in SystemAPI
                          .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>())
             {
-                if (timer.ValueRO.CurrentValue > 0)
+                switch (timer.ValueRO.CurrentValue)
                 {
-                    //TODO refactor calls, 2 times in 1 sec
-                    Debug.LogWarning("timer > 0");
-                    timer.ValueRW.CurrentValue -= SystemAPI.Time.DeltaTime;
-                    return;
+                    case > 0:
+                        //TODO refactor calls, 2 times in 1 sec
+                        Debug.LogWarning("timer > 0");
+                        timer.ValueRW.CurrentValue -= SystemAPI.Time.DeltaTime;
+                        break;
+                    case <= 0:
+                        Debug.LogWarning("timer <= 0");
+                        _ecb.RemoveComponent<ProductsMoveTimerData>(aspect.Self);
+                        break;
                 }
+            }
 
-                if (timer.ValueRO.CurrentValue <= 0)
+            foreach (var (aspect, all) in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<AllLoadedProductsTimerData>>())
+            {
+                switch (all.ValueRO.Value)
                 {
-                    Debug.LogWarning("timer <= 0");
-                    _ecb.RemoveComponent<ProductsMoveTimerData>(aspect.Self);
+                    case > 0:
+                        //TODO refactor calls, 2 times in 1 sec
+                        Debug.LogWarning("all timer > 0");
+                        all.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                        break;
+                    case <= 0:
+                        Debug.LogWarning("all timer <= 0");
+                        _ecb.AddComponent<AllLoadedProductsTimerFinishedEvent>(aspect.Self);
+                        _ecb.RemoveComponent<AllLoadedProductsTimerData>(aspect.Self);
+                        break;
+                }
+            }
+
+            foreach (var (aspect, one) in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<OneLoadedProductTimerData>>())
+            {
+                switch (one.ValueRO.Value)
+                {
+                    case > 0:
+                        //TODO refactor calls, 2 times in 1 sec
+                        Debug.LogWarning("one timer > 0");
+                        one.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                        break;
+                    case <= 0:
+                        Debug.LogWarning("one timer <= 0");
+                        _ecb.AddComponent<OneLoadedProductsTimerFinishedEvent>(aspect.Self);
+                        _ecb.RemoveComponent<OneLoadedProductTimerData>(aspect.Self);
+                        break;
                 }
             }
         }

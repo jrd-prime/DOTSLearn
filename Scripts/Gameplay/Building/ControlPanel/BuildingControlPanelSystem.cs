@@ -223,7 +223,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private void SetItemsToMainStorage()
         {
             NativeList<ProductData> mainStorageProductsList =
-                StorageService.GetMatchingProducts(_required, _mainStorageData.Values, Allocator.Temp);
+                StorageService.GetMatchingProducts(_required, _mainStorageData.Value, Allocator.Temp);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 
