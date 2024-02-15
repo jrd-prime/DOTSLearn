@@ -13,10 +13,11 @@ namespace Jrd.UI.BuildingControlPanel.Part
 
         public TimerUI(VisualElement panel)
         {
-            _timerProgress = panel.Q<VisualElement>("pb-bar");
-            _timerLabel = panel.Q<Label>("text-label");
-            _timerLabel.text = "";
-            _timerProgress.style.width = 0;
+            var timerContainer = panel.Q<VisualElement>("timer-cont");
+            _timerProgress = timerContainer.Q<VisualElement>("pb-bar");
+            _timerLabel = timerContainer.Q<Label>("text-label");
+            _timerLabel.text = "timer";
+            _timerProgress.style.width = 33;
         }
 
         public async void SetTimerText(float max, float value)

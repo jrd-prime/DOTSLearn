@@ -57,6 +57,7 @@ namespace Jrd.Gameplay.Building.Production
                     case ProductionState.InProgress:
                         Debug.Log("InProgress " + aspect.BuildingData.Name);
 
+                        _ecb.AddComponent<ProductionTimersUpdatedEvent>(_entity);
 
                         // сетить и обновлять таймеры
                         // когда заканчивается один цикл - обновить юай произмеденных

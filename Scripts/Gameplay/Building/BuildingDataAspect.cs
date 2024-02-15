@@ -1,12 +1,10 @@
 ﻿using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
-using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage._4_Manufactured.Component;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Building
 {
@@ -56,15 +54,5 @@ namespace Jrd.Gameplay.Building
 
         public void SetOneProductTimer() =>
             _productionProcessData.ValueRW.OneProductTimer = GetOneProductManufacturingTime();
-
-        public void ReduceInProductionProductsForOneCycle()
-        {
-            foreach (var q in _requiredProductsData.ValueRO.Required)
-            {
-                Debug.Log(_buildingProductsData.ValueRW.InProductionData.Value[(int)q.Name]);
-                _buildingProductsData.ValueRW.InProductionData.Value[(int)q.Name] -= q.Quantity;
-                Debug.Log(_buildingProductsData.ValueRW.InProductionData.Value[(int)q.Name]);
-            }
-        }
     }
 }

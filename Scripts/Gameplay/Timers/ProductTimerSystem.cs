@@ -9,6 +9,9 @@ namespace Jrd.Gameplay.Timers
     {
         private EntityCommandBuffer _ecb;
         private MainStorageData _mainStorageData;
+        private float tempTime;
+        private bool tick;
+        private float tickDelay;
 
         public void OnCreate(ref SystemState state)
         {
@@ -19,6 +22,22 @@ namespace Jrd.Gameplay.Timers
         {
             _ecb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
+            // Debug.LogWarning(Time.fixedTime);
+
+            tick = false;
+            tickDelay = 0.5f;
+            if (Time.fixedTime > tempTime)
+            {
+                tempTime = Time.fixedTime + tickDelay;
+                Debug.LogWarning("temp time = " + tempTime);
+            }
+
+            if ((tempTime - Time.fixedTime) < 0.001)
+            {
+                Debug.LogWarning(Time.fixedTime + " / tick?");
+                tempTime = Time.fixedTime + tickDelay;
+                tick = true;
+            }
 
 
             foreach (var (aspect, timer) in SystemAPI
@@ -27,12 +46,10 @@ namespace Jrd.Gameplay.Timers
                 switch (timer.ValueRO.CurrentValue)
                 {
                     case > 0:
-                        //TODO refactor calls, 2 times in 1 sec
-                        Debug.LogWarning("timer > 0");
-                        timer.ValueRW.CurrentValue -= SystemAPI.Time.DeltaTime;
+                        if (!tick) return;
+                        timer.ValueRW.CurrentValue -= tickDelay;
                         break;
                     case <= 0:
-                        Debug.LogWarning("timer <= 0");
                         _ecb.RemoveComponent<ProductsMoveTimerData>(aspect.Self);
                         break;
                 }
@@ -44,9 +61,9 @@ namespace Jrd.Gameplay.Timers
                 switch (all.ValueRO.Value)
                 {
                     case > 0:
-                        //TODO refactor calls, 2 times in 1 sec
+                        if (!tick) return;
                         Debug.LogWarning("all timer > 0");
-                        all.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                        all.ValueRW.Value -= tickDelay;
                         break;
                     case <= 0:
                         Debug.LogWarning("all timer <= 0");
@@ -62,9 +79,9 @@ namespace Jrd.Gameplay.Timers
                 switch (one.ValueRO.Value)
                 {
                     case > 0:
-                        //TODO refactor calls, 2 times in 1 sec
                         Debug.LogWarning("one timer > 0");
-                        one.ValueRW.Value -= SystemAPI.Time.DeltaTime;
+                        if (!tick) return;
+                        one.ValueRW.Value -= tickDelay;
                         break;
                     case <= 0:
                         Debug.LogWarning("one timer <= 0");

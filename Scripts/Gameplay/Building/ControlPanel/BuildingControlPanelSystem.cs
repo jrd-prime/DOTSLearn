@@ -35,6 +35,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
 
+        private float _all;
+        private float _one;
+
         private BuildingControlPanelUI _buildingUI;
         private TextPopUpMono _textPopUpUI;
 
@@ -77,6 +80,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _manufacturedData = aspect.BuildingProductsData.ManufacturedData;
                 _buildingData = aspect.BuildingData;
                 _buildingEntity = aspect.BuildingData.Self;
+
+                _all = aspect.ProductionProcessData.AllProductsTimer;
+                _one = aspect.ProductionProcessData.OneProductTimer;
 
                 _ecb.RemoveComponent<InitializeTag>(_buildingEntity);
 
@@ -122,6 +128,18 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _ecb.RemoveComponent<ManufacturedDataUpdatedEvent>(_buildingEntity);
             }
 
+            if (SystemAPI.HasComponent<ProductionTimersUpdatedEvent>(_buildingEntity))
+            {
+                Debug.LogWarning("Production Timers Updated Event");
+                foreach (var (all, one, entity) in SystemAPI
+                             .Query<AllLoadedProductsTimerData, OneLoadedProductTimerData>()
+                             .WithAll<ProductionTimersUpdatedEvent>().WithEntityAccess())
+                {
+                    UpdateProductionTimers(all.Value, one.Value);
+                    _ecb.RemoveComponent<ProductionTimersUpdatedEvent>(entity);
+                }
+            }
+
             foreach (var moveTimer in SystemAPI.Query<RefRO<ProductsMoveTimerData>>())
             {
                 float timer = moveTimer.ValueRO.CurrentValue;
@@ -141,6 +159,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 }
             }
         }
+
+        private void UpdateProductionTimers(float all, float one) => _buildingUI.UpdateProductionTimers(all, one);
+
 
         private void SetStorageTimer(float max, float value) => _buildingUI.SetTimerText(max, value);
 

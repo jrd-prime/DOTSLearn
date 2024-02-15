@@ -1,5 +1,4 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Products.Component;
 using Jrd.UI.BuildingControlPanel.Part;
 using Unity.Collections;
@@ -46,6 +45,7 @@ namespace Jrd.UI.BuildingControlPanel
         public IProductsItemsContainer WarehouseUI { get; private set; }
         public IProductsItemsContainer StorageUI { get; private set; }
         public TimerUI TimerUI { get; private set; }
+        public ProductionTimersUI ProductionTimersUI { get; private set; }
         public IProductsItemsContainer InProductionUI { get; private set; }
         public IProductsItemsContainer ManufacturedUI { get; private set; }
 
@@ -120,6 +120,7 @@ namespace Jrd.UI.BuildingControlPanel
             WarehouseUI = new WarehouseUI(Panel, _internalStorageItemTemplate);
             StorageUI = new MainStorageUI(Panel, _internalStorageItemTemplate);
             TimerUI = new TimerUI(Panel);
+            ProductionTimersUI = new ProductionTimersUI(Panel);
             InProductionUI = new InProductionBoxUI(Panel, _boxItemTemplate);
             ManufacturedUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
 
@@ -162,5 +163,7 @@ namespace Jrd.UI.BuildingControlPanel
             ui.SetItems(productsData);
 
         public void UpdateItemQuantity(object item, int value) => StorageUI.UpdateItemQuantity(item, value);
+
+        public void UpdateProductionTimers(float all, float one) => ProductionTimersUI.UpdateTimers(all, one);
     }
 }
