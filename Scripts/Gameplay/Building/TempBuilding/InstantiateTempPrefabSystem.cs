@@ -1,5 +1,4 @@
-﻿using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Building.ControlPanel.Component;
+﻿using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.GameStates.BuildingState;
 using Jrd.Screen;
@@ -10,6 +9,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Building.TempBuilding
 {
@@ -21,6 +21,7 @@ namespace Jrd.Gameplay.Building.TempBuilding
         {
             state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<InstantiateTempPrefabComponent>();
         }
 
         [BurstCompile]

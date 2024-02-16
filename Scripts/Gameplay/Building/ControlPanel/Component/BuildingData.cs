@@ -13,6 +13,7 @@ namespace Jrd.Gameplay.Building.ControlPanel.Component
         public FixedString64Bytes Guid;
         public float3 WorldPosition;
         public BuildingNameId NameId;
+        public NativeList<BuildingEvent> BuildingEvents;
 
         // TODO remove, buff
         public int Level;

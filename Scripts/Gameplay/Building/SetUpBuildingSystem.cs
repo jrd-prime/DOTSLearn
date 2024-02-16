@@ -13,6 +13,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Building
 {
@@ -54,6 +55,8 @@ namespace Jrd.Gameplay.Building
                 _building = buildingData.ValueRW;
                 _transform = transform.ValueRO;
 
+                buildingData.ValueRW.BuildingEvents = new NativeList<BuildingEvent>(0, Allocator.Persistent);
+
                 InitSettingsForNewBuilding(ref state);
             }
         }
@@ -87,6 +90,7 @@ namespace Jrd.Gameplay.Building
             // Save?
             AddBuildingToGameBuildingsList(ref state);
         }
+
 
 
         private void BuildingTags()

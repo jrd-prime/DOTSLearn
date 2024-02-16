@@ -1,4 +1,5 @@
 ﻿using System;
+using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Timers.Component;
 using Unity.Burst;
 using Unity.Entities;
@@ -43,7 +44,11 @@ namespace Jrd.Gameplay.Timers
                 switch (timer.TimerType)
                 {
                     case TimerType.MoveToWarehouse:
-                        Ecb.AddComponent<MoveToWarehouseTimerFinishedEvent>(inQueryIndex, timer.Owner);
+                        // Ecb.AddComponent<MoveToWarehouseTimerFinishedEvent>(inQueryIndex, timer.Owner);
+                        Ecb.AddComponent(inQueryIndex, timer.Owner, new AddEventToBuildingData
+                        {
+                            Value = BuildingEvent.MoveToWarehouseTimerFinished
+                        });
                         break;
                     case TimerType.OneProduct:
                         Ecb.AddComponent<OneProductTimerFinishedEvent>(inQueryIndex, timer.Owner);

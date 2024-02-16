@@ -1,7 +1,12 @@
-﻿using Unity.Entities;
+﻿using Jrd.Gameplay.Storage.Warehouse;
+using Unity.Entities;
 
 namespace Jrd.Gameplay.Timers.Component
 {
+    /// <summary>
+    /// On timer finished event
+    /// <see cref="MoveToWarehouseTimerFinishedSystem"/>
+    /// </summary>
     public struct MoveToWarehouseTimerFinishedEvent : IComponentData
     {
     }

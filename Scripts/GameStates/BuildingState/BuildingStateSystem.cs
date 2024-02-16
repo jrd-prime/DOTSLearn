@@ -1,4 +1,5 @@
 ﻿using System;
+using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Building.TempBuilding;
@@ -132,6 +133,7 @@ namespace Jrd.GameStates.BuildingState
                         Guid = giud,
                         Name = blueprintBuffer.Name,
                         Prefab = blueprintBuffer.Self,
+                        BuildingEvents = new NativeList<BuildingEvent>(0, Allocator.Persistent),
 
                         NameId = blueprintBuffer.NameId,
                         Level = blueprintBuffer.Level,

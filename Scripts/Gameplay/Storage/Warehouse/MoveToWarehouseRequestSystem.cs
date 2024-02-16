@@ -6,6 +6,7 @@ using Jrd.Gameplay.Timers;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.Warehouse
 {
@@ -56,9 +57,16 @@ namespace Jrd.Gameplay.Storage.Warehouse
                 SetDeliveryTimer();
                 ReduceProductsInMainStorage();
 
-                _ecb.AddComponent<MainStorageDataUpdatedEvent>(aspect.Self);
+                Debug.Log("--- " + this);
+                foreach (var q in _matchingProducts)
+                {
+                    Debug.Log(q.Name + " / " + q.Quantity);
+                }
+
+                Debug.Log("--- " + this);
 
                 _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
+                aspect.BuildingData.BuildingEvents.Add(BuildingEvent.MoveToWarehouseTimerStarted);
             }
         }
 
