@@ -1,9 +1,10 @@
 ﻿using System;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Storage;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
+using Jrd.Gameplay.Timers.Component;
 using Unity.Entities;
 using UnityEngine;
 
@@ -95,13 +96,23 @@ namespace Jrd.Gameplay.Building.Production
             _aspect.SetOneProductTimer();
 
             // Start timers
-            _ecb.AddComponent(_entity, new OneLoadedProductTimerData
+            var timerEntity = _ecb.CreateEntity();
+            _ecb.AddComponent(timerEntity, new TimerData
             {
-                Value = _aspect.GetOneProductManufacturingTime()
+                Self = timerEntity,
+                Owner = _entity,
+                TimerType = TimerType.OneProduct,
+                IsSet = false,
+                Duration = _aspect.GetOneProductManufacturingTime()
             });
-            _ecb.AddComponent(_entity, new AllLoadedProductsTimerData
+            timerEntity = _ecb.CreateEntity();
+            _ecb.AddComponent(timerEntity, new TimerData
             {
-                Value = _aspect.GetLoadedProductsManufacturingTime()
+                Self = timerEntity,
+                Owner = _entity,
+                TimerType = TimerType.AllProducts,
+                IsSet = false,
+                Duration = _aspect.GetLoadedProductsManufacturingTime()
             });
 
             // взять часть продуктов для 1 прогона

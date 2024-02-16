@@ -2,7 +2,7 @@
 using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._4_Manufactured.Component;
+using Jrd.Gameplay.Storage.ManufacturedBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 

@@ -1,5 +1,5 @@
 ﻿using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
 
 namespace Jrd.Gameplay.Storage

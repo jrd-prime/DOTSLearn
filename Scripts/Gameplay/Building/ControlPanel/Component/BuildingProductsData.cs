@@ -1,6 +1,6 @@
-﻿using Jrd.Gameplay.Storage._2_Warehouse.Component;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
-using Jrd.Gameplay.Storage._4_Manufactured;
+﻿using Jrd.Gameplay.Storage.InProductionBox.Component;
+using Jrd.Gameplay.Storage.ManufacturedBox;
+using Jrd.Gameplay.Storage.Warehouse.Component;
 using Unity.Entities;
 
 namespace Jrd.Gameplay.Building.ControlPanel.Component
@@ -8,7 +8,7 @@ namespace Jrd.Gameplay.Building.ControlPanel.Component
     public struct BuildingProductsData : IComponentData
     {
         public WarehouseData WarehouseData;
-        public InProductionData InProductionData;
-        public ManufacturedData ManufacturedData;
+        public InProductionBoxData InProductionBoxData;
+        public ManufacturedBoxData ManufacturedBoxData;
     }
 }

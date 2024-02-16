@@ -1,7 +1,6 @@
 ﻿using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Shop.BlueprintsShop;
-using Jrd.Gameplay.Storage._1_MainStorage;
-using Jrd.Gameplay.Storage._1_MainStorage.Component;
+using Jrd.Gameplay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -38,7 +37,7 @@ namespace Jrd.UI
                 {
                     Value = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
                     {
-                        { (int)Product.Wheat, 10},
+                        { (int)Product.Wheat, 10 },
                         { (int)Product.Flour, 20 },
                         { (int)Product.Wood, 30 },
                         { (int)Product.WoodenPlank, 40 },

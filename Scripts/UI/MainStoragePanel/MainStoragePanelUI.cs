@@ -1,5 +1,4 @@
-﻿using Jrd.Gameplay.Storage._1_MainStorage;
-using Jrd.Gameplay.Storage._1_MainStorage.Component;
+﻿using Jrd.Gameplay.Storage.MainStorage.Component;
 using UnityEngine;
 using UnityEngine.UIElements;
 

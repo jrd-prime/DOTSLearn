@@ -2,12 +2,13 @@
 using Jrd.Gameplay.Building.ControlPanel.Component;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage;
-using Jrd.Gameplay.Storage._1_MainStorage.Component;
-using Jrd.Gameplay.Storage._2_Warehouse.Component;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
-using Jrd.Gameplay.Storage._4_Manufactured;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
+using Jrd.Gameplay.Storage.MainStorage.Component;
+using Jrd.Gameplay.Storage.ManufacturedBox;
 using Jrd.Gameplay.Storage.Service;
+using Jrd.Gameplay.Storage.Warehouse.Component;
 using Jrd.Gameplay.Timers;
+using Jrd.Gameplay.Timers.Component;
 using Jrd.GameStates;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.GameStates.PlayState;
@@ -29,14 +30,11 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private BuildingDataAspect _aspect;
         private MainStorageData _mainStorageData;
         private WarehouseData _warehouseData;
-        private InProductionData _inProductionData;
-        private ManufacturedData _manufacturedData;
+        private InProductionBoxData _inProductionBoxData;
+        private ManufacturedBoxData _manufacturedBoxData;
         private BuildingData _buildingData;
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
-
-        private float _all;
-        private float _one;
 
         private BuildingControlPanelUI _buildingUI;
         private TextPopUpMono _textPopUpUI;
@@ -76,13 +74,10 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _required = aspect.RequiredProductsData.Required;
                 _manufactured = aspect.ManufacturedProductsData.Manufactured;
                 _warehouseData = aspect.BuildingProductsData.WarehouseData;
-                _inProductionData = aspect.BuildingProductsData.InProductionData;
-                _manufacturedData = aspect.BuildingProductsData.ManufacturedData;
+                _inProductionBoxData = aspect.BuildingProductsData.InProductionBoxData;
+                _manufacturedBoxData = aspect.BuildingProductsData.ManufacturedBoxData;
                 _buildingData = aspect.BuildingData;
                 _buildingEntity = aspect.BuildingData.Self;
-
-                _all = aspect.ProductionProcessData.AllProductsTimer;
-                _one = aspect.ProductionProcessData.OneProductTimer;
 
                 _ecb.RemoveComponent<InitializeTag>(_buildingEntity);
 
@@ -131,31 +126,24 @@ namespace Jrd.Gameplay.Building.ControlPanel
             if (SystemAPI.HasComponent<ProductionTimersUpdatedEvent>(_buildingEntity))
             {
                 Debug.LogWarning("Production Timers Updated Event");
-                foreach (var (all, one, entity) in SystemAPI
-                             .Query<AllLoadedProductsTimerData, OneLoadedProductTimerData>()
+                foreach (var (timer, entity) in SystemAPI
+                             .Query<TimerData>()
                              .WithAll<ProductionTimersUpdatedEvent>().WithEntityAccess())
                 {
-                    UpdateProductionTimers(all.Value, one.Value);
+                    switch (timer.TimerType)
+                    {
+                        case TimerType.MoveToWarehouse:
+                            break;
+                        case TimerType.OneProduct:
+                            break;
+                        case TimerType.AllProducts:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    
+                    // UpdateProductionTimers(all.Value, one.Value);
                     _ecb.RemoveComponent<ProductionTimersUpdatedEvent>(entity);
-                }
-            }
-
-            foreach (var moveTimer in SystemAPI.Query<RefRO<ProductsMoveTimerData>>())
-            {
-                float timer = moveTimer.ValueRO.CurrentValue;
-                float max = moveTimer.ValueRO.StarValue;
-
-                switch (timer)
-                {
-                    case > 0f:
-                        Debug.Log("Update timer UI");
-                        SetStorageTimer(max, timer);
-                        break;
-                    case <= 0f:
-                        Debug.Log("TIMER FINISHED");
-                        SetStorageTimer(max, timer);
-                        SetItemsToWarehouse();
-                        break;
                 }
             }
         }
@@ -171,7 +159,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             //TODO disable button if in storage 0 req products
             //TODO add move time to button
 
-            _ecb.AddComponent<ProductsToWarehouseRequestTag>(_buildingEntity);
+            _ecb.AddComponent<MoveToWarehouseRequestTag>(_buildingEntity);
             _ecb.AddComponent<UpdateStoragesDataTag>(_buildingEntity);
         }
 
@@ -234,7 +222,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToInProduction()
         {
-            NativeList<ProductData> inProductionData = StorageService.GetProductsDataList(_inProductionData.Value);
+            NativeList<ProductData> inProductionData = StorageService.GetProductsDataList(_inProductionBoxData.Value);
 
             _buildingUI.SetItems(_buildingUI.InProductionUI, inProductionData);
 
@@ -254,9 +242,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public void SetItemsToProduction()
         {
             var inProductionBox =
-                Utils.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionData.Value);
+                Utils.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionBoxData.Value);
             var manufacturedBox = Utils.ConvertProductsHashMapToList(
-                _aspect.BuildingProductsData.ManufacturedData.Value);
+                _aspect.BuildingProductsData.ManufacturedBoxData.Value);
 
             _buildingUI.SetItems(_buildingUI.InProductionUI, inProductionBox);
             _buildingUI.SetItems(_buildingUI.ManufacturedUI, manufacturedBox);

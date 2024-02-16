@@ -1,7 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._2_Warehouse;
 using Unity.Collections;
 
 namespace Jrd.Gameplay.Storage.Service

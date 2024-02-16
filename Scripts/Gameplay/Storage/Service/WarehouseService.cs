@@ -1,8 +1,6 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._2_Warehouse;
-using Jrd.Gameplay.Storage._2_Warehouse.Component;
+using Jrd.Gameplay.Storage.Warehouse.Component;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;

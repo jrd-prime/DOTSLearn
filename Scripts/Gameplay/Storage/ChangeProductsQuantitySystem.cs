@@ -1,13 +1,13 @@
 ﻿using System;
 using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._1_MainStorage.Component;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
+using Jrd.Gameplay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Storage._3_InProduction
+namespace Jrd.Gameplay.Storage
 {
     public partial struct ChangeProductsQuantitySystem : ISystem
     {
@@ -27,8 +27,8 @@ namespace Jrd.Gameplay.Storage._3_InProduction
                 NativeList<ProductData> productsData = changeProductsQuantityData.ValueRO.ProductsData;
 
                 var warehouse = aspect.BuildingProductsData.WarehouseData;
-                var inProduction = aspect.BuildingProductsData.InProductionData;
-                var manufactured = aspect.BuildingProductsData.ManufacturedData;
+                var inProduction = aspect.BuildingProductsData.InProductionBoxData;
+                var manufactured = aspect.BuildingProductsData.ManufacturedBoxData;
 
                 switch (storageType)
                 {

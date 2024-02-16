@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Jrd.Grid.Points;
+﻿using Jrd.Grid.Points;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,9 +6,6 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
-using Unity.Physics;
-using Unity.Physics.Systems;
 
 namespace Jrd.Grid.GridLayout
 {
@@ -23,12 +19,11 @@ namespace Jrd.Grid.GridLayout
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<GridComponent>();
+            state.Enabled = false;
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            state.Enabled = false;
-
             var biEcb = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 

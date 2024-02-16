@@ -15,15 +15,16 @@ namespace Jrd.Grid.Points
             // state.RequireForUpdate<GridData>();
             state.RequireForUpdate<InputCursorData>();
             state.RequireForUpdate<DebSetComponent>();
+            state.Enabled = false;
         }
 
         public void OnUpdate(ref SystemState state)
         {
             var em = state.EntityManager;
             var debSet = em.GetComponentData<DebSetComponent>(SystemAPI.GetSingletonEntity<DebSetComponent>());
-            
+
             if (!debSet.MouseRaycast) return;
-            
+
             var cursor = em.GetComponentData<InputCursorData>(SystemAPI.GetSingletonEntity<InputCursorData>());
             // var grid = em.GetComponentData<GridComponent>(SystemAPI.GetSingletonEntity<GridComponent>());
             // var gridData = em.GetComponentData<GridData>(SystemAPI.GetSingletonEntity<GridData>());
@@ -33,7 +34,7 @@ namespace Jrd.Grid.Points
                 Mathf.Round(cursor.CursorWorldPosition.x),
                 Mathf.Round(cursor.CursorWorldPosition.y),
                 Mathf.Round(cursor.CursorWorldPosition.z));
-            
+
             foreach (var point in SystemAPI.Query<RefRW<PointComponent>, RefRO<PointMainTagComponent>>())
             {
                 var p = point.Item1.ValueRO;

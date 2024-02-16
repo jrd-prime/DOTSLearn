@@ -3,10 +3,10 @@ using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage._2_Warehouse.Component;
-using Jrd.Gameplay.Storage._3_InProduction.Component;
-using Jrd.Gameplay.Storage._4_Manufactured;
-using Jrd.Gameplay.Storage._4_Manufactured.Component;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
+using Jrd.Gameplay.Storage.ManufacturedBox;
+using Jrd.Gameplay.Storage.ManufacturedBox.Component;
+using Jrd.Gameplay.Storage.Warehouse.Component;
 using Jrd.GameStates.BuildingState.Prefabs;
 using Jrd.MyUtils;
 using Unity.Burst;
@@ -107,9 +107,9 @@ namespace Jrd.Gameplay.Building
             {
                 WarehouseData = new WarehouseData
                     { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
-                InProductionData = new InProductionData
+                InProductionBoxData = new InProductionBoxData
                     { Value = Utils.ConvertProductsDataToHashMap(required, Utils.ProductValues.ToDefault) },
-                ManufacturedData = new ManufacturedData
+                ManufacturedBoxData = new ManufacturedBoxData
                     { Value = Utils.ConvertProductsDataToHashMap(manufactured, Utils.ProductValues.ToDefault) }
             });
         }

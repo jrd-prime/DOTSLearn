@@ -1,5 +1,5 @@
 ﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
+using Jrd.Gameplay.Timers.Component;
 using Unity.Entities;
 using UnityEngine;
 
@@ -21,12 +21,12 @@ namespace Jrd.Gameplay.Timers
 
 
             foreach (var (aspect, timer, entity) in SystemAPI
-                         .Query<BuildingDataAspect, RefRW<ProductsMoveTimerData>>()
+                         .Query<BuildingDataAspect, RefRW<TimerData>>()
                          .WithAll<InstantBuffTag>()
                          .WithEntityAccess())
             {
                 Debug.LogWarning("Instant");
-                timer.ValueRW.CurrentValue = 0;
+                // timer.ValueRW.FinishTime = Time.time;/
                 _ecb.RemoveComponent<InstantBuffTag>(entity);
             }
         }
