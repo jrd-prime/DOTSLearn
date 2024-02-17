@@ -35,7 +35,7 @@ namespace Jrd.Gameplay.Storage.Service
             WarehouseData warehouseData, NativeList<ProductData> requiredQuantity,
             int loadCapacity)
         {
-            var preparedProducts = new NativeList<ProductData>(0, Allocator.Temp);
+            var preparedProducts = new NativeList<ProductData>(0, Allocator.Persistent);
             var a = 0;
 
             foreach (var q in requiredQuantity)
@@ -48,8 +48,6 @@ namespace Jrd.Gameplay.Storage.Service
             int tempLoadsCount = (int)math.floor(loadCapacity / a);
 
             int maxLoads = GetMaxLoads(warehouseData.Value, tempLoadsCount, requiredQuantity);
-
-            Debug.LogWarning("max load times = " + maxLoads);
 
             foreach (var q in requiredQuantity)
             {

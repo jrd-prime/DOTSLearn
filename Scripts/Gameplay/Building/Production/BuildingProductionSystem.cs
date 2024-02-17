@@ -13,7 +13,7 @@ namespace Jrd.Gameplay.Building.Production
     public partial struct BuildingProductionSystem : ISystem
     {
         private EntityCommandBuffer _ecb;
-        private Entity _entity;
+        private Entity _buildingEntity;
         private BuildingDataAspect _aspect;
 
         public void OnCreate(ref SystemState state)
@@ -29,7 +29,7 @@ namespace Jrd.Gameplay.Building.Production
 
             foreach (var aspect in SystemAPI.Query<BuildingDataAspect>())
             {
-                _entity = aspect.Self;
+                _buildingEntity = aspect.Self;
                 _aspect = aspect;
 
                 ProductionState productionState = aspect.BuildingData.ProductionState;
@@ -41,24 +41,26 @@ namespace Jrd.Gameplay.Building.Production
                 {
                     case ProductionState.Init:
                     case ProductionState.NotEnoughProducts:
-                        Debug.Log("NotEnoughProducts " + aspect.BuildingData.Name);
+                        Debug.Log("NOT ENOUGH PRODUCTS " + aspect.BuildingData.Name);
                         // показывать в панели билдинга что нету продуктов для производства в инпродакшн боксе
                         break;
 
                     case ProductionState.EnoughProducts:
+                        Debug.Log("ENOUGH PRODUCTS " + _aspect.BuildingData.Name);
                         EnoughProducts();
                         aspect.SetProductionState(ProductionState.Started);
                         break;
 
                     case ProductionState.Started:
+                        Debug.Log("STARTED " + _aspect.BuildingData.Name);
                         Started();
                         aspect.SetProductionState(ProductionState.InProgress);
                         break;
 
                     case ProductionState.InProgress:
-                        Debug.Log("InProgress " + aspect.BuildingData.Name);
+                        Debug.Log("IN PROGRESS " + aspect.BuildingData.Name);
 
-                        _ecb.AddComponent<ProductionTimersUpdatedEvent>(_entity);
+                        _ecb.AddComponent<ProductionTimersUpdatedEvent>(_buildingEntity);
 
                         // сетить и обновлять таймеры
                         // когда заканчивается один цикл - обновить юай произмеденных
@@ -72,12 +74,12 @@ namespace Jrd.Gameplay.Building.Production
 
                         break;
                     case ProductionState.Stopped:
-                        Debug.Log("Stopped " + aspect.BuildingData.Name);
+                        Debug.Log("STOPPED " + aspect.BuildingData.Name);
 
                         // ожидание когда освободится место на складе и как-то продолжить цикл
                         break;
                     case ProductionState.Finished:
-                        Debug.Log("Finished " + aspect.BuildingData.Name);
+                        Debug.Log("FINISHED " + aspect.BuildingData.Name);
 
                         // обновить все юаи продакшена 
                         // показать/уведомить что задание завершено
@@ -90,33 +92,26 @@ namespace Jrd.Gameplay.Building.Production
 
         private void Started()
         {
-            Debug.Log("Started " + _aspect.BuildingData.Name);
             // Set timers
             _aspect.SetAllProductsTimer();
             _aspect.SetOneProductTimer();
 
             // Start timers
-            var timerEntity = _ecb.CreateEntity();
-            _ecb.AddComponent(timerEntity, new TimerData
-            {
-                Self = timerEntity,
-                Owner = _entity,
-                TimerType = TimerType.OneProduct,
-                IsSet = false,
-                Duration = _aspect.GetOneProductManufacturingTime()
-            });
-            timerEntity = _ecb.CreateEntity();
-            _ecb.AddComponent(timerEntity, new TimerData
-            {
-                Self = timerEntity,
-                Owner = _entity,
-                TimerType = TimerType.AllProducts,
-                IsSet = false,
-                Duration = _aspect.GetLoadedProductsManufacturingTime()
-            });
+            new JTimer().StartNewTimer(
+                _buildingEntity,
+                TimerType.OneProduct,
+                _aspect.GetOneProductManufacturingTime(),
+                _ecb);
+
+            new JTimer().StartNewTimer(
+                _buildingEntity,
+                TimerType.AllProducts,
+                _aspect.GetLoadedProductsManufacturingTime(),
+                _ecb);
+
 
             // взять часть продуктов для 1 прогона
-            _ecb.AddComponent(_entity, new ChangeProductsQuantityData
+            _ecb.AddComponent(_buildingEntity, new ChangeProductsQuantityData
             {
                 StorageType = StorageType.InProduction,
                 ChangeType = ChangeType.Reduce,
@@ -124,11 +119,11 @@ namespace Jrd.Gameplay.Building.Production
             });
 
             // обновить юай inproduction
-            _ecb.AddComponent<InProductionDataUpdatedEvent>(_entity);
+            _ecb.AddComponent<InProductionDataUpdatedEvent>(_buildingEntity);
 
             // обновить юай таймеров
             // TODO handle
-            _ecb.AddComponent<ProductionTimersUpdatedEvent>(_entity);
+            _ecb.AddComponent<ProductionTimersUpdatedEvent>(_buildingEntity);
 
 
             // таймер юай на 0
@@ -167,7 +162,7 @@ namespace Jrd.Gameplay.Building.Production
             Debug.Log("loadedTime " + loadedProductsTime + " sec");
 
             // запустить производство
-            _ecb.AddComponent<StartProductionTag>(_entity);
+            _ecb.AddComponent<StartProductionTag>(_buildingEntity);
         }
     }
 }

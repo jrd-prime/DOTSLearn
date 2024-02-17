@@ -3,6 +3,7 @@ using Jrd.Gameplay.Products;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.Warehouse.Component
 {

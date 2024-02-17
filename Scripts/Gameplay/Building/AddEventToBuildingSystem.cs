@@ -1,8 +1,9 @@
-﻿using Unity.Entities;
-using UnityEngine;
+﻿using Unity.Burst;
+using Unity.Entities;
 
 namespace Jrd.Gameplay.Building
 {
+    [BurstCompile]
     public partial struct AddEventToBuildingSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -11,17 +12,16 @@ namespace Jrd.Gameplay.Building
             state.RequireForUpdate<AddEventToBuildingData>();
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (aspect, eventToAdd) in SystemAPI.Query<BuildingDataAspect, AddEventToBuildingData>())
+            foreach (var (aspect, eventData) in SystemAPI.Query<BuildingDataAspect, AddEventToBuildingData>())
             {
-                aspect.BuildingData.BuildingEvents.Add(eventToAdd.Value);
-
-                Debug.LogWarning($"event added = " + eventToAdd.Value);
+                aspect.BuildingData.BuildingEvents.Enqueue(eventData.Value);
 
                 ecb.RemoveComponent<AddEventToBuildingData>(aspect.Self);
             }

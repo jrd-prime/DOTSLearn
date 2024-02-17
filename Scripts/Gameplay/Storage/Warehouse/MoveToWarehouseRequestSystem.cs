@@ -1,5 +1,6 @@
 ﻿using Jrd.Gameplay.Building;
 using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.MainStorage.Component;
 using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
@@ -45,7 +46,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
                          .Query<BuildingDataAspect>()
                          .WithAll<MoveToWarehouseRequestTag>())
             {
-                Debug.LogWarning("REQUEST: Move To Warehouse");
+                Debug.LogWarning("___ REQUEST: Move To Warehouse");
                 _aspect = aspect;
                 _mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
@@ -58,8 +59,9 @@ namespace Jrd.Gameplay.Storage.Warehouse
                 SetDeliveryTimer();
                 ReduceProductsInMainStorage();
 
+                aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToWarehouseTimerStarted);
+
                 _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
-                aspect.BuildingData.BuildingEvents.Add(BuildingEvent.MoveToWarehouseTimerStarted);
             }
         }
 
@@ -75,6 +77,12 @@ namespace Jrd.Gameplay.Storage.Warehouse
         }
 
         private void ReduceProductsInMainStorage() =>
-            StorageService.ChangeProductsQuantity(_mainStorage.Value, Operation.Reduce, _matchingProducts);
+            _aspect.ChangeProductsQuantityData.Value.Enqueue(
+                new ChangeProductsQuantityData
+                {
+                    StorageType = StorageType.Main,
+                    ChangeType = ChangeType.Reduce,
+                    ProductsData = _matchingProducts
+                });
     }
 }

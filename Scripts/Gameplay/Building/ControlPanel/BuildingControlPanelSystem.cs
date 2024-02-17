@@ -75,17 +75,17 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 _manufacturedBoxData = aspect.BuildingProductsData.ManufacturedBoxData;
                 _buildingData = aspect.BuildingData;
 
-                var events = aspect.BuildingData.BuildingEvents;
-
-                if (events.Length > 0) ProcessEvents(events);
+                ProcessEvents(aspect.BuildingData.BuildingEvents);
             }
         }
 
-        private void ProcessEvents(NativeList<BuildingEvent> events)
+        private void ProcessEvents(NativeQueue<BuildingEvent> eQueue)
         {
-            foreach (BuildingEvent ev in events)
+            while (eQueue.Count > 0)
             {
-                Debug.LogWarning($"BUILDING EVENT: {ev}");
+                var ev = eQueue.Dequeue();
+
+                Debug.LogWarning($"___ BUILDING EVENT: {ev}");
                 switch (ev)
                 {
                     case BuildingEvent.MoveToWarehouseTimerStarted:
@@ -97,14 +97,28 @@ namespace Jrd.Gameplay.Building.ControlPanel
                     case BuildingEvent.MoveToProductionBoxFinished:
                         OnMoveToProductionBoxFinished();
                         break;
+                    case BuildingEvent.MainStorageDataUpdated:
+                        SetItemsToMainStorage();
+                        break;
+                    case BuildingEvent.WarehouseDataUpdated:
+                        SetItemsToWarehouse();
+                        break;
+                    case BuildingEvent.InProductionBoxDataUpdated:
+                        SetItemsToInProductionBox();
+                        break;
+                    case BuildingEvent.ManufacturedBoxDataUpdated:
+                        SetItemsToManufacturedBox();
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                events.RemoveAt(0);
             }
         }
 
+        private void SetItemsToManufacturedBox()
+        {
+            throw new NotImplementedException();
+        }
 
         #region Events Process
 
@@ -158,7 +172,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             warehouseProductsList.Dispose();
         }
 
-        private void SetItemsToInProduction()
+        private void SetItemsToInProductionBox()
         {
             NativeList<ProductData> inProductionData = StorageService.GetProductsDataList(_inProductionBoxData.Value);
 
@@ -191,8 +205,12 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private void DeliverProductsToWarehouse()
         {
             var productsToDelivery = SystemAPI.GetComponent<ProductsToDeliveryData>(_aspect.Self).Value;
-
-            _warehouseData.ChangeProductsQuantity(ChangeType.Increase, productsToDelivery);
+            _aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
+            {
+                StorageType = StorageType.Warehouse,
+                ChangeType = ChangeType.Increase,
+                ProductsData = productsToDelivery
+            });
         }
 
         #endregion

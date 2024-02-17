@@ -1,5 +1,6 @@
 ﻿using System;
 using Jrd.Gameplay.Building;
+using Jrd.Gameplay.Building.ControlPanel;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.MainStorage.Component;
@@ -9,48 +10,67 @@ using UnityEngine;
 
 namespace Jrd.Gameplay.Storage
 {
+    [UpdateBefore(typeof(BuildingControlPanelSystem))]
     public partial struct ChangeProductsQuantitySystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<MainStorageData>();
+            state.RequireForUpdate<ChangeProductsQuantityQueueData>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (aspect, changeProductsQuantityData)in SystemAPI
-                         .Query<BuildingDataAspect, RefRO<ChangeProductsQuantityData>>())
+            var ecb = SystemAPI
+                .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+
+            foreach (var (aspect, queueData)in SystemAPI
+                         .Query<BuildingDataAspect, RefRW<ChangeProductsQuantityQueueData>>())
             {
-                Debug.Log("--- Change Quantity");
-                StorageType storageType = changeProductsQuantityData.ValueRO.StorageType;
-                ChangeType changeType = changeProductsQuantityData.ValueRO.ChangeType;
-                NativeList<ProductData> productsData = changeProductsQuantityData.ValueRO.ProductsData;
-
-                var warehouse = aspect.BuildingProductsData.WarehouseData;
-                var inProduction = aspect.BuildingProductsData.InProductionBoxData;
-                var manufactured = aspect.BuildingProductsData.ManufacturedBoxData;
-
-                switch (storageType)
+                while (queueData.ValueRW.Value.Count > 0)
                 {
-                    case StorageType.Main:
-                        MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
-                        mainStorage.ChangeProductsQuantity(changeType, productsData);
-                        break;
+                    var dequeue = queueData.ValueRW.Value.Dequeue();
 
-                    case StorageType.Warehouse:
-                        warehouse.ChangeProductsQuantity(changeType, productsData);
-                        break;
+                    Debug.LogWarning("___ CHANGE QUANTITY: " + dequeue.StorageType + "/" + dequeue.ChangeType);
 
-                    case StorageType.InProduction:
-                        inProduction.ChangeProductsQuantity(changeType, productsData);
-                        break;
+                    ChangeType changeType = dequeue.ChangeType;
+                    NativeList<ProductData> productsData = dequeue.ProductsData;
 
-                    case StorageType.Manufactured:
-                        manufactured.ChangeProductsQuantity(changeType, productsData);
-                        break;
+                    switch (dequeue.StorageType)
+                    {
+                        case StorageType.Main:
+                            MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
+                            mainStorage.ChangeProductsQuantity(changeType, productsData);
 
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MainStorageDataUpdated);
+                            break;
+
+                        case StorageType.Warehouse:
+                            aspect.BuildingProductsData.WarehouseData
+                                .ChangeProductsQuantity(changeType, productsData);
+
+                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);
+                            break;
+
+                        case StorageType.InProduction:
+                            aspect.BuildingProductsData.InProductionBoxData
+                                .ChangeProductsQuantity(changeType, productsData);
+
+                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.InProductionBoxDataUpdated);
+                            break;
+
+                        case StorageType.Manufactured:
+                            aspect.BuildingProductsData.ManufacturedBoxData
+                                .ChangeProductsQuantity(changeType, productsData);
+
+                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.ManufacturedBoxDataUpdated);
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
         }

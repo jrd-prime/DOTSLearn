@@ -2,6 +2,7 @@
 using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage;
 using Jrd.Gameplay.Storage.ManufacturedBox.Component;
 using Unity.Collections;
 using Unity.Entities;
@@ -25,13 +26,15 @@ namespace Jrd.Gameplay.Building
         private readonly RefRO<RequiredProductsData> _requiredProductsData;
         private readonly RefRO<ManufacturedProductsData> _manufacturedProductsData;
         private readonly RefRW<ProductionProcessData> _productionProcessData;
+        private readonly RefRW<ChangeProductsQuantityQueueData> _changeProductsQuantityData;
 
         public Entity Self => _self;
         public BuildingData BuildingData => _buildingData.ValueRO;
-        public BuildingProductsData BuildingProductsData => _buildingProductsData.ValueRO;
+        public BuildingProductsData BuildingProductsData => _buildingProductsData.ValueRW;
         public RequiredProductsData RequiredProductsData => _requiredProductsData.ValueRO;
         public ManufacturedProductsData ManufacturedProductsData => _manufacturedProductsData.ValueRO;
         public ProductionProcessData ProductionProcessData => _productionProcessData.ValueRO;
+        public ChangeProductsQuantityQueueData ChangeProductsQuantityData => _changeProductsQuantityData.ValueRW;
 
 
         public void SetProductionState(ProductionState value) => _buildingData.ValueRW.ProductionState = value;

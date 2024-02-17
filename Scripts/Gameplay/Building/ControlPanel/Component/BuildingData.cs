@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Building.Production;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -13,7 +14,7 @@ namespace Jrd.Gameplay.Building.ControlPanel.Component
         public FixedString64Bytes Guid;
         public float3 WorldPosition;
         public BuildingNameId NameId;
-        public NativeList<BuildingEvent> BuildingEvents;
+        public NativeQueue<BuildingEvent> BuildingEvents;
 
         // TODO remove, buff
         public int Level;

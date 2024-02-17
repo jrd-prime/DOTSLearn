@@ -4,6 +4,7 @@ using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.MainStorage.Component
 {

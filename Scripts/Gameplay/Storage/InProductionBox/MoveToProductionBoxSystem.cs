@@ -37,7 +37,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
                          .Query<BuildingDataAspect>()
                          .WithAll<MoveToProductionBoxRequestTag>())
             {
-                Debug.LogWarning("REQUEST: Move To Production Box");
+                Debug.LogWarning("___ REQUEST: Move To Production Box");
 
                 _warehouseData = aspect.BuildingProductsData.WarehouseData;
                 _productionBoxData = aspect.BuildingProductsData.InProductionBoxData;
@@ -51,6 +51,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
                     TextPopUpMono.Instance.ShowPopUp("quantity ok");
 
                     // 1 prepare prods
+                    // TODO dispose
                     var (preparedProducts, maxLoads) =
                         WarehouseService.GetProductsForProductionAndMaxLoads(
                             _warehouseData,
@@ -59,17 +60,29 @@ namespace Jrd.Gameplay.Storage.InProductionBox
 
                     if (preparedProducts.IsEmpty) Debug.LogError("PrepProd list is empty!");
 
+
                     aspect.SetPreparedProductsToProduction(preparedProducts);
                     aspect.SetMaxLoads(maxLoads);
 
                     // 2 reduce in warehouse
-                    StorageService.ChangeProductsQuantity(_warehouseData.Value, Operation.Reduce, preparedProducts);
+                    aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
+                    {
+                        StorageType = StorageType.Warehouse,
+                        ChangeType = ChangeType.Reduce,
+                        ProductsData = preparedProducts
+                    });
 
                     // 3 increase in productin box
-                    StorageService.ChangeProductsQuantity(_productionBoxData.Value, Operation.Increase,
-                        preparedProducts);
+                    aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
+                    {
+                        StorageType = StorageType.InProduction,
+                        ChangeType = ChangeType.Increase,
+                        ProductsData = preparedProducts
+                    });
+
+
                     // 3.1 update ui
-                    aspect.BuildingData.BuildingEvents.Add(BuildingEvent.MoveToProductionBoxFinished);
+                    aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBoxFinished);
                     ecb.AddComponent<InProductionDataUpdatedEvent>(aspect.BuildingData.Self);
 
                     // 4 start production

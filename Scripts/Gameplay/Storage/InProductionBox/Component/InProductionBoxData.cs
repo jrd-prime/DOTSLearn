@@ -1,6 +1,7 @@
 ﻿using System;
 using Jrd.Gameplay.Products.Component;
 using Unity.Collections;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.InProductionBox.Component
 {
@@ -10,7 +11,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox.Component
     public struct InProductionBoxData : IBuildingProductsData
     {
         public NativeParallelHashMap<int, int> Value;
-        
+
         // TODO repeated, needed refact
         public void ChangeProductsQuantity(ChangeType change, NativeList<ProductData> productsData)
         {

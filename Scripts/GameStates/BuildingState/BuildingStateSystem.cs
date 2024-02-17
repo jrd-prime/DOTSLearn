@@ -133,7 +133,7 @@ namespace Jrd.GameStates.BuildingState
                         Guid = giud,
                         Name = blueprintBuffer.Name,
                         Prefab = blueprintBuffer.Self,
-                        BuildingEvents = new NativeList<BuildingEvent>(0, Allocator.Persistent),
+                        BuildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent),
 
                         NameId = blueprintBuffer.NameId,
                         Level = blueprintBuffer.Level,

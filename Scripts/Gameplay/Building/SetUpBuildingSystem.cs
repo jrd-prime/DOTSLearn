@@ -3,6 +3,7 @@ using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Building.TempBuilding.Component;
 using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.ManufacturedBox;
 using Jrd.Gameplay.Storage.ManufacturedBox.Component;
@@ -55,7 +56,7 @@ namespace Jrd.Gameplay.Building
                 _building = buildingData.ValueRW;
                 _transform = transform.ValueRO;
 
-                buildingData.ValueRW.BuildingEvents = new NativeList<BuildingEvent>(0, Allocator.Persistent);
+                buildingData.ValueRW.BuildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent);
 
                 InitSettingsForNewBuilding(ref state);
             }
@@ -78,6 +79,7 @@ namespace Jrd.Gameplay.Building
             SetPosition();
             SetEntityName();
             SetProductionState();
+            InitChangeProductsQueue();
             BuildingTags();
 
             // Init products
@@ -91,6 +93,13 @@ namespace Jrd.Gameplay.Building
             AddBuildingToGameBuildingsList(ref state);
         }
 
+        private void InitChangeProductsQueue()
+        {
+            _bsEcb.AddComponent(_entity, new ChangeProductsQuantityQueueData
+            {
+                Value = new NativeQueue<ChangeProductsQuantityData>(Allocator.Persistent)
+            });
+        }
 
 
         private void BuildingTags()

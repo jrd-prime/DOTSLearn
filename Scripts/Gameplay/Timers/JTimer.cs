@@ -22,7 +22,7 @@ namespace Jrd.Gameplay.Timers
                 Duration = duration
             });
 
-            Debug.Log("TIMER. New timer started. Move time: " + duration + " sec.");
+            Debug.Log("___ TIMER. New timer started. Move time: " + duration + " sec.");
         }
     }
 }

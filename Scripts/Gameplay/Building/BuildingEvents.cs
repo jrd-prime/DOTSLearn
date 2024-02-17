@@ -4,6 +4,10 @@
     {
         MoveToWarehouseTimerStarted,
         MoveToWarehouseTimerFinished,
-        MoveToProductionBoxFinished
+        MoveToProductionBoxFinished,
+        MainStorageDataUpdated,
+        WarehouseDataUpdated,
+        InProductionBoxDataUpdated,
+        ManufacturedBoxDataUpdated
     }
 }

@@ -2,6 +2,7 @@
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
+using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.ManufacturedBox
 {
@@ -15,6 +16,7 @@ namespace Jrd.Gameplay.Storage.ManufacturedBox
         // TODO repeated, needed refact
         public void ChangeProductsQuantity(ChangeType change, NativeList<ProductData> productsData)
         {
+            Debug.Log("MANUFACTURED change");
             foreach (var product in productsData)
             {
                 ChangeProductQuantity(product, change);
