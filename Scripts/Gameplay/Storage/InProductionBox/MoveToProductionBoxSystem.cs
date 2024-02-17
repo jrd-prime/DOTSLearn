@@ -83,7 +83,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
 
                     // 3.1 update ui
                     aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBoxFinished);
-                    ecb.AddComponent<InProductionDataUpdatedEvent>(aspect.BuildingData.Self);
+                    aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
 
                     // 4 start production
                     aspect.SetProductionState(ProductionState.EnoughProducts);

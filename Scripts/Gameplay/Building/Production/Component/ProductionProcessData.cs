@@ -10,5 +10,7 @@ namespace Jrd.Gameplay.Building.Production.Component
         public NativeList<ProductData> PreparedProducts;
         public float AllProductsTimer;
         public float OneProductTimer;
+        public int RemainingCycles;
+        public int CurrentCycle;
     }
 }

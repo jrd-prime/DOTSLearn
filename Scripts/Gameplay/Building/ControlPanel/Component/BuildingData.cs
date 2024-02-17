@@ -1,5 +1,4 @@
 ﻿using Jrd.Gameplay.Building.Production;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

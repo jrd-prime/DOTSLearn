@@ -46,7 +46,7 @@ namespace Jrd.Gameplay.Building
             
             await Task.Run(() =>
             {
-                Debug.LogWarning("add me " + buildingData.Guid);
+                // Debug.LogWarning("add me " + buildingData.Guid);
 
                 if (!gameBuildingsHashMap.ContainsKey(buildingData.Guid))
                 {

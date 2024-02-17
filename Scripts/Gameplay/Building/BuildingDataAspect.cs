@@ -3,6 +3,7 @@ using Jrd.Gameplay.Building.Production;
 using Jrd.Gameplay.Building.Production.Component;
 using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage;
+using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.ManufacturedBox.Component;
 using Unity.Collections;
 using Unity.Entities;
@@ -33,7 +34,7 @@ namespace Jrd.Gameplay.Building
         public BuildingProductsData BuildingProductsData => _buildingProductsData.ValueRW;
         public RequiredProductsData RequiredProductsData => _requiredProductsData.ValueRO;
         public ManufacturedProductsData ManufacturedProductsData => _manufacturedProductsData.ValueRO;
-        public ProductionProcessData ProductionProcessData => _productionProcessData.ValueRO;
+        public RefRW<ProductionProcessData> ProductionProcessData => _productionProcessData;
         public ChangeProductsQuantityQueueData ChangeProductsQuantityData => _changeProductsQuantityData.ValueRW;
 
 
@@ -52,10 +53,18 @@ namespace Jrd.Gameplay.Building
         public int GetLoadedProductsManufacturingTime() =>
             _productionProcessData.ValueRO.MaxLoads * GetOneProductManufacturingTime();
 
-        public void SetAllProductsTimer() =>
+        public void SetFullLoadedProductsTimer() =>
             _productionProcessData.ValueRW.AllProductsTimer = GetLoadedProductsManufacturingTime();
 
         public void SetOneProductTimer() =>
             _productionProcessData.ValueRW.OneProductTimer = GetOneProductManufacturingTime();
+
+        // Events
+        public void AddEvent(BuildingEvent value) =>
+            _buildingData.ValueRW.BuildingEvents.Enqueue(value);
+
+        // Prods
+        public void ChangeProductsQuantity(ChangeProductsQuantityData data) =>
+            _changeProductsQuantityData.ValueRW.Value.Enqueue(data);
     }
 }
