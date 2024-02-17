@@ -45,6 +45,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
                          .Query<BuildingDataAspect>()
                          .WithAll<MoveToWarehouseRequestTag>())
             {
+                Debug.LogWarning("REQUEST: Move To Warehouse");
                 _aspect = aspect;
                 _mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
@@ -56,14 +57,6 @@ namespace Jrd.Gameplay.Storage.Warehouse
                 SetProductsToDelivery();
                 SetDeliveryTimer();
                 ReduceProductsInMainStorage();
-
-                Debug.Log("--- " + this);
-                foreach (var q in _matchingProducts)
-                {
-                    Debug.Log(q.Name + " / " + q.Quantity);
-                }
-
-                Debug.Log("--- " + this);
 
                 _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
                 aspect.BuildingData.BuildingEvents.Add(BuildingEvent.MoveToWarehouseTimerStarted);

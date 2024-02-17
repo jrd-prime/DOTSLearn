@@ -22,7 +22,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             _textPopUpUI.ShowPopUp("load btn");
 
-            ecb.AddComponent<ProductsToProductionBoxRequestTag>(buildingEntity);
+            ecb.AddComponent<MoveToProductionBoxRequestTag>(buildingEntity);
         }
 
         public void TakeButton(Entity buildingEntity, EntityCommandBuffer ecb)

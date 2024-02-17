@@ -4,5 +4,6 @@
     {
         MoveToWarehouseTimerStarted,
         MoveToWarehouseTimerFinished,
+        MoveToProductionBoxFinished
     }
 }

@@ -20,7 +20,7 @@ namespace Jrd.Gameplay.Storage.Service
             NativeList<ProductData> requiredData)
         {
             bool first = warehouseData.Value[(int)requiredData[0].Name] >= requiredData[0].Quantity;
-            Debug.LogWarning("in ");
+
             //TODO LOOK Refactor this 
             return requiredData.Length switch
             {
@@ -67,26 +67,25 @@ namespace Jrd.Gameplay.Storage.Service
         /// Return max possible loads based on available products in warehouse
         /// </summary>
         private static int GetMaxLoads(
-            NativeParallelHashMap<int, int> warehouseData, int maxLoads,
-            NativeList<ProductData> requiredQuantity)
+            NativeParallelHashMap<int, int> warehouseData, int maxLoads, NativeList<ProductData> requiredQuantity)
         {
             var tempMaxLoads = maxLoads;
 
-            bool isFirstProductHasSufficientQuantity =
-                warehouseData[(int)requiredQuantity[0].Name] < requiredQuantity[0].Quantity * maxLoads;
+            bool isFirstHasSufficientQuantity =
+                warehouseData[(int)requiredQuantity[0].Name] >= requiredQuantity[0].Quantity * maxLoads;
 
             switch (warehouseData.Count())
             {
                 case 1:
-                    if (!isFirstProductHasSufficientQuantity) break;
+                    if (isFirstHasSufficientQuantity) return tempMaxLoads;
 
                     tempMaxLoads = GetMaxLoads(warehouseData, maxLoads - 1, requiredQuantity);
                     break;
                 case 2:
-                    bool isSecondProductHasSufficientQuantity =
-                        warehouseData[(int)requiredQuantity[1].Name] < requiredQuantity[1].Quantity * maxLoads;
+                    bool isSecondHasSufficientQuantity =
+                        warehouseData[(int)requiredQuantity[1].Name] >= requiredQuantity[1].Quantity * maxLoads;
 
-                    if (!isFirstProductHasSufficientQuantity || !isSecondProductHasSufficientQuantity) break;
+                    if (isFirstHasSufficientQuantity && isSecondHasSufficientQuantity) return tempMaxLoads;
 
                     tempMaxLoads = GetMaxLoads(warehouseData, maxLoads - 1, requiredQuantity);
                     break;

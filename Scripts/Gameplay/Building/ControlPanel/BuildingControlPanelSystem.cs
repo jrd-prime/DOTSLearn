@@ -94,6 +94,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
                     case BuildingEvent.MoveToWarehouseTimerFinished:
                         OnMoveToWarehouseTimerFinished();
                         break;
+                    case BuildingEvent.MoveToProductionBoxFinished:
+                        OnMoveToProductionBoxFinished();
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -101,6 +104,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 events.RemoveAt(0);
             }
         }
+
 
         #region Events Process
 
@@ -115,6 +119,12 @@ namespace Jrd.Gameplay.Building.ControlPanel
             DeliverProductsToWarehouse();
             SetStorageTimer(10, 10); //TODO
             SetItemsToWarehouse();
+        }
+
+        private void OnMoveToProductionBoxFinished()
+        {
+            SetItemsToWarehouse();
+            SetItemsToProduction();
         }
 
         #endregion

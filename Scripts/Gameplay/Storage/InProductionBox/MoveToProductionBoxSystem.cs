@@ -13,7 +13,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
 {
     /// <summary>
     /// Move products from the building warehouse to production box<br/>
-    /// <see cref="ProductsToProductionBoxRequestTag"/>
+    /// <see cref="MoveToProductionBoxRequestTag"/>
     /// </summary>
     public partial struct MoveToProductionBoxSystem : ISystem
     {
@@ -24,7 +24,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<ProductsToProductionBoxRequestTag>();
+            state.RequireForUpdate<MoveToProductionBoxRequestTag>();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -35,9 +35,9 @@ namespace Jrd.Gameplay.Storage.InProductionBox
 
             foreach (var aspect in SystemAPI
                          .Query<BuildingDataAspect>()
-                         .WithAll<ProductsToProductionBoxRequestTag>())
+                         .WithAll<MoveToProductionBoxRequestTag>())
             {
-                Debug.LogWarning("to production box request");
+                Debug.LogWarning("REQUEST: Move To Production Box");
 
                 _warehouseData = aspect.BuildingProductsData.WarehouseData;
                 _productionBoxData = aspect.BuildingProductsData.InProductionBoxData;
@@ -57,22 +57,19 @@ namespace Jrd.Gameplay.Storage.InProductionBox
                             _requiredQuantity,
                             aspect.BuildingData.LoadCapacity);
 
+                    if (preparedProducts.IsEmpty) Debug.LogError("PrepProd list is empty!");
+
                     aspect.SetPreparedProductsToProduction(preparedProducts);
                     aspect.SetMaxLoads(maxLoads);
-
-                    foreach (var q in preparedProducts)
-                    {
-                        Debug.LogWarning($"prepared: {q.Name} / {q.Quantity}");
-                    }
 
                     // 2 reduce in warehouse
                     StorageService.ChangeProductsQuantity(_warehouseData.Value, Operation.Reduce, preparedProducts);
 
                     // 3 increase in productin box
-                    StorageService.ChangeProductsQuantity(_productionBoxData.Value, Operation.Increase, preparedProducts);
-
+                    StorageService.ChangeProductsQuantity(_productionBoxData.Value, Operation.Increase,
+                        preparedProducts);
                     // 3.1 update ui
-                    // ecb.AddComponent<WarehouseDataUpdatedEvent>(aspect.BuildingData.Self);
+                    aspect.BuildingData.BuildingEvents.Add(BuildingEvent.MoveToProductionBoxFinished);
                     ecb.AddComponent<InProductionDataUpdatedEvent>(aspect.BuildingData.Self);
 
                     // 4 start production
@@ -85,7 +82,7 @@ namespace Jrd.Gameplay.Storage.InProductionBox
                     TextPopUpMono.Instance.ShowPopUp("quantity NOT ok");
                 }
 
-                ecb.RemoveComponent<ProductsToProductionBoxRequestTag>(aspect.BuildingData.Self);
+                ecb.RemoveComponent<MoveToProductionBoxRequestTag>(aspect.BuildingData.Self);
             }
         }
     }

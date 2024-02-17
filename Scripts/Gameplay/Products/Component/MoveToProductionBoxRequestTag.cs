@@ -2,7 +2,7 @@
 
 namespace Jrd.Gameplay.Products.Component
 {
-    public struct ProductsToProductionBoxRequestTag : IComponentData
+    public struct MoveToProductionBoxRequestTag : IComponentData
     {
     }
 }
