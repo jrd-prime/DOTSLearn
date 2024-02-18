@@ -33,7 +33,7 @@ namespace Jrd.Gameplay.Storage
                 {
                     var dequeue = queueData.ValueRW.Value.Dequeue();
 
-                    Debug.LogWarning("___ CHANGE QUANTITY: " + dequeue.StorageType + "/" + dequeue.ChangeType);
+                    // Debug.LogWarning("___ CHANGE QUANTITY: " + dequeue.StorageType + "/" + dequeue.ChangeType);
 
                     ChangeType changeType = dequeue.ChangeType;
                     NativeList<ProductData> productsData = dequeue.ProductsData;

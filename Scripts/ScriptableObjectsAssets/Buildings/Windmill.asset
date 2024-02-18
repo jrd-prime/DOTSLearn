@@ -28,6 +28,6 @@ MonoBehaviour:
   - _productDataSo: {fileID: 11400000, guid: a0ee9d66797760945985dcb3b5f498a4, type: 2}
     _quantity: 10
   _level: 1
-  _itemsPerHour: 180
+  _itemsPerHour: 720
   _loadCapacity: 25
   _storageCapacity: 25

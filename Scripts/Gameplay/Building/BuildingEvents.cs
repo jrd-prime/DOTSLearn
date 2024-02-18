@@ -8,6 +8,10 @@
         MainStorageDataUpdated,
         WarehouseDataUpdated,
         InProductionBoxDataUpdated,
-        ManufacturedBoxDataUpdated
+        ManufacturedBoxDataUpdated,
+        OneLoadCycleFinished,
+        FullLoadCycleFinished,
+        ProductionTimersStarted,
+        ProductionTimersInProgressUpdate
     }
 }

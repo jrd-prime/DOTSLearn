@@ -109,6 +109,17 @@ namespace Jrd.Gameplay.Building.ControlPanel
                     case BuildingEvent.ManufacturedBoxDataUpdated:
                         SetItemsToManufacturedBox();
                         break;
+                    case BuildingEvent.OneLoadCycleFinished:
+                        _aspect.ProductionProcessData.ValueRW.CurrentCycle += 1;
+                        break;
+                    case BuildingEvent.FullLoadCycleFinished:
+                        _aspect.ProductionProcessData.ValueRW.LastCycleEnd = true;
+                        break;
+                    case BuildingEvent.ProductionTimersStarted:
+                        _aspect.ProductionProcessData.ValueRW.LastCycleEnd = false;
+                        break;
+                    case BuildingEvent.ProductionTimersInProgressUpdate:
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -117,7 +128,12 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         private void SetItemsToManufacturedBox()
         {
-            throw new NotImplementedException();
+            NativeList<ProductData> manufacturedProductsList =
+                StorageService.GetProductsDataList(_manufacturedBoxData.Value);
+
+            _buildingUI.SetItems(_buildingUI.ManufacturedUI, manufacturedProductsList);
+
+            manufacturedProductsList.Dispose();
         }
 
         #region Events Process

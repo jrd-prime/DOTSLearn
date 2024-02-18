@@ -3,7 +3,7 @@
     public enum TimerType
     {
         MoveToWarehouse,
-        OneProduct,
-        AllProducts
+        OneLoadCycle,
+        FullLoadCycle
     }
 }

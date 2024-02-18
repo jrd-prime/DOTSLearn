@@ -83,6 +83,13 @@ namespace Jrd.Gameplay.Building
             BuildingTags();
 
             // Init products
+
+            foreach (var q in manufactured)
+            {
+                Debug.LogWarning("manufactured set = " + q.Name + " / " + q.Quantity);
+            }
+
+
             InitBuildingProductsData(required, manufactured);
             SetRequiredProductsData(required);
             SetManufacturedProductsData(manufactured);

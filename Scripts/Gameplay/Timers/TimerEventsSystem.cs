@@ -1,6 +1,5 @@
 ﻿using System;
 using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Timers.Component;
 using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
@@ -36,26 +35,26 @@ namespace Jrd.Gameplay.Timers
             {
                 if (timer.FinishTime.Ticks > Time.Ticks) return;
 
-                Debug.LogWarning("Start: " + timer.StartTime + " / Finish: " + timer.FinishTime + " / Now: " +
-                                 Time);
                 Debug.LogWarning(
                     $"Timer finished:{timer.TimerType} / {timer.Self} / {timer.Owner} / {timer.Duration}");
 
                 switch (timer.TimerType)
                 {
                     case TimerType.MoveToWarehouse:
-                        // Ecb.AddComponent<MoveToWarehouseTimerFinishedEvent>(inQueryIndex, timer.Owner);
-                        Ecb.AddComponent(inQueryIndex, timer.Owner, new AddEventToBuildingData
-                        {
-                            Value = BuildingEvent.MoveToWarehouseTimerFinished
-                        });
+                        Ecb.AddComponent(inQueryIndex, timer.Owner,
+                            new AddEventToBuildingData { Value = BuildingEvent.MoveToWarehouseTimerFinished });
                         break;
-                    case TimerType.OneProduct:
-                        Ecb.AddComponent<OneProductTimerFinishedEvent>(inQueryIndex, timer.Owner);
+
+                    case TimerType.OneLoadCycle:
+                        Ecb.AddComponent(inQueryIndex, timer.Owner,
+                            new AddEventToBuildingData { Value = BuildingEvent.OneLoadCycleFinished });
                         break;
-                    case TimerType.AllProducts:
-                        Ecb.AddComponent<AllProductsTimerFinishedEvent>(inQueryIndex, timer.Owner);
+
+                    case TimerType.FullLoadCycle:
+                        Ecb.AddComponent(inQueryIndex, timer.Owner,
+                            new AddEventToBuildingData { Value = BuildingEvent.FullLoadCycleFinished });
                         break;
+
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -63,7 +62,7 @@ namespace Jrd.Gameplay.Timers
                 ReturnTimerToPool(inQueryIndex, timer.Self);
             }
 
-            //TODO timers pool
+            //TODO timers entity pool
             [BurstCompile]
             private void ReturnTimerToPool(int inQueryIndex, Entity self) => Ecb.DestroyEntity(inQueryIndex, self);
         }
