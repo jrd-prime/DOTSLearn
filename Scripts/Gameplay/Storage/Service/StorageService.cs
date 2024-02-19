@@ -44,7 +44,7 @@ namespace Jrd.Gameplay.Storage.Service
 
         public static NativeList<ProductData> GetProductsDataList(NativeParallelHashMap<int, int> warehouseProductsData)
         {
-            var productDataList = new NativeList<ProductData>(0, Allocator.Temp);
+            var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
             foreach (var product in warehouseProductsData)
             {
                 productDataList.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
@@ -55,26 +55,28 @@ namespace Jrd.Gameplay.Storage.Service
 
         /// <summary>
         /// Matching products in <see cref="MainStorageData"/> for building WarehouseProductsData
-        /// <param name="requiredItemsList">list of <see cref="ProductData"/></param>
+        /// <param name="requiredProducts">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredItemsList,
-            NativeParallelHashMap<int, int> value,
-            Allocator allocator)
+        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredProducts,
+            NativeParallelHashMap<int, int> storageData, out bool isEnough)
         {
-            var productDataList = new NativeList<ProductData>(0, allocator);
+            isEnough = false;
+            var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
 
-            for (var i = 0; i < requiredItemsList.Length; i++)
+            for (var i = 0; i < requiredProducts.Length; i++)
             {
-                Product product = requiredItemsList[i].Name;
+                Product product = requiredProducts[i].Name;
                 var key = (int)product;
 
-                if (!value.ContainsKey(key) && value[key] < 0) continue;
+                if (!storageData.ContainsKey(key)) continue;
+
+                isEnough = storageData[key] > 0;
 
                 productDataList.Add(new ProductData
                 {
                     Name = product,
-                    Quantity = value[key]
+                    Quantity = storageData[key]
                 });
             }
 

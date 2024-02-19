@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Unity.Entities;
 using UnityEngine;
+using Unity.Entities;
 
 namespace Jrd.ForDebug._Deb
 {

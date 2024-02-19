@@ -35,11 +35,11 @@ namespace Jrd.UI
                 entityManager.AddComponent<MainStorageData>(elementEntity);
                 entityManager.SetComponentData(elementEntity, new MainStorageData
                 {
-                    Value = new NativeParallelHashMap<int, int>(1, Allocator.Persistent)
+                    Value = new NativeParallelHashMap<int, int>(0, Allocator.Persistent)
                     {
-                        { (int)Product.Wheat, 10 },
+                        { (int)Product.Wheat, 0 },
                         { (int)Product.Flour, 20 },
-                        { (int)Product.Wood, 30 },
+                        { (int)Product.Wood, 1 },
                         { (int)Product.WoodenPlank, 40 },
                         { (int)Product.Brick, 50 },
                     }

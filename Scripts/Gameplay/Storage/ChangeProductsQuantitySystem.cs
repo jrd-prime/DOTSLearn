@@ -31,6 +31,7 @@ namespace Jrd.Gameplay.Storage
             {
                 while (queueData.ValueRW.Value.Count > 0)
                 {
+                    var buildingEvents = aspect.BuildingData.BuildingEvents;
                     var dequeue = queueData.ValueRW.Value.Dequeue();
 
                     // Debug.LogWarning("___ CHANGE QUANTITY: " + dequeue.StorageType + "/" + dequeue.ChangeType);
@@ -44,28 +45,28 @@ namespace Jrd.Gameplay.Storage
                             MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
                             mainStorage.ChangeProductsQuantity(changeType, productsData);
 
-                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MainStorageDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.MainStorageDataUpdated);
                             break;
 
                         case StorageType.Warehouse:
                             aspect.BuildingProductsData.WarehouseData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);
                             break;
 
                         case StorageType.InProduction:
                             aspect.BuildingProductsData.InProductionBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.InProductionBoxDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.InProductionBoxDataUpdated);
                             break;
 
                         case StorageType.Manufactured:
                             aspect.BuildingProductsData.ManufacturedBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.ManufacturedBoxDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.ManufacturedBoxDataUpdated);
                             break;
 
                         default:

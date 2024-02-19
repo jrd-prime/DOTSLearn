@@ -1,4 +1,5 @@
 ﻿using Jrd.Gameplay.Products.Component;
+using Jrd.Gameplay.Storage.MainStorage;
 using Jrd.Gameplay.Timers.Component;
 using Jrd.UI;
 using Unity.Entities;
@@ -28,6 +29,8 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public void TakeButton(Entity buildingEntity, EntityCommandBuffer ecb)
         {
             _textPopUpUI.ShowPopUp("take btn");
+            
+            ecb.AddComponent<MoveToMainStorageRequestTag>(buildingEntity);
         }
 
         public void UpgradeButton(Entity buildingEntity, EntityCommandBuffer ecb)

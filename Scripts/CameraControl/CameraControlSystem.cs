@@ -9,7 +9,9 @@ using UnityEngine;
 namespace Jrd.CameraControl
 {
     public partial struct CameraControlSystem : ISystem
-    {public static readonly string CameraEntityName = "___ Main Camera Entity";
+    {
+        public static readonly string CameraEntityName = "___ Main Camera Entity";
+
         //TODO переделать
         private const float CameraSpeed = 30f;
         private const float MinFOV = 30f;

@@ -4,6 +4,7 @@ using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Jrd.Gameplay.Storage.MainStorage.Component;
 using Jrd.Gameplay.Storage.Service;
 using Jrd.Gameplay.Timers;
+using Jrd.UI;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -47,21 +48,26 @@ namespace Jrd.Gameplay.Storage.Warehouse
                          .WithAll<MoveToWarehouseRequestTag>())
             {
                 Debug.LogWarning("___ REQUEST: Move To Warehouse");
+                _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
+
                 _aspect = aspect;
                 _mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
                 _matchingProducts = StorageService.GetMatchingProducts(
-                    aspect.RequiredProductsData.Required,
-                    _mainStorage.Value,
-                    Allocator.Persistent);
+                    _aspect.RequiredProductsData.Required,
+                    _mainStorage.Value, out bool isEnough);
+                Debug.LogWarning(isEnough);
+                if (!isEnough)
+                {
+                    Debug.LogWarning("not enough products to move");
+                    return;
+                }
 
                 SetProductsToDelivery();
                 SetDeliveryTimer();
                 ReduceProductsInMainStorage();
 
                 aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToWarehouseTimerStarted);
-
-                _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
             }
         }
 

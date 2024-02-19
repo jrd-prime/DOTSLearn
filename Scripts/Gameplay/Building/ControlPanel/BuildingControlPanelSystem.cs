@@ -85,7 +85,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             {
                 var ev = eQueue.Dequeue();
 
-                Debug.LogWarning($"___ BUILDING EVENT: {ev}");
+                // Debug.LogWarning($"___ BUILDING EVENT: {ev}");
                 switch (ev)
                 {
                     case BuildingEvent.MoveToWarehouseTimerStarted:
@@ -200,7 +200,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         private void SetItemsToMainStorage()
         {
             NativeList<ProductData> mainStorageProductsList =
-                StorageService.GetMatchingProducts(_required, _mainStorageData.Value, Allocator.Temp);
+                StorageService.GetMatchingProducts(_required, _mainStorageData.Value, out bool isEnough);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 

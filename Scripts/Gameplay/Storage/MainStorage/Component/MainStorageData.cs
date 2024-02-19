@@ -4,7 +4,6 @@ using Jrd.Gameplay.Products.Component;
 using Jrd.Gameplay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Jrd.Gameplay.Storage.MainStorage.Component
 {
@@ -26,6 +25,9 @@ namespace Jrd.Gameplay.Storage.MainStorage.Component
 
         private void ChangeProductQuantity(ProductData product, ChangeType change)
         {
+            // If product not present in main storage, add
+            if (!Value.ContainsKey((int)product.Name)) Value.Add((int)product.Name, 0);
+
             switch (change)
             {
                 case ChangeType.Increase:

@@ -13,10 +13,9 @@ namespace Jrd.Gameplay.Building.Production
         private EntityCommandBuffer _ecb;
         private Entity _buildingEntity;
         private BuildingDataAspect _buildingData;
-
         private ProductionProcessData _processDataR;
-
-        private int _tempCycle;
+        private ProductionProcessData _processDataW;
+        private int _cycleInProgress;
 
         public void OnCreate(ref SystemState state)
         {
@@ -34,12 +33,10 @@ namespace Jrd.Gameplay.Building.Production
                 _buildingData = aspect;
                 _buildingEntity = _buildingData.Self;
                 _processDataR = _buildingData.ProductionProcessData.ValueRO;
-                var production = new ProductionManager(_buildingData);
 
                 ProductionState productionState = _buildingData.BuildingData.ProductionState;
 
-                // test
-                // productionState = ProductionState.EnoughProducts;
+                // productionState = ProductionState.EnoughProducts; // test
 
                 switch (productionState)
                 {
@@ -75,94 +72,50 @@ namespace Jrd.Gameplay.Building.Production
         {
             Debug.Log("--- START PRODUCTION --- " + _buildingData.BuildingData.Name);
 
-            _tempCycle = 1;
+            _cycleInProgress = 1;
 
-            // Timer
             StartFullLoadTimer();
             StartOneLoadTimer();
 
-            // Product
+            _buildingData.AddEvent(BuildingEvent.ProductionTimersStarted);
+
             TakeProductsForOneLoad();
+            UpdateProductionUI();
 
-            _buildingData.ProductionProcessData.ValueRW.CurrentCycle = _tempCycle;
-            _buildingData.ProductionProcessData.ValueRW.RemainingCycles =
-                _buildingData.ProductionProcessData.ValueRO.MaxLoads - _tempCycle;
+            _buildingData.SetCurrentCycle(_cycleInProgress);
+            _buildingData.SetRemainingCycles(_processDataR.MaxLoads - _cycleInProgress);
 
-            // State
             SetNewState(ProductionState.InProgress);
         }
+
 
         private void InProgress()
         {
             Debug.Log("--- IN PROGRESS PRODUCTION --- " + _buildingData.BuildingData.Name);
-            Debug.Log("temp cycle = " + _tempCycle);
-            Debug.Log("current cycle = " + _processDataR.CurrentCycle);
 
-            if (_buildingData.ProductionProcessData.ValueRW.LastCycleEnd) SetNewState(ProductionState.Finished);
-            
-            if (_tempCycle != _processDataR.CurrentCycle)
+            Debug.LogWarning("last cycle end " + _processDataR.LastCycleEnd);
+            if (_processDataR.LastCycleEnd) SetNewState(ProductionState.Finished);
+
+            Debug.LogWarning("curr cycle " + _cycleInProgress);
+
+            if (_cycleInProgress != _processDataR.CurrentCycle)
             {
                 PutProductsFromOneLoad();
+                UpdateManufacturedUI();
 
-                Debug.Log("temp != curr / new cycle?");
-
-                if (_tempCycle != _buildingData.ProductionProcessData.ValueRO.MaxLoads)
+                if (_cycleInProgress != _processDataR.MaxLoads)
                 {
                     Debug.Log("new timer");
                     TakeProductsForOneLoad();
+                    UpdateProductionUI();
                     StartOneLoadTimer();
-                    _tempCycle = _processDataR.CurrentCycle;
+                    _cycleInProgress = _processDataR.CurrentCycle;
                 }
                 else
                 {
                     Debug.Log("temp = max load");
                 }
             }
-
-            // if (_tempCycle != _processDataR.CurrentCycle)
-            // {
-            //     Debug.Log("temp != curr / new cycle?");
-            //
-            //     if (_tempCycle != _buildingData.ProductionProcessData.ValueRO.MaxLoads)
-            //     {
-            //         Debug.Log("new timer");
-            //         StartOneLoadTimer();
-            //         _tempCycle = _processDataR.CurrentCycle;
-            //     }
-            //     else
-            //     {
-            //         Debug.Log("temp = max load");
-            //     }
-            // }
-            // _tempCycle = _processDataR.CurrentCycle;
-            //
-            //
-            // _ecb.AddComponent(_buildingEntity,
-            //     new AddEventToBuildingData { Value = BuildingEvent.ProductionTimersInProgressUpdate });
-            //
-            // #region CYCLE
-            //
-            // if (_tempCycle == _processDataR.MaxLoads)
-            // {
-            //     Debug.Log(_processDataR.CurrentCycle + "// LAST CYCLE in progress!");
-            //     // Last cycle
-            //     PutProductsFromOneLoad();
-            //     _buildingData.SetProductionState(ProductionState.Finished);
-            // }
-            // else if (_tempCycle != 1 && _tempCycle != _processDataR.MaxLoads)
-            // {
-            //     Debug.Log(_processDataR.CurrentCycle + "// CYCLE in progress!");
-            //     // Middle cycle
-            //
-            //     StartOneLoadTimer();
-            //     PutProductsFromOneLoad();
-            //     TakeProductsForOneLoad();
-            // }
-
-            // _buildingData.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
-            // _buildingData.AddEvent(BuildingEvent.ManufacturedBoxDataUpdated);
-
-            // #endregion
 
             // сетить и обновлять таймеры
             // когда заканчивается один цикл - обновить юай произмеденных
@@ -174,48 +127,6 @@ namespace Jrd.Gameplay.Building.Production
             // СОХРАНИТЬ ТАЙМЕРЫ И КОЛВО ПРОДУКТОВ ЕСЛИ ПЕРЕХОДИМ В СТОП ИЗ-ЗА ПОЛНОГО СКЛАДА
         }
 
-        private void SetNewState(ProductionState value) => _buildingData.SetProductionState(value);
-
-        private void TakeProductsForOneLoad()
-        {
-            _buildingData.ChangeProductsQuantity(new ChangeProductsQuantityData
-            {
-                StorageType = StorageType.InProduction,
-                ChangeType = ChangeType.Reduce,
-                ProductsData = _buildingData.RequiredProductsData.Required
-            });
-            _buildingData.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
-        }
-
-        private void StartOneLoadTimer()
-        {
-            new JTimer().StartNewTimer(
-                _buildingEntity,
-                TimerType.OneLoadCycle,
-                _buildingData.GetOneProductManufacturingTime(),
-                _ecb);
-        }
-
-        private void StartFullLoadTimer()
-        {
-            new JTimer().StartNewTimer(
-                _buildingEntity,
-                TimerType.FullLoadCycle,
-                _buildingData.GetLoadedProductsManufacturingTime(),
-                _ecb);
-        }
-
-        private void PutProductsFromOneLoad()
-        {
-            _buildingData.ChangeProductsQuantity(new ChangeProductsQuantityData
-            {
-                StorageType = StorageType.Manufactured,
-                ChangeType = ChangeType.Increase,
-                ProductsData = _buildingData.ManufacturedProductsData.Manufactured
-            });
-
-            _buildingData.AddEvent(BuildingEvent.ManufacturedBoxDataUpdated);
-        }
 
         private void NotEnoughProducts()
         {
@@ -251,46 +162,66 @@ namespace Jrd.Gameplay.Building.Production
             _buildingData.SetProductionState(ProductionState.Started);
         }
 
-
-        //     _tempCycle = 1;
-        //     _buildingData.ProductionProcessData.ValueRW.CurrentCycle = _tempCycle;
-        //     _buildingData.ProductionProcessData.ValueRW.RemainingCycles = _processDataR.MaxLoads - _tempCycle;
-        //
-        //
-        //     // FIRST CYCLE
-        //     Debug.Log(_tempCycle + "// FIRST CYCLE in progress!");
-        //
-        //     StartFullLoadTimer();
-        //     StartOneLoadTimer();
-        //     TakeProductsForOneLoad();
-        //
-        //     // обновить юай inproduction
-        //     _buildingData.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
-        //
-        //     // обновить юай таймеров
-        //     // TODO handle
-        //     _ecb.AddComponent(_buildingEntity,
-        //         new AddEventToBuildingData { Value = BuildingEvent.ProductionTimersStarted });
-        //
-        //     _buildingData.SetProductionState(ProductionState.InProgress);
-
-
+        // ожидание когда освободится место на складе и как-то продолжить цикл
         private void Stopped()
         {
             Debug.Log("STOPPED " + _buildingData.BuildingData.Name);
-
-            // ожидание когда освободится место на складе и как-то продолжить цикл
         }
 
         private void Finished()
         {
             Debug.Log("FINISHED " + _buildingData.BuildingData.Name);
+
             PutProductsFromOneLoad();
+            UpdateManufacturedUI();
 
             SetNewState(ProductionState.NotEnoughProducts);
 
             // обновить все юаи продакшена 
             // показать/уведомить что задание завершено
         }
+
+        #region Methods
+
+        private void SetNewState(ProductionState value) => _buildingData.SetProductionState(value);
+
+        private void TakeProductsForOneLoad() =>
+            _buildingData.ChangeProductsQuantity(new ChangeProductsQuantityData
+            {
+                StorageType = StorageType.InProduction,
+                ChangeType = ChangeType.Reduce,
+                ProductsData = _buildingData.RequiredProductsData.Required
+            });
+
+        private void PutProductsFromOneLoad() =>
+            _buildingData.ChangeProductsQuantity(new ChangeProductsQuantityData
+            {
+                StorageType = StorageType.Manufactured,
+                ChangeType = ChangeType.Increase,
+                ProductsData = _buildingData.ManufacturedProductsData.Manufactured
+            });
+
+        private void UpdateProductionUI() => _buildingData.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
+        private void UpdateManufacturedUI() => _buildingData.AddEvent(BuildingEvent.ManufacturedBoxDataUpdated);
+
+        private void StartOneLoadTimer()
+        {
+            new JTimer().StartNewTimer(
+                _buildingEntity,
+                TimerType.OneLoadCycle,
+                _buildingData.GetOneProductManufacturingTime(),
+                _ecb);
+        }
+
+        private void StartFullLoadTimer()
+        {
+            new JTimer().StartNewTimer(
+                _buildingEntity,
+                TimerType.FullLoadCycle,
+                _buildingData.GetLoadedProductsManufacturingTime(),
+                _ecb);
+        }
+
+        #endregion
     }
 }

@@ -29,6 +29,5 @@ namespace Jrd.CameraControl
             get => _movableComponent.ValueRO.isMoving;
             set => _movableComponent.ValueRW.isMoving = value;
         }
-
     }
 }

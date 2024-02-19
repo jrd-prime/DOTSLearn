@@ -118,7 +118,7 @@ namespace Jrd.Gameplay.Building
         private void SetItemsToMainStorage()
         {
             NativeList<ProductData> mainStorageProductsList =
-                StorageService.GetMatchingProducts(_required, _mainStorageData.Value, Allocator.Temp);
+                StorageService.GetMatchingProducts(_required, _mainStorageData.Value, out bool isEnough);
 
             _buildingUI.SetItems(_buildingUI.StorageUI, mainStorageProductsList);
 

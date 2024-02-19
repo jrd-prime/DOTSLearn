@@ -66,5 +66,11 @@ namespace Jrd.Gameplay.Building
         // Prods
         public void ChangeProductsQuantity(ChangeProductsQuantityData data) =>
             _changeProductsQuantityData.ValueRW.Value.Enqueue(data);
+
+        public void SetCurrentCycle(int value) =>
+            _productionProcessData.ValueRW.CurrentCycle = value;
+
+        public void SetRemainingCycles(int value) =>
+            _productionProcessData.ValueRW.RemainingCycles = value;
     }
 }
