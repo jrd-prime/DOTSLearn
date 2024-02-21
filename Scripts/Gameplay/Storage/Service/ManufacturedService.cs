@@ -1,4 +1,4 @@
-﻿namespace Jrd.Gameplay.Storage.Service
+﻿namespace GamePlay.Storage.Service
 {
     public class ManufacturedService : StorageService
     {

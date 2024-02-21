@@ -1,8 +1,8 @@
-﻿using Jrd.Gameplay.Products.Component;
+﻿using GamePlay.Products.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.InProductionBox.Component
+namespace GamePlay.Storage.InProductionBox.Component
 {
     public struct ChangeProductsQuantityData : IComponentData
     {

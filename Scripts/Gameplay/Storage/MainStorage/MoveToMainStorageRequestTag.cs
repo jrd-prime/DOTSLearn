@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage
+namespace GamePlay.Storage.MainStorage
 {
     public struct MoveToMainStorageRequestTag : IComponentData
     {

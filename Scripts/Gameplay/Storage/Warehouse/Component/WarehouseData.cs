@@ -1,11 +1,10 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
+using GamePlay.Products;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
 using Unity.Collections;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.Warehouse.Component
+namespace GamePlay.Storage.Warehouse.Component
 {
     /// <summary>
     /// Contains a hash map of products stored in the building's warehouse

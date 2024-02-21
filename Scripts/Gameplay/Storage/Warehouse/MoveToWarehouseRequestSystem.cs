@@ -1,47 +1,47 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.MainStorage.Component;
-using Jrd.Gameplay.Storage.Service;
-using Jrd.Gameplay.Timers;
-using Jrd.UI;
+﻿using GamePlay.Building.SetUp;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.MainStorage.Component;
+using GamePlay.Storage.Service;
+using GamePlay.UI;
+using JTimer;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.Warehouse
+namespace GamePlay.Storage.Warehouse
 {
     /// <summary>
     /// Moving products from main storage to building warehouse<br/>
     /// <see cref="MoveToWarehouseRequestTag"/>
     /// </summary>
     [BurstCompile]
-    public partial struct MoveToWarehouseRequestSystem : ISystem
+    public partial class MoveToWarehouseRequestSystem : SystemBase
     {
         private BuildingDataAspect _aspect;
         private EntityCommandBuffer _ecb;
         private MainStorageData _mainStorage;
         private NativeList<ProductData> _matchingProducts;
 
-        public void OnCreate(ref SystemState state)
+        protected override void OnCreate()
         {
-            state.RequireForUpdate<MainStorageData>();
-            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<MoveToWarehouseRequestTag>();
+            RequireForUpdate<MainStorageData>();
+            RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            RequireForUpdate<MoveToWarehouseRequestTag>();
         }
 
-        public void OnDestroy(ref SystemState state)
+        protected override void OnDestroy()
         {
             _matchingProducts.Dispose();
         }
 
         [BurstCompile]
-        public void OnUpdate(ref SystemState state)
+        protected override void OnUpdate()
         {
             _ecb = SystemAPI
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
+                .CreateCommandBuffer(World.Unmanaged);
 
             foreach (var aspect in SystemAPI
                          .Query<BuildingDataAspect>()
@@ -56,10 +56,10 @@ namespace Jrd.Gameplay.Storage.Warehouse
                 _matchingProducts = StorageService.GetMatchingProducts(
                     _aspect.RequiredProductsData.Required,
                     _mainStorage.Value, out bool isEnough);
-                Debug.LogWarning(isEnough);
+
                 if (!isEnough)
                 {
-                    Debug.LogWarning("not enough products to move");
+                    TextPopUpMono.Instance.ShowPopUp("not enough products to move!".ToUpper());
                     return;
                 }
 
@@ -79,7 +79,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
             int productsQuantity = StorageService.GetProductsQuantity(_matchingProducts);
             int moveDuration = productsQuantity / 5;
 
-            new JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
+            new JTimer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
         }
 
         private void ReduceProductsInMainStorage() =>

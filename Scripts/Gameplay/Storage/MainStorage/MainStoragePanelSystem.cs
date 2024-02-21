@@ -1,9 +1,9 @@
-﻿using Jrd.Gameplay.Storage.MainStorage.Component;
-using Jrd.UI;
-using Jrd.UI.MainStoragePanel;
+﻿using GamePlay.Storage.MainStorage.Component;
+using GamePlay.UI;
+using GamePlay.UI.MainStoragePanel;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage
+namespace GamePlay.Storage.MainStorage
 {
     /// <summary>
     /// Get data from component and Set data to UI 

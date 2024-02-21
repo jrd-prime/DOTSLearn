@@ -1,9 +1,10 @@
-﻿using Jrd.Gameplay.Building.Production;
+﻿using GamePlay.Building.Production;
+using GamePlay.Building.SetUp;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Gameplay.Building.ControlPanel.Component
+namespace GamePlay.Building.ControlPanel.Component
 {
     public struct BuildingData : IComponentData
     {

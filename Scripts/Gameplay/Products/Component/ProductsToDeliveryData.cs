@@ -1,7 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Products.Component
+namespace GamePlay.Products.Component
 {
     public struct ProductsToDeliveryData : IComponentData
     {

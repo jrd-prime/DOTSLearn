@@ -1,9 +1,8 @@
 ﻿using System;
-using Jrd.Gameplay.Products.Component;
+using GamePlay.Products.Component;
 using Unity.Collections;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.InProductionBox.Component
+namespace GamePlay.Storage.InProductionBox.Component
 {
     /// <summary>
     /// Contains a hashmap (int, int) (Product id, quantity) of the products in ready-to-process

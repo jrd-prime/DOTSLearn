@@ -1,10 +1,9 @@
 ﻿using System;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
 using Unity.Collections;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.ManufacturedBox
+namespace GamePlay.Storage.ManufacturedBox
 {
     /// <summary>
     /// Contains a hashmap (int, int) (Product id, quantity)  of already produced products in the production box
@@ -16,7 +15,6 @@ namespace Jrd.Gameplay.Storage.ManufacturedBox
         // TODO repeated, needed refact
         public void ChangeProductsQuantity(ChangeType change, NativeList<ProductData> productsData)
         {
-            Debug.Log("MANUFACTURED change");
             foreach (var product in productsData)
             {
                 ChangeProductQuantity(product, change);

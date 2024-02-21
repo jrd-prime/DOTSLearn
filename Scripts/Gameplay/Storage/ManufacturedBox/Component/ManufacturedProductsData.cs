@@ -1,8 +1,8 @@
-﻿using Jrd.Gameplay.Products.Component;
+﻿using GamePlay.Products.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.ManufacturedBox.Component
+namespace GamePlay.Storage.ManufacturedBox.Component
 {
     /// <summary>
     /// Required and manufactured

@@ -1,14 +1,13 @@
 ﻿using System;
-using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.ControlPanel;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.MainStorage.Component;
+using GamePlay.Building.ControlPanel;
+using GamePlay.Building.SetUp;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Storage
+namespace GamePlay.Storage
 {
     [UpdateBefore(typeof(BuildingControlPanelSystem))]
     public partial struct ChangeProductsQuantitySystem : ISystem

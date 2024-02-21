@@ -1,37 +1,35 @@
-﻿using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.MainStorage;
-using Jrd.Gameplay.Timers.Component;
-using Jrd.UI;
+﻿
+
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox;
+using GamePlay.Storage.MainStorage;
+using GamePlay.UI;
+using JTimer.Component;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Building.ControlPanel
+namespace GamePlay.Building.ControlPanel
 {
     public class BuildingButtons
     {
         private readonly TextPopUpMono _textPopUpUI = TextPopUpMono.Instance;
 
-        public void MoveButton(Entity buildingEntity, EntityCommandBuffer ecb)
-        {
-            _textPopUpUI.ShowPopUp("move btn");
-            //TODO disable button if in storage 0 req products
-            //TODO add move time to button
-
+        //TODO disable button if in storage 0 req products
+        //TODO add move time to button
+        public void MoveButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
             ecb.AddComponent<MoveToWarehouseRequestTag>(buildingEntity);
-        }
 
-        public void LoadButton(Entity buildingEntity, EntityCommandBuffer ecb)
-        {
-            _textPopUpUI.ShowPopUp("load btn");
-
+        /// <summary>
+        /// <see cref="MoveToProductionBoxSystem"/>
+        /// </summary>
+        /// <param name="buildingEntity"></param>
+        /// <param name="ecb"></param>
+        public void LoadButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
             ecb.AddComponent<MoveToProductionBoxRequestTag>(buildingEntity);
-        }
 
-        public void TakeButton(Entity buildingEntity, EntityCommandBuffer ecb)
-        {
-            _textPopUpUI.ShowPopUp("take btn");
-            
+
+        public void TakeButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
             ecb.AddComponent<MoveToMainStorageRequestTag>(buildingEntity);
-        }
+
 
         public void UpgradeButton(Entity buildingEntity, EntityCommandBuffer ecb)
         {

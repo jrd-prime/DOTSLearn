@@ -2,7 +2,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Products.Component
+namespace GamePlay.Products.Component
 {
     /// <summary>
     /// Contains a list of <see cref="ProductData"/> required for production in the building

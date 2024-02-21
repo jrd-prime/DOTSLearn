@@ -1,9 +1,10 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Products.Component;
+using GamePlay.Products;
+using GamePlay.Products.Component;
+using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
 
-namespace Jrd.Gameplay.Storage.Service
+namespace GamePlay.Storage.Service
 {
     public abstract class StorageService
     {
@@ -61,24 +62,27 @@ namespace Jrd.Gameplay.Storage.Service
         public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredProducts,
             NativeParallelHashMap<int, int> storageData, out bool isEnough)
         {
-            isEnough = false;
             var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
 
             for (var i = 0; i < requiredProducts.Length; i++)
             {
                 Product product = requiredProducts[i].Name;
-                var key = (int)product;
-
-                if (!storageData.ContainsKey(key)) continue;
-
-                isEnough = storageData[key] > 0;
 
                 productDataList.Add(new ProductData
                 {
                     Name = product,
-                    Quantity = storageData[key]
+                    Quantity = storageData[(int)product]
                 });
             }
+
+            isEnough = requiredProducts.Length switch
+            {
+                0 => false,
+                1 => storageData[(int)requiredProducts[0].Name] > 0,
+                2 => storageData[(int)requiredProducts[0].Name] > 0 ||
+                     storageData[(int)requiredProducts[1].Name] > 0,
+                _ => false
+            };
 
             return productDataList;
         }

@@ -1,11 +1,11 @@
 ﻿using System;
-using Jrd.Gameplay.Products;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
+using GamePlay.Products;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage.Component
+namespace GamePlay.Storage.MainStorage.Component
 {
     public struct MainStorageData : IComponentData, IMainStorage
     {

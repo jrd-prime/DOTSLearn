@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Gameplay.Products.Component
+namespace GamePlay.Products.Component
 {
     public class ProductsToMainStorageRequestTag : IComponentData
     {

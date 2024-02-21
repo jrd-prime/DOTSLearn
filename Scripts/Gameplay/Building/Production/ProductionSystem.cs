@@ -1,12 +1,13 @@
 ﻿using System;
-using Jrd.Gameplay.Building.Production.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.Service;
-using Jrd.Gameplay.Timers;
+using GamePlay.Building.Production.Component;
+using GamePlay.Building.SetUp;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.Service;
+using JTimer;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Building.Production
+namespace GamePlay.Building.Production
 {
     public partial struct ProductionSystem : ISystem
     {
@@ -83,7 +84,6 @@ namespace Jrd.Gameplay.Building.Production
             UpdateProductionUI();
 
             _buildingData.SetCurrentCycle(_cycleInProgress);
-            _buildingData.SetRemainingCycles(_processDataR.MaxLoads - _cycleInProgress);
 
             SetNewState(ProductionState.InProgress);
         }
@@ -130,7 +130,7 @@ namespace Jrd.Gameplay.Building.Production
 
         private void NotEnoughProducts()
         {
-            // Debug.Log("NOT ENOUGH PRODUCTS " + _buildingData.BuildingData.Name);
+            Debug.Log("NOT ENOUGH PRODUCTS " + _buildingData.BuildingData.Name);
             // показывать в панели билдинга что нету продуктов для производства в инпродакшн боксе
         }
 
@@ -206,7 +206,8 @@ namespace Jrd.Gameplay.Building.Production
 
         private void StartOneLoadTimer()
         {
-            new JTimer().StartNewTimer(
+            
+            new JTimer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.OneLoadCycle,
                 _buildingData.GetOneProductManufacturingTime(),
@@ -215,7 +216,7 @@ namespace Jrd.Gameplay.Building.Production
 
         private void StartFullLoadTimer()
         {
-            new JTimer().StartNewTimer(
+            new JTimer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.FullLoadCycle,
                 _buildingData.GetLoadedProductsManufacturingTime(),

@@ -1550,7 +1550,7 @@ GameObject:
   - component: {fileID: 1905540224}
   - component: {fileID: 1905540223}
   m_Layer: 0
-  m_Name: Common
+  m_Name: CommonSubScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1665,7 +1665,7 @@ GameObject:
   - component: {fileID: 2069465165}
   - component: {fileID: 2069465164}
   m_Layer: 0
-  m_Name: EScene
+  m_Name: PlayGroundSubScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

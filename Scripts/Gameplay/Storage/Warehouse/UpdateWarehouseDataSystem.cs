@@ -1,10 +1,12 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.Service;
-using Jrd.Gameplay.Timers;
+﻿using System;
+using GamePlay.Building.SetUp;
+using GamePlay.Products.Component;
+using GamePlay.Storage.Service;
+using JTimer;
+using JTimer.Component;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.Warehouse
+namespace GamePlay.Storage.Warehouse
 {
     public partial struct UpdateWarehouseDataSystem : ISystem
     {
@@ -17,6 +19,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
 
         public void OnUpdate(ref SystemState state)
         {
+            var time = new TimeWrapper(DateTime.Now);
             EntityCommandBuffer ecb = SystemAPI
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
@@ -24,7 +27,7 @@ namespace Jrd.Gameplay.Storage.Warehouse
             foreach (var (aspect, productsToDeliveryData, timer) in SystemAPI
                          .Query<BuildingDataAspect, ProductsToDeliveryData, TimerData>())
             {
-                if (!(timer.FinishTime.Ticks <= System.DateTime.Now.Ticks)) continue;
+                if (!(timer.FinishTime.Value.Ticks <= time.Value.Ticks)) continue;
 
                 StorageService.ChangeProductsQuantity(
                     aspect.BuildingProductsData.WarehouseData.Value,

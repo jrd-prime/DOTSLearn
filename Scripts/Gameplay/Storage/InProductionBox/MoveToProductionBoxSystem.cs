@@ -1,15 +1,15 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Building.Production;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.Service;
-using Jrd.Gameplay.Storage.Warehouse.Component;
-using Jrd.UI;
+﻿using GamePlay.Building.Production;
+using GamePlay.Building.SetUp;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.Service;
+using GamePlay.Storage.Warehouse.Component;
+using GamePlay.UI;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.InProductionBox
+namespace GamePlay.Storage.InProductionBox
 {
     /// <summary>
     /// Move products from the building warehouse to production box<br/>
@@ -17,14 +17,20 @@ namespace Jrd.Gameplay.Storage.InProductionBox
     /// </summary>
     public partial struct MoveToProductionBoxSystem : ISystem
     {
+        private BuildingDataAspect _aspect;
         private WarehouseData _warehouseData;
-        private InProductionBoxData _productionBoxData;
         private NativeList<ProductData> _requiredQuantity;
+        private NativeList<ProductData> _preparedProducts;
 
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<MoveToProductionBoxRequestTag>();
+        }
+
+        public void OnDestroy(ref SystemState state)
+        {
+            _preparedProducts.Dispose();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -37,66 +43,68 @@ namespace Jrd.Gameplay.Storage.InProductionBox
                          .Query<BuildingDataAspect>()
                          .WithAll<MoveToProductionBoxRequestTag>())
             {
+                ecb.RemoveComponent<MoveToProductionBoxRequestTag>(aspect.BuildingData.Self);
+
                 Debug.LogWarning("___ REQUEST: Move To Production Box");
 
+                _aspect = aspect;
                 _warehouseData = aspect.BuildingProductsData.WarehouseData;
-                _productionBoxData = aspect.BuildingProductsData.InProductionBoxData;
                 _requiredQuantity = aspect.RequiredProductsData.Required;
 
-                bool isEnoughProducts =
+                bool isEnoughProductsToLoad =
                     WarehouseService.IsEnoughRequiredProducts(_warehouseData, _requiredQuantity);
 
-                if (isEnoughProducts)
+                if (isEnoughProductsToLoad)
                 {
-                    TextPopUpMono.Instance.ShowPopUp("quantity ok");
+                    _preparedProducts = WarehouseService.GetProductsForProductionAndMaxLoads(
+                        _warehouseData,
+                        _requiredQuantity,
+                        aspect.BuildingData.LoadCapacity, out int maxLoads);
 
-                    // 1 prepare prods
-                    // TODO dispose
-                    var (preparedProducts, maxLoads) =
-                        WarehouseService.GetProductsForProductionAndMaxLoads(
-                            _warehouseData,
-                            _requiredQuantity,
-                            aspect.BuildingData.LoadCapacity);
+                    if (_preparedProducts.IsEmpty) Debug.LogError("PrepProd list is empty!");
 
-                    if (preparedProducts.IsEmpty) Debug.LogError("PrepProd list is empty!");
+                    ChangeProductsQuantity(_preparedProducts);
+                    AddEventsForUpdateUI();
+                    SetProductionProcessData(maxLoads);
 
-
-                    aspect.SetPreparedProductsToProduction(preparedProducts);
-                    aspect.SetMaxLoads(maxLoads);
-
-                    // 2 reduce in warehouse
-                    aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
-                    {
-                        StorageType = StorageType.Warehouse,
-                        ChangeType = ChangeType.Reduce,
-                        ProductsData = preparedProducts
-                    });
-
-                    // 3 increase in productin box
-                    aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
-                    {
-                        StorageType = StorageType.InProduction,
-                        ChangeType = ChangeType.Increase,
-                        ProductsData = preparedProducts
-                    });
-
-
-                    // 3.1 update ui
-                    aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBoxFinished);
-                    aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
-
-                    // 4 start production
                     aspect.SetProductionState(ProductionState.EnoughProducts);
 
                     // 5 production settings to building SO
                 }
                 else
                 {
-                    TextPopUpMono.Instance.ShowPopUp("quantity NOT ok");
+                    TextPopUpMono.Instance.ShowPopUp("Insufficient products to produce!".ToUpper());
                 }
-
-                ecb.RemoveComponent<MoveToProductionBoxRequestTag>(aspect.BuildingData.Self);
             }
+        }
+
+        private void SetProductionProcessData(int maxLoads)
+        {
+            _aspect.SetPreparedProductsToProduction(_preparedProducts);
+            _aspect.SetMaxLoads(maxLoads);
+        }
+
+        private void AddEventsForUpdateUI()
+        {
+            _aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBoxFinished);
+            _aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
+        }
+
+        private void ChangeProductsQuantity(NativeList<ProductData> preparedProducts)
+        {
+            _aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
+            {
+                StorageType = StorageType.Warehouse,
+                ChangeType = ChangeType.Reduce,
+                ProductsData = preparedProducts
+            });
+
+            _aspect.ChangeProductsQuantityData.Value.Enqueue(new ChangeProductsQuantityData
+            {
+                StorageType = StorageType.InProduction,
+                ChangeType = ChangeType.Increase,
+                ProductsData = preparedProducts
+            });
         }
     }
 }

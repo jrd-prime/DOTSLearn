@@ -1,8 +1,8 @@
-﻿using Jrd.Gameplay.Storage.InProductionBox.Component;
+﻿using GamePlay.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage
+namespace GamePlay.Storage
 {
     public struct ChangeProductsQuantityQueueData : IComponentData
     {

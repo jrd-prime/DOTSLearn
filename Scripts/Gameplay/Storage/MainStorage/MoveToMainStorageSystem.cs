@@ -1,11 +1,11 @@
-﻿using Jrd.Gameplay.Building;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.Service;
+﻿using GamePlay.Building.SetUp;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.Service;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Gameplay.Storage.MainStorage
+namespace GamePlay.Storage.MainStorage
 {
     public partial struct MoveToMainStorageSystem : ISystem
     {

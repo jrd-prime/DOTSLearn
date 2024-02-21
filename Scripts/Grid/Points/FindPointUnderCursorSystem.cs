@@ -1,9 +1,8 @@
-﻿using Jrd.ForDebug.DebSet;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
-using Jrd.UserInput.Components;
+using UserInputAndCameraControl.UserInput.Components;
 
 namespace Jrd.Grid.Points
 {
@@ -14,16 +13,12 @@ namespace Jrd.Grid.Points
             // state.RequireForUpdate<GridComponent>();
             // state.RequireForUpdate<GridData>();
             state.RequireForUpdate<InputCursorData>();
-            state.RequireForUpdate<DebSetComponent>();
             state.Enabled = false;
         }
 
         public void OnUpdate(ref SystemState state)
         {
             var em = state.EntityManager;
-            var debSet = em.GetComponentData<DebSetComponent>(SystemAPI.GetSingletonEntity<DebSetComponent>());
-
-            if (!debSet.MouseRaycast) return;
 
             var cursor = em.GetComponentData<InputCursorData>(SystemAPI.GetSingletonEntity<InputCursorData>());
             // var grid = em.GetComponentData<GridComponent>(SystemAPI.GetSingletonEntity<GridComponent>());

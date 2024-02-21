@@ -1,4 +1,4 @@
-﻿namespace Jrd.Gameplay.Storage.ManufacturedBox
+﻿namespace GamePlay.Storage.ManufacturedBox
 {
     public struct MoveToManufacturedBoxSystem
     {

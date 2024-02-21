@@ -1,4 +1,4 @@
-﻿namespace Jrd.Gameplay.Building.Production
+﻿namespace GamePlay.Building.Production
 {
     public enum ProductionState
     {

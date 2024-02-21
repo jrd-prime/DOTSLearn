@@ -1,11 +1,10 @@
 ﻿using System;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.Warehouse.Component;
+using GamePlay.Products.Component;
+using GamePlay.Storage.Warehouse.Component;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Storage.Service
+namespace GamePlay.Storage.Service
 {
     public class WarehouseService : StorageService
     {
@@ -31,9 +30,9 @@ namespace Jrd.Gameplay.Storage.Service
             };
         }
 
-        public static (NativeList<ProductData>, int) GetProductsForProductionAndMaxLoads(
-            WarehouseData warehouseData, NativeList<ProductData> requiredQuantity,
-            int loadCapacity)
+        public static NativeList<ProductData> GetProductsForProductionAndMaxLoads(WarehouseData warehouseData,
+            NativeList<ProductData> requiredQuantity,
+            int loadCapacity, out int maxLoads)
         {
             var preparedProducts = new NativeList<ProductData>(0, Allocator.Persistent);
             var a = 0;
@@ -47,7 +46,7 @@ namespace Jrd.Gameplay.Storage.Service
 
             int tempLoadsCount = (int)math.floor(loadCapacity / a);
 
-            int maxLoads = GetMaxLoads(warehouseData.Value, tempLoadsCount, requiredQuantity);
+            maxLoads = GetMaxLoads(warehouseData.Value, tempLoadsCount, requiredQuantity);
 
             foreach (var q in requiredQuantity)
             {
@@ -58,7 +57,7 @@ namespace Jrd.Gameplay.Storage.Service
                 });
             }
 
-            return (preparedProducts, maxLoads);
+            return preparedProducts;
         }
 
         /// <summary>

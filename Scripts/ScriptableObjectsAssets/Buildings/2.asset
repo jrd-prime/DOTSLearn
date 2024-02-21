@@ -17,8 +17,12 @@ MonoBehaviour:
   _nameId: 3
   _name: col
   _size: {x: 1, y: 1}
-  _requiredItems: []
-  _manufacturedItems: []
+  _requiredItems:
+  - _productDataSo: {fileID: 11400000, guid: a0ee9d66797760945985dcb3b5f498a4, type: 2}
+    _quantity: 0
+  _manufacturedItems:
+  - _productDataSo: {fileID: 11400000, guid: c8ae1e23f1095994abc0a2980299f8de, type: 2}
+    _quantity: 0
   _level: 1
   _itemsPerHour: 5
   _loadCapacity: 5

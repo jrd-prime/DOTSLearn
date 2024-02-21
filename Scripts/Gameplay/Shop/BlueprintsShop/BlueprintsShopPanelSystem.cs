@@ -1,14 +1,14 @@
-﻿using Jrd.GameStates.BuildingState;
-using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.UI;
-using Jrd.UI.BlueprintsShopPanel;
+﻿using GamePlay.Building.Prefabs;
+using GamePlay.GameStates;
+using GamePlay.GameStates.BuildingState;
+using GamePlay.UI.BlueprintsShopPanel;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Jrd.Gameplay.Shop.BlueprintsShop
+namespace GamePlay.Shop.BlueprintsShop
 {
-    [UpdateAfter(typeof(InitUISystem))]
+    [UpdateAfter(typeof(MyInitSystemGroup))]
     public partial struct BlueprintsShopPanelSystem : ISystem
     {
         private EntityManager _entityManager;
@@ -20,7 +20,7 @@ namespace Jrd.Gameplay.Shop.BlueprintsShop
         public void OnCreate(ref SystemState state)
         {
             _entityManager = state.EntityManager;
-
+            state.RequireForUpdate<BlueprintsBuffer>();
 
             // state.RequireForUpdate<BuildingPanelData>();
             // state.RequireForUpdate<BuildPrefabsComponent>();
@@ -30,15 +30,40 @@ namespace Jrd.Gameplay.Shop.BlueprintsShop
         {
             // if (!SystemAPI.TryGetSingletonEntity<BuildingPanelData>(out var buildingPanelEntity)) return;
 
-            _blueprintsShopData = SystemAPI.GetSingletonRW<BlueprintsShopData>().ValueRO;
-            _buildingStateData = SystemAPI.GetSingletonRW<BuildingStateData>().ValueRO;
-            _buildingsCount = _buildingStateData.BuildingPrefabsCount;
 
-            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buildingsPrefabsBuffers))
+            if (SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buildingsPrefabsBuffers))
+            {
+                Debug.Log("HAS BUFF " + this);
+            }
+            else
             {
                 Debug.Log("NO BUFF " + this);
                 return;
             }
+
+
+            if (SystemAPI.TryGetSingletonRW<BlueprintsShopData>(out var b))
+            {
+                Debug.Log(" NOUUU BlueprintsShopData");
+            }
+            else
+            {
+                Debug.Log(" YES BlueprintsShopData");
+            }
+
+            if (SystemAPI.TryGetSingletonRW<BuildingStateData>(out var a))
+            {
+                Debug.Log(" NOUUU BuildingStateData");
+            }
+            else
+            {
+                Debug.Log(" YES BuildingStateData");
+            }
+
+            _blueprintsShopData = b.ValueRO;
+            _buildingStateData = a.ValueRO;
+
+            _buildingsCount = _buildingStateData.BuildingPrefabsCount;
 
             _blueprintsBuffers = buildingsPrefabsBuffers;
 

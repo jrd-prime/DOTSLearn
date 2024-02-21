@@ -1,4 +1,4 @@
-﻿namespace Jrd.Gameplay.Products
+﻿namespace GamePlay.Products
 {
     public enum Product
     {

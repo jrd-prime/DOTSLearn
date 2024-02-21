@@ -1,7 +1,6 @@
-﻿using Jrd.Gameplay.Storage.Warehouse;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-namespace Jrd.Gameplay.Products.Component
+namespace GamePlay.Products.Component
 {
     /// <summary>
     /// Move products to warehouse

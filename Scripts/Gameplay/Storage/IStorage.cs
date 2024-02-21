@@ -1,8 +1,8 @@
-﻿using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
+﻿using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
 using Unity.Collections;
 
-namespace Jrd.Gameplay.Storage
+namespace GamePlay.Storage
 {
     public interface IStorage
     {

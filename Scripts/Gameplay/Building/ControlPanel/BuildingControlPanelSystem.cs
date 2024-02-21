@@ -1,21 +1,20 @@
 ﻿using System;
-using Jrd.Gameplay.Building.ControlPanel.Component;
-using Jrd.Gameplay.Products.Component;
-using Jrd.Gameplay.Storage.InProductionBox.Component;
-using Jrd.Gameplay.Storage.MainStorage.Component;
-using Jrd.Gameplay.Storage.ManufacturedBox;
-using Jrd.Gameplay.Storage.Service;
-using Jrd.Gameplay.Storage.Warehouse.Component;
-using Jrd.GameStates.BuildingState.Prefabs;
-using Jrd.GameStates.PlayState;
-using Jrd.MyUtils;
-using Jrd.UI.BuildingControlPanel;
-using Jrd.UI.BuildingControlPanel.Part;
+using GamePlay.Building.ControlPanel.Component;
+using GamePlay.Building.Prefabs;
+using GamePlay.Building.SetUp;
+using GamePlay.GameStates.PlayState;
+using GamePlay.Products.Component;
+using GamePlay.Storage.InProductionBox.Component;
+using GamePlay.Storage.MainStorage.Component;
+using GamePlay.Storage.ManufacturedBox;
+using GamePlay.Storage.Service;
+using GamePlay.Storage.Warehouse.Component;
+using GamePlay.UI.BuildingControlPanel;
+using GamePlay.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
-namespace Jrd.Gameplay.Building.ControlPanel
+namespace GamePlay.Building.ControlPanel
 {
     public partial class BuildingControlPanelSystem : SystemBase
     {
@@ -111,12 +110,20 @@ namespace Jrd.Gameplay.Building.ControlPanel
                         break;
                     case BuildingEvent.OneLoadCycleFinished:
                         _aspect.ProductionProcessData.ValueRW.CurrentCycle += 1;
+
+                        var currentCycle = _aspect.ProductionProcessData.ValueRO.CurrentCycle;
+                        var maxLoads = _aspect.ProductionProcessData.ValueRO.MaxLoads;
+
+                        UpdateProductionTimers(currentCycle, maxLoads);
+
                         break;
                     case BuildingEvent.FullLoadCycleFinished:
                         _aspect.ProductionProcessData.ValueRW.LastCycleEnd = true;
+                        _buildingUI.LoadButton.SetEnabled(true);
                         break;
+
                     case BuildingEvent.ProductionTimersStarted:
-                        _aspect.ProductionProcessData.ValueRW.LastCycleEnd = false;
+                        OnProductionTimersStarted();
                         break;
                     case BuildingEvent.ProductionTimersInProgressUpdate:
                         break;
@@ -125,6 +132,18 @@ namespace Jrd.Gameplay.Building.ControlPanel
                 }
             }
         }
+
+        private void OnProductionTimersStarted()
+        {
+            var currentCycle = _aspect.ProductionProcessData.ValueRO.CurrentCycle;
+            var maxLoads = _aspect.ProductionProcessData.ValueRO.MaxLoads;
+
+            UpdateProductionTimers(currentCycle, maxLoads);
+
+            _aspect.ProductionProcessData.ValueRW.LastCycleEnd = false;
+            _buildingUI.LoadButton.SetEnabled(false);
+        }
+
 
         private void SetItemsToManufacturedBox()
         {
@@ -142,6 +161,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
         {
             SetStorageTimer(10, 3); //TODO
             SetItemsToMainStorage();
+            _buildingUI.MoveButton.SetEnabled(false);
         }
 
         private void OnMoveToWarehouseTimerFinished()
@@ -149,6 +169,7 @@ namespace Jrd.Gameplay.Building.ControlPanel
             DeliverProductsToWarehouse();
             SetStorageTimer(10, 10); //TODO
             SetItemsToWarehouse();
+            _buildingUI.MoveButton.SetEnabled(true);
         }
 
         private void OnMoveToProductionBoxFinished()
@@ -161,7 +182,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
 
         #region Building Timers
 
-        private void UpdateProductionTimers(float all, float one) => _buildingUI.UpdateProductionTimers(all, one);
+        private void UpdateProductionTimers(int currentCycle, int maxLoads) =>
+            _buildingUI.UpdateProductionTimers(currentCycle, maxLoads);
+
         private void SetStorageTimer(float max, float value) => _buildingUI.SetTimerText(max, value);
 
         #endregion
@@ -210,8 +233,9 @@ namespace Jrd.Gameplay.Building.ControlPanel
         public void SetItemsToProduction()
         {
             var inProductionBox =
-                Utils.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionBoxData.Value);
-            var manufacturedBox = Utils.ConvertProductsHashMapToList(
+                ProductData.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionBoxData.Value);
+            // Utility.Utils.ConvertProductsHashMapToList(_aspect.BuildingProductsData.InProductionBoxData.Value);
+            var manufacturedBox = ProductData.ConvertProductsHashMapToList(
                 _aspect.BuildingProductsData.ManufacturedBoxData.Value);
 
             _buildingUI.SetItems(_buildingUI.InProductionUI, inProductionBox);
