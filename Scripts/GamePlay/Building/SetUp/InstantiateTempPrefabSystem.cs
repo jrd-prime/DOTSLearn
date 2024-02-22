@@ -1,8 +1,8 @@
 ﻿using GamePlay.Building.ControlPanel.Component;
 using GamePlay.Building.SetUp.Component;
 using GamePlay.GameStates.BuildingState;
-using Jrd.Screen;
-using Jrd.Select;
+using GamePlay.Screen;
+using GamePlay.Select;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;

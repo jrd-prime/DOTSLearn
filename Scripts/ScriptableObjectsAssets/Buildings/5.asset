@@ -15,7 +15,7 @@ MonoBehaviour:
   _prefab: {fileID: 7688369451615698592, guid: 6c33616d76f3fe14fbc68aeea8e7329a, type: 3}
   _categoryId: 1
   _nameId: 3
-  _name: cube1
+  _name: Warehouse
   _size: {x: 1, y: 1}
   _requiredItems: []
   _manufacturedItems: []

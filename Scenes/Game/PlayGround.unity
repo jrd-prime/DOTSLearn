@@ -265,10 +265,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buildings:
   - {fileID: 11400000, guid: 5476f95d3de0212459e9c0a7db8ab3ce, type: 2}
-  - {fileID: 11400000, guid: 10c23c2a33a9aa04a8ff05943596173e, type: 2}
   - {fileID: 11400000, guid: d108a12fd367dad489dfd081b651be1f, type: 2}
   - {fileID: 11400000, guid: 433163d9519ce654cb3031d064807378, type: 2}
   - {fileID: 11400000, guid: e675b6173f7e9eb4f816278b35cc41ac, type: 2}
+  - {fileID: 11400000, guid: 10c23c2a33a9aa04a8ff05943596173e, type: 2}
 --- !u!1001 &1222018510
 PrefabInstance:
   m_ObjectHideFlags: 0

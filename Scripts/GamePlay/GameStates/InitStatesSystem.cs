@@ -1,5 +1,6 @@
 ﻿using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
+using GamePlay.Prefabs;
 using GamePlay.Shop.BlueprintsShop;
 using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
@@ -8,10 +9,6 @@ using UnityEngine;
 
 namespace GamePlay.GameStates
 {
-    public partial class MyInitSystemGroup : ComponentSystemGroup
-    {
-    }
-
     [UpdateInGroup(typeof(MyInitSystemGroup))]
     public partial struct InitStatesSystem : ISystem
     {
@@ -21,12 +18,21 @@ namespace GamePlay.GameStates
         private static readonly FixedString64Bytes BlueprintsShopDataName = "___ Data: Blueprints Shop";
         private static readonly FixedString64Bytes MainStorageDataName = "___ Data: Main Storage";
 
+        private DynamicBuffer<ProductsDataBuffer> _buffer;
+
         public void OnUpdate(ref SystemState state)
         {
-            Debug.LogWarning("Init Data");
             state.Enabled = false;
 
-            NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(1, Allocator.Temp)
+            if (!SystemAPI.TryGetSingletonBuffer<ProductsDataBuffer>(out var buffer))
+            {
+                Debug.LogError("NO Products Data Buffer!");
+                return;
+            }
+
+            _buffer = buffer;
+
+            NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
                 { GameStateDataEntityName, typeof(GameStateData) },
                 { GameplayStateDataEntityName, typeof(PlayStateData) },
@@ -35,15 +41,44 @@ namespace GamePlay.GameStates
                 { MainStorageDataName, typeof(MainStorageData) }
             };
 
-            var entityManager = state.EntityManager;
+            var em = state.EntityManager;
 
             foreach (var pair in componentsMap)
             {
-                var elementEntity = entityManager.CreateEntity(pair.Value);
-                entityManager.SetName(elementEntity, pair.Key);
+                var entity = em.CreateEntity(pair.Value);
+
+                em.SetName(entity, pair.Key);
+
+                if (pair.Value == typeof(MainStorageData)) SetDefaultsToMainStorageData(entity, em);
             }
 
             componentsMap.Dispose();
+        }
+
+        private void SetDefaultsToMainStorageData(Entity elementEntity, EntityManager entityManager)
+        {
+            var mainStorageMap = new NativeParallelHashMap<int, int>(0, Allocator.Persistent);
+
+            foreach (var buffer in _buffer)
+            {
+                mainStorageMap.Add((int)buffer.Product, -1);
+            }
+
+            entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
+
+
+            // const int all = 33;
+            // entityManager.SetComponentData(elementEntity, new MainStorageData
+            // {
+            //     Value = new NativeParallelHashMap<int, int>(0, Allocator.Persistent)
+            //     {
+            //         { (int)Product.Wheat, all },
+            //         { (int)Product.Flour, all },
+            //         { (int)Product.Wood, all },
+            //         { (int)Product.WoodenPlank, all },
+            //         { (int)Product.Brick, all },
+            //     }
+            // });
         }
     }
 }

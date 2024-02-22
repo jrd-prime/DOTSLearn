@@ -2,11 +2,11 @@
 using GamePlay.Building.SetUp.Component;
 using GamePlay.GameStates.MainGameState;
 using GamePlay.UI.BuildingControlPanel;
-using Jrd.Select;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
 using UserInputAndCameraControl.CameraControl;
+using RaycastSystem = GamePlay.Select.RaycastSystem;
 
 namespace GamePlay.GameStates.PlayState
 {

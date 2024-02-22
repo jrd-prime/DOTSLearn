@@ -8,7 +8,7 @@ using UserInputAndCameraControl.CameraControl;
 using UserInputAndCameraControl.UserInput.Components;
 using Ray = UnityEngine.Ray;
 
-namespace Jrd.Select
+namespace GamePlay.Select
 {
     /// <summary>
     /// Add the SelectedTag to the clicked temp building

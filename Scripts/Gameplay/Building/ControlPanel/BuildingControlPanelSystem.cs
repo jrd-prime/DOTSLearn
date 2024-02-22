@@ -1,8 +1,8 @@
 ﻿using System;
 using GamePlay.Building.ControlPanel.Component;
-using GamePlay.Building.Prefabs;
 using GamePlay.Building.SetUp;
 using GamePlay.GameStates.PlayState;
+using GamePlay.Prefabs;
 using GamePlay.Products.Component;
 using GamePlay.Storage.InProductionBox.Component;
 using GamePlay.Storage.MainStorage.Component;

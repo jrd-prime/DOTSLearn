@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Select
+namespace GamePlay.Select
 {
 
     /// <summary>

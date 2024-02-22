@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using GamePlay.Building.Prefabs;
 using GamePlay.Building.SetUp;
+using GamePlay.Prefabs;
 using UnityEngine;
 
-namespace Jrd.ScriptableObjects
+namespace GamePlay.ScriptableObjects
 {
     //LOOK try [SerializeReference]
 

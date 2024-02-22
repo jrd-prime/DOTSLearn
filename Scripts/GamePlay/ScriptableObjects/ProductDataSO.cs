@@ -2,7 +2,7 @@
 using GamePlay.Products;
 using UnityEngine;
 
-namespace Jrd.ScriptableObjects
+namespace GamePlay.ScriptableObjects
 {
     [Serializable]
     [CreateAssetMenu(fileName = "New Goods", menuName = "Goods Data", order = 52)]

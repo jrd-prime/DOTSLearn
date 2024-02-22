@@ -2,7 +2,7 @@
 using Unity.Physics;
 using Ray = UnityEngine.Ray;
 
-namespace Jrd.Select
+namespace GamePlay.Select
 {
     public partial struct RaycastSystem : ISystem
     {

@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Building.Prefabs
+﻿namespace GamePlay.Prefabs
 {
     public enum BuildingCategoryId
     {

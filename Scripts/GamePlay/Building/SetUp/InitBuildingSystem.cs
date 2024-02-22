@@ -13,6 +13,7 @@ using GamePlay.UI.BuildingControlPanel;
 using GamePlay.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GamePlay.Building.SetUp
 {
@@ -66,6 +67,18 @@ namespace GamePlay.Building.SetUp
                 _manufacturedBoxData = aspect.BuildingProductsData.ManufacturedBoxData;
                 _buildingData = aspect.BuildingData;
                 _buildingEntity = aspect.BuildingData.Self;
+
+
+                foreach (var q in _required)
+                {
+                    Debug.LogWarning($"req {q.Name} / {q.Quantity}");
+                }
+
+                foreach (var q in _manufactured)
+                {
+                    Debug.LogWarning($"man {q.Name} / {q.Quantity}");
+                }
+
 
                 _ecb.RemoveComponent<InitializeTag>(_buildingEntity);
 

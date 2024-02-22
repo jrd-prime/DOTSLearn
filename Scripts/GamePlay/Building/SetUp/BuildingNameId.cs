@@ -6,6 +6,7 @@
         Windmill,
         Bakery,
         Warehouse,
-        Seedbed
+        Seedbed,
+        Test
     }
 }

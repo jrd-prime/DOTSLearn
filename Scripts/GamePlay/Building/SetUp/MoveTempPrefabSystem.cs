@@ -1,5 +1,5 @@
 ﻿using GamePlay.Building.SetUp.Component;
-using Jrd.Select;
+using GamePlay.Select;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 2800642191170894869, guid: adf93ab392496d1499c197818919d286, type: 3}
   _categoryId: 1
-  _nameId: 2
-  _name: col rig
+  _nameId: 3
+  _name: Warehouse col rig
   _size: {x: 1, y: 1}
   _requiredItems: []
   _manufacturedItems: []

@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UserInputAndCameraControl.CameraControl;
 
-namespace Jrd.Screen
+namespace GamePlay.Screen
 {
     /// <summary>
     /// Получаем мировые координаты точки с центра экрана

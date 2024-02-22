@@ -1,4 +1,4 @@
-﻿using GamePlay.Storage.MainStorage.Component;
+﻿using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,12 +34,16 @@ namespace GamePlay.UI.MainStoragePanel
             PanelCloseButton.clicked += OnCloseButton;
         }
 
-        public void SetTestItems(MainStorageData itemsList)
+        public void SetTestItems(NativeParallelHashMap<int, int> itemsList)
         {
             // ItemsCont.Clear();
+            foreach (var q in itemsList)
+            {
+                Debug.LogWarning(q.Key + " / " + q.Value);
+            }
             
             lab.text = "";
-            foreach (var keyValue in itemsList.Value)
+            foreach (var keyValue in itemsList)
             {
                 if (keyValue.Value == -1) continue;
                 lab.text += "\n" + keyValue.Key + " / " + keyValue.Value;

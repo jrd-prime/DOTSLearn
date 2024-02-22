@@ -1,8 +1,8 @@
 ﻿using GamePlay.Building.ControlPanel.Component;
-using GamePlay.Building.Prefabs;
 using GamePlay.Building.Production;
 using GamePlay.Building.Production.Component;
 using GamePlay.Building.SetUp.Component;
+using GamePlay.Prefabs;
 using GamePlay.Products.Component;
 using GamePlay.Storage;
 using GamePlay.Storage.InProductionBox.Component;
@@ -13,6 +13,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace GamePlay.Building.SetUp
 {
@@ -67,11 +68,20 @@ namespace GamePlay.Building.SetUp
 
             var requiredItems = SystemAPI
                 .GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
+
+
+            foreach (var q in requiredItems)
+            {
+                Debug.LogWarning($"req in {q.Value.Name} / {q.Value.Quantity} / {this}");
+            }
+
+
             var manufacturedItems = SystemAPI
                 .GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
 
             NativeList<ProductData> required = GetProductionProductsList(requiredItems);
             NativeList<ProductData> manufactured = GetProductionProductsList(manufacturedItems);
+
 
             // Main
             SetPosition();
@@ -142,6 +152,7 @@ namespace GamePlay.Building.SetUp
         /// </summary>
         private void SetRequiredProductsData(NativeList<ProductData> required) =>
             _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = required });
+
 
         /// <summary>
         /// Set component with manufactured products list + required quantity
