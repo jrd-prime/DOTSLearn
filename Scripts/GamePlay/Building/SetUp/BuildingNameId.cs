@@ -2,11 +2,11 @@
 {
     public enum BuildingNameId
     {
-        Default,
-        Windmill,
-        Bakery,
-        Warehouse,
-        Seedbed,
-        Test
+        Default = 0,
+        Windmill = 1,
+        Bakery = 2,
+        Warehouse = 3,
+        Seedbed = 4,
+        Test = 5
     }
 }

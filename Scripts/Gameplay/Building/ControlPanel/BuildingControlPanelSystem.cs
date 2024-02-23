@@ -13,6 +13,7 @@ using GamePlay.UI.BuildingControlPanel;
 using GamePlay.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace GamePlay.Building.ControlPanel
 {

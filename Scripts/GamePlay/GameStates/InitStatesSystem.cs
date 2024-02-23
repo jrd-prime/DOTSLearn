@@ -1,6 +1,7 @@
 ﻿using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
 using GamePlay.Prefabs;
+using GamePlay.Products.Component;
 using GamePlay.Shop.BlueprintsShop;
 using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
@@ -12,6 +13,11 @@ namespace GamePlay.GameStates
     [UpdateInGroup(typeof(MyInitSystemGroup))]
     public partial struct InitStatesSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<BlueprintsBlobData>();
+        }
+
         private static readonly FixedString64Bytes GameStateDataEntityName = "___ Game State";
         private static readonly FixedString64Bytes GameplayStateDataEntityName = "___ Data: Gameplay State";
         private static readonly FixedString64Bytes BuildingStateDataEntityName = "___ Data: Building State";
@@ -22,6 +28,11 @@ namespace GamePlay.GameStates
 
         public void OnUpdate(ref SystemState state)
         {
+            BlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>> b = SystemAPI.GetSingleton<BlueprintsBlobData>().Value;
+
+            Debug.LogWarning("/// " + b.Value[0][0][0]);
+            
+            
             state.Enabled = false;
 
             if (!SystemAPI.TryGetSingletonBuffer<ProductsDataBuffer>(out var buffer))

@@ -23,40 +23,81 @@ namespace GamePlay.Prefabs
 
                 var buff = AddBuffer<BlueprintsBuffer>(entity);
 
+                int buildingsCount = authoring._buildings.Count;
+
+                const int requiredCellId = 0;
+                const int manufacturedCellId = 1;
+
+                // req and man fixed 0 and 1 index
+                // [][][] [building id][req or man cell id][product data]
+                using BlobBuilder builder = new(Allocator.Temp);
+
+                // ROOT
+                ref BlobArray<BlobArray<BlobArray<ProductData>>> root =
+                    ref builder.ConstructRoot<BlobArray<BlobArray<BlobArray<ProductData>>>>();
+
+                // BUILDINGS ARRAY BUILDER
+                BlobBuilderArray<BlobArray<BlobArray<ProductData>>> buildingsArray =
+                    builder.Allocate(ref root, buildingsCount);
+
+                for (int buildingId = 0; buildingId < buildingsCount; buildingId++)
+                {
+                    // REQUIRED AND MANUFACTURED ARRAYS BUILDER
+                    BlobBuilderArray<BlobArray<ProductData>> requiredAndManufacturedArrays =
+                        builder.Allocate(ref buildingsArray[buildingId], 2);
+
+                    int requiredItemsCount = authoring._buildings[buildingId].RequiredItems.Count;
+
+                    // REQUIRED ARRAY BUILDER
+                    BlobBuilderArray<ProductData> requiredArray =
+                        builder.Allocate(ref requiredAndManufacturedArrays[requiredCellId], requiredItemsCount);
+
+                    if (requiredItemsCount != 0)
+                    {
+                        // REQ ARRAY
+                        for (int j = 0; j < requiredItemsCount; j++)
+                        {
+                            requiredArray[j] = new ProductData
+                            {
+                                Name = authoring._buildings[buildingId].RequiredItems[j]._productDataSo.Product,
+                                Quantity = authoring._buildings[buildingId].RequiredItems[j]._quantity
+                            };
+                        }
+                    }
+
+                    // MANUFACTURED ARRAY BUILDER
+                    int manufacturedItemsCount = authoring._buildings[buildingId].ManufacturedItems.Count;
+
+                    BlobBuilderArray<ProductData> manufacturedArray =
+                        builder.Allocate(ref requiredAndManufacturedArrays[manufacturedCellId], manufacturedItemsCount);
+
+                    if (manufacturedItemsCount != 0)
+                    {
+                        for (int j = 0; j < manufacturedItemsCount; j++)
+                        {
+                            manufacturedArray[j] = new ProductData
+                            {
+                                Name = authoring._buildings[buildingId].ManufacturedItems[j]._productDataSo.Product,
+                                Quantity = authoring._buildings[buildingId].ManufacturedItems[j]._quantity
+                            };
+                        }
+                    }
+                }
+
+                var blobAssetReference =
+                    builder.CreateBlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>>(
+                        Allocator.Persistent);
+
+                AddComponent(entity, new BlueprintsBlobData
+                {
+                    Value = blobAssetReference
+                });
+
                 foreach (var buildingData in authoring._buildings)
                 {
-                    Debug.LogWarning("= = = = = = = = == = = = = = = == ");
-                    Debug.LogWarning($"building {buildingData.NameId} /");
-                    var req = new NativeList<ProductData>(0, Allocator.Persistent);
-                    var man = new NativeList<ProductData>(0, Allocator.Persistent);
-
-                    foreach (var requiredItem in buildingData.RequiredItems)
-                    {
-                        Debug.LogWarning($"req add = {requiredItem._productDataSo.Product} + {requiredItem._quantity}");
-                        req.Add(new ProductData
-                        {
-                            Name = requiredItem._productDataSo.Product,
-                            Quantity = requiredItem._quantity
-                        });
-                    }
-
-                    foreach (var manufacturedItem in buildingData.ManufacturedItems)
-                    {
-                        Debug.LogWarning(
-                            $"req add = {manufacturedItem._productDataSo.Product} + {manufacturedItem._quantity}");
-
-                        man.Add(new ProductData
-                        {
-                            Name = manufacturedItem._productDataSo.Product,
-                            Quantity = manufacturedItem._quantity
-                        });
-                    }
-
-                    var e = GetEntity(buildingData.Prefab, TransformUsageFlags.Dynamic);
-                    Debug.LogWarning($"e = {e}");
                     buff.Add(new BlueprintsBuffer
                     {
-                        Self = e,
+                        Self = GetEntity(buildingData.Prefab, TransformUsageFlags.Dynamic),
 
                         CategoryId = buildingData.CategoryId,
                         NameId = buildingData.NameId,
@@ -68,29 +109,14 @@ namespace GamePlay.Prefabs
                         LoadCapacity = buildingData.LoadCapacity,
                         StorageCapacity = buildingData.StorageCapacity
                     });
-                    AddComponent(e, new req { Value = req });
-                    AddComponent(e, new man { Value = man });
-                }
-            }
-
-            private static void FillBuffer<T>(List<ProductForProduction> data,
-                DynamicBuffer<T> buffer) where T : unmanaged, ITes
-            {
-                foreach (var item in data)
-                {
-                    Debug.LogWarning($"add = {item._productDataSo.Product}");
-                    var itemsBuffer = new T();
-
-                    itemsBuffer.SetValue(new ProductData
-                    {
-                        Name = item._productDataSo.Product,
-                        Quantity = item._quantity
-                    });
-
-                    buffer.Add(itemsBuffer);
                 }
             }
         }
+    }
+
+    public struct BlueprintsBlobData : IComponentData
+    {
+        public BlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>> Value;
     }
 
     public struct BuildingsPrefabsBufferTag : IComponentData
@@ -110,37 +136,5 @@ namespace GamePlay.Prefabs
         public float ItemsPerHour;
         public int LoadCapacity;
         public int StorageCapacity;
-    }
-
-    public struct req : IComponentData
-    {
-        public NativeList<ProductData> Value;
-    }
-
-    public struct man : IComponentData
-    {
-        public NativeList<ProductData> Value;
-    }
-
-    public struct BuildingRequiredItemsBuffer : IBufferElementData, ITes
-    {
-        public ProductData Value;
-        public void SetValue(ProductData value) => Value = value;
-    }
-
-    public struct BuildingManufacturedItemsBuffer : IBufferElementData, ITes
-    {
-        public ProductData Value;
-        public void SetValue(ProductData value) => Value = value;
-    }
-
-    public struct BuildingProductionItemsBuffer
-    {
-        public ProductData Value;
-    }
-
-    internal interface ITes
-    {
-        public void SetValue(ProductData value);
     }
 }
