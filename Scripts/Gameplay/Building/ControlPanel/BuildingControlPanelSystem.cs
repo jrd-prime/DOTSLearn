@@ -30,6 +30,7 @@ namespace GamePlay.Building.ControlPanel
         private InProductionBoxData _inProductionBoxData;
         private ManufacturedBoxData _manufacturedBoxData;
         private BuildingData _buildingData;
+
         private NativeList<ProductData> _required;
         private NativeList<ProductData> _manufactured;
 
@@ -43,6 +44,12 @@ namespace GamePlay.Building.ControlPanel
             RequireForUpdate<MainStorageData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             RequireForUpdate<BuildingsPrefabsBufferTag>();
+        }
+
+        protected override void OnDestroy()
+        {
+            _required.Dispose();
+            _manufactured.Dispose();
         }
 
         protected override void OnStartRunning()
@@ -85,7 +92,7 @@ namespace GamePlay.Building.ControlPanel
             {
                 var ev = eQueue.Dequeue();
 
-                // Debug.LogWarning($"___ BUILDING EVENT: {ev}");
+                Debug.LogWarning($"___ BUILDING EVENT: {ev}");
                 switch (ev)
                 {
                     case BuildingEvent.MoveToWarehouseTimerStarted:

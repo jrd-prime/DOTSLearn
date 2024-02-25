@@ -57,7 +57,7 @@ namespace GamePlay.UI.BuildingControlPanel.Part
             var iteml = template.Q<Label>("item-count-label");
 
             // Icon //TODO getpath, enum to string?lol?
-            var iconPath = GameConst.GoodsIconsPath + item.ToString().ToLower();
+            var iconPath = Names.GoodsIconsPath + item.ToString().ToLower();
             
             var iconSprite = Utility.Utils.LoadFromResources<Sprite>(iconPath, this);
 

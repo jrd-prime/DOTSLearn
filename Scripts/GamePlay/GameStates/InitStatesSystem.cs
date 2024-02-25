@@ -1,55 +1,37 @@
-﻿using GamePlay.GameStates.BuildingState;
+﻿using System;
+using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
 using GamePlay.Prefabs;
-using GamePlay.Products.Component;
 using GamePlay.Shop.BlueprintsShop;
 using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace GamePlay.GameStates
 {
     [UpdateInGroup(typeof(MyInitSystemGroup))]
     public partial struct InitStatesSystem : ISystem
     {
+        private DynamicBuffer<ProductsDataBuffer> _buffer;
+
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BlueprintsBlobData>();
         }
 
-        private static readonly FixedString64Bytes GameStateDataEntityName = "___ Game State";
-        private static readonly FixedString64Bytes GameplayStateDataEntityName = "___ Data: Gameplay State";
-        private static readonly FixedString64Bytes BuildingStateDataEntityName = "___ Data: Building State";
-        private static readonly FixedString64Bytes BlueprintsShopDataName = "___ Data: Blueprints Shop";
-        private static readonly FixedString64Bytes MainStorageDataName = "___ Data: Main Storage";
-
-        private DynamicBuffer<ProductsDataBuffer> _buffer;
-
         public void OnUpdate(ref SystemState state)
         {
-            BlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>> b = SystemAPI.GetSingleton<BlueprintsBlobData>().Value;
-
-            Debug.LogWarning("/// " + b.Value[0][0][0]);
-            
-            
             state.Enabled = false;
 
-            if (!SystemAPI.TryGetSingletonBuffer<ProductsDataBuffer>(out var buffer))
-            {
-                Debug.LogError("NO Products Data Buffer!");
-                return;
-            }
-
-            _buffer = buffer;
+            if (!SystemAPI.TryGetSingletonBuffer(out _buffer)) throw new Exception($"NO {nameof(ProductsDataBuffer)}!");
 
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
-                { GameStateDataEntityName, typeof(GameStateData) },
-                { GameplayStateDataEntityName, typeof(PlayStateData) },
-                { BuildingStateDataEntityName, typeof(BuildingStateData) },
-                { BlueprintsShopDataName, typeof(BlueprintsShopData) },
-                { MainStorageDataName, typeof(MainStorageData) }
+                { Const.Names.GameStateDataEntityName, typeof(GameStateData) },
+                { Const.Names.GameplayStateDataEntityName, typeof(PlayStateData) },
+                { Const.Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
+                { Const.Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
+                { Const.Names.MainStorageDataName, typeof(MainStorageData) }
             };
 
             var em = state.EntityManager;

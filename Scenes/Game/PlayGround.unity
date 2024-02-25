@@ -133,6 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 691191339}
+  - component: {fileID: 691191340}
   m_Layer: 0
   m_Name: ProductsPrefabs
   m_TagString: Untagged
@@ -155,6 +156,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 883203657}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &691191340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 691191338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39a3a2e1396be544aec9cc0e20d0e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _products:
+  - {fileID: 11400000, guid: a82a48a103f70494aa4a6b84d08b6aa8, type: 2}
+  - {fileID: 11400000, guid: 2ec9caf6ce7727648be0a7909a68016f, type: 2}
+  - {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}
+  - {fileID: 11400000, guid: a0ee9d66797760945985dcb3b5f498a4, type: 2}
+  - {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
+  - {fileID: 11400000, guid: c8ae1e23f1095994abc0a2980299f8de, type: 2}
 --- !u!1 &757518466
 GameObject:
   m_ObjectHideFlags: 0

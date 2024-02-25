@@ -1,5 +1,4 @@
-﻿using GamePlay.GameStates;
-using GamePlay.Storage.MainStorage.Component;
+﻿using GamePlay.Storage.MainStorage.Component;
 using GamePlay.UI;
 using GamePlay.UI.MainStoragePanel;
 using Unity.Collections;
@@ -19,7 +18,7 @@ namespace GamePlay.Storage.MainStorage
         private Entity _mainStorageEntity;
         private MainStoragePanelUI _mainStoragePanelUI;
 
-        private NativeParallelHashMap<int, int> cachedMainStorageData;
+        private NativeParallelHashMap<int, int> _cachedMainStorageData;
 
         protected override void OnCreate()
         {
@@ -41,20 +40,20 @@ namespace GamePlay.Storage.MainStorage
             
             Debug.Log(mainStorageData);
 
-            cachedMainStorageData = new NativeParallelHashMap<int, int>(0, Allocator.Persistent);
+            _cachedMainStorageData = new NativeParallelHashMap<int, int>(0, Allocator.Persistent);
 
             foreach (var q in mainStorageData.Value)
             {
-                cachedMainStorageData.Add(q.Key, q.Value);
+                _cachedMainStorageData.Add(q.Key, q.Value);
             }
         }
 
         private void MainStorageSelected()
         {
-            _mainStoragePanelUI.SetTestItems(cachedMainStorageData);
+            _mainStoragePanelUI.SetTestItems(_cachedMainStorageData);
             _mainStoragePanelUI.SetElementVisible(true);
 
-            cachedMainStorageData.Dispose();
+            _cachedMainStorageData.Dispose();
         }
 
         protected override void OnDestroy()

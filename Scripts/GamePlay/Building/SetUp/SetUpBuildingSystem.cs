@@ -13,7 +13,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace GamePlay.Building.SetUp
 {
@@ -25,17 +24,27 @@ namespace GamePlay.Building.SetUp
     {
         private BeginSimulationEntityCommandBufferSystem.Singleton _ecbSystem;
         private EntityCommandBuffer _bsEcb;
+
         private Entity _entity;
         private FixedString64Bytes _guid;
         private BuildingData _building;
-        private LocalTransform _transform;
+
+        // Dispose
+        private NativeList<ProductData> _requiredItems;
+        private NativeList<ProductData> _manufacturedItems;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BuildingsPrefabsBufferTag>();
+            state.RequireForUpdate<BlueprintsBlobData>();
             state.RequireForUpdate<PlaceTempBuildingTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
+        public void OnDestroy(ref SystemState state)
+        {
+            _requiredItems.Dispose();
+            _manufacturedItems.Dispose();
         }
 
         [BurstCompile]
@@ -48,14 +57,21 @@ namespace GamePlay.Building.SetUp
                          .WithAll<PlaceTempBuildingTag, TempBuildingTag>()
                          .WithEntityAccess())
             {
-                _entity = entity;
-                buildingData.ValueRW.Self = entity;
                 _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
-                _guid = buildingData.ValueRO.Guid;
-                _building = buildingData.ValueRW;
-                _transform = transform.ValueRO;
 
+                _entity = entity;
+                _building = buildingData.ValueRW;
+                _guid = _building.Guid;
+
+                buildingData.ValueRW.Self = entity;
+                buildingData.ValueRW.WorldPosition = transform.ValueRO.Position;
                 buildingData.ValueRW.BuildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent);
+
+                BuildingNameId buildingId = _building.NameId;
+                BlueprintsBlobData blueprintsBlobData = SystemAPI.GetSingleton<BlueprintsBlobData>();
+
+                _requiredItems = blueprintsBlobData.GetProductionLineProducts(buildingId).Required;
+                _manufacturedItems = blueprintsBlobData.GetProductionLineProducts(buildingId).Manufactured;
 
                 InitSettingsForNewBuilding(ref state);
             }
@@ -64,58 +80,30 @@ namespace GamePlay.Building.SetUp
         [BurstCompile]
         private void InitSettingsForNewBuilding(ref SystemState state)
         {
-            Entity bufferEntity = SystemAPI.GetSingletonEntity<BuildingsPrefabsBufferTag>();
-
-            var requiredItems = SystemAPI
-                .GetBuffer<BuildingRequiredItemsBuffer>(bufferEntity);
-
-
-            foreach (var q in requiredItems)
-            {
-                Debug.LogWarning($"req in {q.Value.Name} / {q.Value.Quantity} / {this}");
-            }
-
-
-            var manufacturedItems = SystemAPI
-                .GetBuffer<BuildingManufacturedItemsBuffer>(bufferEntity);
-
-            NativeList<ProductData> required = GetProductionProductsList(requiredItems);
-            NativeList<ProductData> manufactured = GetProductionProductsList(manufacturedItems);
-
-
             // Main
-            SetPosition();
-            SetEntityName();
+            // SetPosition();
+            SetBuildingEntityName();
             SetProductionState();
-            InitChangeProductsQueue();
+            InitChangeProductsQuantityQueue();
             BuildingTags();
 
             // Init products
-
-            // foreach (var q in manufactured)
-            // {
-            //     Debug.LogWarning("manufactured set = " + q.Name + " / " + q.Quantity);
-            // }
-
-
-            InitBuildingProductsData(required, manufactured);
-            SetRequiredProductsData(required);
-            SetManufacturedProductsData(manufactured);
-
+            InitBuildingProductsData();
+            SetRequiredProductsData();
+            SetManufacturedProductsData();
             SetProductionProcessDataComponent();
 
             // Save?
             AddBuildingToGameBuildingsList(ref state);
         }
 
-        private void InitChangeProductsQueue()
+        private void InitChangeProductsQuantityQueue()
         {
             _bsEcb.AddComponent(_entity, new ChangeProductsQuantityQueueData
             {
                 Value = new NativeQueue<ChangeProductsQuantityData>(Allocator.Persistent)
             });
         }
-
 
         private void BuildingTags()
         {
@@ -129,36 +117,34 @@ namespace GamePlay.Building.SetUp
         /// <summary>
         /// Set warehouse products quantity to 0 and production boxes data to 0 (in production/manufactured)
         /// </summary>
-        private void InitBuildingProductsData(NativeList<ProductData> required, NativeList<ProductData> manufactured)
+        private void InitBuildingProductsData()
         {
             _bsEcb.AddComponent(_entity, new BuildingProductsData
             {
                 WarehouseData = new WarehouseData
-                    { Value = ProductData.ConvertProductsDataToHashMap(required, ProductValues.ToDefault) },
+                    { Value = ProductData.ConvertProductsDataToHashMap(_requiredItems, ProductValues.ToDefault) },
                 InProductionBoxData = new InProductionBoxData
-                    { Value = ProductData.ConvertProductsDataToHashMap(required, ProductValues.ToDefault) },
+                    { Value = ProductData.ConvertProductsDataToHashMap(_requiredItems, ProductValues.ToDefault) },
                 ManufacturedBoxData = new ManufacturedBoxData
-                    { Value = ProductData.ConvertProductsDataToHashMap(manufactured, ProductValues.ToDefault) }
+                    { Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItems, ProductValues.ToDefault) }
             });
         }
 
-        private void SetPosition() => _building.WorldPosition = _transform.Position;
-        private void SetEntityName() => _bsEcb.SetName(_entity, $"{_building.NameId}_{_guid}");
+        private void SetBuildingEntityName() => _bsEcb.SetName(_entity, _building.NameId + "_" + _guid);
         private void SetProductionState() => _building.ProductionState = ProductionState.Init;
         private void SetProductionProcessDataComponent() => _bsEcb.AddComponent<ProductionProcessData>(_entity);
 
         /// <summary>
         /// Set component with required products list + required quantity
         /// </summary>
-        private void SetRequiredProductsData(NativeList<ProductData> required) =>
-            _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = required });
-
+        private void SetRequiredProductsData() =>
+            _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = _requiredItems });
 
         /// <summary>
         /// Set component with manufactured products list + required quantity
         /// </summary>
-        private void SetManufacturedProductsData(NativeList<ProductData> manufactured) =>
-            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = manufactured });
+        private void SetManufacturedProductsData() =>
+            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = _manufacturedItems });
 
         private void AddBuildingToGameBuildingsList(ref SystemState _)
         {
@@ -168,28 +154,5 @@ namespace GamePlay.Building.SetUp
 
             gameBuildingsMap.Add(_guid, _building);
         }
-
-        #region Local Utils
-
-        /// <summary>
-        /// Contains list of <see cref="ProductData"/> with product and quantity from building required/manufactured buffer
-        /// </summary>
-        private NativeList<ProductData> GetProductionProductsList<T>(
-            DynamicBuffer<T> buffer) where T : unmanaged, IBufferElementData
-        {
-            DynamicBuffer<BuildingProductionItemsBuffer> productsBuffer = buffer
-                .Reinterpret<BuildingProductionItemsBuffer>();
-
-            NativeList<ProductData> productsList = new(productsBuffer.Length, Allocator.Persistent);
-
-            foreach (var product in productsBuffer)
-            {
-                productsList.Add(product.Value);
-            }
-
-            return productsList;
-        }
-
-        #endregion
     }
 }
