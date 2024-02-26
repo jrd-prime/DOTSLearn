@@ -1,7 +1,7 @@
 ﻿using System;
-using GamePlay.Const;
-using GamePlay.Products;
-using GamePlay.Products.Component;
+using GamePlay.Common.Constants;
+using GamePlay.Features.Building.Products;
+using GamePlay.Features.Building.Products.Component;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;

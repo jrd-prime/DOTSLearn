@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GamePlay.Features.Shop.BlueprintsShop;
 using GamePlay.Shop.BlueprintsShop;
 using GamePlay.UI.BuildingControlPanel;
 using Unity.Collections;

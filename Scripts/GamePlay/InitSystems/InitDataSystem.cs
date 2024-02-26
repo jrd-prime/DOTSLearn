@@ -1,10 +1,13 @@
 ﻿using System;
 using GamePlay.Authoring;
+using GamePlay.Common;
+using GamePlay.Common.Constants;
+using GamePlay.Features.Building.Storage.MainStorage.Component;
+using GamePlay.Features.Shop.BlueprintsShop;
 using GamePlay.GameStates;
 using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
 using GamePlay.Shop.BlueprintsShop;
-using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -28,11 +31,11 @@ namespace GamePlay.InitSystems
 
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
-                { Const.Names.GameStateDataEntityName, typeof(GameStateData) },
-                { Const.Names.GameplayStateDataEntityName, typeof(PlayStateData) },
-                { Const.Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
-                { Const.Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
-                { Const.Names.MainStorageDataName, typeof(MainStorageData) }
+                { Names.GameStateDataEntityName, typeof(GameStateData) },
+                { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
+                { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
+                { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
+                { Names.MainStorageDataName, typeof(MainStorageData) }
             };
 
             var em = state.EntityManager;

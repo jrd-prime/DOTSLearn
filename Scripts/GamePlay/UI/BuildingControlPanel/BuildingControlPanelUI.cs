@@ -1,5 +1,5 @@
 ﻿using System;
-using GamePlay.Products.Component;
+using GamePlay.Features.Building.Products.Component;
 using GamePlay.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using UnityEngine;
