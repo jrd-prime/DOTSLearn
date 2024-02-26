@@ -2,7 +2,7 @@
 using Sources.Scripts.Game.Common;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
-using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;

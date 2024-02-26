@@ -1,9 +1,8 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.Game.Common.Screen;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
-using Sources.Scripts.Game.GameStates.BuildingState;
-using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Sources.Scripts.Screen;
+using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;

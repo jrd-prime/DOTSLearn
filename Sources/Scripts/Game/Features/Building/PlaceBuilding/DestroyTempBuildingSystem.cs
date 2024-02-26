@@ -1,7 +1,6 @@
 ﻿using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
-using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;

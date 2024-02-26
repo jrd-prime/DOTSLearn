@@ -5,6 +5,8 @@ namespace Sources.Scripts.UI
 {
     public abstract class PanelMono : MonoBehaviour
     {
+        //TODO refactor without protected
+        
         protected int PanelTitleMaxLength = 30;
         protected bool IsVisible;
         protected VisualElement PanelRoot;

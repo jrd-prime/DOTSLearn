@@ -1,7 +1,6 @@
 ﻿using System;
 using Sources.Scripts.Game.Features.Building.Storage.Service;
-using Sources.Scripts.JTimer;
-using Sources.Scripts.JTimer.Component;
+using Sources.Scripts.Timer;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse

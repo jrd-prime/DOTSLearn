@@ -1,6 +1,7 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Utility;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -58,7 +59,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
             // Icon //TODO getpath, enum to string?lol?
             var iconPath = Names.GoodsIconsPath + item.ToString().ToLower();
             
-            var iconSprite = Utility.Utils.LoadFromResources<Sprite>(iconPath, this);
+            var iconSprite = Utils.LoadFromResources<Sprite>(iconPath, this);
 
             itemContainer.style.backgroundImage = new StyleBackground(iconSprite);
             // NameLabel.text = itemCount.ToString();

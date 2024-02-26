@@ -1,0 +1,61 @@
+﻿using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Unity.Entities;
+using Unity.Mathematics;
+using UnityEngine;
+
+namespace Sources.Scripts.Screen.System
+{
+    /// <summary>
+    /// Получаем мировые координаты точки с центра экрана
+    /// </summary>
+    [UpdateAfter(typeof(ScreenDataSystem))]
+    public partial struct ScreenCenterInWorldCoordsSystem : ISystem
+    {
+        private Entity _screenCenterToWorldSingleton;
+        private const int GroundLayerID = 1 << 3;
+        private const float MaxDistance = 33f;
+
+
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<ScreenData>();
+            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
+        }
+
+        public void OnUpdate(ref SystemState state)
+        {
+            _screenCenterToWorldSingleton = SystemAPI.GetSingletonEntity<ScreenCenterInWorldCoordsData>();
+            foreach (var screenComponent in SystemAPI.Query<RefRW<ScreenData>>())
+            {
+                var targetPoint = new Vector3(screenComponent.ValueRO.ScreenCenter.x,
+                    screenComponent.ValueRO.ScreenCenter.y, 0f);
+
+                if (!Physics.Raycast(
+                        CameraMono.Instance.Camera.ScreenPointToRay(targetPoint),
+                        out var hit,
+                        MaxDistance,
+                        GroundLayerID
+                    )) return;
+
+                // Debug.Log(new float3(
+                //     Mathf.Round(hit.point.x),
+                //     Mathf.Round(hit.point.y),
+                //     Mathf.Round(hit.point.z)));
+
+                if (Mathf.Round(hit.point.y) != 0)
+                {
+                    Debug.LogError("Ground Y != 0 or not set ground layer id");
+                }
+
+                SystemAPI.SetComponent(_screenCenterToWorldSingleton,
+                    new ScreenCenterInWorldCoordsData
+                    {
+                        ScreenCenterToWorld = new float3(
+                            Mathf.Round(hit.point.x),
+                            Mathf.Round(hit.point.y),
+                            Mathf.Round(hit.point.z))
+                    });
+            }
+        }
+    }
+}

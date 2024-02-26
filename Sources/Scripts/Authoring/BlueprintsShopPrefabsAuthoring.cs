@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.ScriptableObjects;
+using Sources.Scripts.CommonComponents.SO;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;

@@ -3,11 +3,9 @@ using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.Game.Common;
-using Sources.Scripts.Game.Common.Constants;
+using Sources.Scripts.Game.Features;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
 using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
-using Sources.Scripts.Game.GameStates;
-using Sources.Scripts.Game.GameStates.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -32,7 +30,7 @@ namespace Sources.Scripts.Game.InitSystems
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
                 // { Names.GameStateDataEntityName, typeof(GameStateData) },
-                { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
+                // { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
                 { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
                 { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
                 { Names.MainStorageDataName, typeof(MainStorageData) }

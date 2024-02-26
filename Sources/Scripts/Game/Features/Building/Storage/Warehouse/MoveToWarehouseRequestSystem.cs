@@ -3,7 +3,7 @@ using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
 using Sources.Scripts.Game.Features.Building.Storage.Service;
-using Sources.Scripts.JTimer;
+using Sources.Scripts.Timer;
 using Sources.Scripts.UI;
 using Unity.Burst;
 using Unity.Collections;
@@ -79,7 +79,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
             int productsQuantity = StorageService.GetProductsQuantity(_matchingProducts);
             int moveDuration = productsQuantity / 5;
 
-            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
+            new global::Sources.Scripts.Timer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
         }
 
         private void ReduceProductsInMainStorage() =>

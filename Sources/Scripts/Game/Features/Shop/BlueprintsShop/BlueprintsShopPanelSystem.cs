@@ -4,11 +4,11 @@ using Sources.Scripts.Game.Features.Building;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
-using Sources.Scripts.Game.GameStates.BuildingState;
 using Sources.Scripts.UI;
 using Sources.Scripts.UI.BlueprintsShopPanel;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.PopUpPanels;
+using Sources.Scripts.Utility;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -163,7 +163,7 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop
 
             BlueprintsBuffer blueprintBuffer = _blueprintsBuffers[index];
 
-            FixedString64Bytes giud = Utility.Utils.GetGuid();
+            FixedString64Bytes giud = Utils.GetGuid();
 
             _bsEcb.AddComponent(_buildingStateEntity,
                 new InstantiateTempBuildingData

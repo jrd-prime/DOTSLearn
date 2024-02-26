@@ -1,12 +1,12 @@
 ﻿using System;
-using Sources.Scripts.JTimer;
-using Sources.Scripts.JTimer.Component;
+using Sources.Scripts.Timer;
 using Unity.Entities;
 using UnityEngine;
+using JTimerSystem = Sources.Scripts.Timer.System.JTimerSystem;
 
 namespace Sources.Scripts.Game.Features.Building.Events
 {
-    [UpdateAfter(typeof(TimerSystem))]
+    [UpdateAfter(typeof(JTimerSystem))]
     public partial struct TimerEventsSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

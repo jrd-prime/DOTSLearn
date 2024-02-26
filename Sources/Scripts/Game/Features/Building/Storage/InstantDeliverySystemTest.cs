@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.JTimer.Component;
+﻿using Sources.Scripts.Timer;
 using Unity.Entities;
 using UnityEngine;
 

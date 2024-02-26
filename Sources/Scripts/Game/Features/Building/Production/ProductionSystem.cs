@@ -3,7 +3,7 @@ using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.Production.Component;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Sources.Scripts.Game.Features.Building.Storage.Service;
-using Sources.Scripts.JTimer;
+using Sources.Scripts.Timer;
 using Unity.Entities;
 using UnityEngine;
 
@@ -207,7 +207,7 @@ namespace Sources.Scripts.Game.Features.Building.Production
         private void StartOneLoadTimer()
         {
             
-            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(
+            new global::Sources.Scripts.Timer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.OneLoadCycle,
                 _buildingData.GetOneProductManufacturingTime(),
@@ -216,7 +216,7 @@ namespace Sources.Scripts.Game.Features.Building.Production
 
         private void StartFullLoadTimer()
         {
-            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(
+            new global::Sources.Scripts.Timer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.FullLoadCycle,
                 _buildingData.GetLoadedProductsManufacturingTime(),

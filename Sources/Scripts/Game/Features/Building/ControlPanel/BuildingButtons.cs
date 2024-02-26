@@ -1,7 +1,7 @@
 ﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
-using Sources.Scripts.JTimer.Component;
+using Sources.Scripts.Timer;
 using Sources.Scripts.UI;
 using Unity.Entities;
 
