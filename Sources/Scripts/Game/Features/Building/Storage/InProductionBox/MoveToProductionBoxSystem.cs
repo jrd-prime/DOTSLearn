@@ -1,16 +1,15 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Production;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.Service;
-using GamePlay.Features.Building.Storage.Warehouse.Component;
-using GamePlay.UI;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Production;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
+using Sources.Scripts.UI;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Storage.InProductionBox
+namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox
 {
     /// <summary>
     /// Move products from the building warehouse to production box<br/>

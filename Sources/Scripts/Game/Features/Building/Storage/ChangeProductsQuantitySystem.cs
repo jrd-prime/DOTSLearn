@@ -1,14 +1,13 @@
 ﻿using System;
-using CommonComponents.Product;
-using GamePlay.Features.Building.ControlPanel;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.ControlPanel;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage
+namespace Sources.Scripts.Game.Features.Building.Storage
 {
     [UpdateBefore(typeof(BuildingControlPanelSystem))]
     public partial struct ChangeProductsQuantitySystem : ISystem

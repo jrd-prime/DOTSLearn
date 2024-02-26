@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace UserInputAndCameraControl.CameraControl
+namespace Sources.Scripts.UserInputAndCameraControl.CameraControl
 {
     public partial struct CameraControlSystem : ISystem
     {

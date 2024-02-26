@@ -1,0 +1,19 @@
+{
+    "name": "Jrd.UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7362e05dfa82dbb4a93618a5e6f6b9e7",
+        "GUID:58c5297620d238c489469edb64257b05",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:734d92eba21c94caba915361bd5ac177"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

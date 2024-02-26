@@ -1,14 +1,14 @@
-﻿using GamePlay.Features.Building.PlaceBuilding.Component;
-using GamePlay.GameStates.MainGameState;
-using GamePlay.InitSystems;
-using GamePlay.UI.BuildingControlPanel;
+﻿using Sources.Scripts.Game.Common;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.Game.InitSystems;
+using Sources.Scripts.UI.BuildingControlPanel;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
-using UserInputAndCameraControl.CameraControl;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace GamePlay.Features.Building.SelectBuilding
+namespace Sources.Scripts.Game.Features.Building.SelectBuilding
 
 {
     public partial struct SelectBuildingSystem : ISystem
@@ -27,7 +27,6 @@ namespace GamePlay.Features.Building.SelectBuilding
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<CameraData>();
-            state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
             _tempFirstTargetEntity = Entity.Null;
         }
@@ -49,7 +48,7 @@ namespace GamePlay.Features.Building.SelectBuilding
             {
                 case TouchPhase.Began:
                 {
-                    bool isHit = Common.RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit firstRaycastHit);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit firstRaycastHit);
 
                     if (!isHit)
                     {
@@ -68,7 +67,7 @@ namespace GamePlay.Features.Building.SelectBuilding
                 {
                     if (Time.time - _timeStart > .3f) return;
 
-                    bool isHit = Common.RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit secondRaycastHit);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit secondRaycastHit);
 
                     if (!isHit) return;
 

@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Features.Building.PlaceBuilding.Component
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.Component
 {
     /// <summary>
     /// A tag indicating that it is a temporary building

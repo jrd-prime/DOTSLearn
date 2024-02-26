@@ -1,10 +1,10 @@
 ﻿using System;
-using JTimer;
-using JTimer.Component;
+using Sources.Scripts.JTimer;
+using Sources.Scripts.JTimer.Component;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Events
+namespace Sources.Scripts.Game.Features.Building.Events
 {
     [UpdateAfter(typeof(TimerSystem))]
     public partial struct TimerEventsSystem : ISystem

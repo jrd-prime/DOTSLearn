@@ -1,11 +1,11 @@
-﻿using Unity.Collections;
+﻿using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using UserInputAndCameraControl.CameraControl;
-using UserInputAndCameraControl.UserInput.Components;
 
-namespace UserInputAndCameraControl.UserInput.Systems
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Systems
 {
     /// <summary>
     /// Устанавливаем позицию курсора в мире

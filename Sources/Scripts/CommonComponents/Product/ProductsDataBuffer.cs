@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace CommonComponents.Product
+namespace Sources.Scripts.CommonComponents.Product
 {
     public struct ProductsDataBuffer : IBufferElementData
     {

@@ -1,9 +1,8 @@
 ﻿using System;
-using CommonComponents.Product;
-using GamePlay.Features.Building.Products.Component;
+using Sources.Scripts.CommonComponents.Product;
 using Unity.Collections;
 
-namespace GamePlay.Features.Building.Storage.InProductionBox.Component
+namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component
 {
     /// <summary>
     /// Contains a hashmap (int, int) (Product id, quantity) of the products in ready-to-process

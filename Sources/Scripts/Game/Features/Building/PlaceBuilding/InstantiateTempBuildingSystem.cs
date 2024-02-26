@@ -1,16 +1,16 @@
-﻿using CommonComponents.Building;
-using GamePlay.Common.Screen;
-using GamePlay.Features.Building.ControlPanel.Component;
-using GamePlay.Features.Building.PlaceBuilding.Component;
-using GamePlay.GameStates.BuildingState;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.Game.Common.Screen;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.Game.GameStates.BuildingState;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UserInputAndCameraControl.UserInput.Components;
 
-namespace GamePlay.Features.Building.PlaceBuilding
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     [BurstCompile]
     public partial struct InstantiateTempBuildingSystem : ISystem

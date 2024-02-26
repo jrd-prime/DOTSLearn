@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Features.Shop.BlueprintsShop
+namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop
 {
     public struct BlueprintsShopData : IComponentData
     {

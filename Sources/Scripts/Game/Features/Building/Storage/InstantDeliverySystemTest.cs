@@ -1,8 +1,8 @@
-﻿using JTimer.Component;
+﻿using Sources.Scripts.JTimer.Component;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Storage
+namespace Sources.Scripts.Game.Features.Building.Storage
 {
     public partial struct InstantDeliverySystemTest : ISystem
     {

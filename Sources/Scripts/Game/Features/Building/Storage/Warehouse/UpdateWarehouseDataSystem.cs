@@ -1,11 +1,10 @@
 ﻿using System;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.Service;
-using JTimer;
-using JTimer.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.JTimer;
+using Sources.Scripts.JTimer.Component;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage.Warehouse
+namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
 {
     public partial struct UpdateWarehouseDataSystem : ISystem
     {

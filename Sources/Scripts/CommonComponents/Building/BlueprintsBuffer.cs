@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace CommonComponents.Building
+namespace Sources.Scripts.CommonComponents.Building
 {
     public struct BlueprintsBuffer : IBufferElementData
     {

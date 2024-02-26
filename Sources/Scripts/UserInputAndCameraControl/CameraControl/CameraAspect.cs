@@ -1,9 +1,9 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.UserInputAndCameraControl.UserInput;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Unity.Entities;
 using Unity.Mathematics;
-using UserInputAndCameraControl.UserInput;
-using UserInputAndCameraControl.UserInput.Components;
 
-namespace UserInputAndCameraControl.CameraControl
+namespace Sources.Scripts.UserInputAndCameraControl.CameraControl
 {
     public readonly partial struct CameraAspect : IAspect
     {

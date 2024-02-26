@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Features.Building.Events
+﻿namespace Sources.Scripts.Game.Features.Building.Events
 {
     public enum BuildingEvent
     {

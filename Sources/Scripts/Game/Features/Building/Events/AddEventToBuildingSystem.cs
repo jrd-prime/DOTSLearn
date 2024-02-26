@@ -1,7 +1,7 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Events
+namespace Sources.Scripts.Game.Features.Building.Events
 {
     [BurstCompile]
     public partial struct AddEventToBuildingSystem : ISystem

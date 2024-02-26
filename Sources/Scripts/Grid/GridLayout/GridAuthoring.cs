@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Jrd.Grid.GridLayout
+namespace Sources.Scripts.Grid.GridLayout
 {
     public class GridAuthoring : MonoBehaviour
     {

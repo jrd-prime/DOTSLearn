@@ -1,7 +1,7 @@
-﻿using CommonComponents.Product;
+﻿using Sources.Scripts.CommonComponents.Product;
 using Unity.Collections;
 
-namespace CommonComponents.Production
+namespace Sources.Scripts.CommonComponents.Production
 {
     public struct ProductionLineData
     {

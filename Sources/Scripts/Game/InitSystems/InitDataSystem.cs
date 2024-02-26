@@ -1,17 +1,17 @@
 ﻿using System;
-using CommonComponents.Building;
-using CommonComponents.Product;
-using GamePlay.Common;
-using GamePlay.Common.Constants;
-using GamePlay.Features.Building.Storage.MainStorage.Component;
-using GamePlay.Features.Shop.BlueprintsShop;
-using GamePlay.GameStates;
-using GamePlay.GameStates.BuildingState;
-using GamePlay.GameStates.MainGameState;
+using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Common;
+using Sources.Scripts.Game.Common.Constants;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
+using Sources.Scripts.Game.GameStates;
+using Sources.Scripts.Game.GameStates.BuildingState;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.InitSystems
+namespace Sources.Scripts.Game.InitSystems
 {
     [UpdateInGroup(typeof(MyInitSystemGroup))]
     public partial struct InitDataSystem : ISystem
@@ -31,7 +31,7 @@ namespace GamePlay.InitSystems
 
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
-                { Names.GameStateDataEntityName, typeof(GameStateData) },
+                // { Names.GameStateDataEntityName, typeof(GameStateData) },
                 { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
                 { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
                 { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },

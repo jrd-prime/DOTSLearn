@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Building;
 using UnityEngine;
 
-namespace CommonComponents.ScriptableObjects
+namespace Sources.Scripts.CommonComponents.ScriptableObjects
 {
     //LOOK try [SerializeReference]
 

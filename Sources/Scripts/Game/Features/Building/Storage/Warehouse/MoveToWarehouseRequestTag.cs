@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Features.Building.Products.Component
+namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
 {
     /// <summary>
     /// Move products to warehouse

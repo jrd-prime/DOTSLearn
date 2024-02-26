@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Common.Constants
+﻿namespace Sources.Scripts.Game.Common.Constants
 {
     public enum CollisionLayers
     {

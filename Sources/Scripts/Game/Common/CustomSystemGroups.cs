@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Common
+namespace Sources.Scripts.Game.Common
 {
     public partial class MyInitSystemGroup : ComponentSystemGroup
     {

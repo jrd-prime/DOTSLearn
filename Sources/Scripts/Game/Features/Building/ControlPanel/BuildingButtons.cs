@@ -1,11 +1,11 @@
-﻿using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox;
-using GamePlay.Features.Building.Storage.MainStorage;
-using GamePlay.UI;
-using JTimer.Component;
+﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
+using Sources.Scripts.JTimer.Component;
+using Sources.Scripts.UI;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.ControlPanel
+namespace Sources.Scripts.Game.Features.Building.ControlPanel
 {
     public class BuildingButtons
     {

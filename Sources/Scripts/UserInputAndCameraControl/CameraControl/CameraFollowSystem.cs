@@ -1,9 +1,9 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.UserInputAndCameraControl.UserInput;
+using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
-using UserInputAndCameraControl.UserInput;
 
-namespace UserInputAndCameraControl.CameraControl
+namespace Sources.Scripts.UserInputAndCameraControl.CameraControl
 {
     public partial struct CameraFollowSystem : ISystem
     {

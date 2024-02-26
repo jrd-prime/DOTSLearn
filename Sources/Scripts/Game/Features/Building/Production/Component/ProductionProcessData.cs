@@ -1,9 +1,9 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.ControlPanel;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Production.Component
+namespace Sources.Scripts.Game.Features.Building.Production.Component
 {
     public struct ProductionProcessData : IComponentData
     {

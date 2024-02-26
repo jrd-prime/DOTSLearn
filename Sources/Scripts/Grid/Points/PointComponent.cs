@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Jrd.Grid.Points
+namespace Sources.Scripts.Grid.Points
 {
     public struct PointComponent : IComponentData
     {

@@ -1,4 +1,4 @@
-﻿namespace CommonComponents.Product
+﻿namespace Sources.Scripts.CommonComponents.Product
 {
     public enum Product
     {

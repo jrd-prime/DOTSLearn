@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Features.Building.Storage.Service
+﻿namespace Sources.Scripts.Game.Features.Building.Storage.Service
 {
     public class ManufacturedService : StorageService
     {

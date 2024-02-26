@@ -1,21 +1,21 @@
 ﻿using System;
-using CommonComponents.Building;
-using CommonComponents.Product;
-using GamePlay.Features.Building.ControlPanel.Component;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.MainStorage.Component;
-using GamePlay.Features.Building.Storage.ManufacturedBox;
-using GamePlay.Features.Building.Storage.Service;
-using GamePlay.Features.Building.Storage.Warehouse.Component;
-using GamePlay.UI.BuildingControlPanel;
-using GamePlay.UI.BuildingControlPanel.Part;
+using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Storage;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
+using Sources.Scripts.UI.BuildingControlPanel;
+using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.ControlPanel
+namespace Sources.Scripts.Game.Features.Building.ControlPanel
 {
     public partial class BuildingControlPanelSystem : SystemBase
     {

@@ -1,11 +1,10 @@
 ﻿using System;
-using CommonComponents.Product;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.Warehouse.Component;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
 using Unity.Collections;
 using Unity.Mathematics;
 
-namespace GamePlay.Features.Building.Storage.Service
+namespace Sources.Scripts.Game.Features.Building.Storage.Service
 {
     public class WarehouseService : StorageService
     {

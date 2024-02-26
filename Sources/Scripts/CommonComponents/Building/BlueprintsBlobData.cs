@@ -1,10 +1,10 @@
 ﻿using System;
-using CommonComponents.Product;
-using CommonComponents.Production;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.Production;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace CommonComponents.Building
+namespace Sources.Scripts.CommonComponents.Building
 {
     public struct BlueprintsBlobData : IComponentData
     {

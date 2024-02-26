@@ -1,9 +1,9 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Sources.Scripts.Utility;
+using Unity.Entities;
 using UnityEngine;
-using UserInputAndCameraControl.UserInput.Components;
-using Utility;
 
-namespace UserInputAndCameraControl.UserInput.Systems
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Systems
 {
     public partial struct ZoomInputSystem : ISystem
     {

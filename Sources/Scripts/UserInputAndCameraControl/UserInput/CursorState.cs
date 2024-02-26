@@ -1,4 +1,4 @@
-﻿namespace UserInputAndCameraControl.UserInput
+﻿namespace Sources.Scripts.UserInputAndCameraControl.UserInput
 {
     public enum CursorState
     {

@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using GamePlay.Features.Building;
-using GamePlay.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Common.SaveAndLoad
+namespace Sources.Scripts.Game.Common.SaveAndLoad
 {
     /// <summary>
     /// Add new placed building to list/map/db/etc

@@ -1,12 +1,12 @@
-﻿using GamePlay.Features.Building.PlaceBuilding.Component;
+﻿using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Sources.Scripts.UserInputAndCameraControl.UserInput;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
-using UserInputAndCameraControl.CameraControl;
-using UserInputAndCameraControl.UserInput;
-using UserInputAndCameraControl.UserInput.Components;
 
-namespace GamePlay.Features.Building.PlaceBuilding
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     [BurstCompile]
     public partial struct DestroyTempBuildingSystem : ISystem

@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Features.Building
+namespace Sources.Scripts.Game.Features.Building
 {
     public struct BuildingTag : IComponentData
     {

@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.PlaceBuilding.BuildingCollision
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.BuildingCollision
 {
     // [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     // [UpdateAfter(typeof(PhysicsSystemGroup))]

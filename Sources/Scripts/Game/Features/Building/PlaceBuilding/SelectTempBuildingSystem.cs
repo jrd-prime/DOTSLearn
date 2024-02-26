@@ -1,15 +1,15 @@
 ﻿using System;
-using GamePlay.Features.Building.PlaceBuilding.Component;
-using GamePlay.GameStates.MainGameState;
+using Sources.Scripts.Game.Common;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
-using UserInputAndCameraControl.CameraControl;
-using UserInputAndCameraControl.UserInput.Components;
 using Ray = UnityEngine.Ray;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace GamePlay.Features.Building.PlaceBuilding
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     /// <summary>
     /// Add the SelectedTag to the clicked temp building
@@ -29,7 +29,6 @@ namespace GamePlay.Features.Building.PlaceBuilding
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<TempBuildingTag>();
             state.RequireForUpdate<CameraData>();
-            state.RequireForUpdate<GameStateData>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
 
             _isSelectTagAdded = false;
@@ -52,7 +51,7 @@ namespace GamePlay.Features.Building.PlaceBuilding
                 case TouchPhase.Began:
                     Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
-                    bool isHit = Common.RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit raycastHit);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit raycastHit);
 
                     if (!isHit) break;
 

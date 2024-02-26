@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace GamePlay.Common.Screen
+namespace Sources.Scripts.Game.Common.Screen
 {
     public struct ScreenComponent : IComponentData
     {

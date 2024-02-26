@@ -1,4 +1,4 @@
-﻿namespace Utility
+﻿namespace Sources.Scripts.Utility
 {
     public static class H
     {

@@ -1,12 +1,11 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.Service;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage.MainStorage
+namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
 {
     public partial struct MoveToMainStorageSystem : ISystem
     {

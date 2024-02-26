@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Features.Building.Events
+namespace Sources.Scripts.Game.Features.Building.Events
 {
     public struct AddEventToBuildingData : IComponentData
     {

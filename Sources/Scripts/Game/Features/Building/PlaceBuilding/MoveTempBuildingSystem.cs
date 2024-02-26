@@ -1,15 +1,16 @@
-﻿using GamePlay.Features.Building.PlaceBuilding.Component;
+﻿using Sources.Scripts.Game.Common;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
-using UserInputAndCameraControl.CameraControl;
-using UserInputAndCameraControl.UserInput.Components;
 using Ray = UnityEngine.Ray;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace GamePlay.Features.Building.PlaceBuilding
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     public partial struct MoveTempBuildingSystem : ISystem
     {
@@ -34,7 +35,7 @@ namespace GamePlay.Features.Building.PlaceBuilding
 
                 Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
-                if (!Common.RaycastSystem.Raycast(ray, GroundLayer, out RaycastHit hitPosition)) return;
+                if (!RaycastSystem.Raycast(ray, GroundLayer, out RaycastHit hitPosition)) return;
 
                 float3 position = new(math.round(hitPosition.Position.x), 0, math.round(hitPosition.Position.z));
 

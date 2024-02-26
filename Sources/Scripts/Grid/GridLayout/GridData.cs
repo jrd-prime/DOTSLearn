@@ -1,8 +1,8 @@
-﻿using Jrd.Grid.Points;
+﻿using Sources.Scripts.Grid.Points;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Jrd.Grid.GridLayout
+namespace Sources.Scripts.Grid.GridLayout
 {
     public struct GridData : IComponentData
     {

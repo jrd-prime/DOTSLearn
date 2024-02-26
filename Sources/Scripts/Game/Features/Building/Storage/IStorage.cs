@@ -1,9 +1,8 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Unity.Collections;
 
-namespace GamePlay.Features.Building.Storage
+namespace Sources.Scripts.Game.Features.Building.Storage
 {
     public interface IStorage
     {

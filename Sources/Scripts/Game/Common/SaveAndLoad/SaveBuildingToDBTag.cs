@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Common.SaveAndLoad
+namespace Sources.Scripts.Game.Common.SaveAndLoad
 {
     public struct SaveBuildingToDBTag : IComponentData
     {

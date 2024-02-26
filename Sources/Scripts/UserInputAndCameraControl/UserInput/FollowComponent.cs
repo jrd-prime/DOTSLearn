@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace UserInputAndCameraControl.UserInput
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput
 {
     public struct FollowComponent : IComponentData
     {

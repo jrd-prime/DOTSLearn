@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace CommonComponents.Building
+namespace Sources.Scripts.CommonComponents.Building
 {
     public struct BuildingsPrefabsBufferTag : IComponentData
     {

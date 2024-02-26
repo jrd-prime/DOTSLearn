@@ -1,23 +1,21 @@
 ﻿using System;
-using CommonComponents.Building;
-using GamePlay.Features.Building;
-using GamePlay.Features.Building.ControlPanel.Component;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.PlaceBuilding.Component;
-using GamePlay.GameStates.BuildingState;
-using GamePlay.GameStates.MainGameState;
-using GamePlay.UI;
-using GamePlay.UI.BlueprintsShopPanel;
-using GamePlay.UI.BuildingControlPanel;
-using GamePlay.UI.PopUpPanels;
+using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.Game.Features.Building;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.Game.GameStates.BuildingState;
+using Sources.Scripts.UI;
+using Sources.Scripts.UI.BlueprintsShopPanel;
+using Sources.Scripts.UI.BuildingControlPanel;
+using Sources.Scripts.UI.PopUpPanels;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GamePlay.Features.Shop.BlueprintsShop
+namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop
 {
-    [UpdateAfter(typeof(GameStatesSystem))]
     public partial class BlueprintsShopPanelSystem : SystemBase
     {
         #region Vars
@@ -48,7 +46,6 @@ namespace GamePlay.Features.Shop.BlueprintsShop
         protected override void OnCreate()
         {
             RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            RequireForUpdate<GameStateData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             RequireForUpdate<BlueprintsBuffer>();
         }

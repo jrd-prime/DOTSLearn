@@ -1,9 +1,9 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using UserInputAndCameraControl.CameraControl;
 
-namespace GamePlay.Common.Screen
+namespace Sources.Scripts.Game.Common.Screen
 {
     /// <summary>
     /// Получаем мировые координаты точки с центра экрана

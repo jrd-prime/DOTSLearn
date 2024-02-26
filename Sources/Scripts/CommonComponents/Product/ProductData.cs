@@ -1,7 +1,7 @@
 ﻿using System;
 using Unity.Collections;
 
-namespace CommonComponents.Product
+namespace Sources.Scripts.CommonComponents.Product
 {
     [Serializable]
     public struct ProductData

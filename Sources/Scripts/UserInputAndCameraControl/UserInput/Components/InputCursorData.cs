@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace UserInputAndCameraControl.UserInput.Components
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Components
 {
     public struct InputCursorData : IComponentData
     {

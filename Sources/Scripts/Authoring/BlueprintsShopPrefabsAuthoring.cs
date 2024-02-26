@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonComponents;
-using CommonComponents.Building;
-using CommonComponents.Product;
-using CommonComponents.ScriptableObjects;
-using GamePlay.Features.Building;
-using GamePlay.Features.Building.Products.Component;
+using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Authoring
+namespace Sources.Scripts.Authoring
 {
     public class BlueprintsShopPrefabsAuthoring : MonoBehaviour
     {

@@ -1,10 +1,9 @@
 ﻿using System;
-using CommonComponents.Product;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Unity.Collections;
 
-namespace GamePlay.Features.Building.Storage.ManufacturedBox
+namespace Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox
 {
     /// <summary>
     /// Contains a hashmap (int, int) (Product id, quantity)  of already produced products in the production box

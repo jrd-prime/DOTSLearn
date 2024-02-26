@@ -1,16 +1,16 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.ControlPanel.Component;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Production;
-using GamePlay.Features.Building.Production.Component;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.ManufacturedBox.Component;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.Game.Features.Building.Production;
+using Sources.Scripts.Game.Features.Building.Production.Component;
+using Sources.Scripts.Game.Features.Building.Storage;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building
+namespace Sources.Scripts.Game.Features.Building
 {
     /// <summary>
     /// Building Data Aspect

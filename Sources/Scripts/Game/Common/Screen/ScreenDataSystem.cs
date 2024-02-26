@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace GamePlay.Common.Screen
+namespace Sources.Scripts.Game.Common.Screen
 {
     /// <summary>
     /// Размер экрана / Координаты центра экрана

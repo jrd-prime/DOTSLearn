@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace UserInputAndCameraControl.CameraControl
+namespace Sources.Scripts.UserInputAndCameraControl.CameraControl
 {
     // TODO переделать камеру на синемашин
     // TODO настройки камеры сделать

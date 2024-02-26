@@ -1,9 +1,9 @@
 ﻿using System;
-using JTimer.Component;
+using Sources.Scripts.JTimer.Component;
 using Unity.Entities;
 using UnityEngine;
 
-namespace JTimer
+namespace Sources.Scripts.JTimer
 {
     public partial struct JTimer : ISystem
     {

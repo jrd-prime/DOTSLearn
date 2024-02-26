@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
 
-namespace Utility
+namespace Sources.Scripts.Utility
 {
     public static class Utils
     {

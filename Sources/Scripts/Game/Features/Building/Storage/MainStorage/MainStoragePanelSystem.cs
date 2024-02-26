@@ -1,12 +1,12 @@
-﻿using GamePlay.Common;
-using GamePlay.Features.Building.Storage.MainStorage.Component;
-using GamePlay.UI;
-using GamePlay.UI.MainStoragePanel;
+﻿using Sources.Scripts.Game.Common;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.UI;
+using Sources.Scripts.UI.MainStoragePanel;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Storage.MainStorage
+namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
 {
     /// <summary>
     /// Get data from component and Set data to UI 

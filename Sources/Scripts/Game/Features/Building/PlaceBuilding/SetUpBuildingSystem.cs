@@ -1,23 +1,22 @@
-﻿using CommonComponents.Building;
-using CommonComponents.Product;
-using GamePlay.Common.SaveAndLoad;
-using GamePlay.Features.Building.ControlPanel.Component;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.PlaceBuilding.Component;
-using GamePlay.Features.Building.Production;
-using GamePlay.Features.Building.Production.Component;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.ManufacturedBox;
-using GamePlay.Features.Building.Storage.ManufacturedBox.Component;
-using GamePlay.Features.Building.Storage.Warehouse.Component;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Common.SaveAndLoad;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
+using Sources.Scripts.Game.Features.Building.Production;
+using Sources.Scripts.Game.Features.Building.Production.Component;
+using Sources.Scripts.Game.Features.Building.Storage;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
+using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace GamePlay.Features.Building.PlaceBuilding
+namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     /// <summary>
     /// Place temp building prefab and init building info

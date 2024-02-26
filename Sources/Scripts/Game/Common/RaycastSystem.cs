@@ -4,7 +4,7 @@ using UnityEngine;
 using Ray = UnityEngine.Ray;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace GamePlay.Common
+namespace Sources.Scripts.Game.Common
 {
     public partial struct RaycastSystem : ISystem
     {

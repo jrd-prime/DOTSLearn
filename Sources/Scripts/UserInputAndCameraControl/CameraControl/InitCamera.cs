@@ -1,8 +1,8 @@
-﻿using Unity.Entities;
-using UserInputAndCameraControl.UserInput;
-using UserInputAndCameraControl.UserInput.Components;
+﻿using Sources.Scripts.UserInputAndCameraControl.UserInput;
+using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Unity.Entities;
 
-namespace UserInputAndCameraControl.CameraControl
+namespace Sources.Scripts.UserInputAndCameraControl.CameraControl
 {
     [UpdateBefore(typeof(CameraControlSystem))]
     public partial struct InitCamera : ISystem

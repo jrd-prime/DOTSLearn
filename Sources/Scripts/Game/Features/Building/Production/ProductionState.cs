@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Features.Building.Production
+﻿namespace Sources.Scripts.Game.Features.Building.Production
 {
     public enum ProductionState
     {

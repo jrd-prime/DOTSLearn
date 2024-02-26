@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JTimer
+namespace Sources.Scripts.JTimer
 {
     public readonly struct TimeWrapper
     {

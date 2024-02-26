@@ -1,4 +1,4 @@
-﻿using Jrd.Grid.Points;
+﻿using Sources.Scripts.Grid.Points;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +7,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Jrd.Grid.GridLayout
+namespace Sources.Scripts.Grid.GridLayout
 {
     // TODO https://app.asana.com/0/1206217975075068/1206234441074580/f
     public partial struct GridSystem : ISystem

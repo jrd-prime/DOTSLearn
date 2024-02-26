@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using CommonComponents;
-using CommonComponents.Product;
-using CommonComponents.ScriptableObjects;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.ScriptableObjects;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Authoring
+namespace Sources.Scripts.Authoring
 {
     public class ProductsDataAuthoring : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CommonComponents.ScriptableObjects
+namespace Sources.Scripts.CommonComponents.ScriptableObjects
 {
     [Serializable]
     [CreateAssetMenu(fileName = "New Goods", menuName = "Goods Data", order = 52)]

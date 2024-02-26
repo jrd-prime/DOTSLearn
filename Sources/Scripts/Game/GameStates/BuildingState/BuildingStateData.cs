@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.GameStates.BuildingState
+namespace Sources.Scripts.Game.GameStates.BuildingState
 {
     public struct BuildingStateData : IComponentData
     {

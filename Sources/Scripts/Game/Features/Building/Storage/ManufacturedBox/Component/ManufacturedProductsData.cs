@@ -1,9 +1,8 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.Products.Component;
+﻿using Sources.Scripts.CommonComponents.Product;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage.ManufacturedBox.Component
+namespace Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component
 {
     /// <summary>
     /// Required and manufactured

@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Jrd.Grid.Points
+namespace Sources.Scripts.Grid.Points
 {
     public partial struct FindPointUnderCursorSystem : ISystem
     {

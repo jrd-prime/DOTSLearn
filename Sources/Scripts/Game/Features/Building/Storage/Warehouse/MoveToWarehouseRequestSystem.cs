@@ -1,17 +1,16 @@
-﻿using CommonComponents.Product;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.MainStorage.Component;
-using GamePlay.Features.Building.Storage.Service;
-using GamePlay.UI;
-using JTimer;
+﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.JTimer;
+using Sources.Scripts.UI;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Storage.Warehouse
+namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
 {
     /// <summary>
     /// Moving products from main storage to building warehouse<br/>
@@ -80,7 +79,7 @@ namespace GamePlay.Features.Building.Storage.Warehouse
             int productsQuantity = StorageService.GetProductsQuantity(_matchingProducts);
             int moveDuration = productsQuantity / 5;
 
-            new JTimer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
+            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse, moveDuration, _ecb);
         }
 
         private void ReduceProductsInMainStorage() =>

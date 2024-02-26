@@ -1,8 +1,8 @@
-﻿using GamePlay.Features.Building.ControlPanel.Component;
+﻿using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Common.SaveAndLoad
+namespace Sources.Scripts.Game.Common.SaveAndLoad
 {
     public struct GameBuildingsMapData : IComponentData
     {

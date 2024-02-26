@@ -1,10 +1,10 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.UserInputAndCameraControl.UserInput.Components;
+using Sources.Scripts.Utility;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-using UserInputAndCameraControl.UserInput.Components;
-using Utility;
 
-namespace UserInputAndCameraControl.UserInput.Systems
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Systems
 {
     /// <summary>
     /// Устанавливает вектор движения simple

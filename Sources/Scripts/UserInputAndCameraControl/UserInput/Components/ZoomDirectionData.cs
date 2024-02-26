@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace UserInputAndCameraControl.UserInput.Components
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Components
 {
     public struct ZoomDirectionData : IComponentData
     {

@@ -1,13 +1,13 @@
 ﻿using System;
-using GamePlay.Features.Building.Events;
-using GamePlay.Features.Building.Production.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
-using GamePlay.Features.Building.Storage.Service;
-using JTimer;
+using Sources.Scripts.Game.Features.Building.Events;
+using Sources.Scripts.Game.Features.Building.Production.Component;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.JTimer;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Features.Building.Production
+namespace Sources.Scripts.Game.Features.Building.Production
 {
     public partial struct ProductionSystem : ISystem
     {
@@ -207,7 +207,7 @@ namespace GamePlay.Features.Building.Production
         private void StartOneLoadTimer()
         {
             
-            new JTimer.JTimer().StartNewTimer(
+            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.OneLoadCycle,
                 _buildingData.GetOneProductManufacturingTime(),
@@ -216,7 +216,7 @@ namespace GamePlay.Features.Building.Production
 
         private void StartFullLoadTimer()
         {
-            new JTimer.JTimer().StartNewTimer(
+            new global::Sources.Scripts.JTimer.JTimer().StartNewTimer(
                 _buildingEntity,
                 TimerType.FullLoadCycle,
                 _buildingData.GetLoadedProductsManufacturingTime(),

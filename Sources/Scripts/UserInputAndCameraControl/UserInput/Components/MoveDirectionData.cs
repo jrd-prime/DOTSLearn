@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace UserInputAndCameraControl.UserInput.Components
+namespace Sources.Scripts.UserInputAndCameraControl.UserInput.Components
 {
     /// <summary>
     /// Component with direction from user input

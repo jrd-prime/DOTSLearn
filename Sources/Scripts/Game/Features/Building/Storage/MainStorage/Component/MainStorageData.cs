@@ -1,12 +1,10 @@
 ﻿using System;
-using CommonComponents.Product;
-using GamePlay.Features.Building.Products;
-using GamePlay.Features.Building.Products.Component;
-using GamePlay.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage.MainStorage.Component
+namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component
 {
     public struct MainStorageData : IComponentData, IMainStorage
     {

@@ -1,4 +1,4 @@
-﻿namespace CommonComponents.Building
+﻿namespace Sources.Scripts.CommonComponents.Building
 {
     public enum BuildingCategoryId
     {

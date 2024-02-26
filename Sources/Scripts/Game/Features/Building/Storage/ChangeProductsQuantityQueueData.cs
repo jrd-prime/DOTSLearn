@@ -1,8 +1,8 @@
-﻿using GamePlay.Features.Building.Storage.InProductionBox.Component;
+﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.Features.Building.Storage
+namespace Sources.Scripts.Game.Features.Building.Storage
 {
     public struct ChangeProductsQuantityQueueData : IComponentData
     {
