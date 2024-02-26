@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using GamePlay.Building.SetUp;
-using GamePlay.Products.Component;
 using GamePlay.ScriptableObjects;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using ProductData = GamePlay.Products.Component.ProductData;
 
-namespace GamePlay.Prefabs
+namespace GamePlay.Authoring
 {
     public class BlueprintsShopPrefabsAuthoring : MonoBehaviour
     {
@@ -32,7 +29,6 @@ namespace GamePlay.Prefabs
                 const int requiredCellId = 0;
                 const int manufacturedCellId = 1;
 
-                // req and man fixed 0 and 1 index
                 // [][][] [building id][req or man cell id][product data]
                 using BlobBuilder builder = new(Allocator.Temp);
 
@@ -44,7 +40,7 @@ namespace GamePlay.Prefabs
                 BlobBuilderArray<BlobArray<BlobArray<ProductData>>> buildingsArray =
                     builder.Allocate(ref root, Enum.GetNames(typeof(BuildingNameId)).Length);
 
-                for (int i = 0; i < buildingsCount; i++)
+                for (var i = 0; i < buildingsCount; i++)
                 {
                     int buildingId = (int)authoring._buildings[i].NameId;
 
@@ -62,7 +58,7 @@ namespace GamePlay.Prefabs
                     if (requiredItemsCount != 0)
                     {
                         // REQ ARRAY
-                        for (int j = 0; j < requiredItemsCount; j++)
+                        for (var j = 0; j < requiredItemsCount; j++)
                         {
                             requiredArray[j] = new ProductData
                             {
@@ -80,7 +76,7 @@ namespace GamePlay.Prefabs
 
                     if (manufacturedItemsCount != 0)
                     {
-                        for (int j = 0; j < manufacturedItemsCount; j++)
+                        for (var j = 0; j < manufacturedItemsCount; j++)
                         {
                             manufacturedArray[j] = new ProductData
                             {

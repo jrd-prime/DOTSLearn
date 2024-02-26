@@ -1,4 +1,4 @@
-﻿namespace GamePlay.Prefabs
+﻿namespace GamePlay.Authoring
 {
     public enum BuildingCategoryId
     {

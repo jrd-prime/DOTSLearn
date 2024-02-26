@@ -1,16 +1,17 @@
 ﻿using System;
+using GamePlay.Authoring;
+using GamePlay.GameStates;
 using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
-using GamePlay.Prefabs;
 using GamePlay.Shop.BlueprintsShop;
 using GamePlay.Storage.MainStorage.Component;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace GamePlay.GameStates
+namespace GamePlay.InitSystems
 {
     [UpdateInGroup(typeof(MyInitSystemGroup))]
-    public partial struct InitStatesSystem : ISystem
+    public partial struct InitDataSystem : ISystem
     {
         private DynamicBuffer<ProductsDataBuffer> _buffer;
 

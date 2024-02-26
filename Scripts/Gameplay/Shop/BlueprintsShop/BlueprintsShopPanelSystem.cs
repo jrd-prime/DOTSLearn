@@ -1,11 +1,11 @@
 ﻿using System;
+using GamePlay.Authoring;
+using GamePlay.Building;
 using GamePlay.Building.ControlPanel.Component;
 using GamePlay.Building.SetUp;
-using GamePlay.Building.SetUp.Component;
+using GamePlay.Building.TempBuilding.Component;
 using GamePlay.GameStates.BuildingState;
 using GamePlay.GameStates.MainGameState;
-using GamePlay.GameStates.PlayState;
-using GamePlay.Prefabs;
 using GamePlay.UI;
 using GamePlay.UI.BlueprintsShopPanel;
 using GamePlay.UI.BuildingControlPanel;
@@ -169,7 +169,7 @@ namespace GamePlay.Shop.BlueprintsShop
             FixedString64Bytes giud = Utility.Utils.GetGuid();
 
             _bsEcb.AddComponent(_buildingStateEntity,
-                new InstantiateTempPrefabComponent
+                new InstantiateTempBuildingData
                 {
                     BuildingData = new BuildingData
                     {
@@ -237,7 +237,7 @@ namespace GamePlay.Shop.BlueprintsShop
 
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
-                _biEcb.AddComponent(tempEntity, new DestroyTempPrefabTag());
+                _biEcb.AddComponent(tempEntity, new DestroyTempBuildingTag());
             }
         }
 

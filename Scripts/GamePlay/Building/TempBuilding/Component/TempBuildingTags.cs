@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.Building.SetUp.Component
+namespace GamePlay.Building.TempBuilding.Component
 {
     /// <summary>
     /// A tag indicating that it is a temporary building
@@ -19,7 +19,7 @@ namespace GamePlay.Building.SetUp.Component
     /// <summary>
     /// Tag to destroy prefab entity
     /// </summary>
-    public struct DestroyTempPrefabTag : IComponentData
+    public struct DestroyTempBuildingTag : IComponentData
     {
     }
 }

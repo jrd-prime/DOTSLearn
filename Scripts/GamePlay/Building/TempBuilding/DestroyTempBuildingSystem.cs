@@ -1,4 +1,4 @@
-﻿using GamePlay.Building.SetUp.Component;
+﻿using GamePlay.Building.TempBuilding.Component;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
@@ -6,10 +6,10 @@ using UserInputAndCameraControl.CameraControl;
 using UserInputAndCameraControl.UserInput;
 using UserInputAndCameraControl.UserInput.Components;
 
-namespace GamePlay.Building.SetUp
+namespace GamePlay.Building.TempBuilding
 {
     [BurstCompile]
-    public partial struct DestroyTempPrefabSystem : ISystem
+    public partial struct DestroyTempBuildingSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -26,7 +26,8 @@ namespace GamePlay.Building.SetUp
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (_, entity) in SystemAPI
-                         .Query<TempBuildingTag>().WithAll<DestroyTempPrefabTag>()
+                         .Query<TempBuildingTag>()
+                         .WithAll<DestroyTempBuildingTag>()
                          .WithEntityAccess())
             {
                 var cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();

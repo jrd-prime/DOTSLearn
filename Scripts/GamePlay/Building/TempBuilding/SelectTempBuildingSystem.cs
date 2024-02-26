@@ -1,5 +1,5 @@
 ﻿using System;
-using GamePlay.Building.SetUp.Component;
+using GamePlay.Building.TempBuilding.Component;
 using GamePlay.GameStates.MainGameState;
 using Unity.Entities;
 using Unity.Physics;
@@ -7,19 +7,22 @@ using UnityEngine;
 using UserInputAndCameraControl.CameraControl;
 using UserInputAndCameraControl.UserInput.Components;
 using Ray = UnityEngine.Ray;
+using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace GamePlay.Select
+namespace GamePlay.Building.TempBuilding
 {
     /// <summary>
     /// Add the SelectedTag to the clicked temp building
     /// </summary>
-    public partial struct TempBuildingSelectionSystem : ISystem // TODO +job
+    public partial struct SelectTempBuildingSystem : ISystem // TODO +job
     {
-        private const float RayDistance = 200f;
-        private Entity _tempTargetEntity;
-        private bool _isSelectTagAdded;
-        private const uint TargetLayer = 1u << 31;
         private EntityCommandBuffer _bsEcb;
+        private Entity _tempTargetEntity;
+
+        private const float RayDistance = 200f;
+        private const uint TargetLayer = 1u << 31;
+
+        private bool _isSelectTagAdded;
 
         public void OnCreate(ref SystemState state)
         {
@@ -41,6 +44,7 @@ namespace GamePlay.Select
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             Touch touch = Input.GetTouch(0);
+            
             Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
 
             switch (touch.phase)
@@ -48,13 +52,13 @@ namespace GamePlay.Select
                 case TouchPhase.Began:
                     Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity targetEntity);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit raycastHit);
 
                     if (!isHit) break;
 
                     // if (SystemAPI.HasComponent<TempBuildingTag>(targetEntity)) Debug.Log("it's temp building!"); 
 
-                    _tempTargetEntity = targetEntity;
+                    _tempTargetEntity = raycastHit.Entity;
                     break;
                 case TouchPhase.Moved:
                 case TouchPhase.Stationary:
@@ -64,9 +68,10 @@ namespace GamePlay.Select
 
                         //TODO bad idea
                         _bsEcb.RemoveComponent<MoveDirectionData>(cameraEntity);
+                        
                         if (!_isSelectTagAdded)
                         {
-                            _bsEcb.AddComponent<SelectedTag>(_tempTargetEntity);
+                            _bsEcb.AddComponent<SelectedBuildingTag>(_tempTargetEntity);
                             _isSelectTagAdded = true;
                         }
                     }
@@ -81,7 +86,7 @@ namespace GamePlay.Select
 
                     if (_isSelectTagAdded)
                     {
-                        _bsEcb.RemoveComponent<SelectedTag>(_tempTargetEntity);
+                        _bsEcb.RemoveComponent<SelectedBuildingTag>(_tempTargetEntity);
                         _isSelectTagAdded = false;
                     }
 

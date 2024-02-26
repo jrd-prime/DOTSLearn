@@ -1,21 +1,26 @@
-﻿using GamePlay.Building.SetUp;
-using GamePlay.Building.SetUp.Component;
+﻿using GamePlay.Building;
+using GamePlay.Building.SetUp;
+using GamePlay.Building.TempBuilding.Component;
 using GamePlay.GameStates.MainGameState;
+using GamePlay.InitSystems;
 using GamePlay.UI.BuildingControlPanel;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
 using UserInputAndCameraControl.CameraControl;
-using RaycastSystem = GamePlay.Select.RaycastSystem;
+using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace GamePlay.GameStates.PlayState
 {
     public partial struct SelectBuildingSystem : ISystem
     {
-        private Entity _tempTargetEntity;
-        private const uint TargetLayer = 1u << 31;
         private EntityCommandBuffer _bsEcb;
+
+        private Entity _tempTargetEntity;
         private Entity _tempFirstTargetEntity;
+
+        private const uint TargetLayer = 1u << 31;
+
         private int _tempFingerId;
         private float _timeStart;
 
@@ -45,7 +50,7 @@ namespace GamePlay.GameStates.PlayState
             {
                 case TouchPhase.Began:
                 {
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity firstEntity);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit firstRaycastHit);
 
                     if (!isHit)
                     {
@@ -53,24 +58,24 @@ namespace GamePlay.GameStates.PlayState
                         return;
                     }
 
-                    if (!IsMatchingTarget(firstEntity, ref state)) return;
+                    if (!IsMatchingTarget(firstRaycastHit.Entity, ref state)) return;
 
                     _timeStart = Time.time;
                     _tempFingerId = touch.fingerId;
-                    _tempFirstTargetEntity = firstEntity;
+                    _tempFirstTargetEntity = firstRaycastHit.Entity;
                     break;
                 }
                 case TouchPhase.Ended or TouchPhase.Canceled when _tempFingerId == touch.fingerId:
                 {
                     if (Time.time - _timeStart > .3f) return;
 
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out Entity secondEntity);
+                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit secondRaycastHit);
 
                     if (!isHit) return;
 
-                    if (!IsMatchingTarget(secondEntity, ref state)) return;
+                    if (!IsMatchingTarget(secondRaycastHit.Entity, ref state)) return;
 
-                    if (_tempFirstTargetEntity != Entity.Null && _tempFirstTargetEntity == secondEntity)
+                    if (_tempFirstTargetEntity != Entity.Null && _tempFirstTargetEntity == secondRaycastHit.Entity)
                     {
                         _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
@@ -83,7 +88,7 @@ namespace GamePlay.GameStates.PlayState
             }
         }
 
-        private bool IsMatchingTarget(Entity entity, ref SystemState state)
+        private bool IsMatchingTarget(Entity entity, ref SystemState _)
         {
             bool isBuilding = SystemAPI.HasComponent<BuildingTag>(entity);
             bool isTempBuilding = SystemAPI.HasComponent<TempBuildingTag>(entity);

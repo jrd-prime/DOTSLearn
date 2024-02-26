@@ -1,8 +1,8 @@
 ﻿using System;
+using GamePlay.Authoring;
 using GamePlay.Building.ControlPanel.Component;
 using GamePlay.Building.SetUp;
 using GamePlay.GameStates.PlayState;
-using GamePlay.Prefabs;
 using GamePlay.Products.Component;
 using GamePlay.Storage.InProductionBox.Component;
 using GamePlay.Storage.MainStorage.Component;
@@ -44,12 +44,6 @@ namespace GamePlay.Building.ControlPanel
             RequireForUpdate<MainStorageData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             RequireForUpdate<BuildingsPrefabsBufferTag>();
-        }
-
-        protected override void OnDestroy()
-        {
-            _required.Dispose();
-            _manufactured.Dispose();
         }
 
         protected override void OnStartRunning()

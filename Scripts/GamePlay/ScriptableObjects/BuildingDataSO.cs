@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using GamePlay.Authoring;
 using GamePlay.Building.SetUp;
-using GamePlay.Prefabs;
 using UnityEngine;
 
 namespace GamePlay.ScriptableObjects

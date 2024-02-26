@@ -4,7 +4,7 @@ using GamePlay.ScriptableObjects;
 using Unity.Entities;
 using UnityEngine;
 
-namespace GamePlay.Prefabs
+namespace GamePlay.Authoring
 {
     public class ProductsDataAuthoring : MonoBehaviour
     {

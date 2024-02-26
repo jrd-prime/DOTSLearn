@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace GamePlay.GameStates
+namespace GamePlay.InitSystems
 {
     public struct InitializeTag : IComponentData
     {

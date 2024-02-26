@@ -1,8 +1,8 @@
 ﻿using GamePlay.Building.ControlPanel.Component;
-using GamePlay.Building.SetUp.Component;
+using GamePlay.Building.SetUp;
+using GamePlay.Building.TempBuilding.Component;
 using GamePlay.GameStates.BuildingState;
 using GamePlay.Screen;
-using GamePlay.Select;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Jobs;
@@ -10,33 +10,33 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UserInputAndCameraControl.UserInput.Components;
 
-namespace GamePlay.Building.SetUp
+namespace GamePlay.Building.TempBuilding
 {
     [BurstCompile]
-    public partial struct InstantiateTempPrefabSystem : ISystem
+    public partial struct InstantiateTempBuildingSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<InstantiateTempPrefabComponent>();
+            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
+            state.RequireForUpdate<InstantiateTempBuildingData>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = SystemAPI
-                .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
-
-            var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
-
             foreach (var (query, entity) in SystemAPI
-                         .Query<RefRO<InstantiateTempPrefabComponent>>()
+                         .Query<RefRO<InstantiateTempBuildingData>>()
                          .WithAll<BuildingStateData>()
                          .WithEntityAccess())
             {
+                var ecb = SystemAPI
+                    .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+                    .CreateCommandBuffer(state.WorldUnmanaged);
+
+                var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
+
                 state.Dependency = new InstantiateTempPrefabJob
                 {
                     BuildingData = query.ValueRO.BuildingData,
@@ -74,18 +74,13 @@ namespace GamePlay.Building.SetUp
                     Scale = Scale
                 });
 
-                BsEcb.AddComponent<TempBuildingTag>(instantiate); // mark as temp
-                BsEcb.AddComponent<SelectableTag>(instantiate); // mark as selectable
+                BsEcb.AddComponent<TempBuildingTag>(instantiate);
+                BsEcb.AddComponent<SelectableBuildingTag>(instantiate);
                 BsEcb.AddComponent<MoveDirectionData>(instantiate);
                 BsEcb.AddComponent(instantiate, BuildingData);
 
-                BsEcb.RemoveComponent<InstantiateTempPrefabComponent>(BuildingStateEntity);
+                BsEcb.RemoveComponent<InstantiateTempBuildingData>(BuildingStateEntity);
             }
         }
-    }
-
-    public struct InstantiateTempPrefabComponent : IComponentData
-    {
-        public BuildingData BuildingData;
     }
 }

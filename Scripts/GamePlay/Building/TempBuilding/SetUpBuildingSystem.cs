@@ -1,8 +1,9 @@
-﻿using GamePlay.Building.ControlPanel.Component;
+﻿using GamePlay.Authoring;
+using GamePlay.Building.ControlPanel.Component;
 using GamePlay.Building.Production;
 using GamePlay.Building.Production.Component;
-using GamePlay.Building.SetUp.Component;
-using GamePlay.Prefabs;
+using GamePlay.Building.SetUp;
+using GamePlay.Building.TempBuilding.Component;
 using GamePlay.Products.Component;
 using GamePlay.Storage;
 using GamePlay.Storage.InProductionBox.Component;
@@ -14,7 +15,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace GamePlay.Building.SetUp
+namespace GamePlay.Building.TempBuilding
 {
     /// <summary>
     /// Place temp building prefab and init building info
