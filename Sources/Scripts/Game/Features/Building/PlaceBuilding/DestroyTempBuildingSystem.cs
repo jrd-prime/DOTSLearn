@@ -3,56 +3,55 @@ using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Jobs;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
     [BurstCompile]
     public partial struct DestroyTempBuildingSystem : ISystem
     {
+        private EntityQuery _tempBuildingForDestroyQuery;
+
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<CameraData>();
-            state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
+
+            _tempBuildingForDestroyQuery = state.EntityManager.CreateEntityQuery(
+                ComponentType.ReadOnly<TempBuildingTag>(),
+                ComponentType.ReadOnly<DestroyTempBuildingTag>());
+
+            state.RequireForUpdate(_tempBuildingForDestroyQuery);
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var bsEcb = SystemAPI
-                .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+            EntityCommandBuffer bsEcb = SystemAPI
+                .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
-            foreach (var (_, entity) in SystemAPI
-                         .Query<TempBuildingTag>()
-                         .WithAll<DestroyTempBuildingTag>()
-                         .WithEntityAccess())
-            {
-                var cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
+            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
 
-                state.Dependency = new DestroyTempPrefabJob
-                    {
-                        BsEcb = bsEcb,
-                        TempPrefabEntity = entity,
-                        CameraEntity = cameraEntity
-                    }
-                    .Schedule(state.Dependency);
-            }
+            state.Dependency = new DestroyTempBuildingJob
+                {
+                    BsEcb = bsEcb,
+                    CameraEntity = cameraEntity
+                }
+                .Schedule(_tempBuildingForDestroyQuery, state.Dependency);
         }
 
         [BurstCompile]
-        private struct DestroyTempPrefabJob : IJob
+        public partial struct DestroyTempBuildingJob : IJobEntity
         {
             public EntityCommandBuffer BsEcb;
-            public Entity TempPrefabEntity;
             public Entity CameraEntity;
 
-            public void Execute()
+            public void Execute(Entity entity)
             {
                 BsEcb.RemoveComponent<FollowComponent>(CameraEntity);
                 BsEcb.AddComponent<MoveDirectionData>(CameraEntity);
-                BsEcb.DestroyEntity(TempPrefabEntity);
+                BsEcb.DestroyEntity(entity);
             }
         }
     }

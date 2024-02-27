@@ -36,14 +36,14 @@ namespace Sources.Scripts.Screen.System
                         CameraMono.Instance.Camera.ScreenPointToRay(targetPoint),
                         out var hit,
                         MaxDistance,
-                        JLayersConst.GroundLayerID
+                        (int)JLayers.GroundLayerID
                     )) return;
                 
                 Assert.IsTrue(
                     math.round(hit.point.y) == 0,
                     "Ground Y != 0 or not set ground layer id. And what??"
                 );
-
+                
                 SystemAPI.SetComponent(centerToWorldEntity, new ScreenCenterInWorldCoordsData
                 {
                     Value = new float3(

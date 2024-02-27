@@ -1,9 +1,9 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
 using Sources.Scripts.Screen;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -14,12 +14,14 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
     [BurstCompile]
     public partial struct InstantiateTempBuildingSystem : ISystem
     {
+        private static readonly FixedString64Bytes TempBuildingEntityName = "___ # Temp Building Entity";
+
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             state.RequireForUpdate<InstantiateTempBuildingData>();
+            state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
         }
 
         [BurstCompile]
@@ -34,16 +36,15 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
                     .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
 
-                var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().Value;
+                ScreenCenterInWorldCoordsData coordsData = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>();
 
                 state.Dependency = new InstantiateTempPrefabJob
                 {
                     BuildingData = query.ValueRO.BuildingData,
                     BsEcb = ecb,
                     BuildingStateEntity = entity,
-                    Position = position,
-                    Rotation = quaternion.identity,
-                    Scale = 1
+                    Position = coordsData.Value,
+                    BuildingEntityName = TempBuildingEntityName
                 }.Schedule(state.Dependency);
             }
         }
@@ -55,22 +56,23 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             public BuildingNameId BuildingNameId;
             public Entity BuildingStateEntity;
             public float3 Position;
-            public quaternion Rotation;
-            public float Scale;
             public BuildingData BuildingData;
+            public FixedString64Bytes BuildingEntityName;
 
             [BurstCompile]
             public void Execute()
             {
                 Entity instantiate = BsEcb.Instantiate(BuildingData.Prefab);
+
                 BuildingData.Self = instantiate;
-                BsEcb.SetName(instantiate, "___ # Temp Building Entity");
+
+                BsEcb.SetName(instantiate, BuildingEntityName);
 
                 BsEcb.SetComponent(instantiate, new LocalTransform
                 {
                     Position = Position,
-                    Rotation = Rotation,
-                    Scale = Scale
+                    Rotation = quaternion.identity,
+                    Scale = 1
                 });
 
                 BsEcb.AddComponent<TempBuildingTag>(instantiate);

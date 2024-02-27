@@ -1,4 +1,5 @@
 ﻿using System;
+using Sources.Scripts.CommonComponents;
 using Sources.Scripts.Game.Common;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
@@ -19,9 +20,6 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
         private EntityCommandBuffer _bsEcb;
         private Entity _tempTargetEntity;
 
-        private const float RayDistance = 200f;
-        private const uint TargetLayer = 1u << 31;
-
         private bool _isSelectTagAdded;
 
         public void OnCreate(ref SystemState state)
@@ -38,20 +36,20 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
         {
             if (Input.touchCount != 1) return; //TODO more than 1 touch???
 
+            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
+
             _bsEcb = SystemAPI
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             Touch touch = Input.GetTouch(0);
-            
-            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
 
             switch (touch.phase)
             {
                 case TouchPhase.Began:
                     Ray ray = CameraMono.Instance.Camera.ScreenPointToRay(touch.position);
 
-                    bool isHit = RaycastSystem.Raycast(ray, TargetLayer, out RaycastHit raycastHit);
+                    bool isHit = RaycastSystem.Raycast(ray, JLayers.SelectableLayerID, out RaycastHit raycastHit);
 
                     if (!isHit) break;
 
@@ -67,7 +65,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 
                         //TODO bad idea
                         _bsEcb.RemoveComponent<MoveDirectionData>(cameraEntity);
-                        
+
                         if (!_isSelectTagAdded)
                         {
                             _bsEcb.AddComponent<SelectedBuildingTag>(_tempTargetEntity);
@@ -80,7 +78,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
                 case TouchPhase.Canceled:
                     Debug.Log("Touch ended or cancelled.");
 
-                    //TODO bad idea
+                    //TODO bad idea?
                     _bsEcb.AddComponent<MoveDirectionData>(cameraEntity);
 
                     if (_isSelectTagAdded)

@@ -62,9 +62,6 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
         // TODO cache
         public void InstantiateBuildingsCards(int blueprintsCount, NativeList<FixedString32Bytes> names)
         {
-            Debug.Log(blueprintsCount);
-            Debug.Log(names[0]);
-            Debug.Log("init cards");
             ClearBuildingsCards();
 
             _cards = new List<BuildingCard>(blueprintsCount);

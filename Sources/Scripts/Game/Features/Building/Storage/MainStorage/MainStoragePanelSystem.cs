@@ -21,10 +21,6 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
 
         private NativeParallelHashMap<int, int> _cachedMainStorageData;
 
-        protected override void OnCreate()
-        {
-        }
-
         protected override void OnStartRunning()
         {
             _mainStoragePanelUI = MainStoragePanelUI.Instance;
@@ -38,8 +34,6 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
             {
                 Debug.Log("Main storage data singleton does not exist!");
             }
-            
-            Debug.Log(mainStorageData);
 
             _cachedMainStorageData = new NativeParallelHashMap<int, int>(0, Allocator.Persistent);
 
@@ -60,6 +54,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
         protected override void OnDestroy()
         {
             MainUIButtonsMono.MainStorageButton.clicked -= MainStorageSelected;
+            _cachedMainStorageData.Dispose();
         }
     }
 }
