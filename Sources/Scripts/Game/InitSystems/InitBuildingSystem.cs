@@ -1,4 +1,5 @@
-﻿using Sources.Scripts.CommonComponents.Product;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.Game.Features.Building;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
@@ -13,6 +14,7 @@ using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+using BuildingDataAspect = Sources.Scripts.Game.Features.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.InitSystems
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -26,10 +27,18 @@ namespace Sources.Scripts.Utility
         }
 
 
-        public static bool IsScreenSizeChanged(float width, float height)
+        public static bool IsScreenSizeChanged(float2 screenSize, out float2 newSize)
         {
-            return Math.Abs(width - UnityEngine.Screen.width) < float.Epsilon &&
-                   Math.Abs(height - UnityEngine.Screen.height) < float.Epsilon;
+            var currentWidth = Screen.width;
+            var currentHeight = Screen.height;
+
+            newSize = new float2(currentWidth, currentHeight);
+
+            // Returns true for the recalculation
+            if (screenSize is { x: < 0, y: < 0 }) return true;
+
+            return Math.Abs(screenSize.x - currentWidth) < float.Epsilon &&
+                   Math.Abs(screenSize.y - currentHeight) < float.Epsilon;
         }
 
         public static string GetGuid()

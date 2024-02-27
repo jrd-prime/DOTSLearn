@@ -1,4 +1,6 @@
-﻿using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+using Unity.Assertions;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -6,15 +8,15 @@ using UnityEngine;
 namespace Sources.Scripts.Screen.System
 {
     /// <summary>
-    /// Получаем мировые координаты точки с центра экрана
+    /// Get world coordinates of the point
+    /// from the center of the screen
+    /// and set it to <see cref="ScreenCenterInWorldCoordsData"/> component
     /// </summary>
     [UpdateAfter(typeof(ScreenDataSystem))]
     public partial struct ScreenCenterInWorldCoordsSystem : ISystem
     {
-        private Entity _screenCenterToWorldSingleton;
-        private const int GroundLayerID = 1 << 3;
+        // TODO remove
         private const float MaxDistance = 33f;
-
 
         public void OnCreate(ref SystemState state)
         {
@@ -24,37 +26,31 @@ namespace Sources.Scripts.Screen.System
 
         public void OnUpdate(ref SystemState state)
         {
-            _screenCenterToWorldSingleton = SystemAPI.GetSingletonEntity<ScreenCenterInWorldCoordsData>();
-            foreach (var screenComponent in SystemAPI.Query<RefRW<ScreenData>>())
+            foreach (var screen in SystemAPI.Query<RefRW<ScreenData>>())
             {
-                var targetPoint = new Vector3(screenComponent.ValueRO.ScreenCenter.x,
-                    screenComponent.ValueRO.ScreenCenter.y, 0f);
+                Entity centerToWorldEntity = SystemAPI.GetSingletonEntity<ScreenCenterInWorldCoordsData>();
+
+                Vector3 targetPoint = new Vector3(screen.ValueRO.ScreenCenter.x, screen.ValueRO.ScreenCenter.y, 0f);
 
                 if (!Physics.Raycast(
                         CameraMono.Instance.Camera.ScreenPointToRay(targetPoint),
                         out var hit,
                         MaxDistance,
-                        GroundLayerID
+                        JLayersConst.GroundLayerID
                     )) return;
+                
+                Assert.IsTrue(
+                    math.round(hit.point.y) == 0,
+                    "Ground Y != 0 or not set ground layer id. And what??"
+                );
 
-                // Debug.Log(new float3(
-                //     Mathf.Round(hit.point.x),
-                //     Mathf.Round(hit.point.y),
-                //     Mathf.Round(hit.point.z)));
-
-                if (Mathf.Round(hit.point.y) != 0)
+                SystemAPI.SetComponent(centerToWorldEntity, new ScreenCenterInWorldCoordsData
                 {
-                    Debug.LogError("Ground Y != 0 or not set ground layer id");
-                }
-
-                SystemAPI.SetComponent(_screenCenterToWorldSingleton,
-                    new ScreenCenterInWorldCoordsData
-                    {
-                        ScreenCenterToWorld = new float3(
-                            Mathf.Round(hit.point.x),
-                            Mathf.Round(hit.point.y),
-                            Mathf.Round(hit.point.z))
-                    });
+                    Value = new float3(
+                        Mathf.Round(hit.point.x),
+                        Mathf.Round(hit.point.y),
+                        Mathf.Round(hit.point.z))
+                });
             }
         }
     }

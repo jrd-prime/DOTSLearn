@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace Sources.Scripts.Timer
+namespace Sources.Scripts.CommonComponents
 {
     public struct InstantBuffTag : IComponentData
     {

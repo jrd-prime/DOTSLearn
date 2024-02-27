@@ -1,11 +1,11 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.Production;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Sources.Scripts.Game.Features.Building.ControlPanel.Component
+namespace Sources.Scripts.Game.Features.Building
 {
     public struct BuildingData : IComponentData
     {

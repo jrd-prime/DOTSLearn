@@ -34,7 +34,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
                     .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
 
-                var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().ScreenCenterToWorld;
+                var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().Value;
 
                 state.Dependency = new InstantiateTempPrefabJob
                 {

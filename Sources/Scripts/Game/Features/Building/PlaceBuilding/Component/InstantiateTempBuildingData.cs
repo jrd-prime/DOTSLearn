@@ -1,4 +1,5 @@
-﻿using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.Component

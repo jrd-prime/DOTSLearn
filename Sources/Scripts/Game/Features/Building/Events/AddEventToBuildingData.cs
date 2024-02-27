@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.Events
 {

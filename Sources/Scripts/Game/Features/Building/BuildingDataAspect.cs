@@ -1,8 +1,9 @@
-﻿using Sources.Scripts.CommonComponents.Product;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
-using Sources.Scripts.Game.Features.Building.Production;
 using Sources.Scripts.Game.Features.Building.Production.Component;
 using Sources.Scripts.Game.Features.Building.Storage;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;

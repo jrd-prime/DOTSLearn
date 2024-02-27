@@ -1,18 +1,14 @@
 {
-    "name": "Jrd.Screen",
+    "name": "Jrd.SaveAndLoad",
     "rootNamespace": "",
     "references": [
         "GUID:734d92eba21c94caba915361bd5ac177",
-        "GUID:2665a8d13d1b3f18800f46e256720795",
-        "GUID:d8b63aba1907145bea998dd612889d6b",
-        "GUID:58c5297620d238c489469edb64257b05",
-        "GUID:7de19bd0a954152478d654927c5fc5d2",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
         "GUID:7362e05dfa82dbb4a93618a5e6f6b9e7"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
+    "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

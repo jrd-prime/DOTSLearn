@@ -6,7 +6,7 @@ using Unity.Mathematics;
 namespace Sources.Scripts.Screen.System
 {
     /// <summary>
-    /// Размер экрана / Координаты центра экрана
+    /// Get screen sizes and set it to <see cref="ScreenData"/> component
     /// </summary>
     [BurstCompile]
     public partial struct ScreenDataSystem : ISystem
@@ -15,16 +15,16 @@ namespace Sources.Scripts.Screen.System
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<ScreenData>();
-
+            
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            var screenEntity = ecb.CreateEntity();
-            ecb.AddComponent<ScreenData>(screenEntity);
-            ecb.SetName(screenEntity, "___ Screen Component");
+            var screenDataEntity = ecb.CreateEntity();
+            ecb.AddComponent<ScreenData>(screenDataEntity);
+            ecb.SetName(screenDataEntity, "___ # Screen Data");
 
             var screenCenterInWorldCoordsEntity = ecb.CreateEntity();
             ecb.AddComponent<ScreenCenterInWorldCoordsData>(screenCenterInWorldCoordsEntity);
-            ecb.SetName(screenCenterInWorldCoordsEntity, "___ # Screen Center To World");
+            ecb.SetName(screenCenterInWorldCoordsEntity, "___ # Screen Center In World Data");
 
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
@@ -33,17 +33,13 @@ namespace Sources.Scripts.Screen.System
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var screenComponent in SystemAPI.Query<RefRW<ScreenData>>())
+            foreach (var screen in SystemAPI.Query<RefRW<ScreenData>>())
             {
-                // continue if screen size not changed
-                var widthAndHeight = screenComponent.ValueRO.WidthAndHeight;
-                if (Utility.Utils.IsScreenSizeChanged(widthAndHeight.x, widthAndHeight.y)) continue;
+                float2 screenSize = screen.ValueRO.WidthAndHeight;
 
-                var width = UnityEngine.Screen.width;
-                var height = UnityEngine.Screen.height;
-
-                screenComponent.ValueRW.ScreenCenter = new float2(width / 2f, height / 2f);
-                screenComponent.ValueRW.WidthAndHeight = new float2(width, height);
+                if (!Utility.Utils.IsScreenSizeChanged(screenSize, out float2 newScreenSize)) return;
+                
+                screen.ValueRW.SetWidthAndHeight(newScreenSize);
             }
         }
     }

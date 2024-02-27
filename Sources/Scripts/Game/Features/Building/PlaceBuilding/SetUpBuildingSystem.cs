@@ -1,5 +1,6 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Common.SaveAndLoad;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
 using Sources.Scripts.Game.Features.Building.Events;
@@ -11,6 +12,7 @@ using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
 using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
 using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component;
 using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
+using Unity.Assertions;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -61,6 +63,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             {
                 _bsEcb = _ecbSystem.CreateCommandBuffer(state.WorldUnmanaged);
 
+                Assert.AreNotEqual(0,0);
                 _entity = entity;
                 _building = buildingData.ValueRW;
                 _guid = _building.Guid;
@@ -96,7 +99,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             SetProductionProcessDataComponent();
 
             // Save?
-            AddBuildingToGameBuildingsList(ref state);
+            // AddBuildingToGameBuildingsList(ref state);
         }
 
         private void InitChangeProductsQuantityQueue()
@@ -148,13 +151,13 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
         private void SetManufacturedProductsData() =>
             _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = _manufacturedItems });
 
-        private void AddBuildingToGameBuildingsList(ref SystemState _)
-        {
-            // add to buildings list for save mb
-            NativeHashMap<FixedString64Bytes, BuildingData> gameBuildingsMap = SystemAPI
-                .GetSingletonRW<GameBuildingsMapData>().ValueRW.GameBuildings;
-
-            gameBuildingsMap.Add(_guid, _building);
-        }
+        // private void AddBuildingToGameBuildingsList(ref SystemState _)
+        // {
+        //     // add to buildings list for save mb
+        //     NativeHashMap<FixedString64Bytes, BuildingData> gameBuildingsMap = SystemAPI
+        //         .GetSingletonRW<GameBuildingsMapData>().ValueRW.GameBuildings;
+        //
+        //     gameBuildingsMap.Add(_guid, _building);
+        // }
     }
 }
