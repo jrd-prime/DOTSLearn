@@ -12,6 +12,7 @@ namespace Sources.Scripts.Screen.System
     /// from the center of the screen
     /// and set it to <see cref="ScreenCenterInWorldCoordsData"/> component
     /// </summary>
+    [UpdateInGroup(typeof(JDefaultSimulationSystemGroup))]
     [UpdateAfter(typeof(ScreenDataSystem))]
     public partial struct ScreenCenterInWorldCoordsSystem : ISystem
     {
@@ -38,12 +39,12 @@ namespace Sources.Scripts.Screen.System
                         MaxDistance,
                         (int)JLayers.GroundLayerID
                     )) return;
-                
+
                 Assert.IsTrue(
                     math.round(hit.point.y) == 0,
                     "Ground Y != 0 or not set ground layer id. And what??"
                 );
-                
+
                 SystemAPI.SetComponent(centerToWorldEntity, new ScreenCenterInWorldCoordsData
                 {
                     Value = new float3(

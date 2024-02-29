@@ -20,6 +20,13 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
         {
             if (list.IsEmpty)
             {
+                Debug.LogError($"List is empty! Set defaults! {this}");
+                return;
+            }
+
+            list.ElementAt(0).Name = Product.Flour;
+            if (list.IsEmpty)
+            {
                 Debug.Log("Empty storage list");
                 SetEmptyContainerItems();
             }

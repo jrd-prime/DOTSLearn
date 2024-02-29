@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.CommonComponents;
+using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
 using Ray = UnityEngine.Ray;
@@ -6,6 +7,7 @@ using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Sources.Scripts.Game.Common
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct RaycastSystem : ISystem
     {
         private const float RayDistance = 200f;

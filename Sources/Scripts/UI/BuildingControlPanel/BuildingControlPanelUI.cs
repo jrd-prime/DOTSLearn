@@ -162,7 +162,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         // Timer // TODO refact
         public void SetTimerText(float max, float value) => TimerUI.SetTimerText(max, value);
 
-        public void SetItems(IProductsItemsContainer ui, NativeList<ProductData> productsData) =>
+        public void SetItems(IProductsItemsContainer ui, in NativeList<ProductData> productsData) => 
             ui.SetItems(productsData);
 
         public void UpdateItemQuantity(object item, int value) => StorageUI.UpdateItemQuantity(item, value);

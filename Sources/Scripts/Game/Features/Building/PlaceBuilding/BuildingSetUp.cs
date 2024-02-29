@@ -1,16 +1,14 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.Game.Common.SaveAndLoad;
-using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
-using Sources.Scripts.Game.Features.Building.Production.Component;
+using Sources.Scripts.Game.Features.Building.Production;
 using Sources.Scripts.Game.Features.Building.Storage;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
-using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component;
-using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
+using Sources.Scripts.SaveAndLoad;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -73,12 +71,12 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             _bsEcb.SetName(_entity, _buildingName);
         }
 
-        public unsafe void InitBuildingProductionData()
+        public void InitBuildingProductionData()
         {
             BuildingNameId buildingId = _building.ValueRO.NameId;
 
-            _requiredItems = *_blobData.GetProductionLineProducts(buildingId).Required;
-            _manufacturedItems = *_blobData.GetProductionLineProducts(buildingId).Manufactured;
+            _requiredItems = _blobData.GetProductionLineProducts(buildingId).Required;
+            _manufacturedItems = _blobData.GetProductionLineProducts(buildingId).Manufactured;
 
             _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = _requiredItems });
             _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = _manufacturedItems });

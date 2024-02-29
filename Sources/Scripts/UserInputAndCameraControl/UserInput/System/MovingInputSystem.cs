@@ -1,4 +1,5 @@
-﻿using Sources.Scripts.Utility;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.Utility;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Sources.Scripts.UserInputAndCameraControl.UserInput.System
     /// <summary>
     /// Устанавливает вектор движения simple
     /// </summary>
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct MovingInputSystem : ISystem
     {
         private const string Horizontal = "Horizontal";

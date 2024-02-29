@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Sources.Scripts.CommonComponents;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -9,6 +10,7 @@ namespace Sources.Scripts.Screen.System
     /// Get screen sizes and set it to <see cref="ScreenData"/> component
     /// </summary>
     [BurstCompile]
+    [UpdateInGroup(typeof(JDefaultSimulationSystemGroup))]
     public partial struct ScreenDataSystem : ISystem
     {
         private static readonly FixedString64Bytes ScreenDataName = "___ # Screen Data";

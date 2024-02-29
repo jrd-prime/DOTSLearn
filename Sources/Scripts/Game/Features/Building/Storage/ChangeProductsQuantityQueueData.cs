@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Unity.Collections;
 using Unity.Entities;
 

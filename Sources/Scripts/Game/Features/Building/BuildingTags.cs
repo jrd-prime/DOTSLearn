@@ -5,6 +5,7 @@ namespace Sources.Scripts.Game.Features.Building
     public struct BuildingTag : IComponentData
     {
     }
+
     /// <summary>
     /// Selectable entity
     /// </summary>
@@ -15,5 +16,4 @@ namespace Sources.Scripts.Game.Features.Building
     public struct SelectedBuildingTag : IComponentData
     {
     }
-
 }

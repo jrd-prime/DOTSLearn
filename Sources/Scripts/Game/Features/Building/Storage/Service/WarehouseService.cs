@@ -1,6 +1,6 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.Warehouse.Component;
+using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
 using Unity.Collections;
 using Unity.Mathematics;
 

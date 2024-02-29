@@ -1,10 +1,12 @@
-﻿using Sources.Scripts.UserInputAndCameraControl.UserInput;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
 namespace Sources.Scripts.UserInputAndCameraControl.CameraControl.System
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct CameraFollowSystem : ISystem
     {
         private Vector3 _lastPosition;

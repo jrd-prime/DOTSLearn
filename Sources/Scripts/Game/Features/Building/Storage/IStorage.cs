@@ -1,5 +1,5 @@
 ﻿using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Unity.Collections;
 
 namespace Sources.Scripts.Game.Features.Building.Storage

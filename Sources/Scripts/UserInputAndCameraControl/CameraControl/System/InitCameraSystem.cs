@@ -1,9 +1,11 @@
-﻿using Sources.Scripts.UserInputAndCameraControl.UserInput;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Entities;
 
 namespace Sources.Scripts.UserInputAndCameraControl.CameraControl.System
 {
     [UpdateBefore(typeof(CameraControlSystem))]
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct InitCameraSystem : ISystem
     {
         public static readonly string CameraEntityName = "___ Main Camera Entity";
@@ -22,7 +24,7 @@ namespace Sources.Scripts.UserInputAndCameraControl.CameraControl.System
         public void OnUpdate(ref SystemState state)
         {
             state.Enabled = false;
-            
+
             EntityCommandBuffer biEcb = SystemAPI
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);

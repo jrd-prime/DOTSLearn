@@ -1,8 +1,10 @@
 ﻿using System;
+using Sources.Scripts.CommonComponents;
 using Unity.Entities;
 
 namespace Sources.Scripts.Timer.System
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct JTimerSystem : ISystem
     {
         public void OnUpdate(ref SystemState state)

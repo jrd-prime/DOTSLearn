@@ -2,16 +2,15 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Common;
 using Sources.Scripts.Game.Features;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
 using Unity.Collections;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.InitSystems
 {
-    [UpdateInGroup(typeof(MyInitSystemGroup))]
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct InitDataSystem : ISystem
     {
         private DynamicBuffer<ProductsDataBuffer> _buffer;
@@ -54,26 +53,21 @@ namespace Sources.Scripts.Game.InitSystems
         {
             var mainStorageMap = new NativeParallelHashMap<int, int>(0, Allocator.Persistent);
 
+            // foreach (var buffer in _buffer)
+            // {
+            //     mainStorageMap.Add((int)buffer.Product, -1);
+            // }
+            //
+            // entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
+
+            var a = new Random();
+            
             foreach (var buffer in _buffer)
             {
-                mainStorageMap.Add((int)buffer.Product, -1);
+                mainStorageMap.Add((int)buffer.Product, a.Next(0, 55));
             }
-
+            
             entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
-
-
-            // const int all = 33;
-            // entityManager.SetComponentData(elementEntity, new MainStorageData
-            // {
-            //     Value = new NativeParallelHashMap<int, int>(0, Allocator.Persistent)
-            //     {
-            //         { (int)Product.Wheat, all },
-            //         { (int)Product.Flour, all },
-            //         { (int)Product.Wood, all },
-            //         { (int)Product.WoodenPlank, all },
-            //         { (int)Product.Brick, all },
-            //     }
-            // });
         }
     }
 }

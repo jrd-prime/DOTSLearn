@@ -1,5 +1,6 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.System;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
 using Sources.Scripts.Timer;
@@ -18,7 +19,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel
             ecb.AddComponent<MoveToWarehouseRequestTag>(buildingEntity);
 
         /// <summary>
-        /// <see cref="MoveToProductionBoxSystem"/>
+        /// <see cref="Storage.InProductionBox.System.MoveToProductionBoxSystem"/>
         /// </summary>
         /// <param name="buildingEntity"></param>
         /// <param name="ecb"></param>

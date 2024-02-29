@@ -1,8 +1,6 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 
-namespace Sources.Scripts.Game.Common.SaveAndLoad
+namespace Sources.Scripts.SaveAndLoad
 {
     public struct GameBuildingsMapData : IComponentData
     {

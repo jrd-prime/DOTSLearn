@@ -36,23 +36,21 @@ namespace Sources.Scripts.CommonComponents.Product
 
             return nativeParallelHashMap;
         }
-
-
-        public static NativeList<ProductData> ConvertProductsHashMapToList(
-            NativeParallelHashMap<int, int> nativeList)
+        
+        public static void ConvertProductsHashMapToList(
+            NativeParallelHashMap<int, int> inputData,
+            out NativeList<ProductData> outputData)
         {
-            NativeList<ProductData> nativeParallelHashMap = new(nativeList.Count(), Allocator.Persistent);
-
-            foreach (var product in nativeList)
+            outputData = new NativeList<ProductData>(inputData.Count(), Allocator.Persistent);
+            
+            foreach (var product in inputData)
             {
-                nativeParallelHashMap.Add(new ProductData
+                outputData.Add(new ProductData
                 {
                     Name = (Product)product.Key,
                     Quantity = product.Value
                 });
             }
-
-            return nativeParallelHashMap;
         }
     }
 

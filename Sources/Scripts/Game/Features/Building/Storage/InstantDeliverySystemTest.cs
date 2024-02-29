@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Storage
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct InstantDeliverySystemTest : ISystem
     {
         private EntityCommandBuffer _ecb;

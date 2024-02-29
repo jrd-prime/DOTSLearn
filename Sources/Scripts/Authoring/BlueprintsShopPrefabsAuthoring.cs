@@ -56,14 +56,25 @@ namespace Sources.Scripts.Authoring
 
                     if (requiredItemsCount != 0)
                     {
+                        NativeList<ProductData> tempArray = new NativeList<ProductData>(0, Allocator.Temp);
                         // REQ ARRAY
                         for (var j = 0; j < requiredItemsCount; j++)
                         {
-                            requiredArray[j] = new ProductData
+                            tempArray.Add(new ProductData
                             {
                                 Name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
                                 Quantity = authoring._buildings[i].RequiredItems[j]._quantity
-                            };
+                            });
+                        }
+
+                        if (requiredItemsCount == 2)
+                        {
+                            var sorted = SortMe(tempArray);
+
+                            for (int j = 0; j < sorted.Length; j++)
+                            {
+                                requiredArray[j] = sorted[j];
+                            }
                         }
                     }
 
@@ -75,13 +86,24 @@ namespace Sources.Scripts.Authoring
 
                     if (manufacturedItemsCount != 0)
                     {
+                        NativeList<ProductData> tempArray = new NativeList<ProductData>(0, Allocator.Temp);
                         for (var j = 0; j < manufacturedItemsCount; j++)
                         {
-                            manufacturedArray[j] = new ProductData
+                            tempArray.Add(new ProductData
                             {
                                 Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
                                 Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
-                            };
+                            });
+                        }
+
+                        if (manufacturedItemsCount == 2)
+                        {
+                            var sorted = SortMe(tempArray);
+
+                            for (int j = 0; j < sorted.Length; j++)
+                            {
+                                manufacturedArray[j] = sorted[j];
+                            }
                         }
                     }
                 }
@@ -112,6 +134,23 @@ namespace Sources.Scripts.Authoring
                         StorageCapacity = buildingData.StorageCapacity
                     });
                 }
+            }
+
+            private NativeArray<ProductData> SortMe(NativeList<ProductData> requiredArray)
+            {
+                // TODO refact this shit
+                var nativeList = new NativeList<ProductData>(0, Allocator.Persistent);
+
+                var temp = new[] { requiredArray[0].Name, requiredArray[1].Name };
+
+                Array.Sort(temp);
+
+                if (temp[0] == requiredArray[0].Name) return requiredArray;
+
+                nativeList.Add(requiredArray[1]);
+                nativeList.Add(requiredArray[0]);
+
+                return nativeList.ToArray(Allocator.Persistent);
             }
         }
     }

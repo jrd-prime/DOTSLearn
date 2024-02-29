@@ -5,7 +5,7 @@ namespace Sources.Scripts.CommonComponents.Production
 {
     public struct ProductionLineData
     {
-        public unsafe NativeList<ProductData>* Required;
-        public unsafe NativeList<ProductData>* Manufactured;
+        public unsafe NativeList<ProductData> Required;
+        public unsafe NativeList<ProductData> Manufactured;
     }
 }

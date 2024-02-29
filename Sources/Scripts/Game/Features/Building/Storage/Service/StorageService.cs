@@ -1,7 +1,10 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Unity.Collections;
+using UnityEngine;
+using UnityEngine.Assertions;
+using Assert = Unity.Assertions.Assert;
 
 namespace Sources.Scripts.Game.Features.Building.Storage.Service
 {
@@ -54,18 +57,20 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
         }
 
         /// <summary>
-        /// Matching products in <see cref="MainStorageData"/> for building WarehouseProductsData
-        /// <param name="requiredProducts">list of <see cref="ProductData"/></param>
+        /// Matching products in <see cref="MainStorageData"/>
+        /// <param name="products">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requiredProducts,
+        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> products,
             NativeParallelHashMap<int, int> storageData, out bool isEnough)
         {
             var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
-
-            for (var i = 0; i < requiredProducts.Length; i++)
+            
+            for (var i = 0; i < products.Length; i++)
             {
-                Product product = requiredProducts[i].Name;
+                Product product = products[i].Name;
+
+                Assert.IsTrue(storageData.ContainsKey((int)product), $"Storage key {(int)product} not exist");
 
                 productDataList.Add(new ProductData
                 {
@@ -74,12 +79,12 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
                 });
             }
 
-            isEnough = requiredProducts.Length switch
+            isEnough = products.Length switch
             {
                 0 => false,
-                1 => storageData[(int)requiredProducts[0].Name] > 0,
-                2 => storageData[(int)requiredProducts[0].Name] > 0 ||
-                     storageData[(int)requiredProducts[1].Name] > 0,
+                1 => storageData[(int)products[0].Name] > 0,
+                2 => storageData[(int)products[0].Name] > 0 ||
+                     storageData[(int)products[1].Name] > 0,
                 _ => false
             };
 

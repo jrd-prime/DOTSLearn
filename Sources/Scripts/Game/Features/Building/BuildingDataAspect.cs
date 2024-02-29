@@ -1,13 +1,13 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.Game.Features.Building.ControlPanel.Component;
+using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.PlaceBuilding.Component;
-using Sources.Scripts.Game.Features.Building.Production.Component;
+using Sources.Scripts.Game.Features.Building.PlaceBuilding;
+using Sources.Scripts.Game.Features.Building.Production;
 using Sources.Scripts.Game.Features.Building.Storage;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
-using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox.Component;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
+using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -17,7 +17,7 @@ namespace Sources.Scripts.Game.Features.Building
     /// Building Data Aspect
     /// <para>
     /// <see cref="BuildingData"/><br />
-    /// <see cref="BuildingProductsData"/><br />
+    /// <see cref="ProductsInBuildingData"/><br />
     /// <see cref="RequiredProductsData"/><br />
     /// <see cref="ManufacturedProductsData"/>
     /// </para>
@@ -34,7 +34,7 @@ namespace Sources.Scripts.Game.Features.Building
 
         public Entity Self => _self;
         public BuildingData BuildingData => _buildingData.ValueRO;
-        public BuildingProductsData BuildingProductsData => _buildingProductsData.ValueRW;
+        public BuildingProductsData ProductsInBuildingData => _buildingProductsData.ValueRW;
         public RequiredProductsData RequiredProductsData => _requiredProductsData.ValueRO;
         public ManufacturedProductsData ManufacturedProductsData => _manufacturedProductsData.ValueRO;
         public RefRW<ProductionProcessData> ProductionProcessData => _productionProcessData;

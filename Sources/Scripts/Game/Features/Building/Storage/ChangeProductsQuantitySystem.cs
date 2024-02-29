@@ -1,15 +1,19 @@
 ﻿using System;
+using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.Component;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage.Component;
+using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
+using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Unity.Collections;
 using Unity.Entities;
+using BuildingControlPanelSystem =
+    Sources.Scripts.Game.Features.Building.ControlPanel.System.BuildingControlPanelSystem;
 
 namespace Sources.Scripts.Game.Features.Building.Storage
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     [UpdateBefore(typeof(BuildingControlPanelSystem))]
     public partial struct ChangeProductsQuantitySystem : ISystem
     {
@@ -49,21 +53,21 @@ namespace Sources.Scripts.Game.Features.Building.Storage
                             break;
 
                         case StorageType.Warehouse:
-                            aspect.BuildingProductsData.WarehouseData
+                            aspect.ProductsInBuildingData.WarehouseData
                                 .ChangeProductsQuantity(changeType, productsData);
 
                             buildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);
                             break;
 
                         case StorageType.InProduction:
-                            aspect.BuildingProductsData.InProductionBoxData
+                            aspect.ProductsInBuildingData.InProductionBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
                             buildingEvents.Enqueue(BuildingEvent.InProductionBoxDataUpdated);
                             break;
 
                         case StorageType.Manufactured:
-                            aspect.BuildingProductsData.ManufacturedBoxData
+                            aspect.ProductsInBuildingData.ManufacturedBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
                             buildingEvents.Enqueue(BuildingEvent.ManufacturedBoxDataUpdated);

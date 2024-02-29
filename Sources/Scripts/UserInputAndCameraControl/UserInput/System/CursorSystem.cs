@@ -1,4 +1,5 @@
-﻿using Sources.Scripts.UserInputAndCameraControl.CameraControl;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -10,6 +11,7 @@ namespace Sources.Scripts.UserInputAndCameraControl.UserInput.System
     /// Устанавливаем позицию курсора в мире
     /// </summary>
     // [BurstCompile]
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct CursorSystem : ISystem
     {
         public static readonly string InputCursorDataEntityName = "___ Input Cursor Data Entity";

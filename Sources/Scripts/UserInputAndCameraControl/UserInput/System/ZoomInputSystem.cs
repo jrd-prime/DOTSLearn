@@ -1,9 +1,11 @@
-﻿using Sources.Scripts.Utility;
+﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.Utility;
 using Unity.Entities;
 using UnityEngine;
 
 namespace Sources.Scripts.UserInputAndCameraControl.UserInput.System
 {
+    [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct ZoomInputSystem : ISystem
     {
         private const string MouseScrollWheel = "Mouse ScrollWheel";
