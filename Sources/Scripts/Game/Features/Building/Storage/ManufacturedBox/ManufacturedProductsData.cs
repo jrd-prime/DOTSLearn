@@ -9,6 +9,6 @@ namespace Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox
     /// </summary>
     public struct ManufacturedProductsData : IComponentData
     {
-        public NativeList<ProductData> Manufactured;
+        public NativeList<ProductData> Value;
     }
 }

@@ -3,9 +3,9 @@ using Unity.Collections;
 
 namespace Sources.Scripts.CommonComponents.Production
 {
-    public struct ProductionLineData
+    public unsafe struct ProductionLineData
     {
-        public unsafe NativeList<ProductData> Required;
-        public unsafe NativeList<ProductData> Manufactured;
+        public NativeList<ProductData> RequiredPtr;
+        public NativeList<ProductData> ManufacturedPtr;
     }
 }

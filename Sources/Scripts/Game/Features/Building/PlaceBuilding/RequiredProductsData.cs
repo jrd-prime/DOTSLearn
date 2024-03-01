@@ -11,6 +11,6 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
     [Serializable]
     public struct RequiredProductsData : IComponentData
     {
-        public NativeList<ProductData> Required;
+        public NativeList<ProductData> Value;
     }
 }

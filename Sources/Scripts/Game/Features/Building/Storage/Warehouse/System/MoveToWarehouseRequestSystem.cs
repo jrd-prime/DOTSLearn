@@ -56,7 +56,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse.System
                 _mainStorage = SystemAPI.GetSingleton<MainStorageData>();
 
                 _matchingProducts = StorageService.GetMatchingProducts(
-                    _aspect.RequiredProductsData.Required,
+                    _aspect.RequiredProductsData.Value,
                     _mainStorage.Value, out bool isEnough);
 
                 if (!isEnough)

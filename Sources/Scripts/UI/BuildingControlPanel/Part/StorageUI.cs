@@ -9,6 +9,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 {
     public abstract class StorageUI : IProductsItemsContainer
     {
+        // TODO refact
         protected VisualElement Container;
         protected Label NameLabel;
         protected VisualTreeAsset ItemContainerTemplate;

@@ -25,9 +25,6 @@ namespace Sources.Scripts.Authoring
 
                 int buildingsCount = authoring._buildings.Count;
 
-                const int requiredCellId = 0;
-                const int manufacturedCellId = 1;
-
                 // [][][] [building id][req or man cell id][product data]
                 using BlobBuilder builder = new(Allocator.Temp);
 
@@ -52,7 +49,8 @@ namespace Sources.Scripts.Authoring
 
                     // REQUIRED ARRAY BUILDER
                     BlobBuilderArray<ProductData> requiredArray =
-                        builder.Allocate(ref reqAndManArrays[requiredCellId], requiredItemsCount);
+                        builder.Allocate(ref reqAndManArrays[BlueprintsBlobAssetReference.RequiredCellId],
+                            requiredItemsCount);
 
                     if (requiredItemsCount != 0)
                     {
@@ -62,8 +60,8 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                Name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
-                                Quantity = authoring._buildings[i].RequiredItems[j]._quantity
+                                _name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
+                                _quantity = authoring._buildings[i].RequiredItems[j]._quantity
                             });
                         }
 
@@ -82,7 +80,8 @@ namespace Sources.Scripts.Authoring
                     int manufacturedItemsCount = authoring._buildings[i].ManufacturedItems.Count;
 
                     BlobBuilderArray<ProductData> manufacturedArray =
-                        builder.Allocate(ref reqAndManArrays[manufacturedCellId], manufacturedItemsCount);
+                        builder.Allocate(ref reqAndManArrays[BlueprintsBlobAssetReference.ManufacturedCellId],
+                            manufacturedItemsCount);
 
                     if (manufacturedItemsCount != 0)
                     {
@@ -91,8 +90,8 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
-                                Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
+                                _name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
+                                _quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
                             });
                         }
 
@@ -112,7 +111,7 @@ namespace Sources.Scripts.Authoring
                     builder.CreateBlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>>(
                         Allocator.Persistent);
 
-                AddComponent(entity, new BlueprintsBlobData
+                AddComponent(entity, new BlueprintsBlobAssetReference
                 {
                     Reference = blobAssetReference
                 });
@@ -141,11 +140,11 @@ namespace Sources.Scripts.Authoring
                 // TODO refact this shit
                 var nativeList = new NativeList<ProductData>(0, Allocator.Persistent);
 
-                var temp = new[] { requiredArray[0].Name, requiredArray[1].Name };
+                var temp = new[] { requiredArray[0]._name, requiredArray[1]._name };
 
                 Array.Sort(temp);
 
-                if (temp[0] == requiredArray[0].Name) return requiredArray;
+                if (temp[0] == requiredArray[0]._name) return requiredArray;
 
                 nativeList.Add(requiredArray[1]);
                 nativeList.Add(requiredArray[0]);

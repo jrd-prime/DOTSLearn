@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.CommonComponents.Building;
+﻿using System;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
@@ -22,15 +22,26 @@ namespace Sources.Scripts.Game.Features.Building
     /// <see cref="ManufacturedProductsData"/>
     /// </para>
     /// </summary>
-    public readonly partial struct BuildingDataAspect : IAspect
+    public readonly partial struct BuildingDataAspect : IAspect, IDisposable
     {
         private readonly Entity _self;
         private readonly RefRW<BuildingData> _buildingData;
         private readonly RefRW<BuildingProductsData> _buildingProductsData;
-        private readonly RefRO<RequiredProductsData> _requiredProductsData;
-        private readonly RefRO<ManufacturedProductsData> _manufacturedProductsData;
+        private readonly RefRW<RequiredProductsData> _requiredProductsData;
+        private readonly RefRW<ManufacturedProductsData> _manufacturedProductsData;
         private readonly RefRW<ProductionProcessData> _productionProcessData;
         private readonly RefRW<ChangeProductsQuantityQueueData> _changeProductsQuantityData;
+
+        // TODO where to place a call?
+        public void Dispose()
+        {
+            _buildingData.ValueRW.BuildingEvents.Dispose();
+            _buildingProductsData.ValueRW.Dispose();
+            _requiredProductsData.ValueRW.Value.Dispose();
+            _manufacturedProductsData.ValueRW.Value.Dispose();
+            _productionProcessData.ValueRW.PreparedProducts.Dispose();
+            _changeProductsQuantityData.ValueRW.Value.Dispose();
+        }
 
         public Entity Self => _self;
         public BuildingData BuildingData => _buildingData.ValueRO;

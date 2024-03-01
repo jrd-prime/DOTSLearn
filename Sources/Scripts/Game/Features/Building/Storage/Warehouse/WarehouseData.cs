@@ -30,10 +30,10 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
             switch (change)
             {
                 case ChangeType.Increase:
-                    Value[(int)product.Name] += product.Quantity;
+                    Value[(int)product._name] += product._quantity;
                     break;
                 case ChangeType.Reduce:
-                    Value[(int)product.Name] -= product.Quantity;
+                    Value[(int)product._name] -= product._quantity;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(change), change, null);

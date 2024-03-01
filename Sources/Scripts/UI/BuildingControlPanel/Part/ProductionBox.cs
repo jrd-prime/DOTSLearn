@@ -28,7 +28,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
             for (int i = 0; i < productsData.Length; i++)
             {
-                var item = GetFilledItem(productsData[i].Name, productsData[i].Quantity);
+                var item = GetFilledItem(productsData[i]._name, productsData[i]._quantity);
 
                 Container.Add(item);
 

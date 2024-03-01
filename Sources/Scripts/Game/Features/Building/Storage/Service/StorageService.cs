@@ -2,8 +2,6 @@
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Unity.Collections;
-using UnityEngine;
-using UnityEngine.Assertions;
 using Assert = Unity.Assertions.Assert;
 
 namespace Sources.Scripts.Game.Features.Building.Storage.Service
@@ -65,7 +63,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
             NativeParallelHashMap<int, int> storageData, out bool isEnough)
         {
             var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
-            
+
             for (var i = 0; i < products.Length; i++)
             {
                 Product product = products[i].Name;

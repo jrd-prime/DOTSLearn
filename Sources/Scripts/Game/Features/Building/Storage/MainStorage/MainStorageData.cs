@@ -27,15 +27,15 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
         private void ChangeProductQuantity(ProductData product, ChangeType change)
         {
             // If product not present in main storage, add
-            if (!Value.ContainsKey((int)product.Name)) Value.Add((int)product.Name, 0);
+            if (!Value.ContainsKey((int)product._name)) Value.Add((int)product._name, 0);
 
             switch (change)
             {
                 case ChangeType.Increase:
-                    Value[(int)product.Name] += product.Quantity;
+                    Value[(int)product._name] += product._quantity;
                     break;
                 case ChangeType.Reduce:
-                    Value[(int)product.Name] -= product.Quantity;
+                    Value[(int)product._name] -= product._quantity;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(change), change, null);
@@ -53,8 +53,8 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
             bool isEnough = requestedProducts.Length switch
             {
                 0 => false,
-                1 => Value[(int)requestedProducts[0].Name] > 0,
-                2 => Value[(int)requestedProducts[0].Name] > 0 || Value[(int)requestedProducts[1].Name] > 0,
+                1 => Value[(int)requestedProducts[0]._name] > 0,
+                2 => Value[(int)requestedProducts[0]._name] > 0 || Value[(int)requestedProducts[1]._name] > 0,
                 _ => false
             };
 
@@ -62,14 +62,14 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
 
             for (var i = 0; i < requestedProducts.Length; i++)
             {
-                Product product = requestedProducts[i].Name;
+                Product product = requestedProducts[i]._name;
 
                 Assert.IsTrue(Value.ContainsKey((int)product), $"Storage key {(int)product} not exist");
 
                 matchingProducts.Add(new ProductData
                 {
-                    Name = product,
-                    Quantity = Value[(int)product]
+                    _name = product,
+                    _quantity = Value[(int)product]
                 });
             }
 

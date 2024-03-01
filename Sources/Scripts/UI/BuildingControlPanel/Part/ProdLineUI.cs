@@ -31,14 +31,14 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
             foreach (var reqBuffer in required)
             {
-                _container.Add(GetFilledItem(reqBuffer.Name, reqBuffer.Quantity));
+                _container.Add(GetFilledItem(reqBuffer._name, reqBuffer._quantity));
             }
 
             _container.Add(_arrowTemplate.Instantiate());
 
             foreach (var manBuffer in manufactured)
             {
-                _container.Add(GetFilledItem(manBuffer.Name, manBuffer.Quantity));
+                _container.Add(GetFilledItem(manBuffer._name, manBuffer._quantity));
             }
         }
 

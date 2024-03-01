@@ -50,7 +50,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox.System
 
                 _aspect = aspect;
                 _warehouseData = aspect.ProductsInBuildingData.WarehouseData;
-                _requiredQuantity = aspect.RequiredProductsData.Required;
+                _requiredQuantity = aspect.RequiredProductsData.Value;
 
                 bool isEnoughProductsToLoad =
                     WarehouseService.IsEnoughRequiredProducts(_warehouseData, _requiredQuantity);

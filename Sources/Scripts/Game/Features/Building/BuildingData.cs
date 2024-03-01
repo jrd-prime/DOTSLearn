@@ -1,4 +1,5 @@
-﻿using Sources.Scripts.CommonComponents.Building;
+﻿using System;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.Events;
 using Unity.Collections;

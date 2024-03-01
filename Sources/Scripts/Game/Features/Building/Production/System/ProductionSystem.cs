@@ -192,7 +192,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
             {
                 StorageType = StorageType.InProduction,
                 ChangeType = ChangeType.Reduce,
-                ProductsData = _buildingData.RequiredProductsData.Required
+                ProductsData = _buildingData.RequiredProductsData.Value
             });
 
         private void PutProductsFromOneLoad() =>
@@ -200,7 +200,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
             {
                 StorageType = StorageType.Manufactured,
                 ChangeType = ChangeType.Increase,
-                ProductsData = _buildingData.ManufacturedProductsData.Manufactured
+                ProductsData = _buildingData.ManufacturedProductsData.Value
             });
 
         private void UpdateProductionUI() => _buildingData.AddEvent(BuildingEvent.InProductionBoxDataUpdated);

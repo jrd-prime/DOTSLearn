@@ -17,7 +17,7 @@ namespace Sources.Scripts.Game.InitSystems
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BlueprintsBlobData>();
+            state.RequireForUpdate<BlueprintsBlobAssetReference>();
         }
 
         public void OnUpdate(ref SystemState state)

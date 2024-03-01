@@ -1,5 +1,4 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
+﻿using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.Events;
@@ -16,31 +15,40 @@ using Unity.Transforms;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 {
-    public class BuildingSetUp
+    public struct BuildingSetUpDataWrapper
     {
-        private readonly RefRW<BuildingData> _building;
+        public RefRW<BuildingData> BuildingData;
+        public Entity Entity;
+        public RefRO<LocalTransform> Transform;
+        public NativeList<ProductData> RequiredItemsList;
+        public NativeList<ProductData> ManufacturedItemsList;
+        public EntityCommandBuffer Ecb;
+    }
+
+    public struct BuildingSetUp
+    {
         private EntityCommandBuffer _bsEcb;
         private readonly Entity _entity;
-        private BlueprintsBlobData _blobData;
+        private readonly RefRW<BuildingData> _building;
         private readonly float3 _position;
 
         private readonly FixedString64Bytes _buildingName;
 
-        private NativeList<ProductData> _requiredItems;
-        private NativeList<ProductData> _manufacturedItems;
+        private readonly NativeList<ProductData> _requiredItemsListPtr;
+        private readonly NativeList<ProductData> _manufacturedItemsListPtr;
         private readonly NativeQueue<BuildingEvent> _buildingEvents;
         private readonly NativeQueue<ChangeProductsQuantityData> _changeProductsQuantityQueue;
 
-        public BuildingSetUp(RefRW<BuildingData> buildingData, Entity entity, RefRO<LocalTransform> transform,
-            BlueprintsBlobData blueprintsBlobData, EntityCommandBuffer ecb)
+        public BuildingSetUp(BuildingSetUpDataWrapper buildingSetUpData)
         {
-            _building = buildingData;
-            _entity = entity;
-            _bsEcb = ecb;
-            _blobData = blueprintsBlobData;
-            _position = transform.ValueRO.Position;
+            _building = buildingSetUpData.BuildingData;
+            _entity = buildingSetUpData.Entity;
+            _bsEcb = buildingSetUpData.Ecb;
+            _requiredItemsListPtr = buildingSetUpData.RequiredItemsList;
+            _manufacturedItemsListPtr = buildingSetUpData.ManufacturedItemsList;
+            _position = buildingSetUpData.Transform.ValueRO.Position;
 
-            _buildingName = _building.ValueRO.NameId + "_" + _building.ValueRO.Guid;
+            _buildingName = $"{_building.ValueRO.NameId}_{_building.ValueRO.Guid}";
 
             _buildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent);
             _changeProductsQuantityQueue = new NativeQueue<ChangeProductsQuantityData>(Allocator.Persistent);
@@ -63,7 +71,6 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             AddBuildingTags();
         }
 
-
         private void SetMainInfo()
         {
             _building.ValueRW.Self = _entity;
@@ -73,13 +80,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 
         public void InitBuildingProductionData()
         {
-            BuildingNameId buildingId = _building.ValueRO.NameId;
-
-            _requiredItems = _blobData.GetProductionLineProducts(buildingId).Required;
-            _manufacturedItems = _blobData.GetProductionLineProducts(buildingId).Manufactured;
-
-            _bsEcb.AddComponent(_entity, new RequiredProductsData { Required = _requiredItems });
-            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Manufactured = _manufacturedItems });
+            _bsEcb.AddComponent(_entity, new RequiredProductsData { Value = _requiredItemsListPtr });
+            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Value = _manufacturedItemsListPtr });
         }
 
         /// <summary>
@@ -90,11 +92,18 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             _bsEcb.AddComponent(_entity, new BuildingProductsData
             {
                 WarehouseData = new WarehouseData
-                    { Value = ProductData.ConvertProductsDataToHashMap(_requiredItems, ProductValues.ToDefault) },
+                {
+                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsListPtr, ProductValues.ToDefault)
+                },
                 InProductionBoxData = new InProductionBoxData
-                    { Value = ProductData.ConvertProductsDataToHashMap(_requiredItems, ProductValues.ToDefault) },
+                {
+                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsListPtr, ProductValues.ToDefault)
+                },
                 ManufacturedBoxData = new ManufacturedBoxData
-                    { Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItems, ProductValues.ToDefault) }
+                {
+                    Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItemsListPtr,
+                        ProductValues.ToDefault)
+                }
             });
         }
 

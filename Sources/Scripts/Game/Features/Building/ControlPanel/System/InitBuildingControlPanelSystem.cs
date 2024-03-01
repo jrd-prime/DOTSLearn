@@ -41,8 +41,8 @@ namespace Sources.Scripts.Game.InitSystems
 
                 _buildingUI = BuildingControlPanelUI.Instance;
                 _buildingData = aspect.BuildingData;
-                _required = aspect.RequiredProductsData.Required;
-                _manufactured = aspect.ManufacturedProductsData.Manufactured;
+                _required = aspect.RequiredProductsData.Value;
+                _manufactured = aspect.ManufacturedProductsData.Value;
 
                 #region Get data for set
 

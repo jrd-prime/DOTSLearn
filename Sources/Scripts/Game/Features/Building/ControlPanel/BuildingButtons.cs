@@ -1,50 +1,55 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox.System;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
-using Sources.Scripts.Timer;
 using Sources.Scripts.UI;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel
 {
-    public class BuildingButtons
+    public struct BuildingButtons
     {
-        private readonly TextPopUpMono _textPopUpUI = TextPopUpMono.Instance;
+        private readonly TextPopUpMono _textPopUpUI;
+        private readonly Entity _buildingEntity;
+        private EntityCommandBuffer _ecb;
+
+        public BuildingButtons(Entity buildingEntity, EntityCommandBuffer ecb)
+        {
+            _buildingEntity = buildingEntity;
+            _ecb = ecb;
+            _textPopUpUI = TextPopUpMono.Instance;
+        }
 
         //TODO disable button if in storage 0 req products
         //TODO add move time to button
-        public void MoveButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
-            ecb.AddComponent<MoveToWarehouseRequestTag>(buildingEntity);
+        public void MoveButton() =>
+            _ecb.AddComponent<MoveToWarehouseRequestTag>(_buildingEntity);
 
         /// <summary>
         /// <see cref="Storage.InProductionBox.System.MoveToProductionBoxSystem"/>
         /// </summary>
-        /// <param name="buildingEntity"></param>
-        /// <param name="ecb"></param>
-        public void LoadButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
-            ecb.AddComponent<MoveToProductionBoxRequestTag>(buildingEntity);
+        public void LoadButton() =>
+            _ecb.AddComponent<MoveToProductionBoxRequestTag>(_buildingEntity);
 
 
-        public void TakeButton(Entity buildingEntity, EntityCommandBuffer ecb) =>
-            ecb.AddComponent<MoveToMainStorageRequestTag>(buildingEntity);
+        public void TakeButton() =>
+            _ecb.AddComponent<MoveToMainStorageRequestTag>(_buildingEntity);
 
 
-        public void UpgradeButton(Entity buildingEntity, EntityCommandBuffer ecb)
+        public void UpgradeButton()
         {
             _textPopUpUI.ShowPopUp("upgrade btn");
         }
 
-        public void BuffButton(Entity buildingEntity, EntityCommandBuffer ecb)
+        public void BuffButton()
         {
             _textPopUpUI.ShowPopUp("buff btn");
         }
 
-        public void InstantDeliveryButton(Entity buildingEntity, EntityCommandBuffer ecb)
+        public void InstantDeliveryButton()
         {
             _textPopUpUI.ShowPopUp("instant btn");
-            ecb.AddComponent<InstantBuffTag>(buildingEntity);
+            _ecb.AddComponent<InstantBuffTag>(_buildingEntity);
         }
     }
 }

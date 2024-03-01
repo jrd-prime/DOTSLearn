@@ -1,6 +1,8 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -16,7 +18,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<BlueprintsBlobData>();
+            state.RequireForUpdate<BlueprintsBlobAssetReference>();
             state.RequireForUpdate<PlaceTempBuildingTag>();
             state.RequireForUpdate<TempBuildingTag>();
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
@@ -34,9 +36,26 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
                     .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
 
-                BlueprintsBlobData blueprintsBlob = SystemAPI.GetSingleton<BlueprintsBlobData>();
+                BlueprintsBlobAssetReference blueprintsBlob = SystemAPI.GetSingleton<BlueprintsBlobAssetReference>();
 
-                new BuildingSetUp(building, entity, transform, blueprintsBlob, bsEcb).Initialize();
+                BuildingNameId buildingId = building.ValueRO.NameId;
+
+                NativeList<ProductData> requiredItems =
+                    blueprintsBlob.GetProductionLineProducts(buildingId).RequiredPtr;
+                NativeList<ProductData> manufacturedItems =
+                    blueprintsBlob.GetProductionLineProducts(buildingId).ManufacturedPtr;
+
+                BuildingSetUpDataWrapper buildingSetUpDataWrapper = new()
+                {
+                    BuildingData = building,
+                    Entity = entity,
+                    Transform = transform,
+                    RequiredItemsList = requiredItems,
+                    ManufacturedItemsList = manufacturedItems,
+                    Ecb = bsEcb
+                };
+
+                new BuildingSetUp(buildingSetUpDataWrapper).Initialize();
             }
         }
     }
