@@ -32,17 +32,6 @@ namespace Sources.Scripts.Game.Features.Building
         private readonly RefRW<ProductionProcessData> _productionProcessData;
         private readonly RefRW<ChangeProductsQuantityQueueData> _changeProductsQuantityData;
 
-        // TODO where to place a call?
-        public void Dispose()
-        {
-            _buildingData.ValueRW.BuildingEvents.Dispose();
-            _buildingProductsData.ValueRW.Dispose();
-            _requiredProductsData.ValueRW.Value.Dispose();
-            _manufacturedProductsData.ValueRW.Value.Dispose();
-            _productionProcessData.ValueRW.PreparedProducts.Dispose();
-            _changeProductsQuantityData.ValueRW.Value.Dispose();
-        }
-
         public Entity Self => _self;
         public BuildingData BuildingData => _buildingData.ValueRO;
         public BuildingProductsData ProductsInBuildingData => _buildingProductsData.ValueRW;
@@ -83,5 +72,16 @@ namespace Sources.Scripts.Game.Features.Building
 
         public void SetCurrentCycle(int value) =>
             _productionProcessData.ValueRW.CurrentCycle = value;
+
+        // TODO where to place a call?
+        public void Dispose()
+        {
+            _buildingData.ValueRW.BuildingEvents.Dispose();
+            _buildingProductsData.ValueRW.Dispose();
+            _requiredProductsData.ValueRW.Value.Dispose();
+            _manufacturedProductsData.ValueRW.Value.Dispose();
+            _productionProcessData.ValueRW.PreparedProducts.Dispose();
+            _changeProductsQuantityData.ValueRW.Value.Dispose();
+        }
     }
 }

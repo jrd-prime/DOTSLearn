@@ -37,7 +37,7 @@ namespace Sources.Scripts.Screen.System
                         CameraMono.Instance.Camera.ScreenPointToRay(targetPoint),
                         out var hit,
                         MaxDistance,
-                        (int)JLayers.GroundLayerID
+                        JLayersConst.GroundLayerID
                     )) return;
 
                 Assert.IsTrue(

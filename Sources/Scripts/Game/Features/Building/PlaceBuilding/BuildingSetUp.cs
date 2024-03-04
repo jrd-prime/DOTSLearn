@@ -34,8 +34,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 
         private readonly FixedString64Bytes _buildingName;
 
-        private readonly NativeList<ProductData> _requiredItemsListPtr;
-        private readonly NativeList<ProductData> _manufacturedItemsListPtr;
+        private readonly NativeList<ProductData> _requiredItemsList;
+        private readonly NativeList<ProductData> _manufacturedItemsList;
         private readonly NativeQueue<BuildingEvent> _buildingEvents;
         private readonly NativeQueue<ChangeProductsQuantityData> _changeProductsQuantityQueue;
 
@@ -44,8 +44,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             _building = buildingSetUpData.BuildingData;
             _entity = buildingSetUpData.Entity;
             _bsEcb = buildingSetUpData.Ecb;
-            _requiredItemsListPtr = buildingSetUpData.RequiredItemsList;
-            _manufacturedItemsListPtr = buildingSetUpData.ManufacturedItemsList;
+            _requiredItemsList = buildingSetUpData.RequiredItemsList;
+            _manufacturedItemsList = buildingSetUpData.ManufacturedItemsList;
             _position = buildingSetUpData.Transform.ValueRO.Position;
 
             _buildingName = $"{_building.ValueRO.NameId}_{_building.ValueRO.Guid}";
@@ -80,8 +80,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
 
         public void InitBuildingProductionData()
         {
-            _bsEcb.AddComponent(_entity, new RequiredProductsData { Value = _requiredItemsListPtr });
-            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Value = _manufacturedItemsListPtr });
+            _bsEcb.AddComponent(_entity, new RequiredProductsData { Value = _requiredItemsList });
+            _bsEcb.AddComponent(_entity, new ManufacturedProductsData { Value = _manufacturedItemsList });
         }
 
         /// <summary>
@@ -93,15 +93,15 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
             {
                 WarehouseData = new WarehouseData
                 {
-                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsListPtr, ProductValues.ToDefault)
+                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsList, ProductValues.ToDefault)
                 },
                 InProductionBoxData = new InProductionBoxData
                 {
-                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsListPtr, ProductValues.ToDefault)
+                    Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsList, ProductValues.ToDefault)
                 },
                 ManufacturedBoxData = new ManufacturedBoxData
                 {
-                    Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItemsListPtr,
+                    Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItemsList,
                         ProductValues.ToDefault)
                 }
             });

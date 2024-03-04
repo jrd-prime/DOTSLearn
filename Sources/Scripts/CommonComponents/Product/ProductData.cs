@@ -6,7 +6,6 @@ namespace Sources.Scripts.CommonComponents.Product
     [Serializable]
     public struct ProductData
     {
-        private Product _name;
         private int _quantity;
         private float _moveTimeMultiplier;
 
@@ -32,14 +31,14 @@ namespace Sources.Scripts.CommonComponents.Product
 
 
         /// <summary>
-        /// Convert list <see cref="ProductData"/> to hashmap, set data quantity to 0
+        /// Convert list <see cref="ProductData"/> to hashmap, set data quantity by <see cref="ProductValues"/>
         /// </summary>
         public static NativeParallelHashMap<int, int> ConvertProductsDataToHashMap(
-            NativeList<ProductData> nativeList, ProductValues values)
+            NativeList<ProductData> list, ProductValues values)
         {
-            NativeParallelHashMap<int, int> nativeParallelHashMap = new(nativeList.Length, Allocator.Persistent);
+            NativeParallelHashMap<int, int> map = new(list.Length, Allocator.Persistent);
 
-            foreach (var product in nativeList)
+            foreach (var product in list)
             {
                 int quantity = values switch
                 {
@@ -48,23 +47,23 @@ namespace Sources.Scripts.CommonComponents.Product
                     _ => throw new ArgumentOutOfRangeException(nameof(values), values, null)
                 };
 
-                nativeParallelHashMap.Add((int)product._name, quantity);
+                map.Add((int)product.Name, quantity);
             }
 
-            return nativeParallelHashMap;
+            return map;
         }
 
         public static void ConvertProductsHashMapToList(
-            NativeParallelHashMap<int, int> inputData,
-            out NativeList<ProductData> outputData)
+            NativeParallelHashMap<int, int> map,
+            out NativeList<ProductData> list)
         {
-            outputData = new NativeList<ProductData>(inputData.Count(), Allocator.Persistent);
+            list = new NativeList<ProductData>(map.Count(), Allocator.Persistent);
 
-            if (inputData.IsEmpty) return;
+            if (map.IsEmpty) return;
 
-            foreach (var product in inputData)
+            foreach (var product in map)
             {
-                outputData.Add(new ProductData { _name = (Product)product.Key, _quantity = product.Value });
+                list.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
             }
         }
     }

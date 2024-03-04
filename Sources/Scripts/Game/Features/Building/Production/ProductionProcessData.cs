@@ -15,7 +15,6 @@ namespace Sources.Scripts.Game.Features.Building.Production
         /// Increased here <see cref="ControlPanel.System.BuildingControlPanelSystem"/> after one load timer finished
         /// </summary>
         public int CurrentCycle;
-
         public bool LastCycleEnd;
     }
 }

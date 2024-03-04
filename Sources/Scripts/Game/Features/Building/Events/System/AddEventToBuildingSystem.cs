@@ -8,6 +8,7 @@ namespace Sources.Scripts.Game.Features.Building.Events.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct AddEventToBuildingSystem : ISystem
     {
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
@@ -17,15 +18,15 @@ namespace Sources.Scripts.Game.Features.Building.Events.System
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = SystemAPI
-                .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.WorldUnmanaged);
-
-            foreach (var (aspect, eventData) in SystemAPI.Query<BuildingDataAspect, AddEventToBuildingData>())
+            // not IEntityJob because nested aspect :( mb unsafe
+            foreach (var (aspect, addEvent) in SystemAPI.Query<BuildingDataAspect, AddEventToBuildingData>())
             {
-                aspect.BuildingData.BuildingEvents.Enqueue(eventData.Value);
+                aspect.BuildingData.BuildingEvents.Enqueue(addEvent.Value);
 
-                ecb.RemoveComponent<AddEventToBuildingData>(aspect.Self);
+                SystemAPI
+                    .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
+                    .CreateCommandBuffer(state.WorldUnmanaged)
+                    .RemoveComponent<AddEventToBuildingData>(aspect.Self);
             }
         }
     }

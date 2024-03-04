@@ -35,7 +35,7 @@ namespace Sources.Scripts.Game.Features.Building.Events.System
                 if (timer.FinishTime.Value.Ticks > Time.Value.Ticks) return;
 
                 Debug.LogWarning(
-                    $"Timer finished:{timer.TimerType} / {timer.Self} / {timer.Owner} / {timer.Duration}");
+                    $"JOB / Timer finished:{timer.TimerType} / {timer.Self} / {timer.Owner} / {timer.Duration}");
 
                 switch (timer.TimerType)
                 {

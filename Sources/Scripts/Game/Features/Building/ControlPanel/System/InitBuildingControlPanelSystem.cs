@@ -1,15 +1,13 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building;
-using Sources.Scripts.Game.Features.Building.ControlPanel;
-using Sources.Scripts.Game.Features.Building.ControlPanel.System;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
+using Sources.Scripts.Game.InitSystems;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.InitSystems
+namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 {
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     [UpdateBefore(typeof(BuildingControlPanelSystem))]

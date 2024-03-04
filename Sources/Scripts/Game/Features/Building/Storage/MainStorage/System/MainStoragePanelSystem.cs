@@ -20,6 +20,10 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage.System
 
         private NativeParallelHashMap<int, int> _cachedMainStorageData;
 
+        protected override void OnCreate()
+        {
+        }
+
         protected override void OnStartRunning()
         {
             _mainStoragePanelUI = MainStoragePanelUI.Instance;
@@ -53,7 +57,6 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage.System
         protected override void OnDestroy()
         {
             MainUIButtonsMono.MainStorageButton.clicked -= MainStorageSelected;
-            _cachedMainStorageData.Dispose();
         }
     }
 }

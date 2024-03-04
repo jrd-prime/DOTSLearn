@@ -1,79 +1,112 @@
 ﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.Game.Features.Building.ControlPanel.Panel;
 using Sources.Scripts.Game.Features.Building.Storage;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
-using Sources.Scripts.UI.BuildingControlPanel;
+using Unity.Collections;
 using Unity.Entities;
+using UnityEngine.UIElements;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 {
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial class BuildingControlPanelSystem : SystemBase
     {
-        #region Vars
+        #region PrivateVars
 
-        private BeginSimulationEntityCommandBufferSystem.Singleton _sys;
         private EntityCommandBuffer _ecb;
-        private Entity _buildingEntity;
-        private MainStorageData _mainStorageData;
+        private Entity _entity;
 
-        private BuildingControlPanelUI _buildingUI;
-        private BuildingButtons _buildingButtons;
+        private EventsDataWrapper _eventsDataWrapper;
 
-        private BuildingControlPanel _buildingControlPanel;
+        private BuildingControlPanel _panel;
+        private bool _isInitialized;
 
         #endregion
+
+        #region Create/Destroy
 
         protected override void OnCreate()
         {
             RequireForUpdate<MainStorageData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            RequireForUpdate<BuildingsPrefabsBufferTag>();
+
+            _isInitialized = false;
+
+            _eventsDataWrapper = new EventsDataWrapper
+            {
+                Aspect = default,
+                MainStorageData = default,
+                ProductsToDelivery = default
+            };
         }
 
-        protected override void OnStartRunning()
+        protected override void OnDestroy()
         {
-            _sys = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-            _mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
-
-            _buildingUI = BuildingControlPanelUI.Instance;
-            _buildingUI.MoveButton.clicked += MoveButton;
-            _buildingUI.LoadButton.clicked += LoadButton;
-            _buildingUI.TakeButton.clicked += TakeButton;
-            _buildingUI.UpgradeButton.clicked += UpgradeButton;
-            _buildingUI.BuffButton.clicked += BuffButton;
-            _buildingUI.InstantDeliveryButton.clicked += InstantDeliveryButton;
+            _eventsDataWrapper.Dispose();
         }
+
+        #endregion
 
         protected override void OnUpdate()
         {
+            _ecb = SystemAPI
+                .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
+
             foreach (var aspect in SystemAPI.Query<BuildingDataAspect>().WithAll<SelectedBuildingTag>())
             {
-                _ecb = _sys.CreateCommandBuffer(World.Unmanaged);
-                var prodsToDelivery = SystemAPI.GetComponent<ProductsToDeliveryData>(aspect.Self).Value;
+                _entity = aspect.Self;
 
-                _buildingControlPanel = new BuildingControlPanel(
-                    new BuildingControlPanelDataWrapper
-                    {
-                        Ecb = _ecb,
-                        Aspect = aspect,
-                        MainStorageData = _mainStorageData,
-                        BuildingUI = _buildingUI,
-                        ProdsToDelivery = prodsToDelivery
-                    });
+                if (!_isInitialized)
+                    InitPanel();
+                else
+                    UpdatePanel(aspect, SystemAPI.GetSingleton<MainStorageData>());
             }
-            
-            
         }
 
-        #region Building Buttons
+        #region Methods
 
-        public void MoveButton() => _buildingControlPanel.Button.MoveButton();
-        public void LoadButton() => _buildingControlPanel.Button.LoadButton();
-        public void TakeButton() => _buildingControlPanel.Button.TakeButton();
-        public void UpgradeButton() => _buildingControlPanel.Button.UpgradeButton();
-        public void BuffButton() => _buildingControlPanel.Button.BuffButton();
-        private void InstantDeliveryButton() => _buildingControlPanel.Button.InstantDeliveryButton();
+        private void UpdatePanel(BuildingDataAspect aspect, MainStorageData mainStorageData)
+        {
+            _eventsDataWrapper.Aspect = aspect;
+            _eventsDataWrapper.MainStorageData = mainStorageData;
+            _eventsDataWrapper.ProductsToDelivery = GetProdsToDelivery(aspect);
+
+            _panel.ProcessEvents(ref _eventsDataWrapper);
+        }
+
+        private void InitPanel()
+        {
+            _panel = new BuildingControlPanel();
+            _isInitialized = true;
+
+            ButtonsCallbacks();
+        }
+
+        private NativeList<ProductData> GetProdsToDelivery(BuildingDataAspect aspect)
+        {
+            return SystemAPI.HasComponent<ProductsToDeliveryData>(aspect.Self)
+                ? SystemAPI.GetComponent<ProductsToDeliveryData>(aspect.Self).Value
+                : new NativeList<ProductData>(0, Allocator.Temp);
+        }
+
+        private void ButtonsCallbacks()
+        {
+            // TODO refact
+            _panel.UI.MoveButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.MoveButton(_ecb, _entity));
+            _panel.UI.LoadButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.LoadButton(_ecb, _entity));
+            _panel.UI.TakeButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.TakeButton(_ecb, _entity));
+            _panel.UI.UpgradeButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.UpgradeButton(_ecb, _entity));
+            _panel.UI.BuffButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.BuffButton(_ecb, _entity));
+            _panel.UI.InstantDeliveryButton
+                .RegisterCallback<ClickEvent>(e => _panel.Buttons.InstantDeliveryButton(_ecb, _entity));
+        }
 
         #endregion
     }

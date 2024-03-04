@@ -60,8 +60,8 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                _name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
-                                _quantity = authoring._buildings[i].RequiredItems[j]._quantity
+                                Name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
+                                Quantity = authoring._buildings[i].RequiredItems[j]._quantity
                             });
                         }
 
@@ -90,8 +90,8 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                _name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
-                                _quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
+                               Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
+                                Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
                             });
                         }
 
@@ -140,11 +140,11 @@ namespace Sources.Scripts.Authoring
                 // TODO refact this shit
                 var nativeList = new NativeList<ProductData>(0, Allocator.Persistent);
 
-                var temp = new[] { requiredArray[0]._name, requiredArray[1]._name };
+                var temp = new[] { requiredArray[0].Name, requiredArray[1].Name };
 
                 Array.Sort(temp);
 
-                if (temp[0] == requiredArray[0]._name) return requiredArray;
+                if (temp[0] == requiredArray[0].Name) return requiredArray;
 
                 nativeList.Add(requiredArray[1]);
                 nativeList.Add(requiredArray[0]);

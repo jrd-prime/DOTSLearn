@@ -20,9 +20,12 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
         private ProductionProcessData _processDataW;
         private int _cycleInProgress;
 
+        private Production _production;
+
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
+            _production = new Production();
         }
 
         public void OnUpdate(ref SystemState state)
@@ -38,6 +41,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
                 _processDataR = _buildingData.ProductionProcessData.ValueRO;
 
                 ProductionState productionState = _buildingData.BuildingData.ProductionState;
+                
 
                 // productionState = ProductionState.EnoughProducts; // test
 

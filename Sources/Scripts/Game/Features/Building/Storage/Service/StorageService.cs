@@ -46,6 +46,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
         public static NativeList<ProductData> GetProductsDataList(NativeParallelHashMap<int, int> warehouseProductsData)
         {
             var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
+
             foreach (var product in warehouseProductsData)
             {
                 productDataList.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
@@ -56,37 +57,37 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
 
         /// <summary>
         /// Matching products in <see cref="MainStorageData"/>
-        /// <param name="products">list of <see cref="ProductData"/></param>
+        /// <param name="requested">list of <see cref="ProductData"/></param>
         /// <returns>list of <see cref="ProductData"/></returns>
         /// </summary>
-        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> products,
+        public static NativeList<ProductData> GetMatchingProducts(NativeList<ProductData> requested,
             NativeParallelHashMap<int, int> storageData, out bool isEnough)
         {
-            var productDataList = new NativeList<ProductData>(0, Allocator.Persistent);
+            var matchingProducts = new NativeList<ProductData>(0, Allocator.Persistent);
 
-            for (var i = 0; i < products.Length; i++)
+            for (var i = 0; i < requested.Length; i++)
             {
-                Product product = products[i].Name;
+                Product product = requested[i].Name;
 
                 Assert.IsTrue(storageData.ContainsKey((int)product), $"Storage key {(int)product} not exist");
 
-                productDataList.Add(new ProductData
+                matchingProducts.Add(new ProductData
                 {
                     Name = product,
                     Quantity = storageData[(int)product]
                 });
             }
 
-            isEnough = products.Length switch
+            isEnough = requested.Length switch
             {
                 0 => false,
-                1 => storageData[(int)products[0].Name] > 0,
-                2 => storageData[(int)products[0].Name] > 0 ||
-                     storageData[(int)products[1].Name] > 0,
+                1 => storageData[(int)requested[0].Name] > 0,
+                2 => storageData[(int)requested[0].Name] > 0 ||
+                     storageData[(int)requested[1].Name] > 0,
                 _ => false
             };
 
-            return productDataList;
+            return matchingProducts;
         }
 
         /// <summary>
