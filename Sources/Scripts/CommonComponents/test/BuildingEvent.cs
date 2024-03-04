@@ -1,4 +1,4 @@
-﻿namespace Sources.Scripts.Game.Features.Building.Events
+﻿namespace Sources.Scripts.CommonComponents.test
 {
     public enum BuildingEvent
     {

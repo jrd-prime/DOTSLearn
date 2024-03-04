@@ -1,9 +1,10 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.test.Service;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
-using Sources.Scripts.Game.Features.Building.Storage.Service;
 using Sources.Scripts.Timer;
 using Sources.Scripts.UI;
 using Unity.Burst;
@@ -21,7 +22,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial class MoveToWarehouseRequestSystem : SystemBase
     {
-        private BuildingDataAspect _aspect;
+        private CommonComponents.test.BuildingDataAspect _aspect;
         private EntityCommandBuffer _ecb;
         private MainStorageData _mainStorage;
         private NativeList<ProductData> _matchingProducts;
@@ -46,7 +47,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse.System
                 .CreateCommandBuffer(World.Unmanaged);
 
             foreach (var aspect in SystemAPI
-                         .Query<BuildingDataAspect>()
+                         .Query<CommonComponents.test.BuildingDataAspect>()
                          .WithAll<MoveToWarehouseRequestTag>())
             {
                 Debug.LogWarning("___ REQUEST: Move To Warehouse");

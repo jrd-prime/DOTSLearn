@@ -2,6 +2,7 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Game.Features;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Shop.BlueprintsShop;

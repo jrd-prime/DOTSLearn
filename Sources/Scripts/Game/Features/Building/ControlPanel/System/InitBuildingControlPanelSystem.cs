@@ -1,5 +1,6 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.InitSystems;
 using Sources.Scripts.UI.BuildingControlPanel;
@@ -29,7 +30,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
         protected override void OnUpdate()
         {
             foreach (var aspect in SystemAPI
-                         .Query<BuildingDataAspect>()
+                         .Query<CommonComponents.test.BuildingDataAspect>()
                          .WithAll<InitializeTag, SelectedBuildingTag>())
             {
                 SystemAPI

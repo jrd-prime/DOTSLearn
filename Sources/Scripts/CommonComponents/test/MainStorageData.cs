@@ -1,12 +1,10 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Unity.Assertions;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
+namespace Sources.Scripts.CommonComponents.test
 {
     public struct MainStorageData : IComponentData, IMainStorage, IDisposable
     {
@@ -62,7 +60,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage
 
             for (var i = 0; i < requestedProducts.Length; i++)
             {
-                Product product = requestedProducts[i].Name;
+                Product.Product product = requestedProducts[i].Name;
 
                 Assert.IsTrue(Value.ContainsKey((int)product), $"Storage key {(int)product} not exist");
 

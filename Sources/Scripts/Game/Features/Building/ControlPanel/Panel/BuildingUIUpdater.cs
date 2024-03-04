@@ -1,6 +1,7 @@
 ﻿using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.test.Service;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.Service;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
@@ -11,7 +12,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
     {
         #region Private
 
-        private BuildingDataAspect _aspect;
+        private CommonComponents.test.BuildingDataAspect _aspect;
         private BuildingData _mainData;
         private NativeList<ProductData> _productsToDelivery;
 

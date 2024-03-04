@@ -1,6 +1,6 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents;
-using Sources.Scripts.Game.Features.Building.Storage.Service;
+using Sources.Scripts.CommonComponents.test.Service;
 using Sources.Scripts.Timer;
 using Unity.Entities;
 
@@ -24,7 +24,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse.System
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (aspect, productsToDeliveryData, timer) in SystemAPI
-                         .Query<BuildingDataAspect, ProductsToDeliveryData, TimerData>())
+                         .Query<CommonComponents.test.BuildingDataAspect, ProductsToDeliveryData, TimerData>())
             {
                 if (!(timer.FinishTime.Value.Ticks <= time.Value.Ticks)) continue;
 

@@ -2,12 +2,12 @@
 using Sources.Scripts.CommonComponents.Product;
 using Unity.Collections;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox
+namespace Sources.Scripts.CommonComponents.test
 {
     /// <summary>
-    /// Contains a hashmap (int, int) (Product id, quantity) of the products in ready-to-process
+    /// Contains a hashmap (int, int) (Product id, quantity)  of already produced products in the production box
     /// </summary>
-    public struct InProductionBoxData : IBuildingProductsData
+    public struct ManufacturedBoxData : IBuildingProductsData
     {
         public NativeParallelHashMap<int, int> Value;
 

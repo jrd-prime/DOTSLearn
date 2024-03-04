@@ -1,8 +1,7 @@
 ﻿using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Unity.Collections;
 
-namespace Sources.Scripts.Game.Features.Building.Storage
+namespace Sources.Scripts.CommonComponents.test
 {
     public interface IStorage
     {

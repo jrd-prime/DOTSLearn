@@ -1,8 +1,7 @@
-﻿using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building.Storage
+namespace Sources.Scripts.CommonComponents.test
 {
     public struct ChangeProductsQuantityQueueData : IComponentData
     {

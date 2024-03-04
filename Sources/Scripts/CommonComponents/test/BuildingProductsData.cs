@@ -1,10 +1,7 @@
 ﻿using System;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
-using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building.ControlPanel
+namespace Sources.Scripts.CommonComponents.test
 {
     public struct BuildingProductsData : IComponentData, IDisposable
     {

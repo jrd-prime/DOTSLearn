@@ -1,5 +1,6 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Panel;
 using Sources.Scripts.Game.Features.Building.Storage;
 using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
@@ -54,7 +55,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(World.Unmanaged);
 
-            foreach (var aspect in SystemAPI.Query<BuildingDataAspect>().WithAll<SelectedBuildingTag>())
+            foreach (var aspect in SystemAPI.Query<CommonComponents.test.BuildingDataAspect>().WithAll<SelectedBuildingTag>())
             {
                 _entity = aspect.Self;
 
@@ -67,7 +68,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 
         #region Methods
 
-        private void UpdatePanel(BuildingDataAspect aspect, MainStorageData mainStorageData)
+        private void UpdatePanel(CommonComponents.test.BuildingDataAspect aspect, MainStorageData mainStorageData)
         {
             _eventsDataWrapper.Aspect = aspect;
             _eventsDataWrapper.MainStorageData = mainStorageData;
@@ -84,7 +85,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             ButtonsCallbacks();
         }
 
-        private NativeList<ProductData> GetProdsToDelivery(BuildingDataAspect aspect)
+        private NativeList<ProductData> GetProdsToDelivery(CommonComponents.test.BuildingDataAspect aspect)
         {
             return SystemAPI.HasComponent<ProductsToDeliveryData>(aspect.Self)
                 ? SystemAPI.GetComponent<ProductsToDeliveryData>(aspect.Self).Value

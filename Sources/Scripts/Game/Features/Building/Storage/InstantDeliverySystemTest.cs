@@ -22,7 +22,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage
 
 
             foreach (var (aspect, timer, entity) in SystemAPI
-                         .Query<BuildingDataAspect, RefRW<TimerData>>()
+                         .Query<CommonComponents.test.BuildingDataAspect, RefRW<TimerData>>()
                          .WithAll<InstantBuffTag>()
                          .WithEntityAccess())
             {

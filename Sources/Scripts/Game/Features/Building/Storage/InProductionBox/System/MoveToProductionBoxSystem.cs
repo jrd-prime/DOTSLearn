@@ -1,8 +1,9 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
+using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.test.Service;
 using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.Storage.Service;
 using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
 using Sources.Scripts.UI;
 using Unity.Collections;
@@ -18,7 +19,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct MoveToProductionBoxSystem : ISystem
     {
-        private BuildingDataAspect _aspect;
+        private CommonComponents.test.BuildingDataAspect _aspect;
         private WarehouseData _warehouseData;
         private NativeList<ProductData> _requiredQuantity;
         private NativeList<ProductData> _preparedProducts;
@@ -41,7 +42,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox.System
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var aspect in SystemAPI
-                         .Query<BuildingDataAspect>()
+                         .Query<CommonComponents.test.BuildingDataAspect>()
                          .WithAll<MoveToProductionBoxRequestTag>())
             {
                 ecb.RemoveComponent<MoveToProductionBoxRequestTag>(aspect.BuildingData.Self);

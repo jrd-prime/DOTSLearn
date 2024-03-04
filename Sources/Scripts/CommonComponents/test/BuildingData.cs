@@ -1,11 +1,10 @@
 ﻿using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.Game.Features.Building.Events;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Sources.Scripts.Game.Features.Building
+namespace Sources.Scripts.CommonComponents.test
 {
     public struct BuildingData : IComponentData
     {

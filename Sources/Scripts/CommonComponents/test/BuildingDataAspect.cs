@@ -1,17 +1,15 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
+using Sources.Scripts.Game.Features.Building;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
-using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding;
-using Sources.Scripts.Game.Features.Building.Production;
 using Sources.Scripts.Game.Features.Building.Storage;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building
+namespace Sources.Scripts.CommonComponents.test
 {
     /// <summary>
     /// Building Data Aspect

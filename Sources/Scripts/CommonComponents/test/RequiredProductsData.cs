@@ -3,7 +3,7 @@ using Sources.Scripts.CommonComponents.Product;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
+namespace Sources.Scripts.CommonComponents.test
 {
     /// <summary>
     /// Contains a list of <see cref="ProductData"/> required for production in the building

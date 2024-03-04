@@ -1,9 +1,8 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
 using Unity.Collections;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.Warehouse
+namespace Sources.Scripts.CommonComponents.test
 {
     /// <summary>
     /// Contains a hash map of products stored in the building's warehouse

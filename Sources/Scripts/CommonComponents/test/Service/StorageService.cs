@@ -1,10 +1,9 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Unity.Collections;
 using Assert = Unity.Assertions.Assert;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.Service
+namespace Sources.Scripts.CommonComponents.test.Service
 {
     public abstract class StorageService
     {
@@ -14,7 +13,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
         /// <param name="product"><see cref="Product"/></param>
         /// <param name="value"> NativeParallelHashMap(int, int)</param>
         /// <returns>Quantity of product <b>OR</b> <b>-1</b> if product not yet available (because there are no buildings required for this product)</returns>
-        public static int GetProductQuantity(NativeParallelHashMap<int, int> value, Product product) =>
+        public static int GetProductQuantity(NativeParallelHashMap<int, int> value, Product.Product product) =>
             value.ContainsKey((int)product) ? value[(int)product] : -1;
 
 
@@ -49,7 +48,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
 
             foreach (var product in warehouseProductsData)
             {
-                productDataList.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
+                productDataList.Add(new ProductData { Name = (Product.Product)product.Key, Quantity = product.Value });
             }
 
             return productDataList;
@@ -67,7 +66,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.Service
 
             for (var i = 0; i < requested.Length; i++)
             {
-                Product product = requested[i].Name;
+                Product.Product product = requested[i].Name;
 
                 Assert.IsTrue(storageData.ContainsKey((int)product), $"Storage key {(int)product} not exist");
 

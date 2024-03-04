@@ -2,7 +2,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox
+namespace Sources.Scripts.CommonComponents.test
 {
     public struct ChangeProductsQuantityData : IComponentData
     {

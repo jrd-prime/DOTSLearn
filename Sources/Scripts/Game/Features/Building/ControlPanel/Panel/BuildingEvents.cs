@@ -1,4 +1,5 @@
 ﻿using System;
+using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Collections;
@@ -10,7 +11,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
     {
         #region Private
 
-        private BuildingDataAspect _aspect;
+        private CommonComponents.test.BuildingDataAspect _aspect;
 
         private readonly BuildingControlPanelUI _mainUI;
         private readonly BuildingUIUpdater _uiUpdater;

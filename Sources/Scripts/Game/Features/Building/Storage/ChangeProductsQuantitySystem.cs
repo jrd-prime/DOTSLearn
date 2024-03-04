@@ -2,6 +2,7 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Game.Features.Building.ControlPanel;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
@@ -31,7 +32,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (aspect, queueData)in SystemAPI
-                         .Query<BuildingDataAspect, RefRW<ChangeProductsQuantityQueueData>>())
+                         .Query<CommonComponents.test.BuildingDataAspect, RefRW<ChangeProductsQuantityQueueData>>())
             {
                 while (queueData.ValueRW.Value.Count > 0)
                 {

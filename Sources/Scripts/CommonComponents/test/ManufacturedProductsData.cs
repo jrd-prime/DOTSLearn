@@ -2,7 +2,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox
+namespace Sources.Scripts.CommonComponents.test
 {
     /// <summary>
     /// Required and manufactured

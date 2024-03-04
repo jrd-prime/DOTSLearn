@@ -19,7 +19,7 @@ namespace Sources.Scripts.Game.Features.Building.Events.System
         public void OnUpdate(ref SystemState state)
         {
             // not IEntityJob because nested aspect :( mb unsafe
-            foreach (var (aspect, addEvent) in SystemAPI.Query<BuildingDataAspect, AddEventToBuildingData>())
+            foreach (var (aspect, addEvent) in SystemAPI.Query<CommonComponents.test.BuildingDataAspect, AddEventToBuildingData>())
             {
                 aspect.BuildingData.BuildingEvents.Enqueue(addEvent.Value);
 

@@ -1,8 +1,9 @@
 ﻿using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.test.Service;
 using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.Service;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -23,7 +24,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorage.System
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var aspect in SystemAPI
-                         .Query<BuildingDataAspect>()
+                         .Query<CommonComponents.test.BuildingDataAspect>()
                          .WithAll<MoveToMainStorageRequestTag>())
             {
                 NativeList<ProductData> productsList =

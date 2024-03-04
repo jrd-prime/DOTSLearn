@@ -1,4 +1,4 @@
-﻿namespace Sources.Scripts.Game.Features.Building.Storage.Service
+﻿namespace Sources.Scripts.CommonComponents.test.Service
 {
     public class ManufacturedService : StorageService
     {
