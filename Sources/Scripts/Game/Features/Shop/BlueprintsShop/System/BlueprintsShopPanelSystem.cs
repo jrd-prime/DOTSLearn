@@ -1,9 +1,6 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.Game.Features.Building;
-using Sources.Scripts.Game.Features.Building.Events;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding;
 using Sources.Scripts.UI;
 using Sources.Scripts.UI.BlueprintsShopPanel;

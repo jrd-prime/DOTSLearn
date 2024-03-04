@@ -2,9 +2,8 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Sources.Scripts.Game.Features;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
 using Unity.Collections;
 using Unity.Entities;
@@ -33,7 +32,7 @@ namespace Sources.Scripts.Game.InitSystems
                 // { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
                 { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
                 { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
-                { Names.MainStorageDataName, typeof(MainStorageData) }
+                { Names.MainStorageDataName, typeof(MainStorageBoxData) }
             };
 
             var em = state.EntityManager;
@@ -44,7 +43,7 @@ namespace Sources.Scripts.Game.InitSystems
 
                 em.SetName(entity, pair.Key);
 
-                if (pair.Value == typeof(MainStorageData)) SetDefaultsToMainStorageData(entity, em);
+                if (pair.Value == typeof(MainStorageBoxData)) SetDefaultsToMainStorageData(entity, em);
             }
 
             componentsMap.Dispose();
@@ -68,7 +67,7 @@ namespace Sources.Scripts.Game.InitSystems
                 mainStorageMap.Add((int)buffer.Product, a.Next(0, 55));
             }
             
-            entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
+            entityManager.SetComponentData(elementEntity, new MainStorageBoxData { Value = mainStorageMap });
         }
     }
 }

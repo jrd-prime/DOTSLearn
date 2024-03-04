@@ -90,7 +90,7 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                               Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
+                                Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
                                 Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
                             });
                         }
@@ -144,7 +144,7 @@ namespace Sources.Scripts.Authoring
 
                 Array.Sort(temp);
 
-                if (temp[0] == requiredArray[0].Name) return requiredArray;
+                if (temp[0] == requiredArray[0].Name) return requiredArray.AsArray();
 
                 nativeList.Add(requiredArray[1]);
                 nativeList.Add(requiredArray[0]);

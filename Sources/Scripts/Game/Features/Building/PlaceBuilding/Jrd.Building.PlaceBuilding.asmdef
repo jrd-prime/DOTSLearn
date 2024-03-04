@@ -1,0 +1,26 @@
+{
+    "name": "Jrd.Building.PlaceBuilding",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Entities",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Jrd.CommonComponents",
+        "Jrd.UserInputAndCameraControl",
+        "Jrd.Screen",
+        "Jrd.SaveAndLoad",
+        "Unity.Mathematics",
+        "Unity.Transforms",
+        "Unity.Physics",
+        "Jrd.Collisions"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

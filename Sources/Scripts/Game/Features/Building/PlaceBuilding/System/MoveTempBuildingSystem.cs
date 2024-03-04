@@ -1,5 +1,5 @@
 using Sources.Scripts.CommonComponents;
-using Sources.Scripts.Game.Common;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Entities;
@@ -9,6 +9,7 @@ using Unity.Transforms;
 using UnityEngine;
 using Ray = UnityEngine.Ray;
 using RaycastHit = Unity.Physics.RaycastHit;
+using RaycastSystem = Sources.Scripts.Collisions.RaycastSystem;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 {

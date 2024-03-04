@@ -1,5 +1,6 @@
-﻿using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.CommonComponents.test.Service;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Production;
+using Sources.Scripts.CommonComponents.Storage.Service;
 using Unity.Entities;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
         {
             Debug.Log($"{GetType().Name} {data.Aspect.BuildingData.Name}");
 
-            CommonComponents.test.BuildingDataAspect aspect = data.Aspect;
+            BuildingDataAspect aspect = data.Aspect;
             EntityCommandBuffer ecb = data.Ecb;
             ProductionMethods* methods = data.ProductionMethodsPtr;
 

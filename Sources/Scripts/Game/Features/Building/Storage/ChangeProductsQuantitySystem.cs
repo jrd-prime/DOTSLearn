@@ -2,15 +2,11 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.Game.Features.Building.ControlPanel;
-using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
+using Sources.Scripts.CommonComponents.Storage;
+using Sources.Scripts.CommonComponents.Storage.Data;
+using Sources.Scripts.Game.Features.Building.ControlPanel.System;
 using Unity.Collections;
 using Unity.Entities;
-using BuildingControlPanelSystem =
-    Sources.Scripts.Game.Features.Building.ControlPanel.System.BuildingControlPanelSystem;
 
 namespace Sources.Scripts.Game.Features.Building.Storage
 {
@@ -21,7 +17,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginInitializationEntityCommandBufferSystem.Singleton>();
-            state.RequireForUpdate<MainStorageData>();
+            state.RequireForUpdate<MainStorageBoxData>();
             state.RequireForUpdate<ChangeProductsQuantityQueueData>();
         }
 
@@ -32,7 +28,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (aspect, queueData)in SystemAPI
-                         .Query<CommonComponents.test.BuildingDataAspect, RefRW<ChangeProductsQuantityQueueData>>())
+                         .Query<BuildingDataAspect, RefRW<ChangeProductsQuantityQueueData>>())
             {
                 while (queueData.ValueRW.Value.Count > 0)
                 {
@@ -47,14 +43,14 @@ namespace Sources.Scripts.Game.Features.Building.Storage
                     switch (dequeue.StorageType)
                     {
                         case StorageType.Main:
-                            MainStorageData mainStorage = SystemAPI.GetSingleton<MainStorageData>();
-                            mainStorage.ChangeProductsQuantity(changeType, productsData);
+                            MainStorageBoxData mainStorageBox = SystemAPI.GetSingleton<MainStorageBoxData>();
+                            mainStorageBox.ChangeProductsQuantity(changeType, productsData);
 
                             buildingEvents.Enqueue(BuildingEvent.MainStorageDataUpdated);
                             break;
 
                         case StorageType.Warehouse:
-                            aspect.ProductsInBuildingData.WarehouseData
+                            aspect.ProductsInBuildingData.WarehouseBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
                             buildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);

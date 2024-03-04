@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
@@ -9,7 +10,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
         {
             Debug.Log($"{GetType().Name} {data.Aspect.BuildingData.Name}");
 
-            CommonComponents.test.BuildingDataAspect aspect = data.Aspect;
+            BuildingDataAspect aspect = data.Aspect;
             EntityCommandBuffer ecb = data.Ecb;
             ProductionMethods* methods = data.ProductionMethodsPtr;
             // // показывать в панели билдинга что нету продуктов для производства в инпродакшн боксе

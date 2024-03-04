@@ -1,21 +1,21 @@
 ﻿using System;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Unity.Collections;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 {
     public struct EventsDataWrapper : IDisposable
     {
-        public CommonComponents.test.BuildingDataAspect Aspect;
-        public MainStorageData MainStorageData;
+        public BuildingDataAspect Aspect;
+        public MainStorageBoxData MainStorageBoxData;
         public NativeList<ProductData> ProductsToDelivery;
 
         public void Dispose()
         {
             Aspect.Dispose();
-            MainStorageData.Dispose();
+            MainStorageBoxData.Dispose();
             ProductsToDelivery.Dispose();
         }
     }

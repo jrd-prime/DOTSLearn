@@ -1,7 +1,7 @@
-﻿using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.CommonComponents.test.Service;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
+using Sources.Scripts.CommonComponents.Storage.Data;
+using Sources.Scripts.CommonComponents.Storage.Service;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
@@ -12,7 +12,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
     {
         #region Private
 
-        private CommonComponents.test.BuildingDataAspect _aspect;
+        private BuildingDataAspect _aspect;
         private BuildingData _mainData;
         private NativeList<ProductData> _productsToDelivery;
 
@@ -42,8 +42,8 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
             _required = _aspect.RequiredProductsData.Value;
             _manufactured = _aspect.ManufacturedProductsData.Value;
 
-            _mainStorageData = eventsDataWrapper.MainStorageData.Value;
-            _warehouseData = _aspect.ProductsInBuildingData.WarehouseData.Value;
+            _mainStorageData = eventsDataWrapper.MainStorageBoxData.Value;
+            _warehouseData = _aspect.ProductsInBuildingData.WarehouseBoxData.Value;
             _inProductionBox = _aspect.ProductsInBuildingData.InProductionBoxData.Value;
             _manufacturedBox = _aspect.ProductsInBuildingData.ManufacturedBoxData.Value;
         }

@@ -1,7 +1,6 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.Game.Common;
-using Sources.Scripts.Game.Features.Building.PlaceBuilding;
-using Sources.Scripts.Game.InitSystems;
+﻿using Sources.Scripts.Collisions;
+using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Unity.Entities;
@@ -10,7 +9,6 @@ using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Sources.Scripts.Game.Features.Building.SelectBuilding.System
-
 {
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct SelectBuildingSystem : ISystem
@@ -79,7 +77,7 @@ namespace Sources.Scripts.Game.Features.Building.SelectBuilding.System
                     {
                         _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
-                        BuildingControlPanelUI.Instance.SetElementVisible(true);
+                        BuildingControlPanelUI.Instance.SetElementVisible(true); //TODO ui??? remove
                     }
 
                     _tempFingerId = -1;

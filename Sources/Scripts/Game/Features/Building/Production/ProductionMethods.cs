@@ -1,7 +1,10 @@
-﻿using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.CommonComponents.test;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Production;
+using Sources.Scripts.CommonComponents.Storage;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Sources.Scripts.Timer;
 using Unity.Entities;
+using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Production
 {
@@ -9,10 +12,10 @@ namespace Sources.Scripts.Game.Features.Building.Production
     {
         #region Building data
 
-        public void SetNewState(ProductionState value, CommonComponents.test.BuildingDataAspect aspect) =>
+        public void SetNewState(ProductionState value, BuildingDataAspect aspect) =>
             aspect.SetProductionState(value);
 
-        public void TakeProductsForOneLoad(CommonComponents.test.BuildingDataAspect aspect) =>
+        public void TakeProductsForOneLoad(BuildingDataAspect aspect) =>
             aspect.ChangeProductsQuantity(new ChangeProductsQuantityData
             {
                 StorageType = StorageType.InProduction,
@@ -20,7 +23,7 @@ namespace Sources.Scripts.Game.Features.Building.Production
                 ProductsData = aspect.RequiredProductsData.Value
             });
 
-        public void PutProductsFromOneLoad(CommonComponents.test.BuildingDataAspect aspect) =>
+        public void PutProductsFromOneLoad(BuildingDataAspect aspect) =>
             aspect.ChangeProductsQuantity(new ChangeProductsQuantityData
             {
                 StorageType = StorageType.Manufactured,
@@ -32,17 +35,17 @@ namespace Sources.Scripts.Game.Features.Building.Production
 
         #region Set events
 
-        public void UpdateProductionUI(CommonComponents.test.BuildingDataAspect aspect) =>
+        public void UpdateProductionUI(BuildingDataAspect aspect) =>
             aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
 
-        public void UpdateManufacturedUI(CommonComponents.test.BuildingDataAspect aspect) =>
+        public void UpdateManufacturedUI(BuildingDataAspect aspect) =>
             aspect.AddEvent(BuildingEvent.ManufacturedBoxDataUpdated);
 
         #endregion
 
         #region Timers
 
-        public void StartOneLoadTimer(CommonComponents.test.BuildingDataAspect aspect, EntityCommandBuffer ecb)
+        public void StartOneLoadTimer(BuildingDataAspect aspect, EntityCommandBuffer ecb)
         {
             new JTimer().StartNewTimer(
                 aspect.Self,
@@ -51,7 +54,7 @@ namespace Sources.Scripts.Game.Features.Building.Production
                 ecb);
         }
 
-        public void StartFullLoadTimer(CommonComponents.test.BuildingDataAspect aspect, EntityCommandBuffer ecb)
+        public void StartFullLoadTimer(BuildingDataAspect aspect, EntityCommandBuffer ecb)
         {
             new JTimer().StartNewTimer(
                 aspect.Self,

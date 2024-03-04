@@ -1,6 +1,5 @@
 using Sources.Scripts.CommonComponents;
 using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.test;
 using Sources.Scripts.Screen;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Burst;
@@ -8,7 +7,6 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 {

@@ -1,3 +1,16 @@
 {
-	"name": "Jrd.Auth"
+    "name": "Jrd.Auth",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7362e05dfa82dbb4a93618a5e6f6b9e7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,4 +1,5 @@
 ﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Production;
 using Unity.Entities;
 
@@ -7,7 +8,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial class ProductionSystem : SystemBase
     {
-        private CommonComponents.test.BuildingDataAspect _buildingData;
+        private BuildingDataAspect _buildingData;
         private int _cycleInProgress;
 
         private Production _production;
@@ -20,7 +21,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
 
         protected override void OnUpdate()
         {
-            foreach (var aspect in SystemAPI.Query<CommonComponents.test.BuildingDataAspect>())
+            foreach (var aspect in SystemAPI.Query<BuildingDataAspect>())
             {
                 EntityCommandBuffer ecb = SystemAPI
                     .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()

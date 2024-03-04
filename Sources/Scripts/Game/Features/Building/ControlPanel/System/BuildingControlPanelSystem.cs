@@ -1,9 +1,8 @@
 ﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Panel;
-using Sources.Scripts.Game.Features.Building.Storage;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.UIElements;
@@ -29,7 +28,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 
         protected override void OnCreate()
         {
-            RequireForUpdate<MainStorageData>();
+            RequireForUpdate<MainStorageBoxData>();
             RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
 
             _isInitialized = false;
@@ -37,7 +36,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             _eventsDataWrapper = new EventsDataWrapper
             {
                 Aspect = default,
-                MainStorageData = default,
+                MainStorageBoxData = default,
                 ProductsToDelivery = default
             };
         }
@@ -55,23 +54,23 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
                 .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(World.Unmanaged);
 
-            foreach (var aspect in SystemAPI.Query<CommonComponents.test.BuildingDataAspect>().WithAll<SelectedBuildingTag>())
+            foreach (var aspect in SystemAPI.Query<BuildingDataAspect>().WithAll<SelectedBuildingTag>())
             {
                 _entity = aspect.Self;
 
                 if (!_isInitialized)
                     InitPanel();
                 else
-                    UpdatePanel(aspect, SystemAPI.GetSingleton<MainStorageData>());
+                    UpdatePanel(aspect, SystemAPI.GetSingleton<MainStorageBoxData>());
             }
         }
 
         #region Methods
 
-        private void UpdatePanel(CommonComponents.test.BuildingDataAspect aspect, MainStorageData mainStorageData)
+        private void UpdatePanel(BuildingDataAspect aspect, MainStorageBoxData mainStorageBoxData)
         {
             _eventsDataWrapper.Aspect = aspect;
-            _eventsDataWrapper.MainStorageData = mainStorageData;
+            _eventsDataWrapper.MainStorageBoxData = mainStorageBoxData;
             _eventsDataWrapper.ProductsToDelivery = GetProdsToDelivery(aspect);
 
             _panel.ProcessEvents(ref _eventsDataWrapper);
@@ -85,7 +84,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             ButtonsCallbacks();
         }
 
-        private NativeList<ProductData> GetProdsToDelivery(CommonComponents.test.BuildingDataAspect aspect)
+        private NativeList<ProductData> GetProdsToDelivery(BuildingDataAspect aspect)
         {
             return SystemAPI.HasComponent<ProductsToDeliveryData>(aspect.Self)
                 ? SystemAPI.GetComponent<ProductsToDeliveryData>(aspect.Self).Value

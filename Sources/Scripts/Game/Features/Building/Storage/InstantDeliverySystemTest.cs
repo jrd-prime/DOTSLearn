@@ -1,4 +1,5 @@
 ﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.Timer;
 using Unity.Entities;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage
 
 
             foreach (var (aspect, timer, entity) in SystemAPI
-                         .Query<CommonComponents.test.BuildingDataAspect, RefRW<TimerData>>()
+                         .Query<BuildingDataAspect, RefRW<TimerData>>()
                          .WithAll<InstantBuffTag>()
                          .WithEntityAccess())
             {

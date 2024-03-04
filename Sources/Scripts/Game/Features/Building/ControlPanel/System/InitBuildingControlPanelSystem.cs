@@ -1,8 +1,7 @@
 ﻿using Sources.Scripts.CommonComponents;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
-using Sources.Scripts.Game.InitSystems;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;
@@ -30,7 +29,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
         protected override void OnUpdate()
         {
             foreach (var aspect in SystemAPI
-                         .Query<CommonComponents.test.BuildingDataAspect>()
+                         .Query<BuildingDataAspect>()
                          .WithAll<InitializeTag, SelectedBuildingTag>())
             {
                 SystemAPI
@@ -45,16 +44,16 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 
                 #region Get data for set
 
-                MainStorageData mainStorageData = SystemAPI.GetSingleton<MainStorageData>();
+                MainStorageBoxData mainStorageBoxData = SystemAPI.GetSingleton<MainStorageBoxData>();
 
-                mainStorageData.TryGetMatchingProducts(
+                mainStorageBoxData.TryGetMatchingProducts(
                     _required,
                     out NativeList<ProductData> mainStorageProducts);
 
                 BuildingProductsData productsInBuilding = aspect.ProductsInBuildingData;
 
                 ProductData.ConvertProductsHashMapToList(
-                    productsInBuilding.WarehouseData.Value,
+                    productsInBuilding.WarehouseBoxData.Value,
                     out var warehouseProducts);
 
                 ProductData.ConvertProductsHashMapToList(

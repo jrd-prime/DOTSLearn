@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.CommonComponents.Production;
 using Sources.Scripts.Game.Features.Building.Production.StateHandler;
 using Unity.Assertions;
@@ -32,7 +33,7 @@ namespace Sources.Scripts.Game.Features.Building.Production
             _isInit = true;
         }
 
-        public void Process(ProductionState state, CommonComponents.test.BuildingDataAspect aspect, EntityCommandBuffer ecb)
+        public void Process(ProductionState state, BuildingDataAspect aspect, EntityCommandBuffer ecb)
         {
             if (!_isInit) Init();
 

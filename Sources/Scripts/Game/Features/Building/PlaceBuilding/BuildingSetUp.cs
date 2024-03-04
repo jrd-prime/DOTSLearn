@@ -1,12 +1,8 @@
-﻿using Sources.Scripts.CommonComponents.Product;
+﻿using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonComponents.Product;
 using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.CommonComponents.test;
-using Sources.Scripts.Game.Features.Building.ControlPanel;
-using Sources.Scripts.Game.Features.Building.Events;
-using Sources.Scripts.Game.Features.Building.Storage;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.ManufacturedBox;
-using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
+using Sources.Scripts.CommonComponents.Storage;
+using Sources.Scripts.CommonComponents.Storage.Data;
 using Sources.Scripts.SaveAndLoad;
 using Unity.Collections;
 using Unity.Entities;
@@ -91,7 +87,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
         {
             _bsEcb.AddComponent(_entity, new BuildingProductsData
             {
-                WarehouseData = new WarehouseData
+                WarehouseBoxData = new WarehouseBoxData
                 {
                     Value = ProductData.ConvertProductsDataToHashMap(_requiredItemsList, ProductValues.ToDefault)
                 },

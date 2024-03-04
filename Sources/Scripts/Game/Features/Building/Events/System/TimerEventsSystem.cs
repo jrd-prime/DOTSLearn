@@ -1,10 +1,10 @@
 ﻿using System;
 using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.test;
+using Sources.Scripts.CommonComponents.Building;
 using Sources.Scripts.Timer;
+using Sources.Scripts.Timer.System;
 using Unity.Entities;
 using UnityEngine;
-using JTimerSystem = Sources.Scripts.Timer.System.JTimerSystem;
 
 namespace Sources.Scripts.Game.Features.Building.Events.System
 {

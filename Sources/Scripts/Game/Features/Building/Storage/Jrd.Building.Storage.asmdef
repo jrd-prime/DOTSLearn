@@ -1,0 +1,22 @@
+{
+    "name": "Jrd.Building.Storage",
+    "rootNamespace": "",
+    "references": [
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:7362e05dfa82dbb4a93618a5e6f6b9e7",
+        "GUID:3cc03755bf1c7524f9e15288c6e482cd",
+        "GUID:efcd5b568b9af334d957d3ccc8544d67",
+        "GUID:7a35935d0531a0b4e974440587aabba7",
+        "GUID:2665a8d13d1b3f18800f46e256720795"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

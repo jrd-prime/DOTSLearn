@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.CommonComponents.test;
+﻿using Sources.Scripts.CommonComponents.Building;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding

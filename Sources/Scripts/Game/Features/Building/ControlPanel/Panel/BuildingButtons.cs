@@ -1,7 +1,5 @@
 ﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.Game.Features.Building.Storage.InProductionBox;
-using Sources.Scripts.Game.Features.Building.Storage.MainStorage;
-using Sources.Scripts.Game.Features.Building.Storage.Warehouse;
+using Sources.Scripts.CommonComponents.Storage;
 using Sources.Scripts.UI;
 using Unity.Entities;
 

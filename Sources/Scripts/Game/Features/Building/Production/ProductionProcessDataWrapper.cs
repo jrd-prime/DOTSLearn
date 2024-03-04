@@ -1,5 +1,6 @@
-﻿using Sources.Scripts.CommonComponents.test;
+﻿
 using Unity.Entities;
+using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Production
 {
