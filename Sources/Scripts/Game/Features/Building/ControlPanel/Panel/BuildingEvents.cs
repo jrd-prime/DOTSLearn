@@ -1,5 +1,5 @@
 ﻿using System;
-using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Collections;
 using UnityEngine;

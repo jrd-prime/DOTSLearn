@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Production;
+using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Production;
 using Sources.Scripts.Game.Features.Building.Production.StateHandler;
 using Unity.Assertions;
 using Unity.Entities;

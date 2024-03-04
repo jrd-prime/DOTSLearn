@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.SO;
+using Sources.Scripts.CommonData.Product;
+using Sources.Scripts.CommonData.SO;
 using Unity.Entities;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Sources.Scripts.Collisions;
-using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
+using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Entities;

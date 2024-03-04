@@ -1,12 +1,11 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.Storage;
-using Sources.Scripts.CommonComponents.Storage.Data;
-using Sources.Scripts.CommonComponents.Storage.Service;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
+using Sources.Scripts.CommonData.Storage;
+using Sources.Scripts.CommonData.Storage.Data;
+using Sources.Scripts.CommonData.Storage.Service;
 using Unity.Collections;
 using Unity.Entities;
-using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Storage.MainStorageBox
 {

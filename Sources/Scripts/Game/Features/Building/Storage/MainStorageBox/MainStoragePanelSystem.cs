@@ -1,5 +1,5 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Storage.Data;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Storage.Data;
 using Sources.Scripts.UI;
 using Sources.Scripts.UI.MainStoragePanel;
 using Unity.Collections;

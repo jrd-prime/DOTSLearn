@@ -1,7 +1,8 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Building;
 using Unity.Burst;
 using Unity.Entities;
+using BuildingDataAspect = Sources.Scripts.CommonData.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Events.System
 {

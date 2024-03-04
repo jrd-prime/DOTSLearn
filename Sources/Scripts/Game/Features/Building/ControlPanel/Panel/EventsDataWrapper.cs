@@ -1,7 +1,7 @@
 ﻿using System;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.Storage.Data;
+using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
+using Sources.Scripts.CommonData.Storage.Data;
 using Unity.Collections;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel

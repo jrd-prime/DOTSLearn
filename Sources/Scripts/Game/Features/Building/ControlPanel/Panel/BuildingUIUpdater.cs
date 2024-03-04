@@ -1,7 +1,7 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.Storage.Data;
-using Sources.Scripts.CommonComponents.Storage.Service;
+﻿using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
+using Sources.Scripts.CommonData.Storage.Data;
+using Sources.Scripts.CommonData.Storage.Service;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.BuildingControlPanel.Part;
 using Unity.Collections;

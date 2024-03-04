@@ -1,6 +1,6 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

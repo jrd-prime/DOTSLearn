@@ -1,6 +1,6 @@
 ﻿
 using Unity.Entities;
-using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
+using BuildingDataAspect = Sources.Scripts.CommonData.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Production
 {

@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.CommonComponents;
+﻿using Sources.Scripts.CommonData;
 using Sources.Scripts.UserInputAndCameraControl.CameraControl;
 using Unity.Collections;
 using Unity.Entities;

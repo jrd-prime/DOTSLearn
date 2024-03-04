@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.CommonComponents;
+﻿using Sources.Scripts.CommonData;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

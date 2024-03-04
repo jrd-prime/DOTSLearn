@@ -1,6 +1,6 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.CommonComponents.Storage.Service;
+﻿using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Production;
+using Sources.Scripts.CommonData.Storage.Service;
 using Unity.Entities;
 using UnityEngine;
 

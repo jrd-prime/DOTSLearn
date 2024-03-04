@@ -1,4 +1,4 @@
-﻿using Sources.Scripts.CommonComponents;
+﻿using Sources.Scripts.CommonData;
 using Sources.Scripts.Utility;
 using Unity.Entities;
 using Unity.Mathematics;

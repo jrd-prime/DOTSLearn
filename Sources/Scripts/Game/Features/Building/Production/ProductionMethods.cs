@@ -1,10 +1,8 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Production;
-using Sources.Scripts.CommonComponents.Storage;
-using Sources.Scripts.CommonComponents.Storage.Data;
+﻿using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Production;
+using Sources.Scripts.CommonData.Storage.Data;
 using Sources.Scripts.Timer;
 using Unity.Entities;
-using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Production
 {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Product;
-using Sources.Scripts.CommonComponents.SO;
+using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
+using Sources.Scripts.CommonData.SO;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;

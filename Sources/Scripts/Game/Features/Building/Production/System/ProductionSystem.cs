@@ -1,6 +1,5 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Production;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Building;
 using Unity.Entities;
 
 namespace Sources.Scripts.Game.Features.Building.Production.System

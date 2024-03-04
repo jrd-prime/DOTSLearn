@@ -1,5 +1,5 @@
-﻿using Sources.Scripts.CommonComponents.Building;
-using Sources.Scripts.CommonComponents.Production;
+﻿using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Production;
 using Unity.Entities;
 using UnityEngine;
 

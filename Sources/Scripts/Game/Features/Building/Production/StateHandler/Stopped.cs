@@ -1,7 +1,6 @@
-﻿
+﻿using Sources.Scripts.CommonData.Building;
 using Unity.Entities;
 using UnityEngine;
-using BuildingDataAspect = Sources.Scripts.CommonComponents.Building.BuildingDataAspect;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {

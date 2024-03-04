@@ -1,5 +1,5 @@
-﻿using Sources.Scripts.CommonComponents;
-using Sources.Scripts.CommonComponents.Storage;
+﻿using Sources.Scripts.CommonData;
+using Sources.Scripts.CommonData.Storage;
 using Sources.Scripts.UI;
 using Unity.Entities;
 
