@@ -46,7 +46,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.MainStorageBox
 
                 ecb.AddComponent(aspect.Self, new AddEventToBuildingData
                 {
-                    Value = BuildingEvent.ManufacturedBoxDataUpdated
+                    Value = BuildingEvent.ManufacturedBox_Updated
                 });
             }
         }

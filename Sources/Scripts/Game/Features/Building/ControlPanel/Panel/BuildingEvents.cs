@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using Sources.Scripts.CommonData.Building;
+using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Collections;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 {
@@ -14,6 +17,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 
         private readonly BuildingControlPanelUI _mainUI;
         private readonly BuildingUIUpdater _uiUpdater;
+        private readonly ProductionEvents _productionEvents;
 
         #endregion
 
@@ -21,6 +25,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
         {
             _uiUpdater = uiUpdater;
             _mainUI = BuildingControlPanelUI.Instance;
+            _productionEvents = new ProductionEvents(_mainUI, _uiUpdater);
         }
 
         public void Process(ref EventsDataWrapper eventsDataWrapper)
@@ -40,38 +45,39 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
                 Debug.LogWarning($"___ BUILDING EVENT: {evt}");
                 switch (evt)
                 {
-                    case BuildingEvent.MoveToWarehouseTimerStarted:
-                        OnMoveToWarehouseTimerStarted();
+                    case BuildingEvent.MoveToWarehouse_Timer_Started:
+                        OnMoveToWarehouseTimerStarted(
+                            eventsDataWrapper.Aspect.ProductsInBuildingData.ProductsToDelivery);
                         break;
-                    case BuildingEvent.MoveToWarehouseTimerFinished:
+                    case BuildingEvent.MoveToWarehouse_Timer_Finished:
                         OnMoveToWarehouseTimerFinished();
                         break;
-                    case BuildingEvent.MoveToProductionBoxFinished:
+                    case BuildingEvent.MoveToProductionBox_Finished:
                         OnMoveToProductionBoxFinished();
                         break;
-                    case BuildingEvent.MainStorageDataUpdated:
+                    case BuildingEvent.MainStorageBox_Updated:
                         OnMainStorageDataUpdated();
                         break;
-                    case BuildingEvent.WarehouseDataUpdated:
+                    case BuildingEvent.WarehouseBox_Updated:
                         OnWarehouseDataUpdated();
                         break;
-                    case BuildingEvent.InProductionBoxDataUpdated:
+                    case BuildingEvent.InProductionBox_Updated:
                         OnInProductionBoxDataUpdated();
                         break;
-                    case BuildingEvent.ManufacturedBoxDataUpdated:
+                    case BuildingEvent.ManufacturedBox_Updated:
                         OnManufacturedBoxDataUpdated();
                         break;
-                    case BuildingEvent.OneLoadCycleFinished:
-                        OnOneLoadCycleFinished();
+                    case BuildingEvent.Production_OneLoadCycle_Finished:
+                        _productionEvents.OneCycle_Finished(_aspect);
                         break;
-                    case BuildingEvent.FullLoadCycleFinished:
-                        OnFullLoadCycleFinished();
+                    case BuildingEvent.Production_FullLoadCycle_Finished:
+                        _productionEvents.FullCycle_Finished(_aspect);
                         break;
-                    case BuildingEvent.ProductionTimersStarted:
-                        OnProductionTimersStarted();
+                    case BuildingEvent.Production_Timers_Started:
+                        _productionEvents.Timers_Started(_aspect);
                         break;
-                    case BuildingEvent.ProductionTimersInProgressUpdate:
-                        OnProductionTimersInProgressUpdate();
+                    case BuildingEvent.Production_Timers_InProgressUpdate:
+                        _productionEvents.Timers_InProgressUpdate(_aspect);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -82,23 +88,6 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
         //TODO refact? move?
 
         #region Events Methods
-
-        private void OnProductionTimersInProgressUpdate()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnFullLoadCycleFinished()
-        {
-            _aspect.ProductionProcessData.ValueRW.LastCycleEnd = true;
-            _mainUI.LoadButton.SetEnabled(true);
-        }
-
-        private void OnOneLoadCycleFinished()
-        {
-            _aspect.ProductionProcessData.ValueRW.CurrentCycle += 1;
-            _uiUpdater.UpdateProductionTimers();
-        }
 
         private void OnManufacturedBoxDataUpdated()
         {
@@ -120,16 +109,23 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
             _uiUpdater.SetItemsToMainStorage();
         }
 
-        private void OnProductionTimersStarted()
-        {
-            _uiUpdater.UpdateProductionTimers();
-            _aspect.ProductionProcessData.ValueRW.LastCycleEnd = false;
-            _mainUI.LoadButton.SetEnabled(false);
-        }
+        #region Timers
 
-        private void OnMoveToWarehouseTimerStarted()
+        private void OnMoveToWarehouseTimerStarted(NativeList<ProductData> productsToDelivery)
         {
-            _uiUpdater.SetStorageTimer(10, 3); //TODO
+            //TODO refact
+            Debug.LogWarning(">>> On MoveToWarehouseTimerStarted");
+
+            var time = 0;
+            var rnd = new Random();
+            foreach (var product in productsToDelivery)
+            {
+                time += (int)Mathf.Round(product.Quantity * rnd.Next(1, 10) / 10f);
+            }
+
+            Debug.LogWarning($"prod to delivery time = " + time + " sec.");
+
+            _uiUpdater.SetStorageTimer(time, 3); //TODO
             _uiUpdater.SetItemsToMainStorage();
             _mainUI.MoveButton.SetEnabled(false);
         }
@@ -137,10 +133,13 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
         private void OnMoveToWarehouseTimerFinished()
         {
             _uiUpdater.DeliverProductsToWarehouse();
-            _uiUpdater.SetStorageTimer(10, 10); //TODO
+            // _uiUpdater.SetStorageTimer(10, 10); //TODO
             _uiUpdater.SetItemsToWarehouse();
             _mainUI.MoveButton.SetEnabled(true);
         }
+
+        #endregion
+
 
         private void OnMoveToProductionBoxFinished()
         {

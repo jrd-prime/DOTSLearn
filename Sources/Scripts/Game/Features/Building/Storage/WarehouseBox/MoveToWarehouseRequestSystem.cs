@@ -4,6 +4,7 @@ using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.CommonData.Storage;
 using Sources.Scripts.CommonData.Storage.Data;
 using Sources.Scripts.CommonData.Storage.Service;
+using Sources.Scripts.Game.Features.Building.ControlPanel.System;
 using Sources.Scripts.Timer;
 using Sources.Scripts.UI;
 using Unity.Burst;
@@ -19,10 +20,11 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
     /// </summary>
     [BurstCompile]
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
+    [UpdateBefore(typeof(BuildingControlPanelSystem))]
     public partial class MoveToWarehouseRequestSystem : SystemBase
     {
         private BuildingDataAspect _aspect;
-        private EntityCommandBuffer _ecb;
+        private EntityCommandBuffer _ecbBI;
         private MainStorageBoxData _mainStorageBox;
         private NativeList<ProductData> _matchingProducts;
 
@@ -41,7 +43,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
         [BurstCompile]
         protected override void OnUpdate()
         {
-            _ecb = SystemAPI
+            _ecbBI = SystemAPI
                 .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(World.Unmanaged);
 
@@ -50,7 +52,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
                          .WithAll<MoveToWarehouseRequestTag>())
             {
                 Debug.LogWarning("___ REQUEST: Move To Warehouse");
-                _ecb.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
+                _ecbBI.RemoveComponent<MoveToWarehouseRequestTag>(aspect.Self);
 
                 _aspect = aspect;
                 _mainStorageBox = SystemAPI.GetSingleton<MainStorageBoxData>();
@@ -58,6 +60,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
                 _matchingProducts = StorageService.GetMatchingProducts(
                     _aspect.RequiredProductsData.Value,
                     _mainStorageBox.Value, out bool isEnough);
+
 
                 if (!isEnough)
                 {
@@ -69,12 +72,18 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
                 SetDeliveryTimer();
                 ReduceProductsInMainStorage();
 
-                aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToWarehouseTimerStarted);
+                aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToWarehouse_Timer_Started);
             }
         }
 
-        private void SetProductsToDelivery() =>
-            _ecb.AddComponent(_aspect.Self, new ProductsToDeliveryData { Value = _matchingProducts });
+        private void SetProductsToDelivery()
+        {
+            _aspect.SetProductsToDelivery(_matchingProducts);
+
+            //TODO refact/remove
+            _ecbBI.AddComponent(_aspect.Self, new ProductsToDeliveryData { Value = _matchingProducts });
+        }
+
 
         private void SetDeliveryTimer()
         {
@@ -82,7 +91,7 @@ namespace Sources.Scripts.Game.Features.Building.Storage.WarehouseBox
             int moveDuration = productsQuantity / 5;
 
             new global::Sources.Scripts.Timer.JTimer().StartNewTimer(_aspect.Self, TimerType.MoveToWarehouse,
-                moveDuration, _ecb);
+                moveDuration, _ecbBI);
         }
 
         private void ReduceProductsInMainStorage() =>

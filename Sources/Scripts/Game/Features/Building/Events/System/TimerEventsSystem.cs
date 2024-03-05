@@ -42,17 +42,17 @@ namespace Sources.Scripts.Game.Features.Building.Events.System
                 {
                     case TimerType.MoveToWarehouse:
                         Ecb.AddComponent(inQueryIndex, timer.Owner,
-                            new AddEventToBuildingData { Value = BuildingEvent.MoveToWarehouseTimerFinished });
+                            new AddEventToBuildingData { Value = BuildingEvent.MoveToWarehouse_Timer_Finished });
                         break;
 
                     case TimerType.OneLoadCycle:
                         Ecb.AddComponent(inQueryIndex, timer.Owner,
-                            new AddEventToBuildingData { Value = BuildingEvent.OneLoadCycleFinished });
+                            new AddEventToBuildingData { Value = BuildingEvent.Production_OneLoadCycle_Finished });
                         break;
 
                     case TimerType.FullLoadCycle:
                         Ecb.AddComponent(inQueryIndex, timer.Owner,
-                            new AddEventToBuildingData { Value = BuildingEvent.FullLoadCycleFinished });
+                            new AddEventToBuildingData { Value = BuildingEvent.Production_FullLoadCycle_Finished });
                         break;
 
                     default:

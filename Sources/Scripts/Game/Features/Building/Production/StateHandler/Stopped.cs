@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public class Stopped : IProductionStateHandler
+    public class Stopped : IProductionStateProvider
     {
         public unsafe void Run(ProductionProcessDataWrapper data)
         {

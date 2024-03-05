@@ -10,13 +10,13 @@ namespace Sources.Scripts.Game.Features.Building.Production
 {
     public unsafe struct Production
     {
-        private Dictionary<ProductionState, IProductionStateHandler> _handlers;
+        private Dictionary<ProductionState, IProductionStateProvider> _handlers;
         private ProductionMethods* _productionMethodsPtr;
         private bool _isInit;
 
         private void Init()
         {
-            _handlers = new Dictionary<ProductionState, IProductionStateHandler>
+            _handlers = new Dictionary<ProductionState, IProductionStateProvider>
             {
                 { ProductionState.NotEnoughProducts, new NotEnough() },
                 { ProductionState.EnoughProducts, new Enough() },

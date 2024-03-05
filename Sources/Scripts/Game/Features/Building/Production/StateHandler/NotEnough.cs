@@ -4,7 +4,7 @@ using BuildingDataAspect = Sources.Scripts.CommonData.Building.BuildingDataAspec
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public class NotEnough : IProductionStateHandler
+    public class NotEnough : IProductionStateProvider
     {
         public unsafe void Run(ProductionProcessDataWrapper data)
         {

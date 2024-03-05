@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public class Enough : IProductionStateHandler
+    public class Enough : IProductionStateProvider
     {
         public unsafe void Run(ProductionProcessDataWrapper data)
         {

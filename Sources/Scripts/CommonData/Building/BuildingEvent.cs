@@ -2,16 +2,16 @@
 {
     public enum BuildingEvent
     {
-        MoveToWarehouseTimerStarted,
-        MoveToWarehouseTimerFinished,
-        MoveToProductionBoxFinished,
-        MainStorageDataUpdated,
-        WarehouseDataUpdated,
-        InProductionBoxDataUpdated,
-        ManufacturedBoxDataUpdated,
-        OneLoadCycleFinished,
-        FullLoadCycleFinished,
-        ProductionTimersStarted,
-        ProductionTimersInProgressUpdate
+        MoveToWarehouse_Timer_Started,
+        MoveToWarehouse_Timer_Finished,
+        MoveToProductionBox_Finished,
+        MainStorageBox_Updated,
+        WarehouseBox_Updated,
+        InProductionBox_Updated,
+        ManufacturedBox_Updated,
+        Production_OneLoadCycle_Finished,
+        Production_FullLoadCycle_Finished,
+        Production_Timers_Started,
+        Production_Timers_InProgressUpdate
     }
 }

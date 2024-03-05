@@ -63,7 +63,7 @@ namespace Sources.Scripts.Game.InitSystems
             
             foreach (var buffer in _buffer)
             {
-                mainStorageMap.Add((int)buffer.Product, a.Next(0, 55));
+                mainStorageMap.Add((int)buffer.Product, a.Next(10, 20));
             }
             
             entityManager.SetComponentData(elementEntity, new MainStorageBoxData { Value = mainStorageMap });

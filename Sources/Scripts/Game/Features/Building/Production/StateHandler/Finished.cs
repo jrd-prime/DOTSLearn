@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public class Finished : IProductionStateHandler
+    public class Finished : IProductionStateProvider
     {
         public unsafe void Run(ProductionProcessDataWrapper data)
         {
@@ -16,7 +16,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
             ProductionMethods* methods = data.ProductionMethodsPtr;
 
             methods->PutProductsFromOneLoad(aspect);
-            methods->UpdateManufacturedUI(aspect);
+            methods->UpdateManufacturedBoxUI(aspect);
 
             methods->SetNewState(ProductionState.NotEnoughProducts, aspect);
 

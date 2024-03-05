@@ -51,12 +51,12 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 
         #region Timers
 
-        public void UpdateProductionTimers()
+        public void UpdateProductionTimers(int getLoadedProductsManufacturingTime)
         {
             var currentCycle = _aspect.ProductionProcessData.ValueRO.CurrentCycle;
             var maxLoads = _aspect.ProductionProcessData.ValueRO.MaxLoads;
 
-            _buildingUI.UpdateProductionTimers(currentCycle, maxLoads);
+            _buildingUI.UpdateProductionTimers(currentCycle, maxLoads, getLoadedProductsManufacturingTime);
         }
 
         public void SetStorageTimer(float max, float value) => _buildingUI.SetTimerText(max, value);

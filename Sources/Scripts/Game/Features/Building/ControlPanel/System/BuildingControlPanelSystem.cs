@@ -71,7 +71,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
         {
             _eventsDataWrapper.Aspect = aspect;
             _eventsDataWrapper.MainStorageBoxData = mainStorageBoxData;
-            _eventsDataWrapper.ProductsToDelivery = GetProdsToDelivery(aspect);
+            _eventsDataWrapper.ProductsToDelivery = GetProdsToDelivery(aspect.Self);
 
             _panel.ProcessEvents(ref _eventsDataWrapper);
         }
@@ -84,10 +84,10 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             ButtonsCallbacks();
         }
 
-        private NativeList<ProductData> GetProdsToDelivery(BuildingDataAspect aspect)
+        private NativeList<ProductData> GetProdsToDelivery(Entity entity)
         {
-            return SystemAPI.HasComponent<ProductsToDeliveryData>(aspect.Self)
-                ? SystemAPI.GetComponent<ProductsToDeliveryData>(aspect.Self).Value
+            return SystemAPI.HasComponent<ProductsToDeliveryData>(entity)
+                ? SystemAPI.GetComponent<ProductsToDeliveryData>(entity).Value
                 : new NativeList<ProductData>(0, Allocator.Temp);
         }
 

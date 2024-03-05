@@ -14,6 +14,13 @@ namespace Sources.Scripts.CommonData
         public static readonly FixedString64Bytes MainStorageDataName = "___ Data: Main Storage";
 
 
-        public const string GoodsIconsPath = "UI/Images/icon-";
+        public static readonly string GoodsIconsPath = "UI/Images/icon-";
+
+        // Production timers UI names
+        public const string ProductionFullTimerContainerName = "all-timer-cont";
+        public static readonly string ProductionOneTimerContainerName = "one-timer-cont";
+        public static readonly string ProductionTimersCycleContainerName = "cycle-cont";
+        public static readonly string ProductionTimersBothProgressBarName = "pb-bar";
+        public static readonly string ProductionTimersBothLabelsName = "text-label";
     }
 }

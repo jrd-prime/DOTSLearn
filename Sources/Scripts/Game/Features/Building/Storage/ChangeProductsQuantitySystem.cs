@@ -46,28 +46,28 @@ namespace Sources.Scripts.Game.Features.Building.Storage
                             MainStorageBoxData mainStorageBox = SystemAPI.GetSingleton<MainStorageBoxData>();
                             mainStorageBox.ChangeProductsQuantity(changeType, productsData);
 
-                            buildingEvents.Enqueue(BuildingEvent.MainStorageDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.MainStorageBox_Updated);
                             break;
 
                         case StorageType.Warehouse:
                             aspect.ProductsInBuildingData.WarehouseBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            buildingEvents.Enqueue(BuildingEvent.WarehouseDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.WarehouseBox_Updated);
                             break;
 
                         case StorageType.InProduction:
                             aspect.ProductsInBuildingData.InProductionBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            buildingEvents.Enqueue(BuildingEvent.InProductionBoxDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.InProductionBox_Updated);
                             break;
 
                         case StorageType.Manufactured:
                             aspect.ProductsInBuildingData.ManufacturedBoxData
                                 .ChangeProductsQuantity(changeType, productsData);
 
-                            buildingEvents.Enqueue(BuildingEvent.ManufacturedBoxDataUpdated);
+                            buildingEvents.Enqueue(BuildingEvent.ManufacturedBox_Updated);
                             break;
 
                         default:

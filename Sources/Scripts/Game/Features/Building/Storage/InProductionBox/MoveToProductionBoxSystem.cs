@@ -88,8 +88,8 @@ namespace Sources.Scripts.Game.Features.Building.Storage.InProductionBox
 
         private void AddEventsForUpdateUI()
         {
-            _aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBoxFinished);
-            _aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
+            _aspect.BuildingData.BuildingEvents.Enqueue(BuildingEvent.MoveToProductionBox_Finished);
+            _aspect.AddEvent(BuildingEvent.InProductionBox_Updated);
         }
 
         private void ChangeProductsQuantity(NativeList<ProductData> preparedProducts)

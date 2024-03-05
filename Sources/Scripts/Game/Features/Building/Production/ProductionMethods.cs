@@ -33,11 +33,14 @@ namespace Sources.Scripts.Game.Features.Building.Production
 
         #region Set events
 
-        public void UpdateProductionUI(BuildingDataAspect aspect) =>
-            aspect.AddEvent(BuildingEvent.InProductionBoxDataUpdated);
+        public void UpdateInProductionBoxUI(BuildingDataAspect aspect) =>
+            aspect.AddEvent(BuildingEvent.InProductionBox_Updated);
 
-        public void UpdateManufacturedUI(BuildingDataAspect aspect) =>
-            aspect.AddEvent(BuildingEvent.ManufacturedBoxDataUpdated);
+        public void UpdateManufacturedBoxUI(BuildingDataAspect aspect) =>
+            aspect.AddEvent(BuildingEvent.ManufacturedBox_Updated);
+
+        public void UpdateProductionTimersUI(BuildingDataAspect aspect) =>
+            aspect.AddEvent(BuildingEvent.Production_Timers_InProgressUpdate);
 
         #endregion
 

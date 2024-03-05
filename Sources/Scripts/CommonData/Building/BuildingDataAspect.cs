@@ -78,5 +78,10 @@ namespace Sources.Scripts.CommonData.Building
             _productionProcessData.ValueRW.PreparedProducts.Dispose();
             _changeProductsQuantityData.ValueRW.Value.Dispose();
         }
+
+        public void SetProductsToDelivery(NativeList<ProductData> matchingProducts)
+        {
+            _buildingProductsData.ValueRW.ProductsToDelivery = matchingProducts;
+        }
     }
 }

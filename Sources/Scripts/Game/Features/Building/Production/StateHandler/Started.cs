@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public unsafe class Started : IProductionStateHandler
+    public unsafe class Started : IProductionStateProvider
     {
         public void Run(ProductionProcessDataWrapper data)
         {
@@ -20,10 +20,10 @@ namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
             methods->StartFullLoadTimer(aspect, ecb);
             methods->StartOneLoadTimer(aspect, ecb);
 
-            aspect.AddEvent(BuildingEvent.ProductionTimersStarted);
+            aspect.AddEvent(BuildingEvent.Production_Timers_Started);
 
             methods->TakeProductsForOneLoad(aspect);
-            methods->UpdateProductionUI(aspect);
+            methods->UpdateInProductionBoxUI(aspect);
 
             aspect.SetCurrentCycle(aspect.ProductionProcessData.ValueRO.CycleInProgress);
 

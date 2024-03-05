@@ -5,7 +5,7 @@ using BuildingDataAspect = Sources.Scripts.CommonData.Building.BuildingDataAspec
 
 namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
 {
-    public class InProgress : IProductionStateHandler
+    public class InProgress : IProductionStateProvider
     {
         public unsafe void Run(ProductionProcessDataWrapper data)
         {
@@ -29,13 +29,13 @@ namespace Sources.Scripts.Game.Features.Building.Production.StateHandler
             if (cycleInProgress != currentCycle)
             {
                 methods->PutProductsFromOneLoad(aspect);
-                methods->UpdateManufacturedUI(aspect);
+                methods->UpdateManufacturedBoxUI(aspect);
 
                 if (cycleInProgress != maxLoads)
                 {
                     Debug.Log("new timer");
                     methods->TakeProductsForOneLoad(aspect);
-                    methods->UpdateProductionUI(aspect);
+                    methods->UpdateInProductionBoxUI(aspect);
                     methods->StartOneLoadTimer(aspect, ecb);
                     aspect.ProductionProcessData.ValueRW.CycleInProgress = currentCycle;
                 }

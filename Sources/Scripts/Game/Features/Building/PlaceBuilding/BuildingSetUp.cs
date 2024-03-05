@@ -99,7 +99,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding
                 {
                     Value = ProductData.ConvertProductsDataToHashMap(_manufacturedItemsList,
                         ProductValues.ToDefault)
-                }
+                },
+                ProductsToDelivery = new NativeList<ProductData>(0, Allocator.Persistent)
             });
         }
 
