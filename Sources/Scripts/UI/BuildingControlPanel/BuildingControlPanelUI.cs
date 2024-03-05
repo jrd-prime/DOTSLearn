@@ -8,46 +8,31 @@ using UnityEngine.UIElements;
 namespace Sources.Scripts.UI.BuildingControlPanel
 {
     /// <summary>
-    /// Contains methods for UI with container for list products items
-    /// </summary>
-    public interface IProductsItemsContainer
-    {
-        /// <summary>
-        /// Set items in UI building control panel
-        /// </summary>
-        public void SetItems(NativeList<ProductData> productsData);
-
-        /// <summary>
-        /// Set empty UI for storage if items list empty
-        /// </summary>
-        public void SetEmptyContainerItems();
-
-        /// <summary>
-        /// Update item quantity if panel opened and quantity changed
-        /// </summary>
-        public void UpdateItemQuantity(object item, int value);
-    }
-
-    /// <summary>
     /// <para><b>Is responsible for all communication with parts of the building control panel UI</b></para>
     /// <para><see cref="ProdLineUI"/> - Production line.
     /// <see cref="SpecsUI"/> - Specifications.
     /// <see cref="WarehouseUI"/> - Building warehouse.
     /// <see cref="MainStorageUI"/> - Main storage UI in building control panel with matching products for this type of building.
-    /// <see cref="TimerUI"/> - Timers and any progress bars.
+    /// <see cref="MoveFromStorageTimerUI"/> - Timers and any progress bars.
     /// <see cref="InProductionUI"/> - Production required items UI.
     /// <see cref="ManufacturedUI"/> - Production manufactured items UI</para>
     /// </summary>
-    public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBcpSpecs, IBcpTimer
+    public class BuildingControlPanelUI : PanelMono, IBuildingProductionLine, IBcpSpecs, IBcpMoveFromStorageTimerUI
     {
+        #region UI Parts
+
         public ProdLineUI ProdLineUI { get; private set; }
         public IBcpSpecs SpecsUI { get; private set; }
         public IProductsItemsContainer WarehouseUI { get; private set; }
         public IProductsItemsContainer StorageUI { get; private set; }
-        public TimerUI TimerUI { get; private set; }
+        public MoveFromStorageTimerUI MoveFromStorageTimerUI { get; private set; }
         public ProductionTimersUI ProductionTimersUI { get; private set; }
         public IProductsItemsContainer InProductionUI { get; private set; }
         public IProductsItemsContainer ManufacturedUI { get; private set; }
+
+        #endregion
+
+        #region Visual elements
 
         [SerializeField] private VisualTreeAsset _prodLineItemTemplate;
         [SerializeField] private VisualTreeAsset _prodLineArrowTemplate;
@@ -65,12 +50,20 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         // Common Labels
         protected Label LevelLabel;
 
-        public static BuildingControlPanelUI Instance { private set; get; }
+        #endregion
+
+        #region Instance
+
+        public static BuildingControlPanelUI Instance { get; private set; }
 
         protected void Awake()
         {
             if (Instance == null) Instance = this;
         }
+
+        #endregion
+
+        #region Enable/Disable
 
         protected void OnEnable()
         {
@@ -91,7 +84,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel
             InstantDeliveryButton = Panel.Q<Button>("instant-delivery-button");
             // Labels
             LevelLabel = Panel.Q<Label>(BCPNamesID.LevelLabelId);
-            
+
             MoveButton.Q<Label>().text = "move to warehouse".ToUpper();
 
             UpgradeButton.RegisterCallback<ClickEvent>(Callback);
@@ -121,24 +114,12 @@ namespace Sources.Scripts.UI.BuildingControlPanel
             SpecsUI = new SpecsUI(Panel);
             WarehouseUI = new WarehouseUI(Panel, _internalStorageItemTemplate);
             StorageUI = new MainStorageUI(Panel, _internalStorageItemTemplate);
-            TimerUI = new TimerUI(Panel);
+            MoveFromStorageTimerUI = new MoveFromStorageTimerUI(Panel);
             ProductionTimersUI = new ProductionTimersUI(Panel);
             InProductionUI = new InProductionBoxUI(Panel, _boxItemTemplate);
             ManufacturedUI = new ManufacturedBoxUI(Panel, _boxItemTemplate);
 
             PanelCloseButton.clicked += OnCloseButton;
-        }
-
-        public void SetLevel(int level) => LevelLabel.text = level.ToString();
-
-        private void Callback(ClickEvent evt)
-        {
-        
-            Debug.Log($"Click + {evt.currentTarget}");
-            var a = evt.target as Button;
-            var an = a?.experimental.animation.Scale(1.3f, 200);
-            if (an != null)
-                an.onAnimationCompleted += () => { a.experimental.animation.Scale(1f, 200); };
         }
 
         private void OnDisable()
@@ -147,7 +128,23 @@ namespace Sources.Scripts.UI.BuildingControlPanel
             UpgradeButton.UnregisterCallback<ClickEvent>(Callback);
         }
 
+        #endregion
+
         protected override void OnCloseButton() => HidePanel();
+
+
+        private void Callback(ClickEvent evt)
+        {
+            Debug.Log($"Click + {evt.currentTarget}");
+            var a = evt.target as Button;
+            var an = a?.experimental.animation.Scale(1.3f, 200);
+            if (an != null)
+                an.onAnimationCompleted += () => { a.experimental.animation.Scale(1f, 200); };
+        }
+
+        #region Set methods
+
+        public void SetLevel(int level) => LevelLabel.text = level.ToString();
 
         // Production line methods
         public void SetLineInfo(NativeList<ProductData> required, NativeList<ProductData> manufactured) =>
@@ -159,14 +156,18 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         public void SetLoadCapacity(int value) => SpecsUI.SetLoadCapacity(value);
         public void SetStorageCapacity(int value) => SpecsUI.SetStorageCapacity(value);
 
-        // Timer // TODO refact
-        public void SetTimerText(float max, float value) => TimerUI.SetTimerText(max, value);
 
-        public void SetItems(IProductsItemsContainer ui, in NativeList<ProductData> productsData) => 
+        public void SetItems(IProductsItemsContainer ui, in NativeList<ProductData> productsData) =>
             ui.SetItems(productsData);
 
         public void UpdateItemQuantity(object item, int value) => StorageUI.UpdateItemQuantity(item, value);
 
-        public void UpdateProductionTimers( int currentCycle, int maxLoads, int cycle) => ProductionTimersUI.UpdateTimers(currentCycle, maxLoads, cycle);
+        // Timer // TODO refact
+        public void SetTimerText(float max, float value) => MoveFromStorageTimerUI.SetTimerText(max, value);
+
+        public void UpdateProductionTimers(int currentCycle, int maxLoads, int cycle) =>
+            ProductionTimersUI.UpdateTimers(currentCycle, maxLoads, cycle);
+
+        #endregion
     }
 }

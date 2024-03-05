@@ -6,14 +6,14 @@ using UnityEngine.UIElements.Experimental;
 
 namespace Sources.Scripts.UI.BuildingControlPanel.Part
 {
-    public class TimerUI : IBcpTimer
+    public class MoveFromStorageTimerUI : IBcpMoveFromStorageTimerUI
     {
         private readonly VisualElement _timerProgress;
         private readonly Label _timerLabel;
         private readonly int _width = 130;
         private VisualElement timerContainer;
 
-        public TimerUI(VisualElement panel)
+        public MoveFromStorageTimerUI(VisualElement panel)
         {
             timerContainer = panel.Q<VisualElement>("timer-cont");
             _timerProgress = timerContainer.Q<VisualElement>("pb-bar");
@@ -60,7 +60,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
         }
     }
 
-    public interface IBcpTimer
+    public interface IBcpMoveFromStorageTimerUI
     {
         public void SetTimerText(float max, float value);
     }

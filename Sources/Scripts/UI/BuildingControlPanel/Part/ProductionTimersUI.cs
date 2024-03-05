@@ -81,22 +81,22 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
             _isTimerRunning = timerTask is not { IsCompleted: true };
         }
 
-        private async Task RunProductionTimersUpdaterAsync(int fullCycle, int maxLoads)
+        private async Task RunProductionTimersUpdaterAsync(int fullCycleDuration, int maxLoadsCount)
         {
-            int oneLoadDuration = fullCycle / maxLoads;
-            int tempFullCycleDuration = fullCycle;
+            int oneLoadDuration = fullCycleDuration / maxLoadsCount;
+            int tempFullCycleDuration = fullCycleDuration;
 
             bool isFirstCycle = true;
 
             float fullLoadPreviousWidth = StartWidth;
             float oneLoadPreviousWidth = StartWidth;
 
-            while (fullCycle >= 0)
+            while (fullCycleDuration >= 0)
             {
                 // ONE
                 float oneNewWidth;
 
-                int divisionResidue = fullCycle % oneLoadDuration;
+                int divisionResidue = fullCycleDuration % oneLoadDuration;
 
                 if (divisionResidue == 0)
                 {
@@ -124,11 +124,12 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
                 // FULL
 
                 float fullNewWidth;
-                if (fullCycle != 0)
+                if (fullCycleDuration != 0)
                 {
                     SetNameAndAnimate(_fullProgressBar, fullLoadPreviousWidth,
-                        fullNewWidth = Mathf.Abs((Width / tempFullCycleDuration * fullCycle) - Width), _fullTimerLabel,
-                        fullCycle + SecondsText);
+                        fullNewWidth = Mathf.Abs((Width / tempFullCycleDuration * fullCycleDuration) - Width),
+                        _fullTimerLabel,
+                        fullCycleDuration + SecondsText);
                 }
                 else
                 {
@@ -140,7 +141,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
                 fullLoadPreviousWidth = fullNewWidth;
 
                 // END
-                fullCycle -= 1;
+                fullCycleDuration -= 1;
                 await Task.Delay(1000);
             }
 

@@ -14,7 +14,7 @@ namespace Sources.Scripts.CommonData.Building
         {
             ref BlobArray<ProductData> required = ref Reference.Value[(int)buildingNameId][0];
             ref BlobArray<ProductData> manufactured = ref Reference.Value[(int)buildingNameId][1];
-            
+
             if (buildingNameId != BuildingNameId.Default)
             {
                 return new ProductionLineData
@@ -32,7 +32,7 @@ namespace Sources.Scripts.CommonData.Building
             var data = new NativeList<ProductData>(0, Allocator.Persistent);
 
             if (reference.Length <= 0) return data;
-            
+
             for (var i = 0; i < reference.Length; i++)
             {
                 data.Add(reference[i]);
