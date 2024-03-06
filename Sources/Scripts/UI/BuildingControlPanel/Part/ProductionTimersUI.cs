@@ -60,15 +60,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
         public void UpdateTimers(int currentCycle, int maxLoads, int fullCycle)
         {
-            if (currentCycle <= maxLoads)
-            {
-                Debug.LogWarning($"CYCLE TIME = {fullCycle}");
-                _cycleLabel.text = $"{currentCycle} / {maxLoads}";
-            }
-            else
-            {
-                _cycleLabel.text = ProducedText.ToUpper();
-            }
+            _cycleLabel.text = currentCycle <= maxLoads ? $"{currentCycle} / {maxLoads}" : ProducedText.ToUpper();
 
             Task timerTask = null;
 
@@ -77,10 +69,10 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
                 timerTask = RunProductionTimersUpdaterAsync(fullCycle, maxLoads);
                 _isTimerRunning = true;
             }
-
-            _isTimerRunning = timerTask is not { IsCompleted: true };
         }
 
+        // TODO refact
+        // Not working in closed app
         private async Task RunProductionTimersUpdaterAsync(int fullCycleDuration, int maxLoadsCount)
         {
             int oneLoadDuration = fullCycleDuration / maxLoadsCount;
@@ -93,9 +85,7 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
             while (fullCycleDuration >= 0)
             {
-                // ONE
                 float oneNewWidth;
-
                 int divisionResidue = fullCycleDuration % oneLoadDuration;
 
                 if (divisionResidue == 0)
@@ -120,9 +110,6 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
                         divisionResidue + SecondsText);
                 }
 
-
-                // FULL
-
                 float fullNewWidth;
                 if (fullCycleDuration != 0)
                 {
@@ -137,10 +124,11 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
                         _fullTimerLabel, ProducedText);
                 }
 
+                Debug.LogWarning("im running = " + oneNewWidth + " / " + fullNewWidth);
+
                 oneLoadPreviousWidth = oneNewWidth;
                 fullLoadPreviousWidth = fullNewWidth;
 
-                // END
                 fullCycleDuration -= 1;
                 await Task.Delay(1000);
             }
@@ -149,6 +137,8 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
             ClearNameAndAnimate(_fullProgressBar, Width, StartWidth, _fullTimerLabel);
             ClearNameAndAnimate(_oneProgressBar, Width, StartWidth, _oneTimerLabel);
+
+            _isTimerRunning = false;
         }
 
         private static void ClearNameAndAnimate(VisualElement progressBar, float from, float to, Label label)

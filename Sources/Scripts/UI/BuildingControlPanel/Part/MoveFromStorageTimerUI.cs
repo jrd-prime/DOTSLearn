@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using System.Threading.Tasks;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
@@ -10,51 +8,50 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
     {
         private readonly VisualElement _timerProgress;
         private readonly Label _timerLabel;
-        private readonly int _width = 130;
-        private VisualElement timerContainer;
+        private const int Width = 130;
+        private readonly VisualElement _timerContainer;
 
         public MoveFromStorageTimerUI(VisualElement panel)
         {
-            timerContainer = panel.Q<VisualElement>("timer-cont");
-            _timerProgress = timerContainer.Q<VisualElement>("pb-bar");
-            _timerLabel = timerContainer.Q<Label>("text-label");
+            _timerContainer = panel.Q<VisualElement>("timer-cont");
+            _timerProgress = _timerContainer.Q<VisualElement>("pb-bar");
+            _timerLabel = _timerContainer.Q<Label>("text-label");
             _timerLabel.text = "";
             _timerProgress.style.width = 0;
         }
 
-        public async void SetTimerText(float max, float value)
+        public async void RunMoveFromStorageTimerAsync(float duration)
         {
-            float previous = 0;
-            var time = max;
+            float previousWidth = 0;
+            var tempDuration = duration;
 
-            while (time >= 0)
+            while (tempDuration >= 0)
             {
-                var newWidth = 130 - ((130 / max) * time);
+                var newWidth = Width - ((Width / duration) * tempDuration);
 
                 _timerProgress.style.width = newWidth;
 
                 _timerProgress.experimental.animation.Start(
-                    new StyleValues { width = previous },
+                    new StyleValues { width = previousWidth },
                     new StyleValues { width = newWidth },
                     500).Start();
 
-                _timerLabel.text = time + "s";
+                _timerLabel.text = tempDuration + "s";
 
-                previous = newWidth;
-                time--;
+                previousWidth = newWidth;
+                tempDuration--;
                 await Task.Delay(1000);
 
-                if (time == 0)
-                {
-                    _timerLabel.text = "Delivered!";
-                    var a = timerContainer.experimental.animation.Scale(1.1f, 200);
+                if (tempDuration != 0) continue;
 
-                    a.onAnimationCompleted += () => timerContainer.experimental.animation.Scale(1f, 200).Start();
-                    a.Start();
-                }
+                _timerLabel.text = "Delivered!";
+                
+                var scaleAnimation = _timerContainer.experimental.animation.Scale(1.1f, 200);
+                scaleAnimation.onAnimationCompleted +=
+                    () => _timerContainer.experimental.animation.Scale(1f, 200).Start();
+                scaleAnimation.Start();
             }
-
-
+            
             await Task.Delay(1000);
             _timerLabel.text = "";
         }
@@ -62,6 +59,6 @@ namespace Sources.Scripts.UI.BuildingControlPanel.Part
 
     public interface IBcpMoveFromStorageTimerUI
     {
-        public void SetTimerText(float max, float value);
+        public void RunMoveFromStorageTimerAsync(float duration);
     }
 }

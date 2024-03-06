@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Collections;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 {
@@ -46,8 +44,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
                 switch (evt)
                 {
                     case BuildingEvent.MoveToWarehouse_Timer_Started:
-                        OnMoveToWarehouseTimerStarted(
-                            eventsDataWrapper.Aspect.ProductsInBuildingData.ProductsToDelivery);
+                        OnMoveToWarehouseTimerStarted();
                         break;
                     case BuildingEvent.MoveToWarehouse_Timer_Finished:
                         OnMoveToWarehouseTimerFinished();
@@ -111,21 +108,11 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
 
         #region Timers
 
-        private void OnMoveToWarehouseTimerStarted(NativeList<ProductData> productsToDelivery)
+        private void OnMoveToWarehouseTimerStarted()
         {
-            //TODO refact
-            Debug.LogWarning(">>> On MoveToWarehouseTimerStarted");
+            int duration = ProductData.GetProductsQuantity(_aspect.ProductsInBuildingData.ProductsToDelivery);
 
-            var time = 0;
-            var rnd = new Random();
-            foreach (var product in productsToDelivery)
-            {
-                time += (int)Mathf.Round(product.Quantity * rnd.Next(1, 10) / 10f);
-            }
-
-            Debug.LogWarning($"prod to delivery time = " + time + " sec.");
-
-            _uiUpdater.SetStorageTimer(time, 3); //TODO
+            _uiUpdater.RunMoveFromStorageTimerAsync(duration);
             _uiUpdater.SetItemsToMainStorage();
             _mainUI.MoveButton.SetEnabled(false);
         }
@@ -133,14 +120,12 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
         private void OnMoveToWarehouseTimerFinished()
         {
             _uiUpdater.DeliverProductsToWarehouse();
-            // _uiUpdater.SetStorageTimer(10, 10); //TODO
             _uiUpdater.SetItemsToWarehouse();
             _mainUI.MoveButton.SetEnabled(true);
         }
 
         #endregion
-
-
+        
         private void OnMoveToProductionBoxFinished()
         {
             _uiUpdater.SetItemsToWarehouse();

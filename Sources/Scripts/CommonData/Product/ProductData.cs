@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Unity.Collections;
 
 namespace Sources.Scripts.CommonData.Product
@@ -66,6 +67,9 @@ namespace Sources.Scripts.CommonData.Product
                 list.Add(new ProductData { Name = (Product)product.Key, Quantity = product.Value });
             }
         }
+
+        public static int GetProductsQuantity(NativeList<ProductData> productsList) =>
+            productsList.Sum(product => product.Quantity);
     }
 
     public enum ProductValues

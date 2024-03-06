@@ -11,7 +11,6 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
     /// <summary>
     /// Place temp building prefab and init building
     /// </summary>
-    [BurstCompile]
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial struct SetUpBuildingSystem : ISystem
     {
@@ -24,7 +23,6 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             foreach (var (building, transform, entity) in SystemAPI

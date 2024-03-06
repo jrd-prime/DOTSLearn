@@ -163,7 +163,8 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         public void UpdateItemQuantity(object item, int value) => StorageUI.UpdateItemQuantity(item, value);
 
         // Timer // TODO refact
-        public void SetTimerText(float max, float value) => MoveFromStorageTimerUI.SetTimerText(max, value);
+        public void RunMoveFromStorageTimerAsync(float duration) =>
+            MoveFromStorageTimerUI.RunMoveFromStorageTimerAsync(duration);
 
         public void UpdateProductionTimers(int currentCycle, int maxLoads, int cycle) =>
             ProductionTimersUI.UpdateTimers(currentCycle, maxLoads, cycle);

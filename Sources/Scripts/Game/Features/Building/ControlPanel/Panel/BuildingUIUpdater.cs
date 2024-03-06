@@ -59,7 +59,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.Panel
             _buildingUI.UpdateProductionTimers(currentCycle, maxLoads, getLoadedProductsManufacturingTime);
         }
 
-        public void SetStorageTimer(float max, float value) => _buildingUI.SetTimerText(max, value);
+        public void RunMoveFromStorageTimerAsync(float duration) => _buildingUI.RunMoveFromStorageTimerAsync(duration);
 
         #endregion
 

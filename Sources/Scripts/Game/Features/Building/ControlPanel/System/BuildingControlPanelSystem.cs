@@ -24,8 +24,6 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
 
         #endregion
 
-        #region Create/Destroy
-
         protected override void OnCreate()
         {
             RequireForUpdate<MainStorageBoxData>();
@@ -40,13 +38,6 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
                 ProductsToDelivery = default
             };
         }
-
-        protected override void OnDestroy()
-        {
-            _eventsDataWrapper.Dispose();
-        }
-
-        #endregion
 
         protected override void OnUpdate()
         {
