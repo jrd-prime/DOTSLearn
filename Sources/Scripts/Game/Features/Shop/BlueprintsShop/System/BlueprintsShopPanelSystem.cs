@@ -17,7 +17,7 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial class BlueprintsShopPanelSystem : SystemBase
     {
-        #region Vars
+        #region Private
 
         private NativeList<Entity> _stateVisualComponents;
         private BeginSimulationEntityCommandBufferSystem.Singleton _bsEcbSystem;

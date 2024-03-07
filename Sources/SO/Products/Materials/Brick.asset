@@ -15,5 +15,5 @@ MonoBehaviour:
   _productPrefabOrImageMb: {fileID: 0}
   _productName: Brick
   _productPackSize: 20
-  _goodsCategory: 5
+  _product: 5
   _moveTimeMultiplier: 1.7

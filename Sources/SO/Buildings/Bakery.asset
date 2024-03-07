@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74eba7c2826b4e67852915cdd7118b0f, type: 3}
+  m_Name: Bakery
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 1890324583466666986, guid: cb0fc13201d333e4eb0fd1b236d4c356, type: 3}
+  _categoryId: 1
+  _nameId: 2
+  _name: Bakery
+  _size: {x: 5, y: 7}
+  _requiredItems:
+  - _productDataSo: {fileID: 11400000, guid: 7230f2c4ed4daf54296bc85f5a2557bd, type: 2}
+    _quantity: 5
+  - _productDataSo: {fileID: 11400000, guid: f0116efa802a1cc45adad0fa35665e9c, type: 2}
+    _quantity: 10
+  _manufacturedItems:
+  - _productDataSo: {fileID: 11400000, guid: c25607cf688d07a4f9039719c5e8cefd, type: 2}
+    _quantity: 10
+  _level: 1
+  _itemsPerHour: 10
+  _loadCapacity: 20
+  _storageCapacity: 20

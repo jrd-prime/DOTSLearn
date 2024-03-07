@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89432a90999d4e7d9a0d2d53f3512cd3, type: 3}
-  m_Name: Hay
+  m_Name: Bread
   m_EditorClassIdentifier: 
-  _productPrefabOrImageMb: {fileID: 0}
-  _productName: Hay
-  _productPackSize: 20
-  _product: 2
+  _productPrefabOrImageMb: {fileID: 21300000, guid: 0629a40f0ff68b441b4b5f56b6545f6d,
+    type: 3}
+  _productName: Bread
+  _productPackSize: 10
+  _product: 7
   _moveTimeMultiplier: 0

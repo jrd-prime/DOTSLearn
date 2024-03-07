@@ -4,8 +4,11 @@ using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.CommonData.Storage.Data;
 using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
+using Unity.Assertions;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Sources.Scripts.Game.InitSystems
 {
@@ -24,6 +27,18 @@ namespace Sources.Scripts.Game.InitSystems
             state.Enabled = false;
 
             if (!SystemAPI.TryGetSingletonBuffer(out _buffer)) throw new Exception($"NO {nameof(ProductsDataBuffer)}!");
+
+            {
+                // Assert
+                // TODO add output of missing products
+                var enumProductsLength = Enum.GetNames(typeof(Product)).Length;
+                var bufferLength = _buffer.Length;
+
+                Assert.IsTrue(enumProductsLength == bufferLength,
+                    $"The enum {typeof(Product)} quantity ({enumProductsLength}) " +
+                    $"does not match the quantity ({bufferLength}) in {typeof(ProductsDataBuffer)} (Products Data Authoring)." +
+                    $"Check {typeof(Product)} or products in products authoring.");
+            }
 
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
@@ -60,12 +75,11 @@ namespace Sources.Scripts.Game.InitSystems
             // entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
 
             var a = new Random();
-            
             foreach (var buffer in _buffer)
             {
                 mainStorageMap.Add((int)buffer.Product, a.Next(10, 20));
             }
-            
+
             entityManager.SetComponentData(elementEntity, new MainStorageBoxData { Value = mainStorageMap });
         }
     }

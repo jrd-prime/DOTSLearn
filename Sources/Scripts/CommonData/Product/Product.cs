@@ -2,11 +2,13 @@
 {
     public enum Product
     {
-        Wheat,
-        Flour,
-        Hay,
-        Wood,
-        WoodenPlank,
-        Brick
+        Wheat = 0,
+        Flour = 1,
+        Hay = 2,
+        Wood = 3,
+        WoodenPlank = 4,
+        Brick = 5,
+        Water = 6,
+        Bread = 7
     }
 }

@@ -175,6 +175,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a0ee9d66797760945985dcb3b5f498a4, type: 2}
   - {fileID: 11400000, guid: 1d611e844cc57064488175011f83a91c, type: 2}
   - {fileID: 11400000, guid: c8ae1e23f1095994abc0a2980299f8de, type: 2}
+  - {fileID: 11400000, guid: f0116efa802a1cc45adad0fa35665e9c, type: 2}
+  - {fileID: 11400000, guid: c25607cf688d07a4f9039719c5e8cefd, type: 2}
 --- !u!1 &757518466
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buildings:
   - {fileID: 11400000, guid: 5476f95d3de0212459e9c0a7db8ab3ce, type: 2}
+  - {fileID: 11400000, guid: 8a53752c30b0927458c2577a18b6cc09, type: 2}
   - {fileID: 11400000, guid: d108a12fd367dad489dfd081b651be1f, type: 2}
   - {fileID: 11400000, guid: 433163d9519ce654cb3031d064807378, type: 2}
   - {fileID: 11400000, guid: e675b6173f7e9eb4f816278b35cc41ac, type: 2}

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using Sources.Scripts.CommonData.Building;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Sources.Scripts.CommonData.SO
 {
     //LOOK try [SerializeReference]
 
-    [CreateAssetMenu(fileName = "New Building", menuName = "Building Data", order = 51)]
-    public class BuildingDataSo : ScriptableObject
+    [CreateAssetMenu(fileName = "New Building", menuName = "Add new Building Data", order = 51)]
+    public class BuildingDataScriptable : ScriptableObject
     {
         [Header("Building Prefab Info")] [SerializeField]
         private GameObject _prefab;
@@ -60,7 +61,7 @@ namespace Sources.Scripts.CommonData.SO
     [Serializable]
     public struct ProductForProduction
     {
-        public ProductDataSO _productDataSo;
+        [FormerlySerializedAs("_productDataSo")] public ProductDataScriptable _productDataScriptable;
         public int _quantity;
     }
 }

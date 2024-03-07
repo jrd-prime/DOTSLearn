@@ -15,5 +15,5 @@ MonoBehaviour:
   _productPrefabOrImageMb: {fileID: 0}
   _productName: Flour
   _productPackSize: 5
-  _goodsCategory: 1
+  _product: 1
   _moveTimeMultiplier: 0.7

@@ -8,9 +8,32 @@
     justify-content: flex-start;
     flex-direction: column;
     -unity-text-align: lower-center;
+    background-color: rgba(0, 0, 0, 0.33);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(166, 127, 73);
+    border-right-color: rgb(166, 127, 73);
+    border-top-color: rgb(166, 127, 73);
+    border-bottom-color: rgb(166, 127, 73);
+    border-right-width: 3px;
+    border-left-width: 0;
+    -unity-font: resource('Fonts/Mono/UbuntuMono-Regular');
 }
 
 .card-head {
+    -unity-font: resource('Fonts/Roboto-Regular');
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    height: auto;
+    flex-grow: 0;
+    position: absolute;
 }
 
 .card-image {

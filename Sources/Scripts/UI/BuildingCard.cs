@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Sources.Scripts.CommonData;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -48,8 +49,18 @@ namespace Sources.Scripts.UI
 
             // Head
             Title.text = Name;
+
             // Icon
-            // Image.style.backgroundColor = new StyleColor(Color.green);
+            var sprite = Resources.Load<Sprite>(ResourcePath.BuildingsPreviewPath + Name.ToLower());
+
+            if (sprite == null)
+            {
+                sprite = Resources.Load<Sprite>(ResourcePath.BuildingsPreviewPath +
+                                                ResourcePath.BuildingsPreviewNoImageName);
+            }
+
+            Image.style.backgroundImage = new StyleBackground(sprite);
+
             // Button
             Button.text = Name;
             Button.name = CardButtonNamePrefix + Id;

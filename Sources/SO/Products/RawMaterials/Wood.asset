@@ -15,5 +15,5 @@ MonoBehaviour:
   _productPrefabOrImageMb: {fileID: 0}
   _productName: Wood
   _productPackSize: 10
-  _goodsCategory: 3
+  _product: 3
   _moveTimeMultiplier: 2

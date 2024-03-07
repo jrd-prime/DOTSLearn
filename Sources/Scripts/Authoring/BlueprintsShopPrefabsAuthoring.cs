@@ -11,7 +11,7 @@ namespace Sources.Scripts.Authoring
 {
     public class BlueprintsShopPrefabsAuthoring : MonoBehaviour
     {
-        public List<BuildingDataSo> _buildings;
+        public List<BuildingDataScriptable> _buildings;
 
         private class Baker : Baker<BlueprintsShopPrefabsAuthoring>
         {
@@ -60,7 +60,7 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                Name = authoring._buildings[i].RequiredItems[j]._productDataSo.Product,
+                                Name = authoring._buildings[i].RequiredItems[j]._productDataScriptable.Product,
                                 Quantity = authoring._buildings[i].RequiredItems[j]._quantity
                             });
                         }
@@ -90,7 +90,7 @@ namespace Sources.Scripts.Authoring
                         {
                             tempArray.Add(new ProductData
                             {
-                                Name = authoring._buildings[i].ManufacturedItems[j]._productDataSo.Product,
+                                Name = authoring._buildings[i].ManufacturedItems[j]._productDataScriptable.Product,
                                 Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
                             });
                         }
