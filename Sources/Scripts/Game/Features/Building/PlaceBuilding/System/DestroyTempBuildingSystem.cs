@@ -28,7 +28,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 
             foreach (var (_, entity) in SystemAPI
                          .Query<TempBuildingTag>()
-                         .WithAll<DestroyTempBuildingTag>()
+                         .WithAll<DestroyTempBlueprintTag>()
                          .WithEntityAccess())
             {
                 var cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();

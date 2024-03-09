@@ -19,7 +19,7 @@ namespace Sources.Scripts.CommonData.Building
     /// <summary>
     /// Tag to destroy prefab entity
     /// </summary>
-    public struct DestroyTempBuildingTag : IComponentData
+    public struct DestroyTempBlueprintTag : IComponentData
     {
     }
 }

@@ -1,12 +1,16 @@
+using System;
 using Sources.Scripts.CommonData;
 using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.Screen;
 using Sources.Scripts.UserInputAndCameraControl.UserInput;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
+using UnityEngine.Diagnostics;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 {
@@ -19,26 +23,48 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
-            state.RequireForUpdate<InstantiateTempBuildingData>();
+            state.RequireForUpdate<InstantiateTempBlueprintData>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             foreach (var (query, entity) in SystemAPI
-                         .Query<RefRO<InstantiateTempBuildingData>>()
+                         .Query<RefRO<InstantiateTempBlueprintData>>()
                          .WithAll<BuildingStateData>()
                          .WithEntityAccess())
             {
+                if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buffer))
+                {
+                    Debug.LogError("Buffer error. Return.. " + this);
+                    return;
+                }
+
+                BlueprintsBuffer blueprintsBuffer = buffer[query.ValueRO.BlueprintId];
+                
+                FixedString64Bytes giud = Guid.NewGuid().ToString("N");
+                
                 var ecb = SystemAPI
                     .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
 
                 var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().Value;
-                
+
                 state.Dependency = new InstantiateTempPrefabJob
                 {
-                    BuildingData = query.ValueRO.BuildingData,
+                    BuildingData = new BuildingData
+                    {
+                        Guid = giud,
+                        Name = blueprintsBuffer.Name,
+                        Prefab = blueprintsBuffer.Self,
+                        BuildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent),
+
+                        NameId = blueprintsBuffer.NameId,
+                        Level = blueprintsBuffer.Level,
+                        ItemsPerHour = blueprintsBuffer.ItemsPerHour,
+                        LoadCapacity = blueprintsBuffer.LoadCapacity,
+                        MaxStorage = blueprintsBuffer.StorageCapacity
+                    },
                     BsEcb = ecb,
                     BuildingStateEntity = entity,
                     Position = position,
@@ -78,7 +104,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
                 BsEcb.AddComponent<MoveDirectionData>(instantiate);
                 BsEcb.AddComponent(instantiate, BuildingData);
 
-                BsEcb.RemoveComponent<InstantiateTempBuildingData>(BuildingStateEntity);
+                BsEcb.RemoveComponent<InstantiateTempBlueprintData>(BuildingStateEntity);
             }
         }
     }

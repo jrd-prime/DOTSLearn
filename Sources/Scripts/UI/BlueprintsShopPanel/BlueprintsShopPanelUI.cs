@@ -4,6 +4,7 @@ using Sources.Scripts.CommonData;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Assertions;
 using Unity.Collections;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Sources.Scripts.UI.BlueprintsShopPanel
@@ -16,6 +17,8 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
         private static List<BlueprintCard> _cards;
         private static List<BlueprintCard> _cardsListCache;
 
+        public bool IsShopSelected { get; private set; }
+
         private const string BuildingPanelTitle = "blueprints";
 
         public static BlueprintsCards BlueprintsCards;
@@ -23,13 +26,20 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
 
         #endregion
 
-        #region Instance
+        #region Instance/Destroy
 
         public static BlueprintsShopPanelUI Instance { private set; get; }
-        
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            PanelCloseButton.clicked -= OnCloseButton;
+            OnBlueprintSelected -= Blueprint_Selected;
+            BlueprintsCards.UnregisterCardsCallbacks(OnBlueprintSelected);
         }
 
         #endregion
@@ -56,13 +66,9 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
             IsVisible = false;
 
             PanelCloseButton.clicked += OnCloseButton;
+            OnBlueprintSelected += Blueprint_Selected;
         }
 
-        private void OnDestroy()
-        {
-            PanelCloseButton.clicked -= OnCloseButton;
-            BlueprintsCards.UnregisterCardsCallbacks(OnBlueprintSelected);
-        }
 
         private void SetButtonEnabled(int id, bool value) =>
             _cardsContainer.Query<Button>().AtIndex(id).SetEnabled(value);
@@ -77,9 +83,41 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
 
         public BlueprintCard GetSelectedCard(int cardId) => BlueprintsCards.GetCardById(cardId);
 
+        public void ShopSelected(int blueprintsCount, NativeList<FixedString32Bytes> blueprintsNames)
+        {
+            if (!IsShopSelected)
+            {
+                OpenShop(blueprintsCount, blueprintsNames);
+            }
+            else
+            {
+                CloseShop();
+            }
+        }
+
+        private void CloseShop()
+        {
+            OnCloseButton();
+        }
+
+        private void OpenShop(int blueprintsCount, NativeList<FixedString32Bytes> blueprintsNames)
+        {
+            InstantiateBuildingsCards(blueprintsCount, blueprintsNames);
+            SetPanelTitle(ToString());
+            SetElementVisible(true);
+            IsShopSelected = true;
+        }
+
+        private void Blueprint_Selected(Button button, int index)
+        {
+            Debug.LogWarning(" = " + this);
+            CloseShop();
+        }
+
         protected override void OnCloseButton()
         {
             SetElementVisible(false);
+            IsShopSelected = false;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Sources.Scripts.Game.InitSystems
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
                 { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
-                { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
+                // { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
                 { Names.MainStorageDataName, typeof(MainStorageBoxData) }
             };
 

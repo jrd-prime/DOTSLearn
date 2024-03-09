@@ -1,12 +1,10 @@
-﻿using System;
-using Sources.Scripts.CommonData;
+﻿using Sources.Scripts.CommonData;
 using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.Game.Features.Building.PlaceBuilding;
 using Sources.Scripts.UI;
 using Sources.Scripts.UI.BlueprintsShopPanel;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Sources.Scripts.UI.PopUpPanels;
-using Sources.Scripts.Utility;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -25,22 +23,19 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
         private EntityCommandBuffer _bsEcb;
         private EntityCommandBuffer _biEcb;
 
-        private int _tempSelectedBuildID;
-        private int _prefabsCount;
 
         private Entity _buildingStateEntity;
-        private RefRW<BlueprintsShopData> _buildingPanelData;
 
-        private RefRW<BuildingStateData> _buildingStateData;
-        private RefRW<BlueprintsShopData> _blueprintsShopData;
         private DynamicBuffer<BlueprintsBuffer> _blueprintsBuffers;
-        private int _buildingsCount;
+        private int _blueprintsCount;
+        private int _tempSelectedBlueprintID;
 
-        private bool _isShopSelected;
-
-        private BlueprintsShopPanelUI _blueprintsShopPanelUI;
+        private BlueprintsShopPanelUI _blueprintsShopUI;
+        private ConfirmationPanelUI _confirmationUI;
 
         #endregion
+
+        #region Create/Start/Destroy
 
         protected override void OnCreate()
         {
@@ -51,99 +46,50 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
 
         protected override void OnStartRunning()
         {
-            _tempSelectedBuildID = -1;
-            _isShopSelected = false;
-            _blueprintsShopPanelUI = BlueprintsShopPanelUI.Instance;
+            _tempSelectedBlueprintID = -1;
+            _blueprintsShopUI = BlueprintsShopPanelUI.Instance;
+            _confirmationUI = ConfirmationPanelUI.Instance;
 
-            _blueprintsShopPanelUI.PanelCloseButton.clicked += OnBlueprintsShopClosed;
-
-            MainUIButtonsMono.BlueprintsShopButton.clicked += BlueprintsShopSelected;
-            
-            BlueprintsShopPanelUI.OnBlueprintSelected += BlueprintSelected;
-            
+            MainUIButtonsMono.BlueprintsShopButton.clicked += BlueprintsShop_Selected;
+            BlueprintsShopPanelUI.OnBlueprintSelected += Blueprint_Selected;
             ConfirmationPanelUI.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply += ConfirmBuilding;
-            
             BuildingControlPanelUI.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
         }
 
+        protected override void OnDestroy()
+        {
+            MainUIButtonsMono.BlueprintsShopButton.clicked -= BlueprintsShop_Selected;
+            BlueprintsShopPanelUI.OnBlueprintSelected -= Blueprint_Selected;
+            ConfirmationPanelUI.OnTempBuildCancelled -= CancelBuilding;
+            ConfirmationPanelUI.OnTempBuildApply -= ConfirmBuilding;
+        }
+
+        #endregion
+
         protected override void OnUpdate()
         {
-            if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buffer))
-            {
-                Debug.LogError("Buffer error. Return.. " + this);
-                return;
-            }
+            _blueprintsBuffers = SystemAPI.GetSingletonBuffer<BlueprintsBuffer>();
 
-            if (!SystemAPI.TryGetSingletonRW<BlueprintsShopData>(out var blueprintsShopData))
-            {
-                Debug.Log(" NOUUU BlueprintsShopData");
-                return;
-            }
-
-            if (!SystemAPI.TryGetSingletonRW<BuildingStateData>(out var buildingStateData))
-            {
-                Debug.Log(" NOUUU BuildingStateData");
-                return;
-            }
-
-            _blueprintsShopData = blueprintsShopData;
-            _buildingStateData = buildingStateData;
-
-            _buildingsCount = _buildingStateData.ValueRO.BuildingPrefabsCount;
-
-            _blueprintsBuffers = buffer;
-
-            _prefabsCount = buffer.Length;
-
+            _blueprintsCount = _blueprintsBuffers.Length;
+            
             _biEcbSystem = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
             _bsEcbSystem = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             _bsEcb = _bsEcbSystem.CreateCommandBuffer(World.Unmanaged);
 
             _buildingStateEntity = SystemAPI.GetSingletonEntity<BuildingStateData>();
-            _buildingPanelData = SystemAPI.GetSingletonRW<BlueprintsShopData>();
-
-            if (!_buildingStateData.ValueRO.IsInitialized) Initialize();
         }
 
-        private void BlueprintsShopSelected()
+        private void BlueprintsShop_Selected() =>
+            _blueprintsShopUI.ShopSelected(_blueprintsCount, GetBlueprintsNamesList());
+
+        private void Blueprint_Selected(Button button, int index)
         {
-            if (!_isShopSelected)
-            {
-                OnBlueprintsShopOpened();
-            }
-            else
-            {
-                OnBlueprintsShopClosed();
-            }
-        }
+            _confirmationUI.SetElementVisible(true);
 
-        private void OnBlueprintsShopClosed()
-        {
-            _blueprintsShopPanelUI.SetElementVisible(false);
-            _isShopSelected = false;
-        }
+            SetTempSelectedBlueprintId(index);
 
-        private void OnBlueprintsShopOpened()
-        {
-            _blueprintsShopPanelUI.InstantiateBuildingsCards(_buildingsCount, GetNamesList());
-            _blueprintsShopPanelUI.SetPanelTitle("Panel Title New");
-            SetBlueprintsShopPanelVisible(true);
-
-            _isShopSelected = true;
-        }
-
-        private void SetBlueprintsShopPanelVisible(bool value) =>
-            _blueprintsShopPanelUI.SetElementVisible(value);
-
-        private void SetConfirmationPanelVisible(bool value) => ConfirmationPanelUI.Instance.SetElementVisible(value);
-
-        private void BlueprintSelected(Button button, int index)
-        {
-            OnBlueprintsShopClosed();
-            SetConfirmationPanelVisible(true);
-            SetTempSelectedBuildingId(index);
-            InstantiateTempPrefab(index);
+            InstantiateTempSelectedBlueprint(index);
         }
 
         private void ClosePanelAndRemoveSelectedTag()
@@ -155,73 +101,26 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             _bsEcb.RemoveComponent<SelectedBuildingTag>(e);
         }
 
-        private void InstantiateTempPrefab(int index)
-        {
-            if (_blueprintsBuffers.IsEmpty) throw new NullReferenceException("Buffer empty!");
-            
-
-            BlueprintsBuffer blueprintBuffer = _blueprintsBuffers[index];
-
-            FixedString64Bytes giud = Utils.GetGuid();
-
-            _bsEcb.AddComponent(_buildingStateEntity,
-                new InstantiateTempBuildingData
-                {
-                    BuildingData = new BuildingData
-                    {
-                        Guid = giud,
-                        Name = blueprintBuffer.Name,
-                        Prefab = blueprintBuffer.Self,
-                        BuildingEvents = new NativeQueue<BuildingEvent>(Allocator.Persistent),
-
-                        NameId = blueprintBuffer.NameId,
-                        Level = blueprintBuffer.Level,
-                        ItemsPerHour = blueprintBuffer.ItemsPerHour,
-                        LoadCapacity = blueprintBuffer.LoadCapacity,
-                        MaxStorage = blueprintBuffer.StorageCapacity
-                    }
-                });
-
-            Debug.Log($"Build ID: {index} / Prefab: {_blueprintsBuffers[index].Name}");
-        }
-
-        private void SetTempSelectedBuildingId(int index)
-        {
-            if (_tempSelectedBuildID < 0)
-            {
-                // SetButtonEnabled(index, false);
-                _tempSelectedBuildID = index;
-            }
-            else if (_tempSelectedBuildID != index)
-            {
-                // SetButtonEnabled(index, false);
-                // SetButtonEnabled(_tempSelectedBuildID, true);
-                _tempSelectedBuildID = index;
-            }
-            else
-            {
-                Debug.LogWarning("Temp = Index! / We have a problem with enable/disable buttons in " + this);
-            }
-        }
-
         private void CancelBuilding()
         {
-            SetConfirmationPanelVisible(false);
-            DestroyTempPrefab();
+            _confirmationUI.SetElementVisible(false);
 
-            OnBlueprintsShopOpened();
+            DestroyTempSelectedBlueprint();
+
+            _blueprintsShopUI.ShopSelected(_blueprintsCount, GetBlueprintsNamesList());
 
             // reset temp id
-            _tempSelectedBuildID = -1;
+            _tempSelectedBlueprintID = -1;
         }
 
         private void ConfirmBuilding()
         {
-            SetConfirmationPanelVisible(false);
+            _confirmationUI.SetElementVisible(false);
+            
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempBuildingEntity))
             {
                 _bsEcb.AddComponent<PlaceTempBuildingTag>(tempBuildingEntity);
-                _tempSelectedBuildID = -1;
+                _tempSelectedBlueprintID = -1;
             }
             else
             {
@@ -229,33 +128,27 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             }
         }
 
-        private void DestroyTempPrefab()
-        {
-            _biEcb = _biEcbSystem.CreateCommandBuffer(World.Unmanaged);
+        #region Instantiate/Destroy selected blueprint
 
+        private void InstantiateTempSelectedBlueprint(int index) =>
+            _bsEcb.AddComponent(_buildingStateEntity, new InstantiateTempBlueprintData { BlueprintId = index });
+
+        private void DestroyTempSelectedBlueprint()
+        {
             if (SystemAPI.TryGetSingletonEntity<TempBuildingTag>(out var tempEntity))
             {
-                _biEcb.AddComponent(tempEntity, new DestroyTempBuildingTag());
+                _biEcbSystem
+                    .CreateCommandBuffer(World.Unmanaged)
+                    .AddComponent(tempEntity, new DestroyTempBlueprintTag());
             }
         }
 
-        protected override void OnDestroy()
-        {
-            MainUIButtonsMono.BlueprintsShopButton.clicked -= BlueprintsShopSelected;
-            BlueprintsShopPanelUI.OnBlueprintSelected -= BlueprintSelected;
-            ConfirmationPanelUI.OnTempBuildCancelled -= CancelBuilding;
-            ConfirmationPanelUI.OnTempBuildApply -= ConfirmBuilding;
-        }
+        #endregion
 
-        private void Initialize()
-        {
-            _buildingStateData.ValueRW.BuildingPrefabsCount = _prefabsCount;
-            _buildingStateData.ValueRW.IsInitialized = true;
-        }
 
-        private NativeList<FixedString32Bytes> GetNamesList()
+        private NativeList<FixedString32Bytes> GetBlueprintsNamesList()
         {
-            NativeList<FixedString32Bytes> namesList = new(_buildingsCount, Allocator.Temp);
+            NativeList<FixedString32Bytes> namesList = new(_blueprintsCount, Allocator.Temp);
 
             foreach (var building in _blueprintsBuffers)
             {
@@ -263,6 +156,25 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             }
 
             return namesList;
+        }
+
+        private void SetTempSelectedBlueprintId(int index)
+        {
+            if (_tempSelectedBlueprintID < 0)
+            {
+                // SetButtonEnabled(index, false);
+                _tempSelectedBlueprintID = index;
+            }
+            else if (_tempSelectedBlueprintID != index)
+            {
+                // SetButtonEnabled(index, false);
+                // SetButtonEnabled(_tempSelectedBuildID, true);
+                _tempSelectedBlueprintID = index;
+            }
+            else
+            {
+                Debug.LogWarning("Temp = Index! / We have a problem with enable/disable buttons in " + this);
+            }
         }
     }
 }
