@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sources.Scripts.UI.BuildingControlPanel;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Sources.Scripts.UI
@@ -17,7 +18,7 @@ namespace Sources.Scripts.UI
 
         protected string PanelIdName;
         protected string PanelTitleIdName;
-        protected string CloseButtonId;
+        protected string CloseButtonIdName = BCPNamesID.CloseButtonIdName;
 
 
         public bool IsPanelVisible

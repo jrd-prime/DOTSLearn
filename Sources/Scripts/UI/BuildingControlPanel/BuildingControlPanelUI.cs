@@ -69,12 +69,12 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         {
             PanelIdName = BCPNamesID.PanelId;
             PanelTitleIdName = BCPNamesID.PanelTitleId;
-            CloseButtonId = BCPNamesID.CloseButtonId;
+            CloseButtonIdName = BCPNamesID.CloseButtonIdName;
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
             PanelTitleLabel = Panel.Q<Label>(PanelTitleIdName);
-            PanelCloseButton = Panel.Q<Button>(CloseButtonId);
+            PanelCloseButton = Panel.Q<Button>(CloseButtonIdName);
             // Buttons
             UpgradeButton = Panel.Q<Button>(BCPNamesID.UpgradeButtonId);
             BuffButton = Panel.Q<Button>(BCPNamesID.BuffButtonId);

@@ -13,7 +13,7 @@
         public static string LevelLabelId => "lvl-label";
 
         // Buttons
-        public static string CloseButtonId = "close-button";
+        public static string CloseButtonIdName = "close-button";
         public static string UpgradeButtonId => "btn-upgrade";
         public static string BuffButtonId => "btn-buff";
         public static string MoveButtonId => "btn-move";

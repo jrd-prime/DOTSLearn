@@ -22,5 +22,13 @@ namespace Sources.Scripts.CommonData
         public static readonly string ProductionTimersCycleContainerName = "cycle-cont";
         public static readonly string ProductionTimersBothProgressBarName = "pb-bar";
         public static readonly string ProductionTimersBothLabelsName = "text-label";
+
+
+        // Blueprints Shop
+        public static readonly string CardsContainerIdName = "groupbox";
+        // Card
+        public static readonly string CardHeadName = "head-text";
+        public static readonly string CardImageName = "img";
+        public static readonly string CardButtonName = "btn";
     }
 }

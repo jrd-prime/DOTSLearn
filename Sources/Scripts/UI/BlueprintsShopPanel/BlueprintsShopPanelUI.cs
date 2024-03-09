@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Sources.Scripts.CommonData;
 using Sources.Scripts.UI.BuildingControlPanel;
 using Unity.Assertions;
 using Unity.Collections;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Sources.Scripts.UI.BlueprintsShopPanel
@@ -14,16 +14,9 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
 
         private static GroupBox _cardsContainer;
         private static List<BlueprintCard> _cards;
-
         private static List<BlueprintCard> _cardsListCache;
 
-        private const string CardsContainerName = "groupbox";
         private const string BuildingPanelTitle = "blueprints";
-
-        private const int ShowDuration = 1;
-        private const int HideDuration = 1;
-        private const float PanelHeight = 333f;
-        private const float BottomMargin = 10f;
 
         public static BlueprintsCards BlueprintsCards;
         public static event Action<Button, int> OnBlueprintSelected;
@@ -46,10 +39,9 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
             PanelTitleLabel = Panel.Q<Label>(PanelTitleIdName);
-            _cardsContainer = PanelRoot.Q<GroupBox>(CardsContainerName);
+            _cardsContainer = PanelRoot.Q<GroupBox>(Names.CardsContainerIdName);
 
-            CloseButtonId = BCPNamesID.CloseButtonId;
-            PanelCloseButton = Panel.Q<Button>(CloseButtonId);
+            PanelCloseButton = Panel.Q<Button>(CloseButtonIdName);
 
 
             BlueprintsCards = new BlueprintsCards(_cardsContainer);
@@ -71,7 +63,6 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
         private void SetButtonEnabled(int id, bool value) =>
             _cardsContainer.Query<Button>().AtIndex(id).SetEnabled(value);
 
-        public BlueprintCard GetSelectedCard(int cardId) => _cards[cardId];
 
         public void InstantiateBuildingsCards(int blueprintsCount, NativeList<FixedString32Bytes> names)
         {
@@ -80,6 +71,7 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
             BlueprintsCards.InstantiateCards(blueprintsCount, names, OnBlueprintSelected);
         }
 
+        public BlueprintCard GetSelectedCard(int cardId) => BlueprintsCards.GetCardById(cardId);
 
         protected override void OnCloseButton()
         {

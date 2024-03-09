@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Assertions;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,6 +24,8 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         public void InstantiateCards(int blueprintsCount, NativeList<FixedString32Bytes> names,
             Action<Button, int> onBlueprintSelectedCallback)
         {
+            ClearCards();
+
             if (blueprintsCount != _blueprintsCardsList.Count)
             {
                 InstantiateNewCards(blueprintsCount, names);
@@ -40,7 +43,6 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         private void LoadCachedCards()
         {
             Debug.Log("LoadCachedCards");
-            ClearCards();
 
             foreach (var card in _filledCardsContainer)
             {
@@ -51,7 +53,6 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         private void InstantiateNewCards(int blueprintsCount, NativeList<FixedString32Bytes> names)
         {
             Debug.Log("InstantiateNewCards");
-            ClearCards();
 
             for (var i = 0; i < blueprintsCount; i++)
             {
@@ -97,5 +98,12 @@ namespace Sources.Scripts.UI.BuildingControlPanel
         }
 
         #endregion
+
+        public BlueprintCard GetCardById(int cardId)
+        {
+            Assert.IsTrue(_blueprintsCardsList.Count > 0, $"_blueprintsCardsList.Count > 0 {this}");
+
+            return _blueprintsCardsList[cardId];
+        }
     }
 }

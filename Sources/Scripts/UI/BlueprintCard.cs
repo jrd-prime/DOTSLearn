@@ -1,6 +1,7 @@
-﻿using System.IO;
-using Sources.Scripts.CommonData;
+﻿using Sources.Scripts.CommonData;
 using Sources.Scripts.UI.BuildingControlPanel;
+using Sources.Scripts.Utility;
+using Unity.Assertions;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,63 +9,76 @@ namespace Sources.Scripts.UI
 {
     public readonly struct BlueprintCard
     {
-        private readonly TemplateContainer _card;
-        private const string CardTemplatePath = "UXMLTemplates/BuildingPanel/card";
-
+        public TemplateContainer Card { get; }
         public string Name { get; }
         public int Id { get; }
         public Label Title { get; }
-        public VisualElement Image { get; }
         public Button Button { get; }
 
-        // Prefix
-
-        // Card
-        private const string CardHeadName = "head-text";
-        private const string CardImageName = "img";
-        private const string CardButtonName = "btn";
+        private readonly VisualElement _image;
 
         public BlueprintCard(string buildingName, int cardIndex)
         {
             Name = buildingName;
             Id = cardIndex;
 
-            VisualTreeAsset cardTemplate = Resources.Load(CardTemplatePath, typeof(VisualTreeAsset)) as VisualTreeAsset;
+            var cardTemplate = Resources.Load(ResPath.CardTemplatePath, typeof(VisualTreeAsset)) as VisualTreeAsset;
 
-            if (cardTemplate == null)
-            {
-                throw new FileNotFoundException("Card template not found.", CardTemplatePath);
-            }
+            Assert.IsNotNull(cardTemplate, $"Card template not found. Path: {ResPath.CardTemplatePath}");
 
-            _card = cardTemplate.Instantiate();
-            Title = _card.Q<Label>(CardHeadName);
-            Image = _card.Q<VisualElement>(CardImageName);
-            Button = _card.Q<Button>(CardButtonName);
+            Card = cardTemplate!.Instantiate();
+            Title = Card.Q<Label>(Names.CardHeadName);
+            _image = Card.Q<VisualElement>(Names.CardImageName);
+            Button = Card.Q<Button>(Names.CardButtonName);
         }
 
         public TemplateContainer GetFilledCard()
         {
-            _card.name = BCPNamesID.CardNamePrefix + Id;
+            SetNameId();
+            SetTitle(Name);
+            SetImage();
+            SetButtonText(Name);
+            SetButtonNameId();
 
-            // Head
-            Title.text = Name;
+            return Card;
+        }
 
-            // Icon
-            var sprite = Resources.Load<Sprite>(ResourcePath.BuildingsPreviewPath + Name.ToLower());
+        private void SetButtonNameId() => Button.name = BCPNamesID.CardButtonNamePrefix + Id;
+
+        public void SetButtonText(string name)
+        {
+            Assert.IsTrue(TextUtils.IsStringCompliant(name, NameLength.ShopCardButtonTextMaxLength));
+
+            Button.text = TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength)
+                ? name
+                : "no text".ToUpper();
+        }
+
+        private void SetImage()
+        {
+            string path = ResPath.BuildingsPreviewPath + Name.ToLower();
+            Sprite sprite = Resources.Load<Sprite>(path);
 
             if (sprite == null)
             {
-                sprite = Resources.Load<Sprite>(ResourcePath.BuildingsPreviewPath +
-                                                ResourcePath.BuildingsPreviewNoImageName);
+                path = ResPath.BuildingsPreviewPath + ResPath.BuildingsPreviewNoImageName;
+                sprite = Resources.Load<Sprite>(path);
             }
 
-            Image.style.backgroundImage = new StyleBackground(sprite);
+            Assert.IsNotNull(sprite, $"Card image sprite is null. Path: {path}");
 
-            // Button
-            Button.text = Name;
-            Button.name = BCPNamesID.CardButtonNamePrefix + Id;
-
-            return _card;
+            _image.style.backgroundImage = new StyleBackground(sprite);
         }
+
+        public void SetTitle(string name)
+        {
+            Assert.IsTrue(TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength));
+
+            Title.name = TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength)
+                ? name
+                : "no text".ToUpper();
+        }
+
+        private void SetNameId() => Card.name = BCPNamesID.CardNamePrefix + Id;
     }
 }

@@ -19,11 +19,11 @@ namespace Sources.Scripts.UI.MainStoragePanel
         {
             PanelIdName = MSPNamesID.PanelId;
             PanelTitleIdName = MSPNamesID.PanelTitleId;
-            CloseButtonId = MSPNamesID.CloseButtonId;
+            CloseButtonIdName = MSPNamesID.CloseButtonId;
 
             PanelRoot = GetComponent<UIDocument>().rootVisualElement;
             Panel = PanelRoot.Q<VisualElement>(PanelIdName);
-            PanelCloseButton = Panel.Q<Button>(CloseButtonId);
+            PanelCloseButton = Panel.Q<Button>(CloseButtonIdName);
             ItemsCont = Panel.Q<VisualElement>(MSPNamesID.ItemsContainerId);
             lab = Panel.Q<Label>(MSPNamesID.TestTextLabelId);
 
