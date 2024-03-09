@@ -23,13 +23,17 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
 
         #endregion
 
+        #region Instance
+
         public static BlueprintsShopPanelUI Instance { private set; get; }
-
-
+        
         private void Awake()
         {
             if (Instance == null) Instance = this;
         }
+
+        #endregion
+
 
         private void OnEnable()
         {

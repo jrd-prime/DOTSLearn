@@ -58,9 +58,12 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             _blueprintsShopPanelUI.PanelCloseButton.clicked += OnBlueprintsShopClosed;
 
             MainUIButtonsMono.BlueprintsShopButton.clicked += BlueprintsShopSelected;
+            
             BlueprintsShopPanelUI.OnBlueprintSelected += BlueprintSelected;
+            
             ConfirmationPanelUI.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply += ConfirmBuilding;
+            
             BuildingControlPanelUI.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
         }
 
@@ -154,10 +157,8 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
 
         private void InstantiateTempPrefab(int index)
         {
-            if (_blueprintsBuffers.IsEmpty)
-            {
-                throw new NullReferenceException("Buffer empty!");
-            }
+            if (_blueprintsBuffers.IsEmpty) throw new NullReferenceException("Buffer empty!");
+            
 
             BlueprintsBuffer blueprintBuffer = _blueprintsBuffers[index];
 
