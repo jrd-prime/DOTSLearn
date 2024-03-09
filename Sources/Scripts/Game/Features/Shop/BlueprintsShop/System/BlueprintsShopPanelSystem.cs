@@ -58,7 +58,7 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             _blueprintsShopPanelUI.PanelCloseButton.clicked += OnBlueprintsShopClosed;
 
             MainUIButtonsMono.BlueprintsShopButton.clicked += BlueprintsShopSelected;
-            BlueprintsShopPanelUI.OnBuildSelected += BuildSelected;
+            BlueprintsShopPanelUI.OnBlueprintSelected += BlueprintSelected;
             ConfirmationPanelUI.OnTempBuildCancelled += CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply += ConfirmBuilding;
             BuildingControlPanelUI.Instance.PanelCloseButton.clicked += ClosePanelAndRemoveSelectedTag;
@@ -118,15 +118,14 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
         private void OnBlueprintsShopClosed()
         {
             _blueprintsShopPanelUI.SetElementVisible(false);
-            _blueprintsShopPanelUI.ClearBuildingsCards();
             _isShopSelected = false;
         }
 
         private void OnBlueprintsShopOpened()
         {
-            SetBlueprintsShopPanelVisible(true);
             _blueprintsShopPanelUI.InstantiateBuildingsCards(_buildingsCount, GetNamesList());
             _blueprintsShopPanelUI.SetPanelTitle("Panel Title New");
+            SetBlueprintsShopPanelVisible(true);
 
             _isShopSelected = true;
         }
@@ -136,7 +135,7 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
 
         private void SetConfirmationPanelVisible(bool value) => ConfirmationPanelUI.Instance.SetElementVisible(value);
 
-        private void BuildSelected(Button button, int index)
+        private void BlueprintSelected(Button button, int index)
         {
             OnBlueprintsShopClosed();
             SetConfirmationPanelVisible(true);
@@ -209,6 +208,8 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
             SetConfirmationPanelVisible(false);
             DestroyTempPrefab();
 
+            OnBlueprintsShopOpened();
+
             // reset temp id
             _tempSelectedBuildID = -1;
         }
@@ -240,7 +241,7 @@ namespace Sources.Scripts.Game.Features.Shop.BlueprintsShop.System
         protected override void OnDestroy()
         {
             MainUIButtonsMono.BlueprintsShopButton.clicked -= BlueprintsShopSelected;
-            BlueprintsShopPanelUI.OnBuildSelected -= BuildSelected;
+            BlueprintsShopPanelUI.OnBlueprintSelected -= BlueprintSelected;
             ConfirmationPanelUI.OnTempBuildCancelled -= CancelBuilding;
             ConfirmationPanelUI.OnTempBuildApply -= ConfirmBuilding;
         }

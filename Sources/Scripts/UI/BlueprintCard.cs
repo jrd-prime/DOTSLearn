@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using Sources.Scripts.CommonData;
+using Sources.Scripts.UI.BuildingControlPanel;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Sources.Scripts.UI
 {
-    public struct BuildingCard
+    public readonly struct BlueprintCard
     {
         private readonly TemplateContainer _card;
         private const string CardTemplatePath = "UXMLTemplates/BuildingPanel/card";
@@ -17,15 +18,13 @@ namespace Sources.Scripts.UI
         public Button Button { get; }
 
         // Prefix
-        private const string CardNamePrefix = "card-";
-        private const string CardButtonNamePrefix = "building-";
 
         // Card
         private const string CardHeadName = "head-text";
         private const string CardImageName = "img";
         private const string CardButtonName = "btn";
 
-        public BuildingCard(string buildingName, int cardIndex)
+        public BlueprintCard(string buildingName, int cardIndex)
         {
             Name = buildingName;
             Id = cardIndex;
@@ -45,7 +44,7 @@ namespace Sources.Scripts.UI
 
         public TemplateContainer GetFilledCard()
         {
-            _card.name = CardNamePrefix + Id;
+            _card.name = BCPNamesID.CardNamePrefix + Id;
 
             // Head
             Title.text = Name;
@@ -63,7 +62,7 @@ namespace Sources.Scripts.UI
 
             // Button
             Button.text = Name;
-            Button.name = CardButtonNamePrefix + Id;
+            Button.name = BCPNamesID.CardButtonNamePrefix + Id;
 
             return _card;
         }

@@ -7,8 +7,6 @@ using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
 using Unity.Assertions;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
-using Random = System.Random;
 
 namespace Sources.Scripts.Game.InitSystems
 {
@@ -42,8 +40,6 @@ namespace Sources.Scripts.Game.InitSystems
 
             NativeHashMap<FixedString64Bytes, ComponentType> componentsMap = new(0, Allocator.Temp)
             {
-                // { Names.GameStateDataEntityName, typeof(GameStateData) },
-                // { Names.GameplayStateDataEntityName, typeof(PlayStateData) },
                 { Names.BuildingStateDataEntityName, typeof(BuildingStateData) },
                 { Names.BlueprintsShopDataName, typeof(BlueprintsShopData) },
                 { Names.MainStorageDataName, typeof(MainStorageBoxData) }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sources.Scripts.UI.BuildingControlPanel;
+using Unity.Assertions;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,8 +10,12 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
 {
     public class BlueprintsShopPanelUI : PanelMono
     {
+        #region Private
+
         private static GroupBox _cardsContainer;
-        private static List<BuildingCard> _cards;
+        private static List<BlueprintCard> _cards;
+
+        private static List<BlueprintCard> _cardsListCache;
 
         private const string CardsContainerName = "groupbox";
         private const string BuildingPanelTitle = "blueprints";
@@ -20,8 +25,13 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
         private const float PanelHeight = 333f;
         private const float BottomMargin = 10f;
 
+        public static BlueprintsCards BlueprintsCards;
+        public static event Action<Button, int> OnBlueprintSelected;
+
+        #endregion
+
         public static BlueprintsShopPanelUI Instance { private set; get; }
-        public static event Action<Button, int> OnBuildSelected;
+
 
         private void Awake()
         {
@@ -41,6 +51,10 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
             CloseButtonId = BCPNamesID.CloseButtonId;
             PanelCloseButton = Panel.Q<Button>(CloseButtonId);
 
+
+            BlueprintsCards = new BlueprintsCards(_cardsContainer);
+
+
             if (Panel == null) return;
             base.HidePanel();
             IsVisible = false;
@@ -51,35 +65,25 @@ namespace Sources.Scripts.UI.BlueprintsShopPanel
         private void OnDestroy()
         {
             PanelCloseButton.clicked -= OnCloseButton;
+            BlueprintsCards.UnregisterCardsCallbacks(OnBlueprintSelected);
         }
 
         private void SetButtonEnabled(int id, bool value) =>
             _cardsContainer.Query<Button>().AtIndex(id).SetEnabled(value);
 
-        public static BuildingCard GetSelectedCard(int cardId) => _cards[cardId];
-        public void ClearBuildingsCards() => _cardsContainer.Clear();
+        public BlueprintCard GetSelectedCard(int cardId) => _cards[cardId];
 
-        // TODO cache
         public void InstantiateBuildingsCards(int blueprintsCount, NativeList<FixedString32Bytes> names)
         {
-            Debug.Log(blueprintsCount);
-            Debug.Log(names[0]);
-            Debug.Log("init cards");
-            ClearBuildingsCards();
+            Assert.IsTrue(blueprintsCount > 0, "Blueprints Count 0, cant init cards for shop");
 
-            _cards = new List<BuildingCard>(blueprintsCount);
-            for (var i = 0; i < blueprintsCount; i++)
-            {
-                var card = new BuildingCard(names[i].ToString(), i);
-                _cards.Add(card);
-                _cardsContainer.Add(card.GetFilledCard());
-                card.Button.RegisterCallback<ClickEvent>(
-                    evt => OnBuildSelected?.Invoke(evt.currentTarget as Button, card.Id));
-            }
-
-            names.Dispose();
+            BlueprintsCards.InstantiateCards(blueprintsCount, names, OnBlueprintSelected);
         }
 
-        protected override void OnCloseButton() => SetElementVisible(false);
+
+        protected override void OnCloseButton()
+        {
+            SetElementVisible(false);
+        }
     }
 }

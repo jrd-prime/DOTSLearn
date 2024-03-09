@@ -48,5 +48,11 @@
         // Manufactured box
         public static string ManufacturedBoxContainerId => "man-box-items-cont";
         public static string ManufacturedBoxNameLabelId => "man-box-label";
+        
+        // Blueprints Shop
+        // Blueprints Card
+        
+        public static string CardNamePrefix = "card-";
+        public static string CardButtonNamePrefix = "building-";
     }
 }

@@ -107,9 +107,8 @@ namespace Sources.Scripts.Authoring
                     }
                 }
 
-                var blobAssetReference =
-                    builder.CreateBlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>>(
-                        Allocator.Persistent);
+                var blobAssetReference = builder
+                    .CreateBlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>>(Allocator.Persistent);
 
                 AddComponent(entity, new BlueprintsBlobAssetReference
                 {
@@ -135,9 +134,9 @@ namespace Sources.Scripts.Authoring
                 }
             }
 
-            private NativeArray<ProductData> SortMe(NativeList<ProductData> requiredArray)
+            // TODO refact this shit
+            private static NativeArray<ProductData> SortMe(NativeList<ProductData> requiredArray)
             {
-                // TODO refact this shit
                 var nativeList = new NativeList<ProductData>(0, Allocator.Persistent);
 
                 var temp = new[] { requiredArray[0].Name, requiredArray[1].Name };
