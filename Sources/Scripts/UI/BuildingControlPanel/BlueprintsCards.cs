@@ -58,13 +58,11 @@ namespace Sources.Scripts.UI.BuildingControlPanel
             {
                 var newCard = new BlueprintCard(names[i].ToString(), i);
 
-                _blueprintsCardsList.Add(newCard);
-
                 TemplateContainer filledCard = newCard.GetFilledCard();
 
                 _cardsContainer.Add(filledCard);
-
                 _filledCardsContainer.Add(filledCard);
+                _blueprintsCardsList.Add(newCard);
             }
         }
 

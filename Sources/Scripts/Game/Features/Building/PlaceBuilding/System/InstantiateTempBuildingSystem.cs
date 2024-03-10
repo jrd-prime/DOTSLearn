@@ -9,8 +9,6 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
-using UnityEngine.Diagnostics;
 
 namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 {
@@ -24,6 +22,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<ScreenCenterInWorldCoordsData>();
             state.RequireForUpdate<InstantiateTempBlueprintData>();
+            state.RequireForUpdate<BlueprintsBuffer>();
         }
 
         [BurstCompile]
@@ -34,23 +33,19 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
                          .WithAll<BuildingStateData>()
                          .WithEntityAccess())
             {
-                if (!SystemAPI.TryGetSingletonBuffer(out DynamicBuffer<BlueprintsBuffer> buffer))
-                {
-                    Debug.LogError("Buffer error. Return.. " + this);
-                    return;
-                }
+                var buffers = SystemAPI.GetSingletonBuffer<BlueprintsBuffer>();
+                
+                BlueprintsBuffer blueprintsBuffer = buffers[query.ValueRO.BlueprintId];
 
-                BlueprintsBuffer blueprintsBuffer = buffer[query.ValueRO.BlueprintId];
-                
                 FixedString64Bytes giud = Guid.NewGuid().ToString("N");
-                
+
                 var ecb = SystemAPI
                     .GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
 
                 var position = SystemAPI.GetSingleton<ScreenCenterInWorldCoordsData>().Value;
 
-                state.Dependency = new InstantiateTempPrefabJob
+                state.Dependency = new InstantiateTempBlueprintPrefabJob
                 {
                     BuildingData = new BuildingData
                     {
@@ -75,7 +70,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
         }
 
         [BurstCompile]
-        private struct InstantiateTempPrefabJob : IJob
+        private struct InstantiateTempBlueprintPrefabJob : IJob
         {
             public EntityCommandBuffer BsEcb;
             public BuildingNameId BuildingNameId;

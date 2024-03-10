@@ -74,7 +74,7 @@ namespace Sources.Scripts.UI
         {
             Assert.IsTrue(TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength));
 
-            Title.name = TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength)
+            Title.text = TextUtils.IsStringCompliant(name, NameLength.ShopCardTitleMaxLength)
                 ? name
                 : "no text".ToUpper();
         }
