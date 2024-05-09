@@ -3,10 +3,11 @@ using Sources.Scripts.CommonData;
 using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.CommonData.Storage.Data;
-using Sources.Scripts.Game.Features.Shop.BlueprintsShop;
 using Unity.Assertions;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Sources.Scripts.Game.InitSystems
 {
@@ -70,9 +71,11 @@ namespace Sources.Scripts.Game.InitSystems
             //
             // entityManager.SetComponentData(elementEntity, new MainStorageData { Value = mainStorageMap });
 
+            Debug.LogWarning($"all prods count = {_buffer.Length}");
             var a = new Random();
             foreach (var buffer in _buffer)
             {
+                // Debug.LogWarning(buffer.Product);
                 mainStorageMap.Add((int)buffer.Product, a.Next(10, 20));
             }
 

@@ -26,6 +26,7 @@ namespace Sources.Scripts.Game.Features.Building.Production.System
                     .GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(World.Unmanaged);
 
+
                 _production.Process(
                     aspect.BuildingData.ProductionState,
                     aspect,

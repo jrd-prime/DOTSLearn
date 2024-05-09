@@ -5,6 +5,7 @@ using Sources.Scripts.CommonData.Production;
 using Sources.Scripts.Game.Features.Building.Production.StateHandler;
 using Unity.Assertions;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Sources.Scripts.Game.Features.Building.Production
 {

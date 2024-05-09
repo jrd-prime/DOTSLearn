@@ -9,7 +9,7 @@ namespace Sources.Scripts.UI
         //TODO refactor without protected
         
         protected int PanelTitleMaxLength = 30;
-        protected bool IsVisible;
+        public bool IsVisible;
         protected VisualElement PanelRoot;
         protected VisualElement Panel;
         protected Label PanelTitleLabel;

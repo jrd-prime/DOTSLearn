@@ -77,7 +77,6 @@ namespace Sources.Scripts.Game.Features.Building.SelectBuilding.System
                     {
                         _bsEcb.AddComponent<SelectedBuildingTag>(_tempFirstTargetEntity);
                         _bsEcb.AddComponent<InitializeTag>(_tempFirstTargetEntity);
-                        BuildingControlPanelUI.Instance.SetElementVisible(true); //TODO ui??? remove
                     }
 
                     _tempFingerId = -1;

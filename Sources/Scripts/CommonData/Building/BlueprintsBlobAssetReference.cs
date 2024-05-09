@@ -3,6 +3,7 @@ using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.CommonData.Production;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Sources.Scripts.CommonData.Building
 {
@@ -17,14 +18,14 @@ namespace Sources.Scripts.CommonData.Building
         {
             ref BlobArray<ProductData> required = ref Reference.Value[(int)buildingName][RequiredCellId];
             ref BlobArray<ProductData> manufactured = ref Reference.Value[(int)buildingName][ManufacturedCellId];
-
+            
             if (buildingName == BuildingNameId.Default)
                 throw new Exception($"Wrong building name id {nameof(BuildingNameId.Default)}!");
 
             return new ProductionLineData
             {
-                RequiredPtr = GetProductsFromReference(ref required),
-                ManufacturedPtr = GetProductsFromReference(ref manufactured)
+                Required = GetProductsFromReference(ref required),
+                Manufactured = GetProductsFromReference(ref manufactured)
             };
         }
 

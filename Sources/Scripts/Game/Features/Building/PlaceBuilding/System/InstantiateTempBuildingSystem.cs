@@ -85,7 +85,8 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
             {
                 Entity instantiate = BsEcb.Instantiate(BuildingData.Prefab);
                 BuildingData.Self = instantiate;
-                BsEcb.SetName(instantiate, "___ # Temp Building Entity");
+
+                BsEcb.SetName(instantiate, "___ # Temp Blueprint Entity");
 
                 BsEcb.SetComponent(instantiate, new LocalTransform
                 {

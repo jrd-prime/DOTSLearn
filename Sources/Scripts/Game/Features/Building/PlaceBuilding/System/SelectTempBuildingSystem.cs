@@ -45,9 +45,9 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
                 .CreateCommandBuffer(state.WorldUnmanaged);
 
             Touch touch = Input.GetTouch(0);
-            
-            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
 
+            Entity cameraEntity = SystemAPI.GetSingletonEntity<CameraData>();
+            
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -69,7 +69,7 @@ namespace Sources.Scripts.Game.Features.Building.PlaceBuilding.System
 
                         //TODO bad idea
                         _bsEcb.RemoveComponent<MoveDirectionData>(cameraEntity);
-                        
+
                         if (!_isSelectTagAdded)
                         {
                             _bsEcb.AddComponent<SelectedBuildingTag>(_tempTargetEntity);

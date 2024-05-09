@@ -47,9 +47,7 @@ namespace Sources.Scripts.CommonData.SO
             // TODO lol, google
             if (_prefab == null
                 || _name == ""
-                || _nameId == BuildingNameId.Default
                 || _size == Vector2.zero
-                || _categoryId == BuildingCategoryId.Default
                 || _itemsPerHour == 0
                 || _loadCapacity == 0)
             {

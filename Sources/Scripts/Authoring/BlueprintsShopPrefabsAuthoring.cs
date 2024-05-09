@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sources.Scripts.CommonData.Building;
 using Sources.Scripts.CommonData.Product;
 using Sources.Scripts.CommonData.SO;
+using Unity.Assertions;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Sources.Scripts.Authoring
 {
     public class BlueprintsShopPrefabsAuthoring : MonoBehaviour
     {
-        public List<BuildingDataScriptable> _buildings;
+        public List<BuildingDataScriptable> _blueprints;
 
         private class Baker : Baker<BlueprintsShopPrefabsAuthoring>
         {
@@ -23,7 +24,7 @@ namespace Sources.Scripts.Authoring
 
                 var buff = AddBuffer<BlueprintsBuffer>(entity);
 
-                int buildingsCount = authoring._buildings.Count;
+                int buildingsCount = authoring._blueprints.Count;
 
                 // [][][] [building id][req or man cell id][product data]
                 using BlobBuilder builder = new(Allocator.Temp);
@@ -36,16 +37,16 @@ namespace Sources.Scripts.Authoring
                 BlobBuilderArray<BlobArray<BlobArray<ProductData>>> buildingsArray =
                     builder.Allocate(ref root, Enum.GetNames(typeof(BuildingNameId)).Length);
 
+                Debug.LogWarning("bu name id length = " + Enum.GetNames(typeof(BuildingNameId)).Length);
+
                 for (var i = 0; i < buildingsCount; i++)
                 {
-                    int buildingId = (int)authoring._buildings[i].NameId;
-
+                    int buildingId = (int)authoring._blueprints[i].NameId;
                     // REQUIRED AND MANUFACTURED ARRAYS BUILDER
                     BlobBuilderArray<BlobArray<ProductData>> reqAndManArrays =
                         builder.Allocate(ref buildingsArray[buildingId], 2);
 
-                    int requiredItemsCount = authoring._buildings[i].RequiredItems.Count;
-
+                    int requiredItemsCount = authoring._blueprints[i].RequiredItems.Count;
 
                     // REQUIRED ARRAY BUILDER
                     BlobBuilderArray<ProductData> requiredArray =
@@ -54,15 +55,23 @@ namespace Sources.Scripts.Authoring
 
                     if (requiredItemsCount != 0)
                     {
-                        NativeList<ProductData> tempArray = new NativeList<ProductData>(0, Allocator.Temp);
+                        NativeArray<ProductData> tempArray = new NativeArray<ProductData>(requiredItemsCount, Allocator.Temp);
                         // REQ ARRAY
                         for (var j = 0; j < requiredItemsCount; j++)
                         {
-                            tempArray.Add(new ProductData
+                            var prod = new ProductData
                             {
-                                Name = authoring._buildings[i].RequiredItems[j]._productDataScriptable.Product,
-                                Quantity = authoring._buildings[i].RequiredItems[j]._quantity
-                            });
+                                Name = authoring._blueprints[i].RequiredItems[j]._productDataScriptable.Product,
+                                Quantity = authoring._blueprints[i].RequiredItems[j]._quantity
+                            };
+                            Debug.LogWarning(tempArray.IsCreated);
+                            tempArray[j] = prod;
+
+                            // tempArray.Add(new ProductData
+                            // {
+                            //     Name = authoring._blueprints[i].RequiredItems[j]._productDataScriptable.Product,
+                            //     Quantity = authoring._blueprints[i].RequiredItems[j]._quantity
+                            // });
                         }
 
                         if (requiredItemsCount == 2)
@@ -77,7 +86,7 @@ namespace Sources.Scripts.Authoring
                     }
 
                     // MANUFACTURED ARRAY BUILDER
-                    int manufacturedItemsCount = authoring._buildings[i].ManufacturedItems.Count;
+                    int manufacturedItemsCount = authoring._blueprints[i].ManufacturedItems.Count;
 
                     BlobBuilderArray<ProductData> manufacturedArray =
                         builder.Allocate(ref reqAndManArrays[BlueprintsBlobAssetReference.ManufacturedCellId],
@@ -85,14 +94,28 @@ namespace Sources.Scripts.Authoring
 
                     if (manufacturedItemsCount != 0)
                     {
-                        NativeList<ProductData> tempArray = new NativeList<ProductData>(0, Allocator.Temp);
+                        NativeArray<ProductData> tempArray =  new NativeArray<ProductData>(manufacturedItemsCount, Allocator.Temp);
                         for (var j = 0; j < manufacturedItemsCount; j++)
                         {
-                            tempArray.Add(new ProductData
+                            if (buildingId == 2)
                             {
-                                Name = authoring._buildings[i].ManufacturedItems[j]._productDataScriptable.Product,
-                                Quantity = authoring._buildings[i].ManufacturedItems[j]._quantity
-                            });
+                                Debug.LogWarning(
+                                    $"i {i} , j {j} == {i}+{BlueprintsBlobAssetReference.ManufacturedCellId}+{j}");
+
+                                Debug.LogWarning(">>> " + authoring._blueprints[i].ManufacturedItems[j]
+                                    ._productDataScriptable.Product);
+                            }
+
+                            tempArray[j] = new ProductData
+                            {
+                                Name = authoring._blueprints[i].ManufacturedItems[j]._productDataScriptable.Product,
+                                Quantity = authoring._blueprints[i].ManufacturedItems[j]._quantity
+                            };
+                            // tempArray.Add(new ProductData
+                            // {
+                            //     Name = authoring._blueprints[i].ManufacturedItems[j]._productDataScriptable.Product,
+                            //     Quantity = authoring._blueprints[i].ManufacturedItems[j]._quantity
+                            // });
                         }
 
                         if (manufacturedItemsCount == 2)
@@ -110,12 +133,14 @@ namespace Sources.Scripts.Authoring
                 var blobAssetReference = builder
                     .CreateBlobAssetReference<BlobArray<BlobArray<BlobArray<ProductData>>>>(Allocator.Persistent);
 
+                Debug.LogWarning("=== " + blobAssetReference.Value[2][1][0].Name);
+
                 AddComponent(entity, new BlueprintsBlobAssetReference
                 {
                     Reference = blobAssetReference
                 });
 
-                foreach (var buildingData in authoring._buildings)
+                foreach (var buildingData in authoring._blueprints)
                 {
                     buff.Add(new BlueprintsBuffer
                     {
@@ -135,21 +160,39 @@ namespace Sources.Scripts.Authoring
             }
 
             // TODO refact this shit
-            private static NativeArray<ProductData> SortMe(NativeList<ProductData> requiredArray)
+            private static NativeArray<ProductData> SortMe(NativeArray<ProductData> requiredArray)
             {
-                var nativeList = new NativeList<ProductData>(0, Allocator.Persistent);
+                var nativeArray = new NativeArray<ProductData>(requiredArray.Length, Allocator.Persistent);
 
                 var temp = new[] { requiredArray[0].Name, requiredArray[1].Name };
 
                 Array.Sort(temp);
 
-                if (temp[0] == requiredArray[0].Name) return requiredArray.AsArray();
+                if (temp[0] == requiredArray[0].Name) return requiredArray;
 
-                nativeList.Add(requiredArray[1]);
-                nativeList.Add(requiredArray[0]);
+                nativeArray[0] = requiredArray[1];
+                nativeArray[1] = requiredArray[0];
 
-                return nativeList.ToArray(Allocator.Persistent);
+                return nativeArray;
             }
+        }
+
+        // TODO made more informative or find another solution
+        private void OnValidate()
+        {
+            var checkMap = new NativeHashMap<int, int>(_blueprints.Count, Allocator.Temp);
+
+            foreach (var blueprint in _blueprints)
+            {
+                if (blueprint.NameId == BuildingNameId.Default) continue;
+
+                Assert.IsFalse(checkMap.ContainsKey((int)blueprint.NameId),
+                    $"Check blueprints SO Name ID. Name ID: {blueprint.NameId} exists on two or more SO.");
+
+                checkMap.Add((int)blueprint.NameId, 0);
+            }
+
+            checkMap.Dispose();
         }
     }
 }

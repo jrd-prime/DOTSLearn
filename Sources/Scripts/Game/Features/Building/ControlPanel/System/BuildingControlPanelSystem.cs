@@ -5,6 +5,7 @@ using Sources.Scripts.CommonData.Storage.Data;
 using Sources.Scripts.Game.Features.Building.ControlPanel.Panel;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
@@ -12,7 +13,7 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
     [UpdateInGroup(typeof(JInitSimulationSystemGroup))]
     public partial class BuildingControlPanelSystem : SystemBase
     {
-        #region PrivateVars
+        #region Private
 
         private EntityCommandBuffer _ecb;
         private Entity _entity;
@@ -39,6 +40,12 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             };
         }
 
+        protected override void OnStartRunning()
+        {
+            _panel = new BuildingControlPanel();
+            _panel.UI.PanelCloseButton.clicked += () => _ecb.RemoveComponent<SelectedBuildingTag>(_entity);
+        }
+
         protected override void OnUpdate()
         {
             _ecb = SystemAPI
@@ -50,29 +57,33 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
                 _entity = aspect.Self;
 
                 if (!_isInitialized)
+                {
                     InitPanel();
+                    _panel.UI.SetElementVisible(true);
+                }
                 else
+                {
+                    if (!_panel.UI.IsVisible) _panel.UI.SetElementVisible(true);
+
                     UpdatePanel(aspect, SystemAPI.GetSingleton<MainStorageBoxData>());
+                }
             }
         }
 
-        #region Methods
+        private void InitPanel()
+        {
+            ButtonsCallbacks();
+            _isInitialized = true;
+        }
 
         private void UpdatePanel(BuildingDataAspect aspect, MainStorageBoxData mainStorageBoxData)
         {
+            Debug.LogWarning($"Update panel: {aspect.BuildingData.Name}");
             _eventsDataWrapper.Aspect = aspect;
             _eventsDataWrapper.MainStorageBoxData = mainStorageBoxData;
             _eventsDataWrapper.ProductsToDelivery = GetProdsToDelivery(aspect.Self);
 
             _panel.ProcessEvents(ref _eventsDataWrapper);
-        }
-
-        private void InitPanel()
-        {
-            _panel = new BuildingControlPanel();
-            _isInitialized = true;
-
-            ButtonsCallbacks();
         }
 
         private NativeList<ProductData> GetProdsToDelivery(Entity entity)
@@ -98,7 +109,5 @@ namespace Sources.Scripts.Game.Features.Building.ControlPanel.System
             _panel.UI.InstantDeliveryButton
                 .RegisterCallback<ClickEvent>(e => _panel.Buttons.InstantDeliveryButton(_ecb, _entity));
         }
-
-        #endregion
     }
 }

@@ -130,9 +130,8 @@ namespace Sources.Scripts.UI.BuildingControlPanel
 
         #endregion
 
-        protected override void OnCloseButton() => HidePanel();
-
-
+        protected override void OnCloseButton() => SetElementVisible(false);
+        
         private void Callback(ClickEvent evt)
         {
             Debug.Log($"Click + {evt.currentTarget}");
